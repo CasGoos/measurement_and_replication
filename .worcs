@@ -1,0 +1,6 @@
+worcs_version: 0.1.14
+creator: u686785
+entry_point: run_me.R
+recipe:
+  recipe: source('run_me.R')
+  terminal: no

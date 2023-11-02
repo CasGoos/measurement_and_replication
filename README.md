@@ -1,22 +1,33 @@
-# Readme <a href='https://osf.io/zcvbs/'><img src='worcs_icon.png' align="right" height="139" /></a>
+# Readme <a href='https://osf.io/zcvbs/'><img src='SupplementaryMaterials/worcs_icon.png' align="right" height="139" /></a>
 
 <!-- Please add a brief introduction to explain what the project is about    -->
 
 ## Where do I start?
 
-You can load this project in RStudio by opening the file called 'Reproducible_R_Project.Rproj'.
+You can load this project in RStudio by opening the file called 'WORCSPersonalTemplate.Rproj'.
 
 ## Project structure
 
 <!--  You can add rows to this table, using "|" to separate columns.         -->
-File                         | Description                | Usage         
----------------------------- | -------------------------- | --------------
-README.md                    | Description of project     | Human editable
-Reproducible_R_Project.Rproj | Project file               | Loads project 
-LICENSE                      | User permissions           | Read only     
-.worcs                       | WORCS metadata YAML        | Read only     
-prepare_data.R               | Script to process raw data | Human editable
-renv.lock                    | Reproducible R environment | Read only     
+File                        | Description                      | Usage         
+--------------------------- | -------------------------------- | --------------
+README.md                   | Description of project           | Human editable
+WORCSPersonalTemplate.Rproj | Project file                     | Loads project 
+LICENSE                     | User permissions                 | Read only     
+.worcs                      | WORCS metadata YAML              | Read only     
+renv.lock                   | Reproducible R environment       | Read only     
+renv/                       | storage of info for renv.lock    | Read only     
+Data/AnalysisData           | fully cleaned data, with codebook| Read only
+Data/InputData              | raw data before cleaning         | Human editable
+Data/IntermediateData       | any semi-cleaned data            | Human editable
+Output/DataAppendixOutput   | data descriptives and figures    | Read only      
+Output/Results              | figures and supplements          | Read only      
+Scripts/Manuscript/manuscript.rmd | Source code for paper            | Human editable   
+Scripts/Manuscript/references.bib | BibTex references for manuscript | Human editable
+Scripts/prepare_data.R      | Script to process raw data       | Human editable
+Scripts/source_script.R     | Script with self-made functions for the manuscript | Human editable
+SupplementaryMaterials/     | misc. materials                  | Read only      
+
 
 <!--  You can consider adding the following to this file:                    -->
 <!--  * A citation reference for your project                                -->
