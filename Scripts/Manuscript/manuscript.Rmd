@@ -1,52 +1,62 @@
 ---
-title             : "The title"
-shorttitle        : "Title"
+title             : "The Impact of Measurement Practices and Measurement Error on Construct Validity and Replication Outcomes in Psychological Science"
+shorttitle        : "Measurement and Replicability"
 
 author: 
-  - name          : "Cas Goos"
+  - name          : "Goos, C."
     affiliation   : "1"
     corresponding : yes    # Define only one corresponding author
     address       : "Professor Cobbenhagenlaan 125, 5037 DB, Tilburg, The Netherlands"
     email         : "casgoos99@gmail.com"
     role: # Contributorship roles (e.g., CRediT, https://credit.niso.org/)
       - "Conceptualization"
+      - "Data curation"
+      - "Formal Analysis"
+      - "Investigation"
+      - "Methodology"
+      - "Visualization"
       - "Writing - Original Draft Preparation"
       - "Writing - Review & Editing"
-  - name          : "Second Author"
-    affiliation   : "1,2"
+  - name          : "Nuijten, M.B."
+    affiliation   : "1"
     role:
+      - "Project Administration"
+      - "Writing - Review & Editing"
+      - "Supervision"
+
+  - name          : "Nuijten, M.B."
+    affiliation   : "1"
+    role:
+      - "Project Administration"
       - "Writing - Review & Editing"
       - "Supervision"
 
 affiliation:
   - id            : "1"
     institution   : "Tilburg University"
-  - id            : "2"
-    institution   : "Other UNI"
 
 authornote: |
   1 Department of Methodology and Statistics, Tilburg School of Social and Behavioral Sciences, Tilburg University, Tilburg, NL. 
-  complete departmental affiliations: Each new line herein must be indented, like this line.
 
-  Enter author note here.
+  Enter author note here. Caspar?
 
 abstract: |
-  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
-  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
-  One sentence clearly stating the **general problem** being addressed by  this particular study.
-  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
-  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
-  One or two sentences to put the results into a more **general context**.
-  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
-  
-  <!-- https://tinyurl.com/ybremelq -->
-  
-keywords          : "keywords"
+  Recently, the influence of measurement related issues on replicability has received more investigations. 
+  In particular, studies have indicated that low reliability, and poor measurement reporting can negatively influence the replicability of an effect. 
+  Building on this new line of research, this thesis assessed these influences in large scale replication projects. 
+  Protocols from the Many Labs replication projects [@klein2014data; @klein2018many; @ebersole2016many; @ebersole2020many], and the original articles that the replications were based on were used to assess the  reporting of the measures, while publicly available data from the Many Labs replications was used to assess the reliability of the measures. Reliability did not relate to replicability, and was generally consistent between labs for each measure in the Many Labs projects. 
+  The quality of measurement reporting in replication protocols did however relate to replicability.
+  Additionally, tentative evidence was found for a relation between quality of measurement reporting in the protocol of a replication and the quality of measurement reporting in its related original study.
+  Recommendations are given for researchers and replicators in order to improve measurement practices in replication, and ward its negative impact on replicability. 
+  Additionally, directions are given for future research investigating the relationship between measurement issues and replicability.
+
+
+keywords          : "reliability, measurement, measurement reporting, replicability, construct validity"
 wordcount         : "X"
 
 bibliography      : ["r-references.bib", "references.bib"]
 
-floatsintext      : no
+floatsintext      : yes
 linenumbers       : no
 draft             : no
 mask              : no
@@ -69,19 +79,15 @@ library("worcs")
 source(file = "../source_script.R")
 
 # Code below loads the processed data. The raw data was prepared for analysis in 'prepare_data.R.
-load_data(worcs_directory = "../../Data/AnalysisData") 
+# load_data(worcs_directory = "../../Data/AnalysisData") 
 
 # creates a reference list for all used R packages and the installed R version (does not include Rstudio)
 r_refs("r-references.bib")
 ```
 
-This manuscript uses the Workflow for Open Reproducible Code in Science [WORCS version 0.1.1, @vanlissaWORCSWorkflowOpen2021] to ensure reproducibility and transparency. All code <!--and data--> are available at <https://github.com/CasGoos/WORCSPersonalTemplate.git>.
+This manuscript uses the Workflow for Open Reproducible Code in Science [WORCS version 0.1.1, @vanlissaWORCS2021] to ensure reproducibility and transparency. All code <!--and data--> are available at <https://github.com/CasGoos/WORCSPersonalTemplate.git>.
 
-This is an example of a non-essential citation [\@ @vanlissaWORCSWorkflowOpen2021]. If you change the rendering function to `worcs::cite_essential`, it will be removed.
-
-<!--The function below inserts a notification if the manuscript is knit using synthetic data. Make sure to insert it after load_data().-->
-
-`r notify_synthetic()`
+This is an example of a non-essential citation [\@ @vanlissaWORCS2021]. If you change the rendering function to `worcs::cite_essential`, it will be removed.
 
 ```{r analysis-preferences}
 # Seed for random number generation
@@ -313,9 +319,8 @@ Example: We will use the standard p<.05 criteria for determining if the ANOVA an
 
 Example: We expect that certain demographic traits may be related to taste preferences. Therefore, we will look for relationships between demographic variables (age, gender, income, and marital status) and the primary outcome measures of taste preferences. -->
 ```
-
-
 # Other
+
 This will contain only any remaining (other) notes that have not been mentioned in any point above. This section will change post-pre-registration to be the Discussion section.
 
 \newpage
