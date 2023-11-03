@@ -268,7 +268,6 @@ Using the lmer function from the lme4 package [@bates2015lme4], a multilevel nul
 & Mixed: alpha_{ij} = \gamma_{00} + u_{0j} + e_{ij}
 \end{align*}
 ```
-
 The purpose of this analysis was to investigate variability in calculated reliability coefficients within and between replication sets. However, to the author's knowledge no formal test exists as of the writing of this thesis for testing the significance of within group variance after controlling for between group variance. Instead the intraclass correlation (ICC) coefficient was calculated an indicator of within vs. between variability. The formula used to calculate the ICC is presented below.
 
 $$ICC = \frac{u_{0j}}{(e_{ij} + u_{0j})}$$
@@ -321,11 +320,59 @@ Finally, in order to present additional validity evidence alongside the analyses
 
 ## Descriptives
 
+The mean sample size within the replications was 4844 participants (IQR = 3816). In the original articles the mean sample size was 244 (IQR = 140). In total, support was found for hypothesized effects of 34 of the 77 measures. Proportions of replication success per Many Labs project can be found in Table XXX.
+
+INSERT REPLICATION RATIO TABLE HERE
+
+Existing materials were used for 73 of the 77 measures in replications and for 28 in original studies. The specific version of the measure was reported for thirteen measures in replications, and nine measures in original articles. For those measures that were not based on existing materials, one in the replications and twelve in original articles clearly stated that they were newly created for the study. Only one measure in the original articles was modified from its original source during the data collection period, all other measures were modified before that, if at all.
+
 ## Reliability
+
+Figure XXX depicts the type of measure (single-item, multiple item, or not a scale), if for the measure reliability was reported or not, and what type of reliability coefficient was reported. Reliabilities were only assessed for multiple item measures, which were approximately equal between replication and original (35 and 38, respectively). Looking at the multiple item measures, four in the replication protocols and twelve in the original articles reported a reliability coefficient. The most commonly reported reliability coefficient was Cronbach's alpha, which accounted for three out of four reported reliabilities in the replication protocols, and eleven out of twelve in the original articles.
+
+INSERT RELIABILITY REPORTING FLOW DIAGRAM FIGURE
+
+A chi-squared test compared whether the number of reliabilities reported among multiple item measures differed between replications and original. Reliabilities were found to be more commonly reported in original articles compared to replication protocols ($\chi^{2}(1) = 4.09, p = 0.043$). These results are contradictory to hypothesis 1.
+
+The average Cronbach's alpha coefficient across replication sets was $0.618$ with a standard deviation of $0.554$, for omega the mean was $0.773$ with a standard deviation of $0.161$. Figure XXX shows the distributions of the Cronbach's alpha coefficients for each replication set separated by successful and unsuccessful replication.
+
+INSERT PLOT 34
+
+The between-group (across different replication set) variance and within-group (lab locations within a replication set) variance in the Cronbach's alpha coefficient were assessed using a multilevel model as specified in Formulas XXX, XXX, & XXX. The between-group and within-group variance for Cronbach's alpha were approximately $0.198$ and $0.044$ respectively. The resulting ICC, obtained using formula XXX, was approximately $0.819$. This suggests that variance was larger between replication sets than within. The same analysis for omega coefficients even showed a relatively larger degree of between group variance (between-group variance $= 0.034$, within-group variance $= 0.004$, ICC = $0.900$). Both results are in line with hypothesis 2, although caution in interpreting this result is advised due to the small sample size and the lack of an available inferential test.
+
+The relationship between reliability and replication success was primarily tested via logistic regression, with replication success as the dependent variable. Further sensitivity analyses were performed using multilevel logistic models, with each measure as an overarching group wherein its reliability at each lab location is nested. The results of the logistic and multilevel logistic models are shown in Table XXX for both Cronbach's alpha and omega reliability coefficients.
+
+INSERT REPLICABILITY AND RELIAIBLITY TESTS TABLE HERE
+
+Cronbach's alpha and omega did not significantly relate to replication success in the main logistic regression model (Cronbach's alpha: $B = -1.621, SD = 1.527, p = .288$; omega: $B = 0.495, SD = 3.776, p = .896$), nor in any of the multilevel sensitivity analyses models (see Table XXX). This is contradictory to the expectation in hypothesis 3. However, the results from these analyses should be evaluated with caution, given the small sample number of measures used to estimate these models.
 
 ## Questionable Measurement Practices
 
+The counts of the QMP ratio obtained for each QMP type (see Table XXX) are shown across the top layer of Figure XXX for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only 52 out of 77 measures in replications, and only ten measures used in original studies were modified. The bottom layer of Figure XXX shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
+
+INSERT HERE 256
+
+Beta-regression was used to test the difference in QMP ratio between original articles and replication protocols. Results showed that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects ($B = -0.779, SD = 0.140, p < .001$). This result is in line with hypothesis 4.
+
+A similar beta-regression tested the association between replication success and QMP ratio in replication protocols. Results showed that successful replication significantly related to a decrease in the ratio of QMPs in replication protocols $\left(B = -0.588, SD = 0.212, p < .001 \right)$. Sensitivity analyses were performed using a random-intercept multilevel regression function. This model also found a significant association between replication success and QMP ratio $\left(B = -0.963, t(70.319) = -1.491, p = .011 \right)$. Both of these results are in line with hypothesis 5. However, the relationship in the multilevel model is no longer significant for QMP ratios obtained with the initial coding protocol $\left(B = -0.517, t(63.122) = -2.635, p = .140 \right)$.
+
+The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. It showed that total QMP ratio in the original article can significantly predict total QMP ratio in the subsequent replication ($B = 1.477, SD = 0.579, p < .001$), which provides some evidence in favor of hypothesis 6. However, this relation was not significant for the QMP ratios obtained with the initial protocol ($B = -0.387, SD = 0.511, p = 0.449$). Sensitivity analyses using a random intercept logistic multilevel model also found similar discrepancy in results between revised and initial protocol (revised protocol: $B = 0.249, t(74.473) = 1.498, p < 0.001$; initial protocol $B = -0.057, t(74.620) = -0.332, p = 0.741$).
+
+INSERT FIGURE 26 HERE
+
 ## Exploratory Results
+
+Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Table XXX shows the results from these tests with the revised protocol QMP coding, while Table XXX shows the results for the QMP ratios obtained via the initial protocol. There were few significant relations and even fewer that are consistent between both coding protocols. The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols, illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol.
+
+INSERT QMP REPLICATION ASSOCIATION TESTS TABLE
+
+INSERT QMP ORIGINAL REPLICATION ASSOCIATION TESTS TABLE
+
+Figure XXX visually illustrates the relations of QMP ratios from different QMP types between replication protocols and original articles further.
+
+The unidimensionality of the measures used in the Many Labs projects was assessed through factor analyses, and evaluated based on the criteria discussed in section XXX. Suitable data for factor analyses was available for nineteen measures. These measures were the same as those shown in Figure XXX, with the addition of one more measure from [@cacioppo1983effects]. A composite score based on the measurement responses was used for sixteen of the nineteen measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for six out of the nineteen evaluated measures. However, as shown in Table XXX the unidimensional model did not hold for any measure data based on the parallel analysis test alone. Only the RMSEA $< .08$ criteria suggested evidence for single factor structures.
+
+INSERT FACTOR ANALYSES RESULTS TABLE HERE
 
 # Discussion
 
