@@ -80,13 +80,12 @@ r_refs("r-references.bib")
 ### DON'T FORGET THAT I SHOULD REMOVE HERE THE R PACKAGE REFERENCES FROM MY REFERENCES BIB AND SHOULD HAVE THE R=REFERENCES BIB TAKE CARE OF THAT INSTEAD.
 ```
 
-This manuscript uses the Workflow for Open Reproducible Code in Science [WORCS version 0.1.1, @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and XXX data are available at <https://github.com/CasGoos/WORCSPersonalTemplate.git>.
 
 This is an example of a non-essential citation [\@ @vanlissaWORCS2021]. If you change the rendering function to `worcs::cite_essential`, it will be removed.
 
 ```{r analysis-preferences}
 # Seed for random number generation
-set.seed(31102023)
+set.seed(17042023)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
@@ -169,7 +168,7 @@ If the relationship exists, it is expected that questionable measurement practic
 
 # Method
 
-Data collection, coding protocol, and planned analyses were all preregistered. The preregistration and supplementary materials can be found on this thesis' OSF page: <https://osf.io/9r8yt/>. Any deviations from the preregistration are explicitly mentioned in the text.
+Data collection, coding protocol, and planned analyses were all preregistered. The preregistration and supplementary materials can be found on this thesis' OSF page: <https://osf.io/9r8yt/>. Any deviations from the preregistration are explicitly mentioned in the text. This manuscript was generated using the Workflow for Open Reproducible Code in Science [WORCS version 0.1.1, @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and XXX data are available at <https://github.com/CasGoos/measurement_and_replication.git>.
 
 ## Sample
 
