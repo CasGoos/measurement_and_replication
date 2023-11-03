@@ -76,6 +76,8 @@ source(file = "../source_script.R")
 
 # creates a reference list for all used R packages and the installed R version (does not include Rstudio)
 r_refs("r-references.bib")
+
+### DON'T FORGET THAT I SHOULD REMOVE HERE THE R PACKAGE REFERENCES FROM MY REFERENCES BIB AND SHOULD HAVE THE R=REFERENCES BIB TAKE CARE OF THAT INSTEAD.
 ```
 
 This manuscript uses the Workflow for Open Reproducible Code in Science [WORCS version 0.1.1, @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and XXX data are available at <https://github.com/CasGoos/WORCSPersonalTemplate.git>.
@@ -209,21 +211,22 @@ The measures of primary variables were identified by combing through the entire 
 
 The structured coding protocol was used for both replication protocols and original studies. A series of questions relating to measurement practices and measurement error were used to extract the information. Descriptions of the extracted variables can be found in the Measures section below. The scope of the coding was limited to the abstract, method, procedure, materials, measure, and initial parts of the results sections. Additionally, a keyword search using the name of the measured variable was used to search for any potentially missed information. An exception to this procedure was a question asking about the presence of example items. For this question, information from supplementary materials was uniquely considered as relevant. Another exception was the question regarding the replication of the original effect. Tables from the final report of each Many Labs project were used to answer that question.
 
-<!-- \@ref(sec:measures) didn't work for section corss-reference in the paragraph above-->
+<!-- @ref(sec:measures) didn't work for section corss-reference in the paragraph above-->
 
 After the data was initially coded according to the preregistered coding protocol, it was determined, based on discussion with the supervisor, that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more favourable judgement of QMPs. These changes included: accepting linked online appendices as a data source for example items; assuming that if no differences between replication and original are measurement is mentioned, that there is no difference, even if it is not explicitly clear; and generally simplified criteria for what constituted sufficiently clear reporting. The revision of the coding protocol happened after all the data were coded using the initial protocol. As a result the coded data using the initial protocol, and the coded data using the revised protocol are both available available on this thesis' OSF page: <https://osf.io/9r8yt/>. Both raw and processed formats are present.
 
 ## Measures {#sec:measures}
 
 ### Measurement Error Measures
-Two main sources of information were used to test hypothesis 1, the reported reliability coefficient from the replication protocols, and the reported reliability coefficient in the original articles. The reported reliability coefficient is the score reliability reported per measure in the replication protocol or original article. Both the type (Cronbach's alpha, retest, interrater, etc.) and the value itself were extracted. 
 
-The test of hypothesis 2 was based on different score reliabilities. As stated earlier, only score reliabilities of scalar measures with multiple items were included in the test of hypothesis 2. Because data was available for each lab location within a replication set, it was possible to calculate score reliabilities of a measure for each lab location. With location specific score reliabilities, it was possible to assess the variation of score reliabilities of the same measure across different contexts. 
+Two main sources of information were used to test hypothesis 1, the reported reliability coefficient from the replication protocols, and the reported reliability coefficient in the original articles. The reported reliability coefficient is the score reliability reported per measure in the replication protocol or original article. Both the type (Cronbach's alpha, retest, interrater, etc.) and the value itself were extracted.
 
-Two different types of score reliabilities were calculated: Cronbach's alpha and omega. Cronbach's alpha was used as it is one of the most popular indices of score reliability [@cho2015cronbach]. Omega was added to the analysis as it has been argued to be a more informative measure of score reliability, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Cronbach's alpha and omega were calculated using the alpha and omega functions respectively in the psych R package [@revelle2022psych]. Default arguments were used for both functions except the nfactors in the omega function, which was set to 1. 
+The test of hypothesis 2 was based on different score reliabilities. As stated earlier, only score reliabilities of scalar measures with multiple items were included in the test of hypothesis 2. Because data was available for each lab location within a replication set, it was possible to calculate score reliabilities of a measure for each lab location. With location specific score reliabilities, it was possible to assess the variation of score reliabilities of the same measure across different contexts.
 
+Two different types of score reliabilities were calculated: Cronbach's alpha and omega. Cronbach's alpha was used as it is one of the most popular indices of score reliability [@cho2015cronbach]. Omega was added to the analysis as it has been argued to be a more informative measure of score reliability, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Cronbach's alpha and omega were calculated using the alpha and omega functions respectively in the psych R package [@revelle2022psych]. Default arguments were used for both functions except the nfactors in the omega function, which was set to 1.
 
 ### Replicability Measure
+
 Hypothesis 3 as well as 5 specify an association between either score reliability or QMPs respectively, and replication success. Replication success was based on the test of the main effect of a study. However, the unit of measurement for the data in this thesis was a measure of a unique variable, not an effect. Fortunately, since only primary measures were included in the data, each measured a variable of the main effect, and as a result the measure remains related to the test of the main effect. Replication was based on the significance of the meta-analytic effect of the replication set as reported in its respective Many Labs report. An effect was considered replicated if the meta-analytic p-value was lower than .05, and in the same direction as the original effect. In all cases, meta-analytic significance of an effect meant that support in the direction of the original effect was found.
 
 The tests for hypotheses 4, 5, & 6 were all based on the number of QMPs per category that were determined by the research using the coding protocol. An overview of the QMP categories of the coding variables, based on @flake2020measurement, can be seen in Table INSERT TABLE 1 REF HERE
@@ -232,75 +235,87 @@ INSERT TABLE 1 HERE
 
 Selection and creation share a category as the justifications and requirements in selecting a measure are similar to those for creating a new measure. Modification variables were only assessed when it was clear that the measure was modified from an original source in some way. The questions were all answered as either true, false, or not applicable. Questions related to modification had 'no modification' as an additional answer option, in case the specific aspect of the measure was explicitly not modified. Beside these quantitative variables, a total of four qualitative variables were also included to measure details surrounding measurement practices. These variables assessed: the specific version of the measure (if reported); whether and what previous materials were used for the study; what, if any, psychometric evidence beyond reliability score (e.g. factor analysis, IRT model, convergent validity) was provided; and whether it was specified or not that the measure was or was not modified.
 
-Two of the qualitative items have an equivalent in the coding key of @flake2022construct. Eleven out of twenty of the quantitative coding variables have an equivalent in @flake2022construct. Variables related to the specific measurement scaling and purpose in the paper, were omitted from the analyses of this thesis as they were deemed neither relevant for the analyses of this study, nor necessary in matching this study to the key results of @flake2022construct. Questions about more general measurement features such as the number of items and how scores were aggregated were altered from @flake2022construct to better fit the aims of this thesis. 
+Two of the qualitative items have an equivalent in the coding key of @flake2022construct. Eleven out of twenty of the quantitative coding variables have an equivalent in @flake2022construct. Variables related to the specific measurement scaling and purpose in the paper, were omitted from the analyses of this thesis as they were deemed neither relevant for the analyses of this study, nor necessary in matching this study to the key results of @flake2022construct. Questions about more general measurement features such as the number of items and how scores were aggregated were altered from @flake2022construct to better fit the aims of this thesis.
 
 The tests for hypotheses 4, 5, & 6 were all based on QMP ratios, both total QMP ratios and ratios per QMP type. This ratio was based on the number of coded trues divided by the number of applicable QMPs. When a question was coded as true, this equated to a count of one QMP for that type and in total, whereas false equated to a zero. If coded as not applicable or no modification (for the modification items), this item was considered not applicable. Non applicable responses were not only counted as a zero, but additionally the denominator for calculating the ratio of QMPs was lowered by one. These ratios were preferred over counts, since non applicable items could thus be accounted for.
 
 ### QMP measures
-The same data as for the test of hypothesis 2 was used to check for the unidimensionality of the factor structure, as part of the exploratory analyses. A check for unidimensionality as validity evidence only makes sense if the measure was intended to be unidimensional. Therefore, for each replication for which data was available, the protocol was checked to ensure that the scores on each measure were meant to assess a single construct. 
+
+The same data as for the test of hypothesis 2 was used to check for the unidimensionality of the factor structure, as part of the exploratory analyses. A check for unidimensionality as validity evidence only makes sense if the measure was intended to be unidimensional. Therefore, for each replication for which data was available, the protocol was checked to ensure that the scores on each measure were meant to assess a single construct.
 
 ### Validity Measure
-The same data as for the test of hypothesis 2 was used to check for the unidimensionality of the factor structure, as part of the exploratory analyses. A check for unidimensionality as validity evidence only makes sense if the measure was intended to be unidimensional. Therefore, for each replication for which data was available, the protocol was checked to ensure that the scores on each measure were meant to assess a single construct. 
+
+The same data as for the test of hypothesis 2 was used to check for the unidimensionality of the factor structure, as part of the exploratory analyses. A check for unidimensionality as validity evidence only makes sense if the measure was intended to be unidimensional. Therefore, for each replication for which data was available, the protocol was checked to ensure that the scores on each measure were meant to assess a single construct.
 
 ## Analyses
+
 ### Analyses Measurement Error
-Every hypothesis test in this thesis used an alpha significance cutoff of .05. No correction for multiple testing was applied, to avoid inflating type II error rate. The generally small sample size and consequently low power of these analyses meant that a smaller alpha would increase the number of false negatives. On top of that, these analyses were considered as exploratory. In this exploratory context, the rate of discovery of any potential true effects was given more value relative to decreasing any false positives compared to typical confirmatory research. That as a consequence obtaining false positives was more likely has been accepted, as false negatives were deemed more harmful to this study's aims. 
+
+Every hypothesis test in this thesis used an alpha significance cutoff of .05. No correction for multiple testing was applied, to avoid inflating type II error rate. The generally small sample size and consequently low power of these analyses meant that a smaller alpha would increase the number of false negatives. On top of that, these analyses were considered as exploratory. In this exploratory context, the rate of discovery of any potential true effects was given more value relative to decreasing any false positives compared to typical confirmatory research. That as a consequence obtaining false positives was more likely has been accepted, as false negatives were deemed more harmful to this study's aims.
 
 The measurement error analyses testing hypotheses 1, 2, & 3 deviated from the preregistration for two main reasons: there were too few reported reliability coefficients, and too few multiple item scalar measures to calculate the reliability coefficients from. Because of the small sample size, the test for hypothesis 1 was changed, and the low power as a result of the sample size was accepted for hypothesis 2 & 3. This should be kept in mind while interpreting the results from these hypothesis tests.
 
 Thus for testing hypothesis 1, instead of comparing the reported Cronbach's alpha coefficient between original and replication, the total number of reported reliability coefficients were compared instead. This total also included reliability coefficients other than Cronbach's alpha. This comparison was implemented via a chi-square test using the base R stats package [@R2021R].
 
-The number of usable datasets to calculate reliability coefficients from was similarly limited in number. However, the number of datasets were still sufficient to be able to estimate the models of the planned analysis for hypothesis 2, albeit with a more exploratory goal than intended. 
+The number of usable datasets to calculate reliability coefficients from was similarly limited in number. However, the number of datasets were still sufficient to be able to estimate the models of the planned analysis for hypothesis 2, albeit with a more exploratory goal than intended.
 
 Using the lmer function from the lme4 package [@bates2015lme4], a multilevel null model with the Cronbach's alpha or omega coefficient of a replication as dependent was specified, where the random intercept was grouped by replication set. The formulas for this model, where $alpha_{ij}$ represents the calculated Cronbach's alpha coefficient of a single study at one lab location with $i = 1,..., n_{locations}$ and $j = 1,...,n_{replications}$ look as follows:
 
-INSERT H2 FORMULA HERE
+```{=tex}
+\begin{align*}
+& Level 1: alpha_{ij} = \beta_{0j} + e_{ij} \qquad\qquad\quad e_{ij} \sim N(0, \sigma_{e}^{2}) \\
+& Level 2: \beta_{0j} = \gamma_{00} + u_{0j} \qquad\qquad\qquad u_{0j} \sim N(0, \sigma_{u0}^{2}) \\
+& Mixed: alpha_{ij} = \gamma_{00} + u_{0j} + e_{ij}
+\end{align*}
+```
 
-The purpose of this analysis was to investigate variability in calculated reliability coefficients within and between replication sets. However, to the author’s knowledge no formal test exists as of the writing of this thesis for testing the significance of within group variance after controlling for between group variance. Instead the intraclass correlation (ICC) coefficient was calculated an indicator of within vs. between variability. Formula XXX shows the formula used to calculate the ICC.
+The purpose of this analysis was to investigate variability in calculated reliability coefficients within and between replication sets. However, to the author's knowledge no formal test exists as of the writing of this thesis for testing the significance of within group variance after controlling for between group variance. Instead the intraclass correlation (ICC) coefficient was calculated an indicator of within vs. between variability. The formula used to calculate the ICC is presented below.
 
-INSERT ICC FORMULA HERE
+$$ICC = \frac{u_{0j}}{(e_{ij} + u_{0j})}$$
 
-A high ICC indicates low within group variance relative to between group variance, which would be in line with hypothesis 2. 
+A high ICC indicates low within group variance relative to between group variance, which would be in line with hypothesis 2.
 
 In order to test hypothesis 3, the average calculated Cronbach's alpha level within a replication set is used as a predictor of replication success. Replication success was either set to 1 if it reached meta analytic significance at an alpha of .05 in the same direction as that found in the original study, or 0 otherwise. This test aligns with a logistic regression model. With $i = 1,..., n_{replications}$, $p_{replicated}$ being binomially distributed, and $alpha$ referring to the averaged calculated Cronbach's alpha coefficient, the following regression equation was used to model the relation:
 
-INSERT H3 FORMULA HERE
+$$f(replicated_{i}) = \beta_{0} + \beta_{1} alpha_{i}$$
 
 Where:
 
-INSET f(.) FORMULA HERE
+$$f(.) = log\frac{p_{replicated}}{1 - p_{replicated}}$$
 
 In this data, replication attempts at different lab locations can be seen as nested within a replication set. In order to see if this nesting might impact the analyses of hypothesis 3, multilevel logistic regression models were included as sensitivity checks. The dependent variable remains replication success at the replication set level, while Cronbach's alpha is no longer averaged across locations. The models used were a multilevel logistic random intercept and random slope model.
 
 ### Analyses QMPs
-The reported analyses were primarily based on the revised set of QMP data. The results using the original QMP data are mentioned when the results led to different conclusions. The analysis code for both the original and revised QMP data are available in R script on the OSF page of this thesis: <https://osf.io/9r8yt/>. 
+
+The reported analyses were primarily based on the revised set of QMP data. The results using the original QMP data are mentioned when the results led to different conclusions. The analysis code for both the original and revised QMP data are available in R script on the OSF page of this thesis: <https://osf.io/9r8yt/>.
 
 Hypothesis 4, 5, & 6 were all tested using a model with the same dependent variable: total QMP ratio. In order to model a ratio dependent variable, beta regression was used. Beta regression models operate similarly to standard generalized linear models with similar interpretations of the results. What differentiates them is that they are suitable to model dependent variables with values in the interval of $(0, 1)$, meaning ratios. Furthermore, they are well suited for modelling heteroskedastic and asymmetrically distributed dependent variables [@cribari2010beta]. The beta regression model was implemented using the betareg function within the betareg package [@cribari2010beta]. Defaults were used for all function parameters besides the model formula and data. All beta regression models used the beta link function, which is as follows:
 
-INSERT BETALINK FORMULA HERE
+$$g(.) = (0, 1) \mapsto \mathbb{R}$$
 
-All of these models assume that the QMPs are the same across each replication set. The reason being that only one protocol was analysed per replication set, and several of the questions regarding QMPs focus solely on the reporting of relevant measurement information. This assumption was deemed likely, since each replication within a set was based on the same protocol. Furthermore, the goal of these protocols is to ensure that the measurement practices are equal across the different replication studies of the same original effect. 
+All of these models assume that the QMPs are the same across each replication set. The reason being that only one protocol was analysed per replication set, and several of the questions regarding QMPs focus solely on the reporting of relevant measurement information. This assumption was deemed likely, since each replication within a set was based on the same protocol. Furthermore, the goal of these protocols is to ensure that the measurement practices are equal across the different replication studies of the same original effect.
 
 To test hypothesis 4, the total QMP ratios between replication and original research was compared. The model formula for this test looked as follows:
 
-INSERT H4 FORMULA HERE
+$$g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replication_{i}$$
 
 Where $replication_{i}$ is a dummy coded variable, which was coded as 1 in case the reported QMP ratio belonged to a replications, and 0 if it belonged to an original study. For hypothesis 5 a similar formula was used:
 
-INSERT H5 FORMULA HERE
+$$g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replicated_{i}$$
 
 Where $replicated_{i}$ is a dummy coded variable, which was coded as 1 if the meta-analytic effect in the replication set matches the original effect in direction at a significance alpha level of .05, and 0 otherwise. Note here that unlike in the test for hypothesis 4, $QMP\_ratio_{i}$ refers only to the QMP ratios of the replications, meaning that original article QMPs were not included in this analysis.
 
 The relationship between original article QMPs and replication protocol QMPs was modelled to test hypothesis 6. The outcome variable remains the same as in the model for hypothesis 5. The independent variable is changed to the QMP ratio for original articles. The resulting model formula is as follows:
 
-INSERT H6 FORMULA HERE
+$$g(QMP\_ratio\_replication_{i}) = \beta_{0} + \beta_{1} QMP\_ratio\_original_{i}$$
 
-These models had independence of observations as another assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models were implemented as sensitivity analyses for the tests of both hypothesis 5 & 6. In these models each replication set was treated as being nested in its respective Many Labs project. Worth noting is that currently the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@bates2015lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model. 
+These models had independence of observations as another assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models were implemented as sensitivity analyses for the tests of both hypothesis 5 & 6. In these models each replication set was treated as being nested in its respective Many Labs project. Worth noting is that currently the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@bates2015lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model.
 
 ### Exploratory Analyses
+
 Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. As these analyses are exploratory in nature, due to the large number of tests, the focus was on visualisation rather than inference.
 
-Finally, in order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set. A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@revelle2022psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score < .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false. 
+Finally, in order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set. A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@revelle2022psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
 
 # Results
 
