@@ -4,7 +4,7 @@
 
 ## Where do I start?
 
-You can load this project in RStudio by opening the file called 'WORCSPersonalTemplate.Rproj'.
+You can load this project in RStudio by opening the file called 'Reproducbile_R_Project.Rproj'.
 
 ## Project structure
 
@@ -18,13 +18,14 @@ LICENSE                     | User permissions                 | Read only
 renv.lock                   | Reproducible R environment       | Read only     
 renv/                       | storage of info for renv.lock    | Read only     
 Data/AnalysisData           | fully cleaned data, with codebook| Read only
-Data/InputData              | raw data before cleaning         | Human editable
+Data/LocalInputData         | raw data on local system         | Human editable
+Data/InputData              | raw data                         | Human editable
 Data/IntermediateData       | any semi-cleaned data            | Human editable
 Output/DataAppendixOutput   | data descriptives and figures    | Read only      
 Output/Results              | figures and supplements          | Read only      
-Scripts/Manuscript/manuscript.rmd | Source code for paper            | Human editable   
+Scripts/Manuscript/manuscript.rmd | Source code for paper            | Human editable
 Scripts/Manuscript/references.bib | BibTex references for manuscript | Human editable
-Scripts/prepare_data.R      | Script to process raw data       | Human editable
+Scripts/process_data.R      | Script to load in raw data       | Human editable
 Scripts/source_script.R     | Script with self-made functions for the manuscript | Human editable
 SupplementaryMaterials/     | misc. materials                  | Read only      
 
