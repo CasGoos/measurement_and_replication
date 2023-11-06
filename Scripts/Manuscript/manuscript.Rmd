@@ -72,7 +72,7 @@ library("worcs")
 source(file = "../source_script.R")
 
 # Code below loads the processed data. The raw data was prepared for analysis in 'prepare_data.R.
-# load_data(worcs_directory = "../../Data/AnalysisData") 
+# load_data() 
 
 # creates a reference list for all used R packages and the installed R version (does not include Rstudio)
 r_refs("r-references.bib")
@@ -210,9 +210,18 @@ The measures of primary variables were identified by combing through the entire 
 
 The structured coding protocol was used for both replication protocols and original studies. A series of questions relating to measurement practices and measurement error were used to extract the information. Descriptions of the extracted variables can be found in the Measures section below. The scope of the coding was limited to the abstract, method, procedure, materials, measure, and initial parts of the results sections. Additionally, a keyword search using the name of the measured variable was used to search for any potentially missed information. An exception to this procedure was a question asking about the presence of example items. For this question, information from supplementary materials was uniquely considered as relevant. Another exception was the question regarding the replication of the original effect. Tables from the final report of each Many Labs project were used to answer that question.
 
-<!-- @ref(sec:measures) didn't work for section corss-reference in the paragraph above-->
+<!-- @ref(sec:measures) didn't work for section cross-reference in the paragraph above-->
 
 After the data was initially coded according to the preregistered coding protocol, it was determined, based on discussion with the supervisor, that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more favourable judgement of QMPs. These changes included: accepting linked online appendices as a data source for example items; assuming that if no differences between replication and original are measurement is mentioned, that there is no difference, even if it is not explicitly clear; and generally simplified criteria for what constituted sufficiently clear reporting. The revision of the coding protocol happened after all the data were coded using the initial protocol. As a result the coded data using the initial protocol, and the coded data using the revised protocol are both available available on this thesis' OSF page: <https://osf.io/9r8yt/>. Both raw and processed formats are present.
+
+```{r}
+open_data(data = Data_ML1, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(Data_ML1))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/AnalysisData/codebook_", deparse(substitute(Data_ML1))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/AnalysisData/value_labels_", deparse(substitute(Data_ML1))), ".yml")) 
+```
 
 ## Measures {#sec:measures}
 

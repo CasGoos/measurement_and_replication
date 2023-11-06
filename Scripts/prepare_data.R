@@ -69,7 +69,7 @@ Data_5.1 <- read_excel("Data/LocalInputData/MLRetrievedData/ML5 Alb 5 Revised Pr
 Data_5.4 <- read.spss("Data/LocalInputData/MLRetrievedData/dataset_LoBue_raw.sav", 
                       to.data.frame = TRUE)
 # 5.5.1 & 5.5.2
-Data_5.5.1 <- read.csv("Data/LocalInputData/MLRetrievedData/Payne replication Data/Genova_ML5.csv")
+Data_5.5 <- read.csv("Data/LocalInputData/MLRetrievedData/Payne replication Data/Genova_ML5.csv")
 # 5.7 
 Data_5.7 <- read.csv("Data/LocalInputData/MLRetrievedData/ml5_computed_dataset.csv")
 # 5.9.1
@@ -88,16 +88,94 @@ Coded_Data_Vignette_raw <- read.csv("Data/LocalInputData/CodedData/Coded Data (V
 
 
 # Data Storing -----------------------------------------------------------------
-# replace iris with your own dataframe
-open_data(data = iris, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(iris))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/InputData/codebook_", deparse(substitute(iris))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/InputData/value_labels_", deparse(substitute(iris))), ".yml")) 
+closed_data(data = Data_ML1, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_ML1))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.2, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.2))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.3, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.3))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.4.1, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.4.1))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.4.2, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.4.2))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.8.2, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.8.2))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.10.1, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.10.1))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.12, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.12))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.15, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.15))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.19.1, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.19.1))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.20, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.20))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_2.23, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_2.23))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_ML3, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_ML3))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_3.5, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_3.5))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_5.1, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_5.1))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_5.4, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_5.4))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_5.5, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_5.5))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_5.7, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_5.7))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+closed_data(data = Data_5.9.1, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Data_5.9.1))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
 
 
+open_data(data = Coded_Data_Initial_raw, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Coded_Data_Initial_raw))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
 
-save(Data_5.7, file = "Many Labs Data/Likely Useable/Data_5.7.RData")
-save(Data_5.9.1, file = "Many Labs Data/Likely Useable/Data_5.9.1.RData")
+open_data(data = Coded_Data_Revised_raw, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Coded_Data_Revised_raw))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+open_data(data = Coded_Data_Vignette_raw, filename = paste0(paste0(
+  "Data/InputData/", deparse(substitute(Coded_Data_Vignette_raw))), ".csv"),
+  codebook = NULL, value_labels = NULL) 
+
+
 
