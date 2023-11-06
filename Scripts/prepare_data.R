@@ -88,93 +88,74 @@ Coded_Data_Vignette_raw <- read.csv("Data/LocalInputData/CodedData/Coded Data (V
 
 
 # Data Storing -----------------------------------------------------------------
-closed_data(data = Data_ML1, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_ML1))), ".csv"),
+closed_data(data = Data_ML1, filename = "Data/InputData/Data_ML1.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.2, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.2))), ".csv"),
+closed_data(data = Data_2.2, filename = "Data/InputData/Data_2.2.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.3, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.3))), ".csv"),
+closed_data(data = Data_2.3, filename = "Data/InputData/Data_2.3.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.4.1, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.4.1))), ".csv"),
+closed_data(data = Data_2.4.1, filename = "Data/InputData/Data_2.4.1.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.4.2, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.4.2))), ".csv"),
+closed_data(data = Data_2.4.2, filename = "Data/InputData/Data_2.4.2.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.8.2, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.8.2))), ".csv"),
+closed_data(data = Data_2.8.2, filename = "Data/InputData/Data_2.8.2.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.10.1, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.10.1))), ".csv"),
+closed_data(data = Data_2.10.1, filename = "Data/InputData/Data_2.10.1.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.12, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.12))), ".csv"),
+closed_data(data = Data_2.12, filename = "Data/InputData/Data_2.12.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.15, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.15))), ".csv"),
+closed_data(data = Data_2.15, filename = "Data/InputData/Data_2.15.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.19.1, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.19.1))), ".csv"),
+closed_data(data = Data_2.19.1, filename = "Data/InputData/Data_2.19.1.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.20, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.20))), ".csv"),
+closed_data(data = Data_2.20, filename = "Data/InputData/Data_2.20.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_2.23, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_2.23))), ".csv"),
+closed_data(data = Data_2.23, filename = "Data/InputData/Data_2.23.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_ML3, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_ML3))), ".csv"),
+closed_data(data = Data_ML3, filename = "Data/InputData/Data_ML3.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_3.5, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_3.5))), ".csv"),
+closed_data(data = Data_3.5, filename = "Data/InputData/Data_3.5.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_5.1, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_5.1))), ".csv"),
+closed_data(data = Data_5.1, filename = "Data/InputData/Data_5.1.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_5.4, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_5.4))), ".csv"),
+closed_data(data = Data_5.4, filename = "Data/InputData/Data_5.4.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_5.5, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_5.5))), ".csv"),
+closed_data(data = Data_5.5, filename = "Data/InputData/Data_5.5.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_5.7, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_5.7))), ".csv"),
+closed_data(data = Data_5.7, filename = "Data/InputData/Data_5.7.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
-closed_data(data = Data_5.9.1, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Data_5.9.1))), ".csv"),
+closed_data(data = Data_5.9.1, filename = "Data/InputData/Data_5.9.1.csv",
   codebook = NULL, value_labels = NULL, synthetic = FALSE) 
 
 
-open_data(data = Coded_Data_Initial_raw, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Coded_Data_Initial_raw))), ".csv"),
+open_data(data = Coded_Data_Initial_raw, 
+          filename = "Data/InputData/Coded_Data_Initial_raw.csv",
   codebook = NULL, value_labels = NULL) 
 
-open_data(data = Coded_Data_Revised_raw, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Coded_Data_Revised_raw))), ".csv"),
+open_data(data = Coded_Data_Revised_raw, 
+          filename = "Data/InputData/Coded_Data_Revised_raw.csv",
   codebook = NULL, value_labels = NULL) 
 
-open_data(data = Coded_Data_Vignette_raw, filename = paste0(paste0(
-  "Data/InputData/", deparse(substitute(Coded_Data_Vignette_raw))), ".csv"),
+open_data(data = Coded_Data_Vignette_raw, 
+          filename = "Data/InputData/Coded_Data_Vignette_raw.csv",
   codebook = NULL, value_labels = NULL) 
 
 

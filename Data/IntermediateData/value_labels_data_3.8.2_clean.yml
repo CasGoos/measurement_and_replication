@@ -1,0 +1,23 @@
+g:
+  class: factor
+  '1': AshlandUniversity
+  '2': BradleyUniversity
+  '3': CarletonUniversity
+  '4': IthacaCollege
+  '5': MiamiUniversity
+  '6': MichiganStateUniversity
+  '7': MontanaStateUniversity
+  '8': mTurk
+  '9': NovaSoutheasternUniversity
+  '10': OSUNewark
+  '11': PacificLutheranUniversity
+  '12': PennStateAbington
+  '13': SanDiegoStateUniversity
+  '14': TexasAandM
+  '15': UCDavis
+  '16': UCRiverside
+  '17': UniversityOfFlorida
+  '18': UniversityOfSouthernMississippi
+  '19': UniversityOfToronto
+  '20': UniversityOfVirginia
+  '21': VirginiaCommonwealthUniversity

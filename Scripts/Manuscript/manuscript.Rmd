@@ -73,7 +73,7 @@ library(psych)
 source(file = "../source_script.R")
 
 # Code below loads the processed data. The raw data was prepared for analysis in 'prepare_data.R.
-# load_data() 
+load_data() 
 
 # creates a reference list for all used R packages and the installed R version (does not include Rstudio)
 r_refs("r-references.bib")
@@ -185,6 +185,236 @@ The replication datasets refer to the data of each of the replication attempts f
 
 For Many Labs 1, all the relevant replication data was available in a single csv file. For Many Labs 2 & 3 the situation was similar, only here the files were split across two csv files for each project. For Many Labs 5, the data was made available for each of the ten replication sets separately. Three out of the ten datasets were furthermore split across the various locations at which they were taken. If cleaned data was available this was chosen over raw data. Pilot data were omitted from the analyses entirely. This resulted in suitable measure data from eighteen replication sets spread across on average 40 lab locations for the analyses of hypotheses 2 & 3.
 
+```{r Cleaning Replication Datasets Data}
+##### Data already available, code does not need to be run!
+### ML 1
+# 1.3
+data_1.3_clean <- cbind(as.factor(data_ml1[[5]]), data_ml1[22:29])
+colnames(data_1.3_clean)[1] <- "g"
+# 1.10
+data_1.10_clean <- cbind(as.factor(data_ml1[[5]]), data_ml1[108:115])
+colnames(data_1.10_clean)[1] <- "g"
+# 1.11
+data_1.11_clean <- cbind(as.factor(data_ml1[[5]]), data_ml1[73:76])
+colnames(data_1.11_clean)[1] <- "g"
+# 1.12.1
+# not found
+# 1.12.3
+data_1.12.3.1_clean <- cbind(as.factor(data_ml1[[5]]), data_ml1[54:59])
+colnames(data_1.12.3.1_clean)[1] <- "g"
+data_1.12.3.2_clean <- cbind(as.factor(data_ml1[[5]]), data_ml1[60:65])
+colnames(data_1.12.3.2_clean)[1] <- "g"
+
+### ML 2
+# 2.2
+data_2.2_clean <- cbind(as.factor(data_2.2[[5]]), data_2.2[6:11])
+colnames(data_2.2_clean)[1] <- "g"
+# 2.3
+# data does not appear suitable
+# 2.4.1
+data_2.4.1_clean <- cbind(as.factor(data_2.4.1[[5]]), data_2.4.1[6:11])
+colnames(data_2.4.1_clean)[1] <- "g"
+# 2.4.2
+data_2.4.2_clean <- cbind(as.factor(data_2.4.2[[5]]), data_2.4.2[6:14])
+colnames(data_2.4.2_clean)[1] <- "g"
+# 2.8.2
+data_2.8.2_clean <- cbind(as.factor(data_2.8.2[[6]]), data_2.8.2[9:13])
+colnames(data_2.8.2_clean)[1] <- "g"
+# 2.10.1
+data_2.10.1_clean <- cbind(as.factor(data_2.10.1[[5]]), data_2.10.1[6:11])
+colnames(data_2.10.1_clean)[1] <- "g"
+# 2.12.1
+data_2.12.1_clean <- cbind(as.factor(data_2.12[[5]]), data_2.12[c(6,7,8,9,10,31,32,33,34,35)]) 
+data_2.12.1_clean[3465:6905,2:6] <- data_2.12.1_clean[3465:6905,7:11]
+data_2.12.1_clean <- data_2.12.1_clean[1:6]
+colnames(data_2.12.1_clean)[1] <- "g"
+# 2.12.2
+data_2.12.2_clean <- cbind(as.factor(data_2.12[[5]]), data_2.12[c(11,14,15,18,19,22,24,27,28,29,36,39,40,43,44,47,49,52,53,54)]) 
+data_2.12.2_clean[3465:6905,2:11] <- data_2.12.2_clean[3465:6905,12:21]
+data_2.12.2_clean <- data_2.12.2_clean[1:11]
+colnames(data_2.12.2_clean)[1] <- "g"
+# 2.12.3
+data_2.12.3_clean <- cbind(as.factor(data_2.12[[5]]), data_2.12[c(12,13,16,17,20,21,23,25,26,30,37,38,41,42,45,46,48,50,51,55)]) 
+data_2.12.3_clean[3465:6905,2:11] <- data_2.12.3_clean[3465:6905,12:21]
+data_2.12.3_clean <- data_2.12.3_clean[1:11]
+colnames(data_2.12.3_clean)[1] <- "g"
+# 2.15
+data_2.15_clean <- cbind(as.factor(data_2.15[[5]]), data_2.15[8:12])
+colnames(data_2.15_clean)[1] <- "g"
+# 2.19.1
+# difficult to extract
+# 2.19.2
+# difficult to extract
+# 2.20
+data_2.20_clean <- cbind(as.factor(data_2.20[[5]]), data_2.20[6:45] - 1) 
+data_2.20_clean[3729:7396,2:21] <- data_2.20_clean[3729:7396,22:41]
+data_2.20_clean <- data_2.20_clean[1:21] 
+colnames(data_2.20_clean)[1] <- "g"
+# 2.23
+data_2.23_clean <- cbind(as.factor(data_2.23[[5]]), data_2.23[c(7,8,12,13,15)])
+colnames(data_2.23_clean)[1] <- "g"
+
+
+### ML 3
+# 3.2.1
+data_3.2.1 <- cbind(as.factor(data_ml3[[1]]), data_ml3[77:86] - 1)
+data_3.2.1.1_clean <- na.omit(data_3.2.1[1:6])
+colnames(data_3.2.1.1_clean)[1] <- "g"
+data_3.2.1.2_clean <- na.omit(data_3.2.1[c(1, 7:11)])
+colnames(data_3.2.1.2_clean)[1] <- "g"
+# 3.5
+# data appears unusable
+# 3.7.1
+data_3.7.1_clean <- na.omit(cbind(as.factor(data_ml3[[1]]), data_ml3[38:42]))
+colnames(data_3.7.1_clean)[1] <- "g"
+# 3.7.2
+data_3.7.2_clean <- na.omit(cbind(as.factor(data_ml3[[1]]), data_ml3[89:94]))
+colnames(data_3.7.2_clean)[1] <- "g"
+# 3.8.1
+# a single measure was reported
+# 3.8.2
+data_3.8.2_clean <- na.omit(cbind(as.factor(data_ml3[[1]]), data_ml3[29:30])) 
+colnames(data_3.8.2_clean)[1] <- "g"
+
+
+### ML 5
+# 5.1.1
+data_5.1.1_clean <- cbind(as.factor(data_5.1[[2]]), data_5.1[13:33])
+colnames(data_5.1.1_clean)[1] <- "g"
+# 5.1.2
+# difficult to separate .1 from .2
+# 5.4
+data_5.4_clean <- cbind(as.factor(data_5.4[[1]]), data_5.4[18:41])
+colnames(data_5.4_clean)[1] <- "g"
+# 5.5.1 & 5.5.2
+# from this dataset it appears that this data will be difficult to use.
+# 5.5.2
+# also difficult to use
+# 5.7 
+data_5.7_clean <- cbind(as.factor(data_5.7[[3]]), data_5.7[c(25, 34, 35, 36, 37, 38, 39, 40, 41, 42)])
+colnames(data_5.7_clean)[1] <- "g"
+# 5.9.1
+data_5.9.1_clean <- na.omit(cbind(as.factor(data_5.9.1[[4]]), data_5.9.1[c(79, 83, 87, 91, 95, 98, 101)]))
+colnames(data_5.9.1_clean)[1] <- "g"
+
+### to summarize
+# total number of likely usable: 15 (1.10, 1.11, 1.12.3.1, 1.12.3.2, 2.10.1, 
+# 2.12.1, 2.12.2, 2.12.3, 2.15, 2.23, 3.7.1, 3.7.2, 3.8.2, 5.7, 5.9.1)
+# total number of maybe usable: 6 (1.3, 2.20, 3.2.1.1, 3.2.1.2, 5.1.1, 5.4)
+# total alpha coefficient comparison usable: 3 
+#                                           1.11: 0.82
+#                                           3.7.2: 0.67
+#                                           5.9.1: 0.84
+
+
+### Saving to Intermediate Data Folder
+closed_data(data = data_1.3_clean, filename = "Data/IntermediateData/data_1.3_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_1.3_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_1.3_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_1.10_clean, filename = "Data/IntermediateData/data_1.10_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_1.10_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_1.10_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_1.11_clean, filename = "Data/IntermediateData/data_1.11_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_1.11_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_1.11_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_1.12.3.1_clean, filename = "Data/IntermediateData/data_1.12.3.1_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_1.12.3.1_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_1.12.3.1_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_1.12.3.2_clean, filename = "Data/IntermediateData/data_1.12.3.2_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_1.12.3.2_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_1.12.3.2_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_2.10.1_clean, filename = "Data/IntermediateData/data_2.10.1_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_2.10.1_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_2.10.1_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_2.12.1_clean, filename = "Data/IntermediateData/data_2.12.1_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_2.12.1_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_2.12.1_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_2.12.2_clean, filename = "Data/IntermediateData/data_2.12.2_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_2.12.2_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_2.12.2_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_2.12.3_clean, filename = "Data/IntermediateData/data_2.12.3_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_2.12.3_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_2.12.3_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_2.15_clean, filename = "Data/IntermediateData/data_2.15_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_2.15_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_2.15_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_2.20_clean, filename = "Data/IntermediateData/data_2.20_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_2.20_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_2.20_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_2.23_clean, filename = "Data/IntermediateData/data_2.23_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_2.23_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_2.23_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_3.2.1.1_clean, filename = "Data/IntermediateData/data_3.2.1.1_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_3.2.1.1_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_3.2.1.1_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_3.2.1.2_clean, filename = "Data/IntermediateData/data_3.2.1.2_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_3.2.1.2_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_3.2.1.2_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_3.7.1_clean, filename = "Data/IntermediateData/data_3.7.1_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_3.7.1_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_3.7.1_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_3.7.2_clean, filename = "Data/IntermediateData/data_3.7.2_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_3.7.2_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_3.7.2_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_3.8.2_clean, filename = "Data/IntermediateData/data_3.8.2_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_3.8.2_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_3.8.2_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_5.1.1_clean, filename = "Data/IntermediateData/data_5.1.1_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_5.1.1_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_5.1.1_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_5.4_clean, filename = "Data/IntermediateData/data_5.4_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_5.4_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_5.4_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_5.7_clean, filename = "Data/IntermediateData/data_5.7_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_5.7_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_5.7_clean.yml", 
+            synthetic = FALSE) 
+
+closed_data(data = data_5.9.1_clean, filename = "Data/IntermediateData/data_5.9.1_clean.csv",
+            codebook = "Data/IntermediateData/codebook_data_5.9.1_clean.Rmd", 
+            value_labels = "Data/IntermediateData/value_labels_data_5.9.1_clean.yml", 
+            synthetic = FALSE) 
+
+```
+
 ### Preregistered Replication Protocols
 
 The preregistered replication protocols refer to the publicly available protocols describing the background, methodology, and analysis of each replication set. These protocols were available through the OSF pages of each Many Labs project. These preregistered replication protocols, as well as the replication datasets mentioned earlier were scanned through to ensure that the planned analyses were feasible. However, no coding or analysis of either of them had taken place before the analyses were preregistered. This includes any systematic coding of the QMPs present in the report. Furthermore, no overview of these and the qualitative topics were available at the time of preregistration.
@@ -194,6 +424,77 @@ Finally, the reports of the Many Labs projects, meaning the published articles [
 ### Original Study
 
 The original study articles are the published articles of the original effect on which the Many Labs replication sets were based. In the case of Many Labs 5 the original studies refer to the studies which first tested the effect to be replicated, not the earlier replication attempts of the same effects in the RPP [@osc2015estimating].
+
+```{r Cleaning Coded Data}
+##### Data already available, code does not need to be run!
+# Selecting the relevant rows and columns for the data
+coded_data_initial_sel <- coded_data_initial_raw[3:160, 18:57]
+coded_data_revised_sel <- coded_data_revised_raw[3:160, 18:38]
+coded_data_vignette_raw <- coded_data_vignette_raw[3:160, 2]
+
+# Combining the datasets
+coded_data_full <- cbind(coded_data_initial_sel, 
+                         cbind(coded_data_revised_sel, coded_data_vignette_raw))
+
+# filtering out unnecessary double columns
+coded_data_full <- cbind(coded_data_full[, 1:40], coded_data_full[, 45:62])
+
+
+### creating the cleaned dataset using the functions in the source code 
+coded_data_clean <- calculating(recoding(restructuring(fixing(
+  renaming(coded_data_full)))))
+
+
+
+### Saving to Intermediate Data Folder
+# Splitting data into replication and original
+coded_data_replications <- coded_data_clean[1:77,]
+coded_data_original <- coded_data_clean[78:157,]
+
+# difference in dataset row number is due to the fact that the moral foundations
+# questionnaire in original 2.4 is reported using all 5 of its factors, whereas
+# in replication 2.4 only the two overarching groups of binding and 
+# individualizing foundations are described.
+# For that reason a shortened original dataset will be used for any direct
+# comparisons between original and replication coding.
+coded_data_original_shortened <- coded_data_original[c(1:17, 19, 22:80),] 
+coded_data_original_shortened[c(18,19),5] <- 
+  c("individualizing moral foundations", "binding moral foundations")
+coded_data_original_shortened[18,13] <- NA
+coded_data_original_shortened[19,13] <- NA
+
+
+# exporting cleaned data
+open_data(data = coded_data_replications, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(coded_data_replications))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(coded_data_replications))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(coded_data_replications))), ".yml")) 
+
+open_data(data = coded_data_original, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(coded_data_original))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(coded_data_original))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(coded_data_original))), ".yml")) 
+
+open_data(data = coded_data_original_shortened, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(coded_data_original_shortened))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(coded_data_original_shortened))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(coded_data_original_shortened))), ".yml")) 
+
+
+```
+
 
 ## Data Collection
 
@@ -216,12 +517,7 @@ The structured coding protocol was used for both replication protocols and origi
 After the data was initially coded according to the preregistered coding protocol, it was determined, based on discussion with the supervisor, that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more favourable judgement of QMPs. These changes included: accepting linked online appendices as a data source for example items; assuming that if no differences between replication and original are measurement is mentioned, that there is no difference, even if it is not explicitly clear; and generally simplified criteria for what constituted sufficiently clear reporting. The revision of the coding protocol happened after all the data were coded using the initial protocol. As a result the coded data using the initial protocol, and the coded data using the revised protocol are both available available on this thesis' OSF page: <https://osf.io/9r8yt/>. Both raw and processed formats are present.
 
 ```{r}
-open_data(data = Data_ML1, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(Data_ML1))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", deparse(substitute(Data_ML1))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", deparse(substitute(Data_ML1))), ".yml")) 
+
 ```
 
 ## Measures {#sec:measures}
@@ -255,6 +551,24 @@ The same data as for the test of hypothesis 2 was used to check for the unidimen
 ### Validity Measure
 
 The same data as for the test of hypothesis 2 was used to check for the unidimensionality of the factor structure, as part of the exploratory analyses. A check for unidimensionality as validity evidence only makes sense if the measure was intended to be unidimensional. Therefore, for each replication for which data was available, the protocol was checked to ensure that the scores on each measure were meant to assess a single construct.
+
+```{r Check for Reliability and Validity Testability}
+## Checking the measures to recalculate the reliability and factor analysis for.
+## The question: "Are they psychometrics scales or not?", is key here.
+View(coded_data_replications)
+
+# Likely reliability: 1.10, 1.11, 1.12.3, 2.4.1, 2.4.2, 2.8.2, 2.10.1, 2.12.1, 
+# 2.12.2, 2.12.3, 2.15, 2.19.2, 2.23, 3.7.1, 3.7.2, 3.8.1, 3.8.2, 5.7, 5.9.1
+# Likely factor: 1.10, 1.11, 1.12.3, 2.4.1, 2.4.2, 2.8.2, 2.10.1, 2.12.1, 2.12.2,
+# 2,12,3, 2.15, 2.19.2, 2.23, 3.7.1, 3.7.2, 3.8.1, 3.8.2, 5.7, 5.9.1
+# Maybe reliability: 1.3, 1.12.1, 2.2, 2.3, 2.19.1, 2.20, 3.2.1, 3.5, 5.1.1, 
+# 5.1.2, 5.4, 5.5.1, 5.5.2
+# Maybe factor: 1.3, 1.12.1, 2.3, 2.19.1, 2.20, 3.2.1, 3.5, 5.1.1, 5.1.2, 5.4,
+# 5.5.1, 5.5.2
+
+# 1.9 is difficult, might be a scale as dv rather than voting behaviour.
+```
+
 
 ## Analyses
 

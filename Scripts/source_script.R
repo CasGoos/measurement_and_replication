@@ -1,5 +1,223 @@
 # source_script
 
+# Data Cleaning Functions ------------------------------------------------------
+### renaming the columns and rows to accommodate the joining of the three 
+### datasets.
+renaming <- function(Data){
+  # renaming columns
+  colnames(Data) <- 
+    c("many_labs_version", "rep_org", "title", "measure_name", "variable_name",
+      "multi", "appearance", "N", "N_items", "hypothesis_support", 
+      "reliability_type", "reliability_type_text", "reliability_coeff",
+      "def1", "op_version", "op_1", "op_2", "op_3", "op_4", "op_5", 
+      "sel_existing", "sel_existing_text", "sel_1", "sel_2", "sel_3", "sel_4",
+      "sel_psychometric_evidence", "sel_psychometric_evidence_text", "quant_1",
+      "quant_2", "quant_3", "quant_4", "mod_check", "mod_1", "mod_2", "mod_3",
+      "mod_4", "mod_5", "mod_6", "mod_time", "op_1_REV", "op_2_REV",
+      "op_5_REV", "sel_1_REV", "sel_3_REV", "sel_psychometric_evidence_REV", 
+      "sel_psychometric_evidence_text_REV", "quant_1_REV", "quant_2_REV", 
+      "quant_3_REV", "mod_check_REV", "mod_1_REV", "mod_2_REV", "mod_3_REV", 
+      "mod_4_REV", "mod_5_REV", "mod_6_REV", "inseperable_material")
+  
+  # renaming rows
+  rownames(Data) <- 1:nrow(Data)
+  
+  return(Data)
+}
+
+
+### Fixing some coding misses.
+fixing <- function(Data){
+  Data$variable_name[79] <- "quote attribution effect"
+  Data$N[3] <- "5284"
+  Data$N[158] <- "1202"
+  Data$reliability_type[50] <- "Not Reported"
+  Data$reliability_type[127] <- "Not Reported"
+  Data$op_1[145] <- "False"
+  Data$op_3[121] <- "True"
+  Data$op_5[157] <- "True"
+  Data$sel_1[59] <- "True"
+  Data$quant_2[113] <- "True"
+  Data$mod_time[1] <- "Before"
+  
+  return(Data)
+}
+
+
+
+### Moving around of entries
+restructuring <- function(Data){
+  # removing missing entry 77
+  Data <- data.frame(Data)[-77,]
+  
+  # Many labs 2.25 and 2.26, as well as 3.4 and 3.5 (for replications) were coded 
+  # in reverse order thus need to be swapped in right order. Additionally, some
+  # of the entries were included later than following their order, due to some
+  # minor coding oversights.
+  Coded_Data_Full_Restructured <- Data[1:18,]
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[148,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[19:23,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[147,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[24:28,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[153,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[29:40,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[154,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[42,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[41,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[155,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[43:49,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[156,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[51,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[50,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[52:76,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[157,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[77:88,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[149:152,])
+  Coded_Data_Full_Restructured <- rbind(Coded_Data_Full_Restructured, 
+                                        Data[89:146,])
+  
+  rownames(Coded_Data_Full_Restructured) <- 1:nrow(Coded_Data_Full_Restructured)
+  
+  return(Coded_Data_Full_Restructured)
+}
+
+
+### Recoding Dataset Content for Analysis
+recoding <- function(Data){
+  # changing the variable types for each column
+  class(Data$many_labs_version) <- "numeric"
+  Data$rep_org <- droplevels(as.factor(Data$rep_org))
+  Data$multi <- droplevels(as.factor(Data$multi))
+  Data$appearance <- droplevels(as.factor(Data$appearance))
+  class(Data$N) <- "numeric"
+  Data$N_items <- droplevels(as.factor(Data$N_items))
+  Data$hypothesis_support <- droplevels(as.factor(Data$hypothesis_support))
+  levels(Data$hypothesis_support) <- c("No", "Unclear", "Yes")
+  Data$reliability_type <- droplevels(as.factor(Data$reliability_type))
+  class(Data$reliability_coeff) <- "numeric"
+  Data$def1 <- as.logical(Data$def1)
+  Data$op_1 <- as.logical(Data$op_1)
+  Data$op_2 <- as.logical(Data$op_2)
+  Data$op_3 <- as.logical(Data$op_3)
+  Data$op_4 <- as.logical(Data$op_4)
+  Data$op_5 <- as.logical(Data$op_5)
+  Data$sel_existing <- droplevels(as.factor(Data$sel_existing))
+  Data$sel_1 <- as.logical(Data$sel_1)
+  Data$sel_2 <- as.logical(Data$sel_2)
+  Data$sel_3 <- as.logical(Data$sel_3)
+  Data$sel_4 <- as.logical(Data$sel_4)
+  Data$sel_psychometric_evidence <- 
+    droplevels(as.factor(Data$sel_psychometric_evidence))
+  Data$quant_1 <- as.logical(Data$quant_1)
+  Data$quant_2 <- as.logical(Data$quant_2)
+  Data$quant_3 <- as.logical(Data$quant_3)
+  Data$quant_4 <- as.logical(Data$quant_4)
+  Data$mod_check <- droplevels(as.factor(Data$mod_check))
+  Data$mod_1 <- as.logical(Data$mod_1)
+  Data$mod_2 <- as.logical(Data$mod_2)
+  Data$mod_3 <- as.logical(Data$mod_3)
+  Data$mod_4 <- as.logical(Data$mod_4)
+  Data$mod_5 <- as.logical(Data$mod_5)
+  Data$mod_6 <- as.logical(Data$mod_6)
+  Data$mod_time <- droplevels(as.factor(Data$mod_time))
+  Data$op_1_REV <- as.logical(Data$op_1_REV)
+  Data$op_2_REV <- as.logical(Data$op_2_REV)
+  Data$op_5_REV <- as.logical(Data$op_5_REV)
+  Data$sel_1_REV <- as.logical(Data$sel_1_REV)
+  Data$sel_3_REV <- as.logical(Data$sel_3_REV)
+  Data$sel_psychometric_evidence_REV <- 
+    droplevels(as.factor(Data$sel_psychometric_evidence_REV))
+  Data$quant_1_REV <- as.logical(Data$quant_1_REV)
+  Data$quant_2_REV <- as.logical(Data$quant_2_REV)
+  Data$quant_3_REV <- as.logical(Data$quant_3_REV)
+  Data$mod_check_REV <- droplevels(as.factor(Data$mod_check_REV))
+  Data$mod_1_REV <- as.logical(Data$mod_1_REV)
+  Data$mod_2_REV <- as.logical(Data$mod_2_REV)
+  Data$mod_3_REV <- as.logical(Data$mod_3_REV)
+  Data$mod_4_REV <- as.logical(Data$mod_4_REV)
+  Data$mod_5_REV <- as.logical(Data$mod_5_REV)
+  Data$mod_6_REV <- as.logical(Data$mod_6_REV)
+  Data$inseperable_material <- droplevels(as.factor(Data$inseperable_material))
+  
+  return(Data)
+}
+
+
+### calculating total applicable qmps and attained qmps in total and per 
+### category, for both revised and not revised data.
+calculating <- function(Data){
+  Data$def_count <- as.numeric(Data$def1)
+  Data$def_count[is.na(Data$def_count)] <- 0
+  Data$def_total <- as.numeric(!is.na(Data$def1))
+  Data$def_ratio <- 1 - round(Data$def_count / Data$def_total, 4) 
+  Data$def_ratio[is.na(Data$def_ratio)] <- 0
+  
+  Data$op_count <- rowSums(Data[16:20], na.rm = TRUE)
+  Data$op_total <- rowSums(!is.na(Data[16:20]))
+  Data$op_ratio <- 1 - round(Data$op_count / Data$op_total, 4)
+  
+  Data$sel_count <- rowSums(Data[23:26], na.rm = TRUE)
+  Data$sel_total <- rowSums(!is.na(Data[23:26]))
+  Data$sel_ratio <- 1 - round(Data$sel_count / Data$sel_total, 4) 
+  
+  Data$quant_count <- rowSums(Data[29:32], na.rm = TRUE)
+  Data$quant_total <- rowSums(!is.na(Data[29:32]))
+  Data$quant_ratio <- 1 - round(Data$quant_count / Data$quant_total, 4)  
+  
+  Data$mod_count <- rowSums(Data[34:39], na.rm = TRUE)
+  Data$mod_total <- rowSums(!is.na(Data[34:39]))
+  Data$mod_ratio <- 1 - round(Data$mod_count / Data$mod_total, 4) 
+  
+  Data$MP_total <- Data$def_total + Data$op_total + Data$sel_total + 
+    Data$quant_total + Data$mod_total
+  Data$MP_count <- Data$def_count + Data$op_count + 
+    Data$sel_count + Data$quant_count + Data$mod_count
+  Data$QMP_ratio <- 1 - round(Data$MP_count / Data$MP_total, 4) 
+  
+  Data$op_REV_count <- rowSums(Data[c(18,19,41,42,43)], na.rm = TRUE)
+  Data$op_REV_total <- rowSums(!is.na(Data[c(18,19,41,42,43)]))
+  Data$op_REV_ratio <- 1 - round(Data$op_REV_count / Data$op_REV_total, 4) 
+  
+  Data$sel_REV_count <- rowSums(Data[c(24,26,44,45)], na.rm = TRUE)
+  Data$sel_REV_total <- rowSums(!is.na(Data[c(24,26,44,45)]))
+  Data$sel_REV_ratio <- 1 - round(Data$sel_REV_count / Data$sel_REV_total, 4)  
+  
+  Data$quant_REV_count <- rowSums(Data[c(32,48,49,50)], na.rm = TRUE)
+  Data$quant_REV_total <- rowSums(!is.na(Data[c(32,48,49,50)]))
+  Data$quant_REV_ratio <- 1 - round(Data$quant_REV_count / Data$quant_REV_total, 
+                                    4) 
+  
+  Data$mod_REV_count <- rowSums(Data[52:57], na.rm = TRUE)
+  Data$mod_REV_total <- rowSums(!is.na(Data[52:57]))
+  Data$mod_REV_ratio <- 1 - round(Data$mod_REV_count / Data$mod_REV_total, 4) 
+  
+  Data$MP_REV_count <- Data$def_count + Data$op_REV_count + 
+    Data$sel_REV_count + Data$quant_REV_count + Data$mod_REV_count
+  Data$MP_REV_total <- Data$def_total + Data$op_REV_total + 
+    Data$sel_REV_total + Data$quant_REV_total + Data$mod_REV_total
+  Data$QMP_REV_ratio <- 1 - round(Data$MP_REV_count / Data$MP_REV_total, 4) 
+  
+  return(Data)
+}
+
 # QMP Related Functions --------------------------------------------------------
 ### Hypothesis 2 
 # data load and prep function
@@ -305,32 +523,6 @@ Sensitivity_H6 <- function(Data){
 
 
 # Reliability Related Functions ------------------------------------------------
-Load_Many_Labs_Data <- function(){
-  load("Many Labs Data/Likely Useable/Data_1.10.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_1.11.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_1.12.3.1.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_1.12.3.2.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_2.10.1.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_2.12.1.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_2.12.2.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_2.12.3.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_2.15.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_2.23.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_3.7.1.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_3.7.2.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_3.8.2.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_5.7.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Likely Useable/Data_5.9.1.RData", envir = .GlobalEnv)
-  
-  load("Many Labs Data/Maybe Useable/Data_1.3.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Maybe Useable/Data_2.20.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Maybe Useable/Data_3.2.1.1.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Maybe Useable/Data_3.2.1.2.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Maybe Useable/Data_5.1.1.RData", envir = .GlobalEnv)
-  load("Many Labs Data/Maybe Useable/Data_5.4.RData", envir = .GlobalEnv)
-}
-
-
 ### Hypothesis 1
 # data load and prep function
 data_prep_H1 <- function(Data_Original, Data_Replications){
