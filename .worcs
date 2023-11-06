@@ -4,3 +4,93 @@ entry_point: run_me.R
 recipe:
   recipe: source('run_me.R')
   terminal: no
+data:
+  data/inputdata/data_ml1.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.2.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.3.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.4.1.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.4.2.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.8.2.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.10.1.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.12.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.15.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.19.1.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.20.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_2.23.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_ml3.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_3.5.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_5.1.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_5.4.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_5.5.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_5.7.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/data_5.9.1.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/coded_data_initial_raw.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/coded_data_revised_raw.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+  data/inputdata/coded_data_vignette_raw.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+checksums:
+  data/inputdata/data_ml1.csv: c8c01092a13e0c49be9535fe323e8766
+  data/inputdata/data_2.2.csv: 4e1a0541727d0dcf1df49f7248d5de50
+  data/inputdata/data_2.3.csv: f567d631c915b253938f34f3593e3642
+  data/inputdata/data_2.4.1.csv: 5c37c13eaacf82e4f3065e251f663763
+  data/inputdata/data_2.4.2.csv: 164c0bcd7f3052d127c19e2c2e08acc5
+  data/inputdata/data_2.8.2.csv: f3ea4a6fa95760c1cf268ccc46d0e966
+  data/inputdata/data_2.10.1.csv: 4494b7f01336a56c7ca8259cb3c39fbe
+  data/inputdata/data_2.12.csv: 5464d49272b6022a7c06aff3b5808d50
+  data/inputdata/data_2.15.csv: 1825491bb73c91a7d2bcdcbb8e580c27
+  data/inputdata/data_2.19.1.csv: 98a0fd6a3595c6737b23426465ac3b77
+  data/inputdata/data_2.20.csv: 764fd348bda47be591f1984714d2f9e3
+  data/inputdata/data_2.23.csv: eaa5628b1e1101acd801efdb28cd7fde
+  data/inputdata/data_ml3.csv: b39ef0ccf4c9701321c5e8eed215b524
+  data/inputdata/data_3.5.csv: 7d3b70800f81d66f66f80fb7388fadde
+  data/inputdata/data_5.1.csv: f6c0a2a9cf16cf073e88f9685443be4e
+  data/inputdata/data_5.4.csv: 5e90308f99faa5c3c508c20b48904e77
+  data/inputdata/data_5.5.csv: 669529cb30fc6a8a212f6acb2824fdd8
+  data/inputdata/data_5.7.csv: 1c2f4a0f72c9a0bc57dcdfbbdb4e8d71
+  data/inputdata/data_5.9.1.csv: 06c44700f7790943155070c778b9d6f5
+  data/inputdata/coded_data_initial_raw.csv: b82083b85dd3dde4ffca4fb5b66798ea
+  data/inputdata/coded_data_revised_raw.csv: 8fe3daa97e5ba6f96f7b556cc552414f
+  data/inputdata/coded_data_vignette_raw.csv: 42be25b49f534404e99976dae38679c9
