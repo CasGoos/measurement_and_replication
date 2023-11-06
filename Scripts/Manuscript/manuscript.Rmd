@@ -65,8 +65,9 @@ knit              : worcs::cite_all
 
 ```{r setup, include = FALSE}
 # loading R libraries
-library("papaja")
-library("worcs")
+library(papaja)
+library(worcs)
+library(psych)
 
 # loading source script
 source(file = "../source_script.R")
