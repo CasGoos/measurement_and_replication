@@ -752,7 +752,7 @@ Using the lmer function from the lme4 package [@bates2015lme4], a multilevel nul
 \end{align*}
 ```
 
-```{r Hypothesis 3 Model}
+```{r Hypothesis 2 Model}
 # intercept only model to check the within and between group variance.
 H3_test_result_alpha <- summary(lmer(formula = alpha ~ 1 + (1|g), data = data_H3))
 
@@ -762,11 +762,12 @@ H3_test_result_omega <- summary(lmer(formula = omega.tot ~ 1 + (1|g), data = dat
 
 ```
 
+
 The purpose of this analysis was to investigate variability in calculated reliability coefficients within and between replication sets. However, to the author's knowledge no formal test exists as of the writing of this thesis for testing the significance of within group variance after controlling for between group variance. Instead the intraclass correlation (ICC) coefficient was calculated an indicator of within vs. between variability. The formula used to calculate the ICC is presented below.
 
 $$ICC = \frac{u_{0j}}{(e_{ij} + u_{0j})}$$
 
-A high ICC indicates low within group variance relative to between group variance, which would be in line with hypothesis 3.
+A high ICC indicates low within group variance relative to between group variance, which would be in line with hypothesis 2.
 
 ```{r ICC calculations}
 # alpha
@@ -790,7 +791,54 @@ Where:
 
 $$f(.) = log\frac{p_{replicated}}{1 - p_{replicated}}$$
 
+```{r Hypothesis 3 Main Test}
+## The main model to test hypothesis 3, through a logistic regression model.
+H4_test_result_main_alpha <- summary(glm(formula = replication ~ 1 + alpha_avg, 
+                                     family = binomial(), data = data_H4_avg))
+
+# and for omega
+H4_test_result_main_omega <- summary(glm(formula = replication ~ 1 + 
+                                     omega.tot_avg, family = binomial(), 
+                                     data = data_H4_avg))
+
+# alpha says negative, omega says positive, neither are significant though.
+
+```
+
+
 In this data, replication attempts at different lab locations can be seen as nested within a replication set. In order to see if this nesting might impact the analyses of hypothesis 3, multilevel logistic regression models were included as sensitivity checks. The dependent variable remains replication success at the replication set level, while Cronbach's alpha is no longer averaged across locations. The models used were a multilevel logistic random intercept and random slope model.
+
+```{r Hypothesis 3 Multilevel Model Sensitivity Analyses}
+## sensitivity analyses.
+# running a random intercept multilevel logistic model
+H4_test_result_int_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
+                                                + alpha + (1|g), family = 
+                                                binomial(), data = 
+                                                data_H4_multiple))
+
+# and for omega
+H4_test_result_int_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
+                                                + omega.tot + (1|g), family = 
+                                                  binomial(), data = 
+                                                  data_H4_multiple))
+
+# same as for non-multilevel model
+
+# running a random slope multilevel logistic model
+H4_test_result_slp_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
+                                                + alpha + (1 + alpha|g), 
+                                                family = binomial(), data =
+                                                data_H4_multiple))
+
+# and for omega
+H4_test_result_slp_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
+                                                + omega.tot + (1 + omega.tot|g), 
+                                                family = binomial(), data =
+                                                data_H4_multiple))
+
+# alpha did not converge, and omega shows no significant effect.
+```
+
 
 ### Analyses QMPs
 
