@@ -1,0 +1,12 @@
+QMP_type:
+  class: factor
+  '1': Definition
+  '2': Operationalization
+  '3': Selection
+  '4': Quantification
+  '5': Modification
+  '6': Total
+RepOrg:
+  class: factor
+  '1': Original
+  '2': Replication

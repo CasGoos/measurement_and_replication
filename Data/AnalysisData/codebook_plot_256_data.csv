@@ -1,0 +1,4 @@
+"name","type","n","missing","unique","mean","median","mode","mode_value","sd","v","min","max","range","skew","skew_2se","kurt","kurt_2se","category","description"
+"QMP_type","factor",924,0,7,NA,NA,154,"Definition",NA,0.833333333333333,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"QMP_ratio","numeric",820,0.112554112554113,54,0.244249269084574,0.105194805194805,0.105194805194805,NA,0.296375427674279,NA,0.00649350649350649,0.993506493506494,0.987012987012987,1.15555541404305,6.76681692288002,0.363122049527971,1.06448794730591,NA,NA
+"RepOrg","factor",924,0,3,NA,NA,462,"Original",NA,0.5,NA,NA,NA,NA,NA,NA,NA,NA,NA

@@ -1,0 +1,741 @@
+rep_org:
+  class: factor
+  '1': Original
+  '2': Replication
+title:
+  class: factor
+  '1': ' Intentional action and side effects in  ordinary language'
+  '2': A Dissociation Between Moral Judgments and Justifi cations
+  '3': 'A Functional Basis for Structure-Seeking: Exposure to Structure Promotes Willingness
+    to Engage in Motivated Action'
+  '4': 'A Needs-Based Model of Reconciliation: Satisfying the Differential Emotional
+    Needs of Victim and Perpetrator as a Key to Promoting Reconciliation'
+  '5': A Single Exposure to the American Flag Shifts Support Toward Republicanism
+    up to 8 Months Later
+  '6': 'A Social Functional Approach to Emotions in Bargaining: When Communicating
+    Anger Pays and when it Backfires '
+  '7': 'ASSIMILATION AND CONTRAST EFFECTS IN PART-WHOLE QUESTION SEQUENCES: A CONVERSATIONAL
+    LOGIC ANALYSIS'
+  '8': 'Availability: A Heuristic for Judging Frequency and Probability'
+  '9': 'Choosing versus rejecting: Why some options are both better and worse than
+    others'
+  '10': Cloninger's Psychobiological Model of Temperament and Character and the Five-Factor
+    Model of Personality
+  '11': 'Cloninger''s Psychobiological Model of Temperament and Character and the
+    Five-Factor Model of Personality (in REP: The Relation between Persistence and
+    Conscientiousness (De Fruyt, Van De Wiele, & Van Heeringen, 2000)'
+  '12': 'Cuing consumerism: Situational materialism undermines personal and social
+    well-being'
+  '13': Cultural preferences for formal versus intuitive reasoning
+  '14': 'Cultural Variation in Correspondence Bias: The Critical Role of Attitude
+    Diagnosticity of Socially Constrained Behavior'
+  '15': Detecting the Snake in the Grass Attention to Fear-Relevant Stimuli by Adults
+    and Young Children
+  '16': 'Development of Prosocial, Individualistic, and Competitive Orientations:
+    Theory and Preliminary Evidence'
+  '17': Disgust Sensitivity Predicts Intuitive Disapproval of Gays
+  '18': 'Effects of Need for Cognition on Message Evaluation, Recall, and Persuasion
+    (IN REPLICATION CALLED: Issue Involvement can Increas or Decrease Persuasion by
+    Enhancing Message-Relevant Cognitive Responses)'
+  '19': Elaboration enhances the imagined contact effect
+  '20': 'Experiments in Wording Questions: II'
+  '21': 'High in the Hierarchy: How Vertical Location and Judgments of Leaders'' Power
+    are Interrelated'
+  '22': How warm days increase belief in global warming
+  '23': Incidental Environmental Anchors
+  '24': 'Increasing and Decreasing Motor and Cognitive Output: A Model of General
+    Action and Inaction Goals'
+  '25': 'Instructional manipulation checks: Detecting satisficing to increase statistical
+    power'
+  '26': 'It Feels Like Yesterday: Self-Esteem, Valence of Personal Past Experiences,
+    and Judgments of Subjective Distance'
+  '27': kiss or cash question with or without chance from this study
+  '28': 'Less Is Better: When Low-value Options Are Valued More Highly than High-value
+    Options'
+  '29': Liberals and Conservatives Rely on Different Sets of Moral Foundations
+  '30': 'Living in the north is not necessarily favorable: Different metaphoric associations
+    between cardinal direction and valence in Hong Kong and in the United States'
+  '31': "Math \x01 Male, Me \x01 Female, Therefore Math  Me"
+  '32': Measures of Anchoring in Estimation Tasks
+  '33': Mere Exposure to Money Increases Endorsement of Free-Market Systems and Social
+    Inequality
+  '34': 'Metaphoric structuring: understanding time through spatial metaphors'
+  '35': Moral Credentials and the Expression of Prejudice
+  '36': 'Moral Typecasting: Divergent Perceptions of Moral Agents and Moral Patients'
+  '37': 'Overcoming Intuition: Metacognitive Difficulty Activates Analytic Reasoning'
+  '38': Power and Perspectives Not Taken
+  '39': Prestige, Suggestion, and Attitudes
+  '40': 'Response Scales: Effects of Category Range on Reported Behavior and Comparative
+    Judgments'
+  '41': Running on Empty
+  '42': Studies of Similarity
+  '43': 'The “False Consensus Effect”: An Egocentric Bias in Social Perception and
+    Attribution Processes '
+  '44': the current status of american public opinion
+  '45': The Effect of Global Versus Local Processing Styles on Assimilation Versus
+    Contrast in Social Judgment
+  '46': the framing of decisions and the psychology of choice
+  '47': The Framing of Decisions and the Psychology of Choice
+  '48': 'The Local Ladder Effect: Social Status and Subjective Well-Being'
+  '49': The retrospective gambler’s fallacy
+  '50': The Value of Believing in Free Will Encouraging a Belief in Determinism Increases
+    Cheating
+  '51': 'The Value of Believing in Free Will: Encouraging a Belief in Determinism
+    Increases Cheating'
+  '52': 'Warmer hearts, warmer rooms: Focusing on positive communal but not agentic
+    traits increases estimates of ambient temperature'
+  '53': 'Washing Away Your Sins: Threatened Morality and Physical Cleansing'
+  '54': Weight as an Embodiment of Importance
+  '55': What Counts as a Choice? U.S. Americans Are More Likely Than Indians to Construe
+    Actions as Choices
+  '56': Why Do Implicit and Explicit Attitude Tests Diverge? The Role of Structural
+    Fit
+  '57': Why People Are Reluctant to Tempt Fate
+  '58': ' INCIDENTAL ENVIRONMENTAL ANCHORS (Critcher & Gilovich, 2008, Study 2)'
+  '59': . Issue involvement can increase or decrease persuasion by enhancing message­relevant
+    cognitive responses (Cacioppo, Petty, & Morris, 1983, Study 1)
+  '60': '“A Needs-Based Model of Reconciliation: Satisfying the Differential Emotional
+    Needs of Victim and Perpetrator as a Key to Promoting Reconciliation” (Shnabel
+    &; Nadler, JPSP, 2008)'
+  '61': "1\tSunk costs (Oppenheimer et al., 2009)"
+  '62': A DISSOCIATION BETWEEN MORAL JUDGMENTS AND JUSTIFICATIONS (Hauser, Cushman,
+    Young, Kang-Xing & Mikhail, et al., 2007, Scenarios 1+2)
+  '63': 'A FUNCTIONAL BASIS FOR STRUCTURE-SEEKING: EXPOSURE TO STRUCTURE PROMOTES
+    WILLINGNESS TO ENGAGE IN MOTIVATED ACTION (Kay, Laurin, Fitzsimons & Landau, 2014,
+    Study 2)'
+  '64': Albarracín et al. (2008) Study 7
+  '65': Albarracín et al. (2008, Journal of Personality and Social Psychology, 95),
+    Experiment 5
+  '66': Allowed/Forbidden (Rugg, 1941)
+  '67': Anchoring (Jacowitz & Kahneman, 1995)
+  '68': 'ASSIMILATION AND CONTRAST EFFECTS IN PART-WHOLE QUESTION SEQUENCES: A CONVERSATIONAL
+    LOGIC ANALYSIS (Schwarz, Strack & Mai, 1991, Study 1)'
+  '69': 'Availability: A heuristic for judging frequency and probability (Tversky
+    & Kahneman, 1973, Study 3)'
+  '70': 'CHOOSING VERSUS REJECTING: WHY SOME OPTIONS ARE BOTH BETTER AND WORSE THAN
+    OTHERS (Shafir, 1993, Study 1)'
+  '71': 'CULTURAL PREFERENCES FOR FORMAL VERSUS INTUITIVE REASONING (Norenzayan, Smith,
+    Kim, & Nisbett, 2002, Study 2) '
+  '72': 'CULTURAL VARIATION IN CORRESPONDENCE BIAS: THE CRITICAL ROLE OF ATTITUDE
+    DIAGNOSTICITY OF SOCIALLY CONSTRAINED BEHAVIOR (Miyamoto & Kitayama, 2002, Study
+    1)'
+  '73': Currency priming and system justification (Caruso et al., 2012)
+  '74': 'Detecting the Snake in the Grass: Attention to Fear-Relevant Stimuli by Adults
+    and Young Children by Vanessa LoBue and Judy S. DeLoache (2008'
+  '75': 'DEVELOPMENT OF PROSOCIAL, INDIVIDUALISTIC, AND COMPETITIVE ORIENTATIONS:
+    THEORY AND PRELIMINARY EVIDENCE (Van Lange, Otten, De Bruin & Joireman, 1997,
+    Study 3)'
+  '76': 'DISGUST SENSITIVITY PREDICTS INTUITIVE DISAPPROVAL OF GAYS (Inbar, Pizarro,
+    Knobe & Bloom, 2009, Study 1) '
+  '77': Flag Priming (Carter et al., 2011; Study 2)
+  '78': Förster, J., Liberman, N., & Kuschel, S. (2008). The effect of global versus
+    local processing styles on assimilation versus contrast in social judgment
+  '79': Gain versus loss framing for combating disease (Tversky & Kahneman, 1981)
+  '80': 'HIGH IN THE HIERARCHY: HOW VERTICAL LOCATION AND JUDGMENTS OF LEADERS’ POWER
+    ARE INTERRELATED (Giessner & Schubert, 2007, Study 1a)'
+  '81': HOW WARM DAYS INCREASE BELIEF IN GLOBAL WARMING (Zaval, Keenan, Johnson &
+    Weber, 2014, Study 3A)
+  '82': 'Imagined contact (Husnu & Crisp, 2010, Study 1). '
+  '83': INTENTIONAL ACTION AND SIDE EFFECTS IN ORDINARY LANGUAGE (Knobe, 2003, Study
+    1)
+  '84': Issue involvement can increase or decrease persuasion by enhancing message­relevant
+    cognitive responses (Cacioppo, Petty, & Morris, 1983, Study 1)
+  '85': 'It feels like yesterday: self­esteem, valence of personal past experiences,
+    and judgments of subjective distance (Ross, & Wilson, 2002, Study 2)'
+  '86': 'LESS IS BETTER: WHEN LOW-VALUE OPTIONS ARE VALUED MORE HIGHLY THAN HIGH-VALUE
+    OPTIONS (Hsee, 1998, Study 1) '
+  '87': LIBERALS AND CONSERVATIVES RELY ON DIFFERENT SETS OF MORAL FOUNDATIONS (Graham,
+    Haidt, & Nosek, 2009, Study 1)
+  '88': 'LIVING IN THE NORTH IS NOT NECESSARILY FAVORABLE: DIFFERENT METAPHORIC ASSOCIATIONS
+    BETWEEN CARDINAL DIRECTION AND VALENCE IN HONG KONG AND IN THE UNITED STATES (Huang,
+    Tse & Cho, 2014, Study 1a)'
+  '89': Low-vs.-high category scales (Schwarz et al., 1985)
+  '90': 'Metaphoric structuring: Understanding time through spatial metaphors (Boroditsky,
+    2000'
+  '91': 'MONEY, KISSES, AND ELECTRIC SHOCKS: ON THE AFFECTIVE PSYCHOLOGY OF RISK (Rottenstreich
+    & Hsee, 2001, Study 1)'
+  '92': Moral credentials and the expression of prejudice (Monin & Miller, 2001, Study
+    1)
+  '93': 'MORAL TYPECASTING: DIVERGENT PERCEPTIONS OF MORAL AGENTS AND MORAL PATIENTS
+    (Gray & Wegner, 2009, Study 1a) '
+  '94': 'Norm of reciprocity (Hyman and Sheatsley, 1950). '
+  '95': 'OVERCOMING INTUITION: METACOGNITIVE DIFFICULTY ACTIVATES ANALYTIC REASONING
+    (Alter, Oppenheimer, Epley & Eyre, 2007, Study 4)'
+  '96': Payne, Burkley, & Stokes (2008)
+  '97': 'Payne, Burkley, & Stokes (2008) '
+  '98': PERSONAL AND SOCIAL WELL-BEING (Bauer, Wilkie, Kim & Bodenhausen, 2012, Study
+    4)
+  '99': Power and perspectives not taken (Galinsky, Magee, Inesi, & Gruenfeld, 2006,
+    Study 2a)
+  '100': 'Quote Attribution (Lorge & Curtis, 1936). '
+  '101': Retrospective gambler’s fallacy (Oppenheimer & Monin, 2009)
+  '102': Risen & Gilovich (2008) study 6
+  '103': Sex differences in implicit math attitudes and relations with self-reported
+    attitudes (Nosek, Banaji, & Greenwald, 2002)
+  '104': Sex differences in implicit math attitudes and relations with self-reported
+    attitudes (Nosek, Banaji, & Greenwald, 2002).
+  '105': Stroop task (Stroop, 1935; as adapted from Inzlicht, & Gutsell, 2007, Study
+    1)
+  '106': STUDIES OF SIMILARITY (Tversky & Gati, 1978, Study 2)
+  '107': 'THE “FALSE CONSENSUS EFFECT”: AN EGOCENTRIC BIAS IN SOCIAL PERCEPTION AND
+    ATTRIBUTION PROCESSES (Ross, Greene & House, 1977, Study 1)'
+  '108': THE FRAMING OF DECISIONS AND THE PSYCHOLOGY OF CHOICE (Tversky & Kahneman,
+    1981, Study 10)
+  '109': THE LOCAL-LADDER EFFECT AND SUBJECTIVE WELL-BEING (Anderson, Kraus, Galinsky
+    & Keltner, 2012, Study 3).
+  '110': The Relation between Persistence and Conscientiousness (De Fruyt, Van De
+    Wiele, & Van Heeringen, 2000)
+  '111': van Dijk et al. (2008)
+  '112': 'Vohs, K. & Schooler, J. (2008). The value of believing in free will: Encouraging
+    a belief in determinism increases cheating'
+  '113': 'Vohs, K. & Schooler, J. (2008). The value of believing in free will: Encouraging
+    a belief in determinism increases cheating.'
+  '114': Warmer hearts, warmer rooms (Szymkow, Chandler, IJzerman, Parzuchowski, &
+    Wojciszke, 2013, Study 1)
+  '115': 'WASHING AWAY YOUR SINS: THREATENED MORALITY AND PHYSICAL CLEANSING (Zhong
+    & Liljenquist, 2006, Study 2)'
+  '116': Weight as an embodiment of importance (Jostmann, Lakens, & Schubert, 2009,
+    Study 2)
+  '117': WHAT COUNTS AS A CHOICE? U.S. AMERICANS ARE MORE LIKELY THAN INDIANS TO CONSTRUE
+    ACTIONS AS CHOICES (Savani, Markus, Naidu, Kumar, & Berlia, 2010, Study 5)
+  '118': WHY PEOPLE ARE RELUCTANT TO TEMPT FATE (Risen & Gilovich, 2008, Study 2)
+measure_name:
+  class: factor
+  '1': ' System Justification scale from (Kay & Jost, 2003'
+  '2': 34-item NCS (Cacioppo & Petty, 1982)
+  '3': a scale measuring perceived leader power
+  '4': actual time passed since last school course question
+  '5': allowing speeches or forbidding them questions from this paper
+  '6': ambiguous temporal statement
+  '7': argument quality rating question set from this study
+  '8': asian disease problem
+  '9': business environment and profit consequence scenarios with intentionaality
+    of side effect question scenarios
+  '10': Cleaning product rating question
+  '11': comment evaluation question
+  '12': 'computer based mental arithmatic task with cheating option '
+  '13': custody selection scenario
+  '14': daily tv consumption quesiton from this study
+  '15': dice roll retrospective observation scenario from this study
+  '16': direct rating procedure
+  '17': drought water consumption problem with trust question from this study
+  '18': feeling thermometers
+  '19': gender suitability to job description
+  '20': 'general life satisfaction question '
+  '21': generosity rating scale
+  '22': global warming belief question
+  '23': global warming concern question
+  '24': 'goal pursuit willingness questions from this study '
+  '25': implicit attitudes toward math and science test from this study
+  '26': impression formation task with aggression measurements
+  '27': index of intentions to engage in future contact
+  '28': 'indirect rating procedure '
+  '29': inention of voting scale from this study
+  '30': judegement of phone sales question from this study
+  '31': kiss or cash question with or without chance from this study
+  '32': letter position frequency guessing task
+  '33': likelihood of being selected to answer a quesiton in a lecture scenario
+  '34': list of some/most women statements from this study
+  '35': moral foundations questionnaire
+  '36': Moral Foundations questionnaire
+  '37': negative affect schedule
+  '38': 'nineitem decomposed game measure of social value orientation (e.g., Van Lange
+    & Kuhlman, 1994; Van Lange et al., in press) '
+  '39': participant choice of options within presented scenario
+  '40': peer aprroval of the described choices within the scenario
+  '41': positive affect schedule ((Watson, Clark, & Tellegen, 1988)
+  '42': preference to rule-base judgement of similarity questions
+  '43': question about evaluated degree of choice in personal and interpersonal actions
+  '44': question about likelihood of being called on within a specific scenario
+  '45': question askinf for number of siblings
+  '46': question investigating the importance of listening to student opinions
+  '47': 'question of an essay''s writers true attitude '
+  '48': question of letting american and russian newspapers be published across countries
+  '49': question regarding intentionality of a director in encouraging gay couples
+    kissing from this study
+  '50': question to judge cardinal living location Meier et al. (2011)
+  '51': quote attribution question from this study
+  '52': Rating of intentionality of doer within a story
+  '53': rating of personal and interpersonal choice importance
+  '54': reponses to travel for discount scenarios from this study
+  '55': room temperature estimation question
+  '56': Rosenberg’s (1965) Self-Esteem Scale
+  '57': SAT-type quantitative ability problems
+  '58': SAT-type verbal ability problems
+  '59': Satisfaction with life Scale (SWLS; Diener, Emmons, Larsen, & Griffin, 1985)
+  '60': semantic differential scales measuring attitudes toward math and arts
+  '61': set of quantity questions
+  '62': similarity rating question of country pairs
+  '63': six item adjust version of the eight-item short form of the Disgust Sensitivity
+    Scale (DSS; Haidt, McCauley, & Rozin, 1994)
+  '64': specific life satisfaction questions
+  '65': Stroop task
+  '66': subjective distance from last course question
+  '67': sunk cost question adapted from Thaler (1985)
+  '68': syllogisms solving task with font differences from this study
+  '69': The authorised Dutch translation of Costa and McCrae's NEO-PI-R
+  '70': The Dutch translation of Cloninger's Temperament and Character Inventory
+  '71': the Free Will and Determinism scale (FWD; Paulhus & Margesson, 1994)
+  '72': thought listing task
+  '73': threatening image identification task from this study
+  '74': trolley dillema scenarios with permissibility questions
+  '75': ultimatum game with happy or angry fictional respondent
+  '76': willingness to reconcile questionnaire from this study
+  '77': writing down thoughts task
+  '78': ' ambiguous temporal statement from Boroditsky (2000)'
+  '79': ' Satisfaction With Life Scale (SWLS; Diener, Emmons, Larsen, & Griffin, 1985)'
+  '80': 5-item contamination subscale
+  '81': action related stem completion task from Albarracín et al. (2008) Study 5
+  '82': anagram solving tasks adapted from Aspinwall and Richter (2002)
+  '83': antagonistic trait description measure from Förster et al
+  '84': 'approval of signing imagined scenario question from  THE “FALSE CONSENSUS
+    EFFECT”: AN EGOCENTRIC BIAS IN SOCIAL PERCEPTION AND ATTRIBUTION PROCESSES (Ross,
+    Greene & House, 1977, Study 1, Supermarket Scenario)'
+  '85': 'argument quality questionnaire from Cacioppo, Petty, and Morris (1983) '
+  '86': Asian disease problem
+  '87': assessments of the director’s intentionality in both the gay kissing and kissing
+    conditions from Inbar, Pizarro, Knobe & Bloom, 2009, Study 1
+  '88': attributed quote rating question
+  '89': award or deny custody questions from Shafir, 1993, Study 1
+  '90': chip bargaining with fictional respondent from van Dijk et al. (2008)
+  '91': choice after hypothethical story about either supermarket add or traffic ticket
+  '92': classroom question scenarios either tempted or di not tempt fate from Risen
+    and Gilovich (2008)
+  '93': cleaning products rating from Zhong and Liljenquist (2006)
+  '94': comment evaluation question from Galinsky et al. (2006)
+  '95': composite index of intentions to engage in contact with muslims
+  '96': computer-based mental-arithmetic task (von Hippel, Lakin, & Shakarchi, 2005)
+    with cheating options
+  '97': country pair similarity ratings from Tversky and Gati (1978, study 2)
+  '98': 'degree of choice in personal and interpersonal actions from Savani and colleagues
+    (2010) '
+  '99': dice restrospect scenario
+  '100': direct rating procedure from Payne, Burkley, & Stokes, 2008
+  '101': 'drought water consumption problem with trust questionnaire from Bauer and
+    colleagues (2012)  '
+  '102': e (Watson, Clark, & Tellegen, 1988).
+  '103': estimated percentage of phone sales from foreign market to new question from
+    n Critcher and Gilovich (2008)
+  '104': estimation in scenarios
+  '105': 'FAD-Plus Free Will subscale from Paulhus & Carey, 2011a '
+  '106': 'feeling thermometers '
+  '107': fictional city house placement two hypothetical descriptions
+  '108': flag priming voting intention question
+  '109': gender suitability to job description question from Monin and Miller (2001)
+  '110': general life satisfaction question from Schwarz, Strack & Mai, 1991, Study
+    1
+  '111': gift generosity scale from Hsee (1998)
+  '112': global warming belief question from (Zaval, Keenan, Johnson & Weber, 2014,
+    Study 3A)
+  '113': global warming concern question from Zaval et al. (2014)
+  '114': 'image identification task from LoBue and DeLoache (2008) '
+  '115': implicit math atittudes association test
+  '116': importance of action scale from Savani and colleagues (2010)
+  '117': inaction stem completion task from Albarracín et al. (2008) Study 5
+  '118': indirect rating procedure from Payne, Burkley, & Stokes, 2008
+  '119': kiss or cash choice with or without uncertainty
+  '120': letter position frequency guessing task from Tversky and Kahneman (1973)
+  '121': likelihood of attending a game rating
+  '122': likelihood of being called on question from Risen & Gilovich (2008)
+  '123': list of some/most statements from Monin and Miller (2001)
+  '124': moral foundation questionnaire
+  '125': Need for cognition (adapted from Cacioppo & Petty, 1982; Skulborstad, unpublished
+    data)
+  '126': number of siblings question
+  '127': perceived responsibility question from Gray and Wegner (2009)
+  '128': Positive and Negative Affect Schedule (Watson, Clark, & Tellegen, 1988)
+  '129': 'quantitative ability SAT-type problems from Albarracín et al. (2008) '
+  '130': question of an essay's writer's true attitude towards capital punishment
+    from Miyamoto and Kitayama (2002)
+  '131': relationship satisfaction question
+  '132': room temperature rating question from Szymkow, Chandler, IJzerman, Parzuchowski,
+    & Wojciszke, 2013, Study 1
+  '133': set of power items from Giessner & Schubert, 2007, Study 1a
+  '134': side effect intetionality question from Knobe (2003)
+  '135': single­item measure of self­esteem (SISE; Robins, Hendin, & Trzesniewski,
+    2001)
+  '136': stroop task as adapted from Inzlicht, & Gutsell, 2007, Study 1 and further
+    modified
+  '137': student input importance question from Jostmann, Lakens, and Schubert (2009)
+  '138': Subjective distance of time question
+  '139': SVO slider measure
+  '140': syllogisms presented in easy- or hard-to-read font from Alter et al. (2007)
+  '141': system justification scale
+  '142': Ten ­Item Personality Inventory for Big­Five personality (Gosling, Rentfrow,
+    & Swann, 2003).
+  '143': 'three questions about their most important goal on a scale '
+  '144': time since last term in school question from Ross, & Wilson, 2002, Study
+    2
+  '145': TV watching daily on different scales
+  '146': two different frame forbidding speeches question
+  '147': two questions about allowing news reporting with order effects
+  '148': two train moral dillemas from Hauser, Cushman, Young, Kang-Xing & Mikhail,
+    et al., 2007, Scenarios 1+2
+  '149': 'two travel for discount question fromn Tversky and Kahneman (1981) '
+  '150': use of rule or similarity based judegement trials from Norenzayan, Smith,
+    Kim, & Nisbett, 2002, Study 2
+  '151': verbal ability SAT-type problems from Albarracín et al. (2008, Journal of
+    Personality and Social Psychology, 95), Experiment 5
+  '152': 'willingness to reconcile scale from Shnabel and Nadler (2008) '
+variable_name:
+  class: factor
+  '1': ability to solve cognitive tasks
+  '2': action related cognition
+  '3': actual time passed
+  '4': affective response choice
+  '5': aggressiveness rating
+  '6': anchor effect
+  '7': argument quality rating
+  '8': atency in finding fear target
+  '9': attitudes towards math and arts
+  '10': attributed true attitude
+  '11': attribution bias
+  '12': aversion to tempt fate
+  '13': basic anchoring
+  '14': belief in free will
+  '15': belief in tempting fate
+  '16': binding moral foundations
+  '17': choice compatibility
+  '18': choice importance
+  '19': Conscientiousness
+  '20': degree of intentionaility
+  '21': direct racially biased rating
+  '22': disgust sensitivity
+  '23': effects of category range on judgements
+  '24': evaluated degree of choice
+  '25': expression of prejudice
+  '26': feelings of warmth toward math and arts as academic domains
+  '27': framing effect
+  '28': general life satisfaction
+  '29': global warming belief
+  '30': global warming concern
+  '31': goal pursuit willingness
+  '32': implicit attitudes toward math and science
+  '33': inaction cognition
+  '34': indirect racially biased rating
+  '35': individualizing moral foundations
+  '36': intenionality rating
+  '37': intention to vote
+  '38': intentionality of side effects
+  '39': intentions to engage in future contact
+  '40': judged cardinal living location
+  '41': judgement of frequency
+  '42': mental accessibility of cleansing-related words
+  '43': moral credentials
+  '44': moral permissibility ratings
+  '45': Need for cognition
+  '46': negative affect
+  '47': number of chips offered
+  '48': number of siblings
+  '49': order effects
+  '50': participant choice
+  '51': perceived leader power
+  '52': perceptions of importance
+  '53': persistence
+  '54': perspective taking
+  '55': physical warmth
+  '56': positive affect
+  '57': preference to rule-base judgement of similarity
+  '58': quantitative ability
+  '59': quote attribution effect
+  '60': 'rated generosity '
+  '61': response latency
+  '62': retrospective gambler's fallacy
+  '63': satisfaction with life
+  '64': Self esteem
+  '65': similarity rating
+  '66': Social Value Orientation
+  '67': specific life satisfaction
+  '68': subjective distance
+  '69': sunk cost effect
+  '70': system justification
+  '71': temporal statement perception
+  '72': tendency to cheat
+  '73': trust in others
+  '74': verbal ability
+  '75': willingness to reconcile
+  '76': wording effect
+  '77': ' actual time passed '
+  '78': abbility to answer syllogisms
+  '79': antagonistic trait attirubtion
+  '80': appreciation for a gift.
+  '81': attitudes toward math and arts
+  '82': availability heuristic
+  '83': belief in free-will
+  '84': cardinal location
+  '85': choice attribution
+  '86': conscientiousness
+  '87': consensus
+  '88': direct ravially biased rrating
+  '89': director’s intentionality
+  '90': double effect
+  '91': effect of incidental anchors on rating
+  '92': favor towardscleaning
+  '93': feelings of warmth toward math and arts
+  '94': implicit math attitudes
+  '95': importance of actionr ating
+  '96': in or outgroup favoritism
+  '97': intentions to engage in contact with muslims
+  '98': judgement of environment heat
+  '99': latency in finding (non-)fear target
+  '100': Life satisfaction
+  '101': likelihood of attending a game
+  '102': likelihood of negative outcomes after tempting fate
+  '103': measure of tempting fate
+  '104': need for cognition
+  '105': number of chips offered in bargaining
+  '106': number of dice rolls by imagined man
+  '107': 'participant''s choice '
+  '108': perceived responsibility
+  '109': positive affect's effect on judgement
+  '110': power rating
+  '111': preference fro rule based judgement
+  '112': priming
+  '113': program adoption preference
+  '114': quantitative judgement
+  '115': rated pair similarity
+  '116': rated side effect intentionality
+  '117': self-esteem
+  '118': social trust
+  '119': specific satisfaction
+  '120': subjective feeling of time passing
+  '121': task persistence
+  '122': temproal statement perception
+  '123': Tv watching time
+  '124': 'verbal ability '
+multi:
+  class: factor
+  '1': 'False'
+  '2': 'True'
+appearance:
+  class: factor
+  '1': '1'
+  '2': '2'
+  '3': '3'
+  '4': '5'
+N_items:
+  class: factor
+  '1': 1 item measure
+  '2': multiple item measure
+  '3': The measure is not a scale
+hypothesis_support:
+  class: factor
+  '1': 'No'
+  '2': Unclear
+  '3': 'Yes'
+reliability_type:
+  class: factor
+  '1': ''
+  '2': alpha
+  '3': Not Reported
+  '4': Other
+  '5': retest
+reliability_type_text:
+  class: factor
+  '1': ''
+  '2': Correlation between scores of two related tests
+  '3': item correlation
+op_version:
+  class: factor
+  '1': ''
+  '2': ' System Justification scale from (Kay & Jost, 2003'
+  '3': negative affect schedule (Watson, Clark, & Tellegen, 1988)
+  '4': 'nineitem decomposed game measure of social value orientation (e.g., Van Lange
+    & Kuhlman, 1994; Van Lange et al., in press) '
+  '5': positive affect schedule ((Watson, Clark, & Tellegen, 1988)
+  '6': Rosenberg’s (1965) Self-Esteem Scale
+  '7': 'the 34-item NCS (Cacioppo & Petty, 1982) '
+  '8': The authorised Dutch translation of Costa and McCrae's NEO-PI-R
+  '9': The Dutch translation of Cloninger's Temperament and Character Inventory
+  '10': the Free Will and Determinism scale (FWD; Paulhus & Margesson, 1994)
+  '11': anagram solving tasks adapted from Aspinwall and Richter (2002)
+  '12': composite index of intentions from (Husnu & Crisp, 2010, Study 1)
+  '13': e (Watson, Clark, & Tellegen, 1988).
+  '14': 'FAD-Plus Free Will subscale from Paulhus & Carey, 2011a '
+  '15': map (originally from Meier et al., 2011
+  '16': Positive and Negative Affect Schedule (Watson, Clark, & Tellegen, 1988)
+  '17': Satisfaction With Life Scale (SWLS; Diener, Emmons, Larsen, & Griffin, 1985)
+  '18': single­item measure of self­esteem (SISE; Robins, Hendin, & Trzesniewski,
+    2001)
+  '19': stroop task as adapted from Inzlicht, & Gutsell, 2007, Study 1 and further
+    modified
+  '20': supermarket and traffic ticket story
+  '21': SVO slider measure from Murphy, Ackermann, & Handgraaf, 2011
+  '22': system justification scale from (Kay & Jost, 2003)
+  '23': Ten ­Item Personality Inventory for Big­Five personality (Gosling, Rentfrow,
+    & Swann, 2003).
+sel_existing:
+  class: factor
+  '1': False, materials were newly developped for this study
+  '2': Not Clearly Stated
+  '3': 'True, namely:'
+sel_existing_text:
+  class: factor
+  '1': ''
+  '2': ' System Justification scale from (Kay & Jost, 2003'
+  '3': (von Hippel, Lakin, & Shakarchi, 2005)
+  '4': ', Ratcliff, Czuchry, Scarberry, Thomas, Dansereau and Lord (1999)''s measure
+    of behavioral intentions'
+  '5': a study by Salancik and Conway (1975) formed inspiration
+  '6': affect misattribution procedure (AMP; Payne, Cheng, Govorun, & Stewart, 2005)
+  '7': an ultimatum bargaining game along the lines of previous research on asymmetric
+    information (e.g., Van Dijk & Vermunt, 2000)
+  '8': daily tv consumption quesiton prepared by the quarterly and Mr. Elmo Roper
+  '9': dice roll retrospective observation scenario from this study
+  '10': essays used by Choi and Nisbett (1998).
+  '11': extensive word-count of Mayzner and Tresselt when determining the consonants
+    to use
+  '12': f Srull & Wyer’s (1979) person perception task
+  '13': it was based on examples by Savage (2, p.103) and Thaler (18)
+  '14': Keysar (1994) was followed
+  '15': negative affect schedule (Watson, Clark, & Tellegen, 1988)
+  '16': 'nineitem decomposed game measure of social value orientation (e.g., Van Lange
+    & Kuhlman, 1994; Van Lange et al., in press) '
+  '17': positive affect schedule ((Watson, Clark, & Tellegen, 1988)
+  '18': question to judge cardinal living location Meier et al. (2011)
+  '19': Rosenberg’s (1965) Self-Esteem Scale
+  '20': Satisfaction with life Scale (SWLS; Diener, Emmons, Larsen, & Griffin, 1985)
+  '21': Stroop Task from Stroop (1935)
+  '22': sunk cost question adapted from Thaler (1985)
+  '23': syllogisms used in Johnson-Laird & Bara, 1984; Zielinski, Goodwin, & Halford,
+    2006
+  '24': 'the 34-item NCS (Cacioppo & Petty, 1982) '
+  '25': The authorised Dutch translation of Costa and McCrae's NEO-PI-R
+  '26': The Dutch translation of Cloninger's Temperament and Character Inventory
+  '27': the eight-item short form of the Disgust Sensitivity Scale (DSS; Haidt, McCauley,
+    & Rozin, 1994)
+  '28': the Free Will and Determinism scale (FWD; Paulhus & Margesson, 1994)
+  '29': ' ambiguous temporal statement from Boroditsky (2000)'
+  '30': ' Satisfaction With Life Scale (SWLS; Diener, Emmons, Larsen, & Griffin, 1985)'
+  '31': 5-item contamination subscale
+  '32': affective vs. economic choice with or without uncertainty set of questions
+    from Rottenstreich & Hsee, 2001, Study 1
+  '33': Albarracín et al. (2008, Journal of Personality and Social Psychology, 95),
+    Experiment 5
+  '34': anagram solving tasks adapted from Aspinwall and Richter (2002)
+  '35': Anchoring scenarios developped in (Jacowitz & Kahneman, 1995)
+  '36': antagonistic trait description measure from Förster et al
+  '37': 'argument quality questionnaire from Cacioppo, Petty, and Morris (1983) '
+  '38': Asian Disease Problem
+  '39': assessments of the director’s intentionality in both the gay kissing and kissing
+    conditions from Inbar, Pizarro, Knobe & Bloom, 2009, Study 1
+  '40': award or deny custody questions from Shafir, 1993, Study 1
+  '41': chip bargaining with fictional respondent from van Dijk et al. (2008)
+  '42': choice after hypothethical story about either supermarket add or traffic ticket
+    from Ross, Greene & House, 1977
+  '43': classroom question scenarios either tempted or di not tempt fate from Risen
+    and Gilovich (2008)
+  '44': cleaning products rating from Zhong and Liljenquist (2006)
+  '45': comment evaluation question from Galinsky et al. (2006)
+  '46': composite index of intentions from (Husnu & Crisp, 2010, Study 1)
+  '47': computer-based mental-arithmetic task (von Hippel, Lakin, & Shakarchi, 2005)
+    with cheating options
+  '48': country pair similarity ratings from Tversky and Gati (1978, study 2)
+  '49': direct rating procedure from Payne, Burkley, & Stokes, 2008
+  '50': 'drought water reduction trust scenario from Bauer and colleagues (2012) '
+  '51': e (Watson, Clark, & Tellegen, 1988).
+  '52': estimated percentage of phone sales from foreign market to new question from
+    n Critcher and Gilovich (2008)
+  '53': 'FAD-Plus Free Will subscale from Paulhus & Carey, 2011a '
+  '54': 'feeling thermometers '
+  '55': fictional city map (originally from Meier et al., 2011
+  '56': flag primed voting preference question from Flag Priming (Carter et al., 2011;
+    Study 2)
+  '57': gender suitability to job description question from Monin and Miller (2001)
+  '58': general life satisfaction question from Schwarz, Strack & Mai, 1991, Study
+    1
+  '59': gift generosity scale from Hsee (1998)
+  '60': global warming belief question from (Zaval, Keenan, Johnson & Weber, 2014,
+    Study 3A)
+  '61': global warming concern question from Zaval et al. (2014)
+  '62': 'image identification task from LoBue and DeLoache (2008) '
+  '63': importance of action scale from Savani and colleagues (2010)
+  '64': indirect rating procedure from Payne, Burkley, & Stokes, 2008
+  '65': intentional behaviour question from Gray and Wegner (2009)
+  '66': letter position frequency guessing task from Tversky and Kahneman (1973)
+  '67': likelihood of being called on question from Risen & Gilovich (2008)
+  '68': list of some/most statements from Monin and Miller (2001)
+  '69': 'math attitudes IAT '
+  '70': moral foundations questionnaire used in Graham, Haidt, & Nosek, 2009, Study
+    1
+  '71': Need for cognition (adapted from Cacioppo & Petty, 1982; Skulborstad, unpublished
+    data)
+  '72': Oppenheimer's adapted task
+  '73': Positive and Negative Affect Schedule (Watson, Clark, & Tellegen, 1988)
+  '74': 'quantitative ability SAT-type problems from Albarracín et al. (2008) '
+  '75': question of an essay's writer's true attitude towards capital punishment from
+    Miyamoto and Kitayama (2002)
+  '76': room temperature rating question from Szymkow, Chandler, IJzerman, Parzuchowski,
+    & Wojciszke, 2013, Study 1
+  '77': Savani and colleagues (2010)
+  '78': semantic differential scales measuring attitudes toward math and arts
+  '79': set of power items from Giessner & Schubert, 2007, Study 1a
+  '80': side effect intetionality question from Knobe (2003)
+  '81': single­item measure of self­esteem (SISE; Robins, Hendin, & Trzesniewski,
+    2001)
+  '82': solving task of syllogisms presented in easy- or hard-to-read font fromAlter
+    et al. (2007)
+  '83': specific life satisfaction question from (Schwarz, Strack & Mai, 1991, Study
+    1)
+  '84': stroop task as adapted from Inzlicht, & Gutsell, 2007, Study 1
+  '85': student input importance question from Jostmann, Lakens, and Schubert (2009)
+  '86': Subjective distance question from Ross, & Wilson, 2002
+  '87': supermarket and traffic ticket scenarios from Ross, Greene & House, 1977
+  '88': SVO Slider measure from Murphy, Ackermann, & Handgraaf, 2011
+  '89': system justification scale (Kay & Jost, 2003)
+  '90': Ten ­Item Personality Inventory for Big­Five personality (Gosling, Rentfrow,
+    & Swann, 2003).
+  '91': the reptrospective dice scenario from (Oppenheimer & Monin, 2009)
+  '92': three questions about their most important goal on a scale from Kay, Laurin,
+    Fitzsimons, and Landau (2014)
+  '93': time since last term in school question from Ross, & Wilson, 2002, Study 2
+  '94': two counterbalanced questions from (Hyman & Sheatsley, 1950)
+  '95': two item question wording test from Allowed/Forbidden (Rugg, 1941)
+  '96': two train moral dillemas from Hauser, Cushman, Young, Kang-Xing & Mikhail,
+    et al., 2007, Scenarios 1+2
+  '97': 'two travel for discount question fromn Tversky and Kahneman (1981) '
+  '98': Two TV daily watch time questions from (Schwarz et al., 1985)
+  '99': use of rule or similarity based judegement trials from Norenzayan, Smith,
+    Kim, & Nisbett, 2002, Study 2
+  '100': 'willingness to reconcile scale from Shnabel and Nadler (2008) '
+sel_psychometric_evidence:
+  class: factor
+  '1': Exploratory Factor Analysis
+  '2': None
+  '3': Not Apllicable (only report this if psychometric evidence would not be possible
+    for this measure, otherwise report as None)
+mod_check:
+  class: factor
+  '1': 'False'
+  '2': None Reported
+  '3': 'True'
+mod_time:
+  class: factor
+  '1': ''
+  '2': After/During
+  '3': Before
+  '4': Not reported
+sel_psychometric_evidence_REV:
+  class: factor
+  '1': Exploratory Factor Analysis
+  '2': None
+  '3': Not Apllicable (only report this if psychometric evidence would not be possible
+    for this measure, otherwise report as None)
+  '4': 'Other, namely:'
+sel_psychometric_evidence_text_REV:
+  class: factor
+  '1': ''
+  '2': convergent validitiy
+  '3': convergent validity
+  '4': difficulty in solving tasks onbtained from previous research
+  '5': earlier study exploring pair similarity/dissimilarity
+  '6': validity showing differences in behavior
+mod_check_REV:
+  class: factor
+  '1': 'False'
+  '2': None Reported
+  '3': 'True'
+inseperable_material:
+  class: factor
+  '1': 'False'
+  '2': 'True'

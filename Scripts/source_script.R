@@ -224,10 +224,13 @@ calculating <- function(Data){
 data_prep_H2 <- function(Data_Original, Data_Replications){
   # data prep for model (using the (y * (n - 1) + 0.5) / n to adjust for any 0 
   # or 1 proportions in the data).
-  Data_H2 <- rbind(Coded_Data_Original_Shortened, Coded_Data_Replications)
+  Data_H2 <- rbind(Data_Original, Data_Replications)
   Data_H2$QMP_ratio <- ((Data_H2$QMP_ratio * (77 - 1) + 0.5) / 77)
   Data_H2$QMP_REV_ratio <- ((Data_H2$QMP_REV_ratio * (77 - 1) + 0.5) / 77)
   
+  # removing the empty sel_psychometric_evidence_text column to prevent codebook
+  # generation issues.
+  Data_H2 <- subset(Data_H2, select = -c(sel_psychometric_evidence_text))
   return(Data_H2)
 }
 
@@ -250,13 +253,18 @@ Model_H2 <- function(Data){
 data_prep_H5 <- function(Data_Replications){
   # data prep for model (using the (y * (n - 1) + 0.5) / n to adjust for any 0 
   # or 1 proportions in the data).
-  Data_H5 <- Coded_Data_Replications[-c(53:55),]
+  Data_H5 <- Data_Replications[-c(53:55),]
   Data_H5$hypothesis_support <- droplevels(Data_H5$hypothesis_support)
   levels(Data_H5$hypothesis_support) <- c(FALSE, TRUE)
   Data_H5$hypothesis_support <- as.logical(Data_H5$hypothesis_support)
   Data_H5$QMP_ratio <- ((Data_H5$QMP_ratio * (77 - 1) + 0.5) / 77)
   Data_H5$QMP_REV_ratio <- ((Data_H5$QMP_REV_ratio * (77 - 1) + 0.5) / 77)
   Data_H5$many_labs_version <- as.factor(Data_H5$many_labs_version)
+  
+  # removing the empty sel_psychometric_evidence_text & reliability_type_text 
+  # column to prevent codebook generation issues.
+  Data_H5 <- subset(Data_H5, select = -c(sel_psychometric_evidence_text, 
+                                         reliability_type_text))
   
   return(Data_H5)
 }
@@ -532,6 +540,10 @@ data_prep_H1 <- function(Data_Original, Data_Replications){
     ifelse(Data_H1$reliability_type[Data_H1$N_items == "multiple item measure"] 
            != "Not Reported", TRUE, FALSE)
   
+  # removing the empty sel_psychometric_evidence_text column to prevent codebook
+  # generation issues.
+  Data_H1 <- subset(Data_H1, select = -c(sel_psychometric_evidence_text))
+  
   return(Data_H1)
 }
 
@@ -549,19 +561,20 @@ just_alpha <- function(Data, m_length){
 
 
 # data load and prep function (including calculations)
-data_prep_H3 <- function(Data_1.10, Data_1.11, Data_1.12.3.1, Data_1.12.3.2, 
-                         Data_2.10.1, Data_2.12.1, Data_2.12.2, Data_2.12.3, 
-                         Data_2.15, Data_2.20, Data_2.23, Data_3.2.1.1, 
-                         Data_3.2.1.2, Data_3.7.2, Data_3.8.2, Data_5.1.1, 
-                         Data_5.7, Data_5.9.1){
+data_prep_H3 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
+                         data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
+                         data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
+                         data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
+                         data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean){
   # Combining the data together (no 1.3, no 5.4, & no 3.7.1, and for omega no 
   # 2.12.3, no 2.20, & no 3.2.1.1 due to issues with the running of the code for 
   # this data, likely due to negative relations or lack of variance)
-  Extracted_Data_List <- list(Data_1.10, Data_1.11, Data_1.12.3.1, 
-                              Data_1.12.3.2, Data_2.10.1, Data_2.12.1, 
-                              Data_2.12.2, Data_2.12.3, Data_2.15, Data_2.20, 
-                              Data_2.23, Data_3.2.1.1, Data_3.2.1.2, Data_3.7.2, 
-                              Data_3.8.2, Data_5.1.1, Data_5.7, Data_5.9.1) 
+  Extracted_Data_List <- list(data_1.10_clean, data_1.11_clean, 
+    data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.10.1_clean, 
+    data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, 
+    data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, 
+    data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.7_clean, 
+    data_5.9.1_clean) 
   # creating an empty dataframe to insert all the responses into
   Data_H3 <- data.frame(alpha = 0, omega.tot = 0, g = 0)
   
@@ -635,7 +648,7 @@ Data_prep_H4_avg <- function(Data_H5, Data_H4_multiple){
 
 # Validity Related Functions ---------------------------------------------------
 # Data loading for the extracted measure data
-Data_Extracted_Measures <- function(Data_1.10, Data_1.11, Data_1.12.3.1, 
+Data_unidimensionality_test <- function(Data_1.10, Data_1.11, Data_1.12.3.1, 
                                     Data_1.12.3.2, Data_2.10.1, Data_2.12.1, 
                                     Data_2.12.2, Data_2.12.3, Data_2.15, 
                                     Data_2.20, Data_2.23, Data_3.2.1.1, 

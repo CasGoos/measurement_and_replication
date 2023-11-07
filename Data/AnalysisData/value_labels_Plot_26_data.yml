@@ -1,0 +1,14 @@
+QMP_type:
+  class: factor
+  '1': Def. Ratio
+  '2': Op. Ratio
+  '3': Sel. Ratio
+  '4': Quant. Ratio
+  '5': Mod. Ratio
+QMP_Rep_type:
+  class: factor
+  '1': Rep. Def. Ratio
+  '2': Rep. Op. Ratio
+  '3': Rep. Sel. Ratio
+  '4': Rep. Quant. Ratio
+  '5': Rep. Mod. Ratio
