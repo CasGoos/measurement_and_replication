@@ -854,23 +854,149 @@ To test hypothesis 4, the total QMP ratios between replication and original rese
 
 $$g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replication_{i}$$
 
+```{r Hypothesis 4 Model}
+## Hypothesis 4 beta regression model
+# running the model with none revised QMP ratio's
+H4_test_results <- betareg(QMP_ratio ~ rep_org, data = data_h4)
+
+# running the models with revised QMP ratio's
+H4_test_results_REV  <- betareg(QMP_REV_ratio ~ rep_org, data = data_h4)
+
+```
+
+
 Where $replication_{i}$ is a dummy coded variable, which was coded as 1 in case the reported QMP ratio belonged to a replications, and 0 if it belonged to an original study. For hypothesis 5 a similar formula was used:
 
 $$g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replicated_{i}$$
 
 Where $replicated_{i}$ is a dummy coded variable, which was coded as 1 if the meta-analytic effect in the replication set matches the original effect in direction at a significance alpha level of .05, and 0 otherwise. Note here that unlike in the test for hypothesis 4, $QMP\_ratio_{i}$ refers only to the QMP ratios of the replications, meaning that original article QMPs were not included in this analysis.
 
+```{r Hypothesis 5 Model}
+## Hypothesis 4 beta regression model
+H5_test_results <- betareg(QMP_ratio ~ hypothesis_support, data = data_h5)
+
+H5_test_results_REV <- betareg(QMP_REV_ratio ~ hypothesis_support, data = data_h5)
+
+```
+
+
 The relationship between original article QMPs and replication protocol QMPs was modelled to test hypothesis 6. The outcome variable remains the same as in the model for hypothesis 5. The independent variable is changed to the QMP ratio for original articles. The resulting model formula is as follows:
 
 $$g(QMP\_ratio\_replication_{i}) = \beta_{0} + \beta_{1} QMP\_ratio\_original_{i}$$
+```{r Hypothesis 6 Model}
+H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
+
+H6_test_results_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6)
+
+```
+
 
 These models had independence of observations as another assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models were implemented as sensitivity analyses for the tests of both hypothesis 5 & 6. In these models each replication set was treated as being nested in its respective Many Labs project. Worth noting is that currently the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@bates2015lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model.
+
+```{r Hypotheses 5 & 6 Sensitivity Analyses}
+## Hypothesis 5 sensitivity test using a random intercept Guassian model.
+# create dummy H5 dataframe for use in sensitivity test
+data_h5_sens <- data_h5
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform.
+data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio))
+data_h5_sens$QMP_REV <- log(data_h5_sens$QMP_REV_ratio /(1 - data_h5_sens$QMP_REV_ratio))
+
+check_h5 <- lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens)
+H5_sensitivity_test_results <- summary(check_h5)$coefficients
+
+check_h5_REV <- lmer(formula = QMP_REV ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens)
+H5_sensitivity_test_results_REV <- summary(check_h5_REV)$coefficients
+
+
+## Hypothesis 6 sensitivity test using a random intercept Guassian model.
+# create dummy H6 dataframe for use in sensitivity test
+data_h6_sens <- data_h6
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform.
+data_h6_sens$QMP <- log(data_h6_sens$QMP_ratio /(1 - data_h6_sens$QMP_ratio))
+data_h6_sens$Rep_QMP <- log(data_h6_sens$Rep_QMP_ratio /(1 - data_h6_sens$Rep_QMP_ratio))
+data_h6_sens$QMP_REV <- log(data_h6_sens$QMP_REV_ratio /(1 - data_h6_sens$QMP_REV_ratio))
+data_h6_sens$Rep_QMP_REV <- log(data_h6_sens$Rep_QMP_REV_ratio /(1 - data_h6_sens$Rep_QMP_REV_ratio))
+
+# running the models one with none revised QMP ratio's and one with
+check_h6 <- lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens)
+H6_sensitivity_test_results <- summary(check_h6)$coefficients
+  
+check_h6_REV <- lmer(formula = Rep_QMP_REV ~ 1 + QMP_REV + (1|many_labs_version), data = data_h6_sens)
+H6_sensitivity_test_results_REV <- summary(check_h6_REV)$coefficients
+
+# n of mod ratio's pressent check
+H6_n_check_results <- betareg(Rep_op_ratio ~ mod_ratio, data = data_h6)$n
+H6_n_check_results_REV <- betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = data_h6)$n
+
+```
+
+```{r Hypothesis 6 Associations}
+## Associations between the QMP categories
+# associations are generated using a helper function available in the source_ 
+# script. These associations correspond to the coefficients between replication
+# and original article QMPs of the various QMP types, as estimated through a 
+# beta regression.
+# Associations between the QMP categories (original QMP coding)
+Results_H6_between <- Associations_H6(data_h6)
+
+# keep in mind mod_ratio (not Rep) is based on a very small sample size, less
+# of a concern for the revised.
+
+# Associations between the QMP categories (revised QMP coding)
+Results_H6_between_REV <- Associations_H6_REV(data_h6)
+
+```
+
 
 ### Exploratory Analyses
 
 Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. As these analyses are exploratory in nature, due to the large number of tests, the focus was on visualisation rather than inference.
 
 Finally, in order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set. A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@revelle2022psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
+
+```{r Unidimensionality Exploratory Analysis}
+extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
+                            data_1.12.3.2_clean, data_2.10.1_clean,
+                            data_2.12.1_clean, data_2.12.2_clean, 
+                            data_2.12.3_clean, data_2.15_clean, data_2.20_clean,
+                            data_2.23_clean, data_3.2.1.1_clean, 
+                            data_3.2.1.2_clean, data_3.7.1_clean, 
+                            data_3.7.2_clean, data_3.8.2_clean,
+                            data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
+
+# creating an empty dataframe to store the results in
+cfa_results <- data.frame(RMSEA = 0,
+                          N_factors = 0,
+                          Single_factor = FALSE)
+
+# running the cfas for all of the extracted datasets
+for (i in 1:length(extracted_data_list)){
+  # obtaining single factor model cfa RMSEA value for evaluation
+  RMSEA_value <- fa(extracted_data_list[[i]][-1])$RMSEA[1]
+    
+  # conducting parallel test to check if one factor solution is best.
+  parallel_N_factors <- fa.parallel(extracted_data_list[[i]][-1], 
+                                    fa = "fa")$nfact
+  
+  # adding a single factor check indicator value
+  single_factor <- ifelse(RMSEA_value < 0.08 | parallel_N_factors == 1, TRUE, 
+                          FALSE)
+  
+  # adding the cfa results of one factor analysis to the results dataframe.
+  cfa_results <- rbind(cfa_results, c(RMSEA_value, parallel_N_factors, 
+                                      single_factor))
+}
+# removing the initial empty row
+cfa_results <- cfa_results[-1,]
+
+
+
+```
+
 
 # Results
 
