@@ -219,30 +219,30 @@ calculating <- function(Data){
 }
 
 # QMP Related Functions --------------------------------------------------------
-### Hypothesis 2 
+### Hypothesis 4 
 # data load and prep function
-data_prep_H2 <- function(Data_Original, Data_Replications){
+data_prep_H4 <- function(Data_Original, Data_Replications){
   # data prep for model (using the (y * (n - 1) + 0.5) / n to adjust for any 0 
   # or 1 proportions in the data).
-  Data_H2 <- rbind(Data_Original, Data_Replications)
-  Data_H2$QMP_ratio <- ((Data_H2$QMP_ratio * (77 - 1) + 0.5) / 77)
-  Data_H2$QMP_REV_ratio <- ((Data_H2$QMP_REV_ratio * (77 - 1) + 0.5) / 77)
+  Data_H4 <- rbind(Data_Original, Data_Replications)
+  Data_H4$QMP_ratio <- ((Data_H4$QMP_ratio * (77 - 1) + 0.5) / 77)
+  Data_H4$QMP_REV_ratio <- ((Data_H4$QMP_REV_ratio * (77 - 1) + 0.5) / 77)
   
   # removing the empty sel_psychometric_evidence_text column to prevent codebook
   # generation issues.
-  Data_H2 <- subset(Data_H2, select = -c(sel_psychometric_evidence_text))
-  return(Data_H2)
+  Data_H4 <- subset(Data_H4, select = -c(sel_psychometric_evidence_text))
+  return(Data_H4)
 }
 
 # modelling and results returning function
-Model_H2 <- function(Data){
+Model_H4 <- function(Data){
   return_list <- list(first = 0, revised = 0)
   # running the models one with none revised QMP ratio's and one with
-  Model_H2 <- betareg(QMP_ratio ~ rep_org, data = Data)
-  return_list[[1]] <- summary(Model_H2)$coefficients
+  Model_H4 <- betareg(QMP_ratio ~ rep_org, data = Data)
+  return_list[[1]] <- summary(Model_H4)$coefficients
   
-  Model_H2_REV <- betareg(QMP_REV_ratio ~ rep_org, data = Data)
-  return_list[[2]] <- summary(Model_H2_REV)$coefficients
+  Model_H4_REV <- betareg(QMP_REV_ratio ~ rep_org, data = Data)
+  return_list[[2]] <- summary(Model_H4_REV)$coefficients
   
   return(return_list) 
 }
@@ -548,7 +548,7 @@ data_prep_H1 <- function(Data_Original, Data_Replications){
 }
 
 
-### Hypothesis 3
+### Hypothesis 2
 # obtaining the omega and alpha values for each measure (helper function)
 omega_and_alpha <- function(Data, m_length){
   return(omega(Data[2:m_length], nfactors = 1)[3:4])
@@ -561,7 +561,7 @@ just_alpha <- function(Data, m_length){
 
 
 # data load and prep function (including calculations)
-data_prep_H3 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
+data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
                          data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
                          data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
                          data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
@@ -576,7 +576,7 @@ data_prep_H3 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
     data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.7_clean, 
     data_5.9.1_clean) 
   # creating an empty dataframe to insert all the responses into
-  Data_H3 <- data.frame(alpha = 0, omega.tot = 0, g = 0)
+  Data_H2 <- data.frame(alpha = 0, omega.tot = 0, g = 0)
   
   for (i in 1:length(Extracted_Data_List)){
     if(i %in% c(8, 10, 12)){
@@ -594,16 +594,16 @@ data_prep_H3 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
     reliability_frame$alpha <- as.numeric(reliability_frame$alpha)
     reliability_frame$g <- as.factor(i)
     
-    Data_H3 <- rbind(Data_H3, reliability_frame)
+    Data_H2 <- rbind(Data_H2, reliability_frame)
   }
   
-  Data_H3 <- Data_H3[-1,]
+  Data_H2 <- Data_H2[-1,]
   
-  return(Data_H3)
+  return(Data_H2)
 }
 
 
-### Hypothesis 4
+### Hypothesis 3
 # indexing whether or not an effect replicated (helper function)
 replication_indexer <- function(Data_H5){
   # creating an index of whether or not an effect replicated based on what was
@@ -620,28 +620,28 @@ replication_indexer <- function(Data_H5){
 }
 
 # data load and prep functions
-Data_prep_H4_multiple <- function(Data_H5, Data_H3){
+Data_prep_H3_multiple <- function(Data_H5, Data_H2){
   replication_index <- replication_indexer(Data_H5)
   
   # alpha between sites
-  Data_H4_multiple <- cbind(Data_H3, replication = replication_index)
+  Data_H3_multiple <- cbind(Data_H2, replication = replication_index)
   
-  return(Data_H4_multiple)
+  return(Data_H3_multiple)
 }
 
-Data_prep_H4_avg <- function(Data_H5, Data_H4_multiple){
+Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
   # alpha averaged across sites
-  Data_H4_avg <- data.frame(alpha_avg = sapply(split(Data_H4_multiple$alpha, 
-                                                     Data_H4_multiple$g), mean),
+  Data_H3_avg <- data.frame(alpha_avg = sapply(split(Data_H3_multiple$alpha, 
+                                                     Data_H3_multiple$g), mean),
                             omega.tot_avg = sapply(split(
-                              Data_H4_multiple$omega.tot, Data_H4_multiple$g), 
+                              Data_H3_multiple$omega.tot, Data_H3_multiple$g), 
                               mean),
                             replication = c(Data_H5[c(10, 11, 12, 13, 26, 29, 
                                                       30, 31, 34, 39, 42, 51, 
                                                       51, 57, 59, 62, 71, 73), 
                                                     10]))
   
-  return(Data_H4_avg)
+  return(Data_H3_avg)
 }
 
 
@@ -697,13 +697,13 @@ cfa_ML_measures <- function(Extracted_Data_List){
 
 
 # Plotting Related Functions ---------------------------------------------------
-### Plot 34 data prep
-data_prep_plot_34_alpha <- function(Data){
+### Plot 23 data prep
+data_prep_plot_23_alpha <- function(Data){
   Data$avg.alpha <- ave(Data$alpha, Data$g)
-  Plot_34_data <- Data[order(-Data$replication, -Data$avg.alpha),]
-  Plot_34_data <- Plot_34_data[Plot_34_data$alpha > 0,]
-  Plot_34_data$g <- fct_inorder(as.factor(Plot_34_data$g), ordered = NA)
-  levels(Plot_34_data$g) <- c("Husnu & Crisp (2010)", 
+  Plot_23_data <- Data[order(-Data$replication, -Data$avg.alpha),]
+  Plot_23_data <- Plot_23_data[Plot_23_data$alpha > 0,]
+  Plot_23_data$g <- fct_inorder(as.factor(Plot_23_data$g), ordered = NA)
+  levels(Plot_23_data$g) <- c("Husnu & Crisp (2010)", 
                               "Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
                               "Norenzayan et al. (2002)", "Shnabel & Nadler (2008)", 
                               "Vohs & Schooler (2008)", "Caruso et al. (2012)",
@@ -714,16 +714,16 @@ data_prep_plot_34_alpha <- function(Data){
                               "Cacioppo et al. (1983)", "De Fruyt et al. (2000)", 
                               "Albarracín et al. (2008), experiment 5")
   
-  return(Plot_34_data)
+  return(Plot_23_data)
 }
 
 # and for omega
-data_prep_plot_34_omega <- function(Data){
+data_prep_plot_23_omega <- function(Data){
   Data <- Data[!is.na(Data$omega.tot),]
   Data$avg.omega.tot <- ave(Data$omega.tot, Data$g)
-  Plot_34_data <- Data[order(-Data$replication, -Data$avg.omega.tot),]
-  Plot_34_data$g <- fct_inorder(as.factor(Plot_34_data$g), ordered = NA)
-  levels(Plot_34_data$g) <- c("Husnu & Crisp (2010)", 
+  Plot_23_data <- Data[order(-Data$replication, -Data$avg.omega.tot),]
+  Plot_23_data$g <- fct_inorder(as.factor(Plot_23_data$g), ordered = NA)
+  levels(Plot_23_data$g) <- c("Husnu & Crisp (2010)", 
                               "Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
                               "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)", 
                               "Caruso et al. (2012)", "Van Lange et al. (1997)", 
@@ -732,38 +732,38 @@ data_prep_plot_34_omega <- function(Data){
                               "Monin & Miller (2001), some", "Cacioppo et al. (1983)", 
                               "De Fruyt et al. (2000)", "Albarracín et al. (2008), experiment 5")
   
-  return(Plot_34_data)
+  return(Plot_23_data)
 }
 
 
-### 256 plots data prep
-data_prep_plot_256 <- function(Data){
-  #Plot_256_ratio_data <- gather(Data[c("def_ratio", "op_ratio", "sel_ratio", 
+### 456 plots data prep
+data_prep_plot_456 <- function(Data){
+  #Plot_456_ratio_data <- gather(Data[c("def_ratio", "op_ratio", "sel_ratio", 
   #  "quant_ratio", "mod_ratio", "QMP_ratio")], QMP_type, QMP_ratio, 
   #  c("def_ratio", "op_ratio", "sel_ratio", "quant_ratio", "mod_ratio", 
   #    "QMP_ratio"), factor_key = TRUE)
-  #Plot_256_count_data <- gather(Data[c("def_count", "op_count", "sel_count", 
+  #Plot_456_count_data <- gather(Data[c("def_count", "op_count", "sel_count", 
   #  "quant_count", "mod_count", "MP_count")], QMP_type, QMP_count, 
   #   c("def_count", "op_count", "sel_count", "quant_count", "mod_count", 
   #     "MP_count"), factor_key = TRUE)
-  Plot_256_ratio_data_REV <- gather(Data[c("def_ratio", "op_REV_ratio", 
+  Plot_456_ratio_data_REV <- gather(Data[c("def_ratio", "op_REV_ratio", 
                                            "sel_REV_ratio", "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio")], 
                                     QMP_type, QMP_ratio, c("def_ratio", "op_REV_ratio", "sel_REV_ratio", 
                                                            "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio"), factor_key = TRUE)
-  #Plot_256_count_data_REV <- gather(Data[c("def_count", "op_REV_count", 
+  #Plot_456_count_data_REV <- gather(Data[c("def_count", "op_REV_count", 
   #  "sel_REV_count", "quant_REV_count", "mod_REV_count", "MP_REV_count")], 
   #  QMP_type, QMP_REV_count, c("def_count", "op_REV_count", "sel_REV_count", 
   # "quant_REV_count", "mod_REV_count", "MP_REV_count"), factor_key = TRUE)
   
-  #Plot_256_ratio_rep_data <- gather(Data[c("Rep_def_ratio", "Rep_op_ratio", 
+  #Plot_456_ratio_rep_data <- gather(Data[c("Rep_def_ratio", "Rep_op_ratio", 
   #  "Rep_sel_ratio", "Rep_quant_ratio", "Rep_mod_ratio", "Rep_QMP_ratio")], 
   #  QMP_type, Rep_QMP_ratio, c("Rep_def_ratio", "Rep_op_ratio", "Rep_sel_ratio",
   #  "Rep_quant_ratio", "Rep_mod_ratio", "Rep_QMP_ratio"), factor_key = TRUE)
-  #Plot_256_count_rep_data <- gather(Data[c("Rep_def_count", "Rep_op_count", 
+  #Plot_456_count_rep_data <- gather(Data[c("Rep_def_count", "Rep_op_count", 
   #  "Rep_sel_count", "Rep_quant_count", "Rep_mod_count", "Rep_MP_count")], 
   #  QMP_type, Rep_QMP_count, c("Rep_def_count", "Rep_op_count", "Rep_sel_count", 
   #  "Rep_quant_count", "Rep_mod_count", "Rep_MP_count"), factor_key = TRUE)
-  Plot_256_ratio_rep_data_REV <- gather(Data[c("Rep_def_ratio", 
+  Plot_456_ratio_rep_data_REV <- gather(Data[c("Rep_def_ratio", 
                                                "Rep_op_REV_ratio", "Rep_sel_REV_ratio", "Rep_quant_REV_ratio", 
                                                "Rep_mod_REV_ratio", "Rep_QMP_REV_ratio")], QMP_type, QMP_ratio, 
                                         c("Rep_def_ratio", "Rep_op_REV_ratio", "Rep_sel_REV_ratio", 
@@ -777,41 +777,41 @@ data_prep_plot_256 <- function(Data){
   #  factor_key = TRUE)
   
   
-  levels(Plot_256_ratio_data_REV$QMP_type) <- c("Definition", 
+  levels(Plot_456_ratio_data_REV$QMP_type) <- c("Definition", 
                                                 "Operationalization",
                                                 "Selection", "Quantification", 
                                                 "Modification", "Total")
-  levels(Plot_256_ratio_rep_data_REV$QMP_type) <- c("Definition", 
+  levels(Plot_456_ratio_rep_data_REV$QMP_type) <- c("Definition", 
                                                     "Operationalization", "Selection", 
                                                     "Quantification", "Modification", 
                                                     "Total")
   
-  Plot_256_ratio_data_REV$RepOrg <- as.factor(rep("Original", 
-                                                  times = nrow(Plot_256_ratio_data_REV)))
-  Plot_256_ratio_rep_data_REV$RepOrg <- as.factor(rep("Replication", 
-                                                      times = nrow(Plot_256_ratio_data_REV)))
+  Plot_456_ratio_data_REV$RepOrg <- as.factor(rep("Original", 
+                                                  times = nrow(Plot_456_ratio_data_REV)))
+  Plot_456_ratio_rep_data_REV$RepOrg <- as.factor(rep("Replication", 
+                                                      times = nrow(Plot_456_ratio_data_REV)))
   
   
-  Plot_256_data <- rbind(Plot_256_ratio_data_REV, Plot_256_ratio_rep_data_REV)
+  Plot_456_data <- rbind(Plot_456_ratio_data_REV, Plot_456_ratio_rep_data_REV)
   
   
-  return(Plot_256_data)
+  return(Plot_456_data)
 }
 
 
-### 26 plots data prep
-data_prep_plot_26 <- function(Data){
+### 46 plots data prep
+data_prep_plot_46 <- function(Data){
   colnames(Data) <- c("Def. Ratio", "Op. Ratio", "Sel. Ratio", 
                       "Quant. Ratio", "Mod. Ratio", "Rep. Def. Ratio", "Rep. Op. Ratio", 
                       "Rep. Sel. Ratio", "Rep. Quant. Ratio", "Rep. Mod. Ratio")
   
-  Plot_26_data <- gather(Data, QMP_type, QMP_ratio, 
+  Plot_46_data <- gather(Data, QMP_type, QMP_ratio, 
                          c("Def. Ratio", "Op. Ratio", "Sel. Ratio", "Quant. Ratio", "Mod. Ratio"), 
                          factor_key = TRUE)
   
-  Plot_26_data <- gather(Plot_26_data, QMP_Rep_type, QMP_Rep_ratio, 
+  Plot_46_data <- gather(Plot_46_data, QMP_Rep_type, QMP_Rep_ratio, 
                          c("Rep. Def. Ratio", "Rep. Op. Ratio", "Rep. Sel. Ratio", 
                            "Rep. Quant. Ratio", "Rep. Mod. Ratio"), factor_key = TRUE)
   
-  return(Plot_26_data)
+  return(Plot_46_data)
 }

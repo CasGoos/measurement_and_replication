@@ -580,8 +580,8 @@ View(coded_data_replications)
 ```{r Final Preparation of Data}
 ### this code prepares the various pieces of data to be ready to use for the analyses.
 ## confirmatory analyses
-# for hypothesis 2
-data_H2 <- data_prep_H2(coded_data_original_shortened, coded_data_replications)
+# for hypothesis 4
+data_H4 <- data_prep_H4(coded_data_original_shortened, coded_data_replications)
 # for hypothesis 5
 data_H5 <- data_prep_H5(coded_data_replications)
 # for hypothesis 6
@@ -589,37 +589,37 @@ data_H6 <- data_prep_H6(coded_data_original_shortened, coded_data_replications)
 
 # for hypothesis 1
 data_H1 <- data_prep_H1(coded_data_original_shortened, coded_data_replications)
-# for hypothesis 3
-data_H3 <- data_prep_H3(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
+# for hypothesis 2
+data_H2 <- data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
   data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
   data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
   data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
   data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
-# for hypothesis 4
-data_H4_multiple <- Data_prep_H4_multiple(data_H5, data_H3)
-data_H4_avg <- Data_prep_H4_avg(data_H5, data_H4_multiple)
+# for hypothesis 3
+data_H3_multiple <- Data_prep_H3_multiple(data_H5, data_H2)
+data_H3_avg <- Data_prep_H3_avg(data_H5, data_H3_multiple)
 
 
 ## graphs
-# plot accompanying the results for Hypotheses 2, 5, & 6.
-plot_256_data <- data_prep_plot_256(data_H6)
-# plot accompanying the results for Hypotheses 2, & 6
-Plot_26_data <- data_prep_plot_26(data_H6[c(3, 6, 9, 12, 15, 36, 39, 42, 45, 48)])
-# plot accompanying the results for Hypotheses 3, & 4
-plot_34_data_alpha <- data_prep_plot_34_alpha(data_H4_multiple)
-plot_34_data_omega <- data_prep_plot_34_omega(data_H4_multiple)
+# plot accompanying the results for Hypotheses 4, 5, & 6.
+plot_456_data <- data_prep_plot_456(data_H6)
+# plot accompanying the results for Hypotheses 4, & 6
+Plot_46_data <- data_prep_plot_46(data_H6[c(3, 6, 9, 12, 15, 36, 39, 42, 45, 48)])
+# plot accompanying the results for Hypotheses 2, & 3
+plot_23_data_alpha <- data_prep_plot_23_alpha(data_H3_multiple)
+plot_23_data_omega <- data_prep_plot_23_omega(data_H3_multiple)
 
 
 ### Exporting the final datasets for the analyses
 # the open data
-open_data(data = data_H2, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H2))), ".csv"),
+open_data(data = data_H4, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_H4))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H2))), ".Rmd"),
+    deparse(substitute(data_H4))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H2))), ".yml")) 
+    deparse(substitute(data_H4))), ".yml")) 
 
 open_data(data = data_H6, filename = paste0(paste0(
   "Data/AnalysisData/", deparse(substitute(data_H6))), ".csv"),
@@ -648,68 +648,68 @@ open_data(data = data_H1, filename = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
     deparse(substitute(data_H1))), ".yml")) 
 
-open_data(data = plot_256_data, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_256_data))), ".csv"),
+open_data(data = plot_456_data, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(plot_456_data))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_256_data))), ".Rmd"),
+    deparse(substitute(plot_456_data))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_256_data))), ".yml")) 
+    deparse(substitute(plot_456_data))), ".yml")) 
 
-open_data(data = Plot_26_data, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(Plot_26_data))), ".csv"),
+open_data(data = Plot_46_data, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(Plot_46_data))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(Plot_26_data))), ".Rmd"),
+    deparse(substitute(Plot_46_data))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(Plot_26_data))), ".yml")) 
+    deparse(substitute(Plot_46_data))), ".yml")) 
 
-open_data(data = data_H3, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H3))), ".csv"),
+open_data(data = data_H2, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_H2))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H3))), ".Rmd"),
+    deparse(substitute(data_H2))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H3))), ".yml")) 
+    deparse(substitute(data_H2))), ".yml")) 
 
-open_data(data = data_H4_multiple, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H4_multiple))), ".csv"),
+open_data(data = data_H3_multiple, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_H3_multiple))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H4_multiple))), ".Rmd"),
+    deparse(substitute(data_H3_multiple))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H4_multiple))), ".yml")) 
+    deparse(substitute(data_H3_multiple))), ".yml")) 
 
-open_data(data = data_H4_avg, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H4_avg))), ".csv"),
+open_data(data = data_H3_avg, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_H3_avg))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H4_avg))), ".Rmd"),
+    deparse(substitute(data_H3_avg))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H4_avg))), ".yml")) 
+    deparse(substitute(data_H3_avg))), ".yml")) 
 
-open_data(data = plot_34_data_alpha, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_34_data_alpha))), ".csv"),
+open_data(data = plot_23_data_alpha, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(plot_23_data_alpha))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_34_data_alpha))), ".Rmd"),
+    deparse(substitute(plot_23_data_alpha))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_34_data_alpha))), ".yml")) 
+    deparse(substitute(plot_23_data_alpha))), ".yml")) 
 
-open_data(data = plot_34_data_omega, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_34_data_omega))), ".csv"),
+open_data(data = plot_23_data_omega, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(plot_23_data_omega))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_34_data_omega))), ".Rmd"),
+    deparse(substitute(plot_23_data_omega))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_34_data_omega))), ".yml")) 
+    deparse(substitute(plot_23_data_omega))), ".yml")) 
 
 # clearing up memory space by removing intermediate files from the environment
 rm(coded_data_original, coded_data_original_shortened, coded_data_replications)
@@ -754,11 +754,11 @@ Using the lmer function from the lme4 package [@bates2015lme4], a multilevel nul
 
 ```{r Hypothesis 2 Model}
 # intercept only model to check the within and between group variance.
-H3_test_result_alpha <- summary(lmer(formula = alpha ~ 1 + (1|g), data = data_H3))
+H2_test_result_alpha <- summary(lmer(formula = alpha ~ 1 + (1|g), data = data_H2))
 
 # and same analyses for omega
 # intercept only model to check the within and between group variance.
-H3_test_result_omega <- summary(lmer(formula = omega.tot ~ 1 + (1|g), data = data_H3[complete.cases(data_H3),]))
+H2_test_result_omega <- summary(lmer(formula = omega.tot ~ 1 + (1|g), data = data_H2[complete.cases(data_H2),]))
 
 ```
 
@@ -793,13 +793,13 @@ $$f(.) = log\frac{p_{replicated}}{1 - p_{replicated}}$$
 
 ```{r Hypothesis 3 Main Test}
 ## The main model to test hypothesis 3, through a logistic regression model.
-H4_test_result_main_alpha <- summary(glm(formula = replication ~ 1 + alpha_avg, 
-                                     family = binomial(), data = data_H4_avg))
+H3_test_result_main_alpha <- summary(glm(formula = replication ~ 1 + alpha_avg, 
+                                     family = binomial(), data = data_H3_avg))
 
 # and for omega
-H4_test_result_main_omega <- summary(glm(formula = replication ~ 1 + 
+H3_test_result_main_omega <- summary(glm(formula = replication ~ 1 + 
                                      omega.tot_avg, family = binomial(), 
-                                     data = data_H4_avg))
+                                     data = data_H3_avg))
 
 # alpha says negative, omega says positive, neither are significant though.
 
@@ -811,30 +811,30 @@ In this data, replication attempts at different lab locations can be seen as nes
 ```{r Hypothesis 3 Multilevel Model Sensitivity Analyses}
 ## sensitivity analyses.
 # running a random intercept multilevel logistic model
-H4_test_result_int_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
+H3_test_result_int_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
                                                 + alpha + (1|g), family = 
                                                 binomial(), data = 
-                                                data_H4_multiple))
+                                                data_H3_multiple))
 
 # and for omega
-H4_test_result_int_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
+H3_test_result_int_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
                                                 + omega.tot + (1|g), family = 
                                                   binomial(), data = 
-                                                  data_H4_multiple))
+                                                  data_H3_multiple))
 
 # same as for non-multilevel model
 
 # running a random slope multilevel logistic model
-H4_test_result_slp_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
+H3_test_result_slp_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
                                                 + alpha + (1 + alpha|g), 
                                                 family = binomial(), data =
-                                                data_H4_multiple))
+                                                data_H3_multiple))
 
 # and for omega
-H4_test_result_slp_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
+H3_test_result_slp_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
                                                 + omega.tot + (1 + omega.tot|g), 
                                                 family = binomial(), data =
-                                                data_H4_multiple))
+                                                data_H3_multiple))
 
 # alpha did not converge, and omega shows no significant effect.
 ```

@@ -4,7 +4,7 @@
 
 ## Where do I start?
 
-You can load this project in RStudio by opening the file called 'Reproducbile_R_Project.Rproj'.
+You can load this project in RStudio by opening the file called 'Measurement_and_Replication.Rproj'.
 
 ## Project structure
 
@@ -12,7 +12,7 @@ You can load this project in RStudio by opening the file called 'Reproducbile_R_
 File                        | Description                      | Usage         
 --------------------------- | -------------------------------- | --------------
 README.md                   | Description of project           | Human editable
-WORCSPersonalTemplate.Rproj | Project file                     | Loads project 
+Measurement_and_Replication.Rproj | Project file                     | Loads project 
 LICENSE                     | User permissions                 | Read only     
 .worcs                      | WORCS metadata YAML              | Read only     
 renv.lock                   | Reproducible R environment       | Read only     

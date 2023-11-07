@@ -191,11 +191,11 @@ data:
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/intermediatedata/codebook_coded_data_original_shortened.rmd
     labels: Data/IntermediateData/value_labels_coded_data_original_shortened.yml
-  data/analysisdata/data_h2.csv:
+  data/analysisdata/data_h4.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_data_h2.rmd
-    labels: Data/AnalysisData/value_labels_data_H2.yml
+    codebook: data/analysisdata/codebook_data_h4.rmd
+    labels: Data/AnalysisData/value_labels_data_H4.yml
   data/analysisdata/data_h6.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
@@ -211,38 +211,38 @@ data:
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_data_h1.rmd
     labels: Data/AnalysisData/value_labels_data_H1.yml
-  data/analysisdata/plot_256_data.csv:
+  data/analysisdata/plot_456_data.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_plot_256_data.rmd
-    labels: Data/AnalysisData/value_labels_plot_256_data.yml
-  data/analysisdata/plot_26_data.csv:
+    codebook: data/analysisdata/codebook_plot_456_data.rmd
+    labels: Data/AnalysisData/value_labels_plot_456_data.yml
+  data/analysisdata/plot_46_data.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_plot_26_data.rmd
-    labels: Data/AnalysisData/value_labels_Plot_26_data.yml
-  data/analysisdata/data_h3.csv:
+    codebook: data/analysisdata/codebook_plot_46_data.rmd
+    labels: Data/AnalysisData/value_labels_Plot_46_data.yml
+  data/analysisdata/data_h2.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_data_h3.rmd
-  data/analysisdata/data_h4_multiple.csv:
+    codebook: data/analysisdata/codebook_data_h2.rmd
+  data/analysisdata/data_h3_multiple.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_data_h4_multiple.rmd
-  data/analysisdata/data_h4_avg.csv:
+    codebook: data/analysisdata/codebook_data_h3_multiple.rmd
+  data/analysisdata/data_h3_avg.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_data_h4_avg.rmd
-  data/analysisdata/plot_34_data_alpha.csv:
+    codebook: data/analysisdata/codebook_data_h3_avg.rmd
+  data/analysisdata/plot_23_data_alpha.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_plot_34_data_alpha.rmd
-    labels: Data/AnalysisData/value_labels_plot_34_data_alpha.yml
-  data/analysisdata/plot_34_data_omega.csv:
+    codebook: data/analysisdata/codebook_plot_23_data_alpha.rmd
+    labels: Data/AnalysisData/value_labels_plot_23_data_alpha.yml
+  data/analysisdata/plot_23_data_omega.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
-    codebook: data/analysisdata/codebook_plot_34_data_omega.rmd
-    labels: Data/AnalysisData/value_labels_plot_34_data_omega.yml
+    codebook: data/analysisdata/codebook_plot_23_data_omega.rmd
+    labels: Data/AnalysisData/value_labels_plot_23_data_omega.yml
 checksums:
   data/inputdata/data_ml1.csv: c8c01092a13e0c49be9535fe323e8766
   data/inputdata/data_2.2.csv: 4e1a0541727d0dcf1df49f7248d5de50
@@ -290,14 +290,14 @@ checksums:
   data/intermediatedata/coded_data_replications.csv: c835bcfb07bd2c624ce252b9feffb50b
   data/intermediatedata/coded_data_original.csv: 0416862402ddf2ec8ab7e2ddd9573e36
   data/intermediatedata/coded_data_original_shortened.csv: 334598178d8c7ea18245b32a2cd9107e
-  data/analysisdata/data_h2.csv: ba0e580a6878a62e734847965693cb47
+  data/analysisdata/data_h4.csv: ba0e580a6878a62e734847965693cb47
   data/analysisdata/data_h6.csv: c61fe7eb98969bb8db341f06ae2129ca
   data/analysisdata/data_h5.csv: c196c840652baa53254f6dba968f5693
   data/analysisdata/data_h1.csv: d974b3756ed1ceaced6c395f3848cac7
-  data/analysisdata/plot_256_data.csv: 83efffea21bb2925f7cc1a0aeaa0ce13
-  data/analysisdata/plot_26_data.csv: 0ceab231a2e3e6fff26b6782c1b68d97
-  data/analysisdata/data_h3.csv: f0c0115722dd5d533cee5a22d6d19450
-  data/analysisdata/data_h4_multiple.csv: 4e00db41adb72c77fd6878bb0a428d98
-  data/analysisdata/data_h4_avg.csv: c93836ba5f901690067a810c0e26a91e
-  data/analysisdata/plot_34_data_alpha.csv: 7636054864b216e8dbc4db11e5693f02
-  data/analysisdata/plot_34_data_omega.csv: 85ebddd15b7c8a13a80e0fd03db00b54
+  data/analysisdata/plot_456_data.csv: 83efffea21bb2925f7cc1a0aeaa0ce13
+  data/analysisdata/plot_46_data.csv: 0ceab231a2e3e6fff26b6782c1b68d97
+  data/analysisdata/data_h2.csv: f0c0115722dd5d533cee5a22d6d19450
+  data/analysisdata/data_h3_multiple.csv: 4e00db41adb72c77fd6878bb0a428d98
+  data/analysisdata/data_h3_avg.csv: c93836ba5f901690067a810c0e26a91e
+  data/analysisdata/plot_23_data_alpha.csv: 7636054864b216e8dbc4db11e5693f02
+  data/analysisdata/plot_23_data_omega.csv: 85ebddd15b7c8a13a80e0fd03db00b54

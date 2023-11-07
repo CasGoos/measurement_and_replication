@@ -1,4 +1,4 @@
-Codebook created on 2023-11-07 at 2023-11-07 11:00:04.653618
+Codebook created on 2023-11-07 at 2023-11-07 11:58:47.216976
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -6,15 +6,16 @@ structure, and layout of a data file.
 
 ## Dataset description
 
-The data contains 713 cases and 3 variables.
+The data contains 1925 cases and 4 variables.
 
 ## Codebook
 
-| name      | type      |   n | missing | unique | mean | median |  mode | mode_value |   sd |    v |  min |  max | range |  skew | skew_2se |  kurt | kurt_2se |
-|:----------|:----------|----:|--------:|-------:|-----:|-------:|------:|-----------:|-----:|-----:|-----:|-----:|------:|------:|---------:|------:|---------:|
-| alpha     | numeric   | 713 |    0.00 |    713 | 0.62 |   0.81 |  0.81 |            | 0.55 |      | -2.9 | 0.97 |  3.87 | -3.18 |   -17.35 | 10.24 |    28.01 |
-| omega.tot | numeric   | 558 |    0.22 |    559 | 0.77 |   0.83 |  0.83 |            | 0.16 |      |  0.0 | 0.97 |  0.97 | -2.05 |    -9.91 |  5.79 |    14.01 |
-| g         | character | 713 |    0.00 |     19 |      |        | 74.00 |          6 |      | 0.92 |      |      |       |       |          |       |          |
+| name          | type    |    n | missing | unique | mean | median |   mode | mode_value      |   sd |   v |  min |  max | range | skew | skew_2se |  kurt | kurt_2se |
+|:--------------|:--------|-----:|--------:|-------:|-----:|-------:|-------:|:----------------|-----:|----:|-----:|-----:|------:|-----:|---------:|------:|---------:|
+| QMP_type      | factor  | 1925 |    0.00 |      6 |      |        | 385.00 | Def. Ratio      |      | 0.8 |      |      |       |      |          |       |          |
+| QMP_ratio     | numeric | 1575 |    0.18 |     14 | 0.39 |   0.34 |   0.34 |                 | 0.37 |     | 0.01 | 0.99 |  0.99 | 0.41 |     3.34 | -1.29 |    -5.22 |
+| QMP_Rep_type  | factor  | 1925 |    0.00 |      6 |      |        | 385.00 | Rep. Def. Ratio |      | 0.8 |      |      |       |      |          |       |          |
+| QMP_Rep_ratio | numeric | 1800 |    0.06 |     19 | 0.32 |   0.20 |   0.20 |                 | 0.35 |     | 0.01 | 0.99 |  0.99 | 0.73 |     6.34 | -0.81 |    -3.51 |
 
 ### Legend
 

@@ -1,5 +1,5 @@
 ---
-title: "Codebook created on 2023-11-07 at 2023-11-07 10:58:51.91642"
+title: "Codebook created on 2023-11-07 at 2023-11-07 11:58:47.216976"
 output: github_document
 ---
 
@@ -11,12 +11,12 @@ knitr::opts_chunk$set(echo = FALSE, results = 'asis')
 A codebook contains documentation and metadata describing the contents, structure, and layout of a data file.
 
 ## Dataset description
-The data contains 924 cases and 3 variables.
+The data contains 1925 cases and 4 variables.
 
 ## Codebook
 
 ```{r}
-summaries <- read.csv("codebook_plot_256_data.csv", stringsAsFactors = FALSE)
+summaries <- read.csv("codebook_Plot_46_data.csv", stringsAsFactors = FALSE)
 summaries <- summaries[, !colSums(is.na(summaries)) == nrow(summaries)]
 options(knitr.kable.NA = '')
 knitr::kable(summaries, row.names = FALSE, digits = 2)
