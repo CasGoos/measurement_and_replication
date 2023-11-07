@@ -1,32 +1,32 @@
 "name","type","n","missing","unique","mean","median","mode","mode_value","sd","v","min","max","range","skew","skew_2se","kurt","kurt_2se","category","description"
-"many_labs_version","integer",77,0,4,3.35064935064935,3,3,NA,0.97016322238002,NA,2,5,3,0.3759249919162,0.686224699998193,-0.859789131393515,-0.793954822108192,NA,NA
+"many_labs_version","numeric",77,0,4,2.51948051948052,2,2,NA,1.28360501395576,NA,1,5,4,0.896882301126275,1.63719572057945,-0.272467037330817,-0.251604155316224,NA,NA
 "rep_org","factor",77,0,2,NA,NA,77,"Replication",NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"title","factor",77,0,62,NA,NA,3,"It feels like yesterday: self­esteem, valence of personal past experiences, and judgments of subjective distance (Ross, & Wilson, 2002, Study 2)",NA,0.980941136785293,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"measure_name","factor",77,0,77,NA,NA,2,"moral foundation questionnaire",NA,0.986675662000337,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"variable_name","factor",77,0,77,NA,NA,2,"framing effect",NA,0.986675662000337,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"title","character",77,0,62,NA,NA,3,"It feels like yesterday: self­esteem, valence of personal past experiences, and judgments of subjective distance (Ross, & Wilson, 2002, Study 2)",NA,0.980941136785293,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"measure_name","character",77,0,77,NA,NA,2,"moral foundation questionnaire",NA,0.986675662000337,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"variable_name","character",77,0,77,NA,NA,2,"framing effect",NA,0.986675662000337,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "multi","factor",77,0,3,NA,NA,56,"False",NA,0.396694214876033,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "appearance","factor",77,0,4,NA,NA,57,"1",NA,0.401754090065778,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"N","integer",76,0.012987012987013,58,65.1315789473684,66.5,66.5,NA,24.8302729775641,NA,6,106,100,-0.253007915345921,-0.458950479236953,-0.891065274586876,-0.817785090094181,NA,NA
+"N","numeric",77,0,58,4843.90909090909,5899,5899,NA,2506.68778723626,NA,119,8002,7883,-0.547429262659728,-0.999293714482929,-1.17150809456663,-1.08180537164088,NA,NA
 "N_items","factor",77,0,4,NA,NA,37,"1 item measure",NA,0.558272895935234,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "hypothesis_support","factor",77,0,4,NA,NA,40,"No",NA,0.533648170011807,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "reliability_type","factor",77,0,5,NA,NA,40,"",NA,0.544779895429246,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"reliability_type_text","factor",77,0,2,NA,NA,77,"",NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"reliability_coeff","integer",77,0,4,1.44155844155844,1,1,NA,2.33674034373519,NA,1,16,15,5.32496069623957,9.72034218223442,27.8186838558121,25.6885989663859,NA,NA
+"reliability_type_text","character",77,0,2,NA,NA,77,"",NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"reliability_coeff","numeric",3,0.961038961038961,4,0.776666666666667,0.82,0.82,NA,0.0929157324317756,NA,0.67,0.84,0.17,NA,NA,NA,NA,NA,NA
 "def1","logical",70,0.0909090909090909,3,NA,NA,37,"TRUE",NA,0.498367346938775,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"op_version","factor",77,0,15,NA,NA,64,"",NA,0.306965761511216,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"op_version","character",77,0,15,NA,NA,64,"",NA,0.306965761511216,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "op_1","logical",76,0.012987012987013,3,NA,NA,64,"TRUE",NA,0.265927977839335,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "op_2","logical",77,0,3,NA,NA,64,"TRUE",NA,0.28065441052454,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "op_3","logical",77,0,3,NA,NA,75,"TRUE",NA,0.0505987518974531,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "op_4","logical",77,0,3,NA,NA,68,"TRUE",NA,0.206442907741609,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "op_5","logical",76,0.012987012987013,3,NA,NA,54,"TRUE",NA,0.411357340720222,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_existing","factor",77,0,4,NA,NA,73,"True, namely:",NA,0.099510878731658,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"sel_existing_text","factor",77,0,74,NA,NA,4,"",NA,0.984651711924439,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"sel_existing_text","character",77,0,74,NA,NA,4,"",NA,0.984651711924439,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_1","logical",77,0,3,NA,NA,66,"TRUE",NA,0.244897959183674,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_2","logical",77,0,3,NA,NA,69,"TRUE",NA,0.186203406982628,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_3","logical",36,0.532467532467532,2,NA,NA,41,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_4","logical",37,0.519480519480519,3,NA,NA,40,NA,NA,0.149013878743608,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_psychometric_evidence","factor",77,0,3,NA,NA,40,"Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)",NA,0.499241018721538,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"sel_psychometric_evidence_text","factor",77,0,2,NA,NA,77,"",NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"sel_psychometric_evidence_text","character",77,0,2,NA,NA,77,"",NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "quant_1","logical",77,0,3,NA,NA,66,"TRUE",NA,0.244897959183674,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "quant_2","logical",64,0.168831168831169,3,NA,NA,55,"TRUE",NA,0.24169921875,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "quant_3","logical",17,0.779220779220779,3,NA,NA,60,NA,NA,0.41522491349481,NA,NA,NA,NA,NA,NA,NA,NA,NA
@@ -45,7 +45,7 @@
 "sel_1_REV","logical",77,0,3,NA,NA,74,"TRUE",NA,0.0748861528082307,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_3_REV","logical",34,0.558441558441558,3,NA,NA,43,NA,NA,0.250865051903114,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "sel_psychometric_evidence_REV","factor",77,0,4,NA,NA,43,"Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)",NA,0.524540394670265,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"sel_psychometric_evidence_text_REV","factor",77,0,4,NA,NA,74,"",NA,0.0755608028335302,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"sel_psychometric_evidence_text_REV","character",77,0,4,NA,NA,74,"",NA,0.0755608028335302,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "quant_1_REV","logical",77,0,3,NA,NA,71,"TRUE",NA,0.143700455388767,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "quant_2_REV","logical",73,0.051948051948052,3,NA,NA,66,"TRUE",NA,0.173390880090073,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "quant_3_REV","logical",18,0.766233766233766,3,NA,NA,59,NA,NA,0.5,NA,NA,NA,NA,NA,NA,NA,NA,NA

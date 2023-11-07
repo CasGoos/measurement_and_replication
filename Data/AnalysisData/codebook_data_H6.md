@@ -1,4 +1,4 @@
-Codebook created on 2023-11-07 at 2023-11-07 11:58:25.499715
+Codebook created on 2023-11-07 at 2023-11-07 16:10:22.587468
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -78,7 +78,7 @@ The data contains 77 cases and 67 variables.
 | Rep_MP_REV_count    | numeric |  77 |    0.00 |      8 | 10.39 |  10.00 | 10.00 |            | 1.76 |      | 7.00 | 14.00 |  7.00 |  0.15 |     0.26 | -0.44 |    -0.41 |
 | Rep_MP_REV_total    | numeric |  77 |    0.00 |      9 | 12.78 |  13.00 | 13.00 |            | 2.13 |      | 9.00 | 17.00 |  8.00 |  0.02 |     0.04 | -1.03 |    -0.95 |
 | Rep_QMP_REV_ratio   | numeric |  77 |    0.00 |     29 |  0.18 |   0.16 |  0.16 |            | 0.14 |      | 0.01 |  0.50 |  0.49 |  0.61 |     1.12 | -0.38 |    -0.35 |
-| many_labs_version   | factor  |  77 |    0.00 |      5 |       |        | 35.00 |          3 |      | 0.69 |      |       |       |       |          |       |          |
+| many_labs_version   | factor  |  77 |    0.00 |      5 |       |        | 35.00 |          2 |      | 0.69 |      |       |       |       |          |       |          |
 
 ### Legend
 

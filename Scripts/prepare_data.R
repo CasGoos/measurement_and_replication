@@ -148,15 +148,18 @@ closed_data(data = Data_5.9.1, filename = "Data/InputData/Data_5.9.1.csv",
 
 open_data(data = Coded_Data_Initial_raw, 
           filename = "Data/InputData/Coded_Data_Initial_raw.csv",
-  codebook = NULL, value_labels = NULL) 
+  codebook = NULL, value_labels = NULL, 
+  load_expression = read.csv(file = filename, stringsAsFactors = FALSE)) 
 
 open_data(data = Coded_Data_Revised_raw, 
           filename = "Data/InputData/Coded_Data_Revised_raw.csv",
-  codebook = NULL, value_labels = NULL) 
+  codebook = NULL, value_labels = NULL,
+  load_expression = read.csv(file = filename, stringsAsFactors = FALSE)) 
 
 open_data(data = Coded_Data_Vignette_raw, 
           filename = "Data/InputData/Coded_Data_Vignette_raw.csv",
-  codebook = NULL, value_labels = NULL) 
+  codebook = NULL, value_labels = NULL,
+  load_expression = read.csv(file = filename, stringsAsFactors = FALSE)) 
 
 
 

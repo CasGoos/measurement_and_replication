@@ -189,7 +189,7 @@ The replication datasets refer to the data of each of the replication attempts f
 
 For Many Labs 1, all the relevant replication data was available in a single csv file. For Many Labs 2 & 3 the situation was similar, only here the files were split across two csv files for each project. For Many Labs 5, the data was made available for each of the ten replication sets separately. Three out of the ten datasets were furthermore split across the various locations at which they were taken. If cleaned data was available this was chosen over raw data. Pilot data were omitted from the analyses entirely. This resulted in suitable measure data from eighteen replication sets spread across on average 40 lab locations for the analyses of hypotheses 2 & 3.
 
-```{r Cleaning Replication Datasets Data}
+```{r Cleaning Replication Datasets Data, include = FALSE, eval = FALSE}
 ##### Data already available, code does not need to be run!
 ### ML 1
 # 1.3
@@ -429,7 +429,7 @@ Finally, the reports of the Many Labs projects, meaning the published articles [
 
 The original study articles are the published articles of the original effect on which the Many Labs replication sets were based. In the case of Many Labs 5 the original studies refer to the studies which first tested the effect to be replicated, not the earlier replication attempts of the same effects in the RPP [@osc2015estimating].
 
-```{r Cleaning Coded Data}
+```{r Cleaning Coded Data, include = FALSE, eval = FALSE}
 ##### Data already available, code does not need to be run!
 # Selecting the relevant rows and columns for the data
 coded_data_initial_sel <- coded_data_initial_raw[3:160, 18:57]
@@ -442,6 +442,7 @@ coded_data_full <- cbind(coded_data_initial_sel,
 
 # filtering out unnecessary double columns
 coded_data_full <- cbind(coded_data_full[, 1:40], coded_data_full[, 45:62])
+
 
 
 ### creating the cleaned dataset using the functions in the source code 
@@ -525,7 +526,6 @@ The structured coding protocol was used for both replication protocols and origi
 
 After the data was initially coded according to the preregistered coding protocol, it was determined, based on discussion with the supervisor, that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more favourable judgement of QMPs. These changes included: accepting linked online appendices as a data source for example items; assuming that if no differences between replication and original are measurement is mentioned, that there is no difference, even if it is not explicitly clear; and generally simplified criteria for what constituted sufficiently clear reporting. The revision of the coding protocol happened after all the data were coded using the initial protocol. As a result the coded data using the initial protocol, and the coded data using the revised protocol are both available available on this thesis' OSF page: <https://osf.io/9r8yt/>. Both raw and processed formats are present.
 
-
 ## Measures {#sec:measures}
 
 ### Measurement Error Measures
@@ -558,7 +558,7 @@ The same data as for the test of hypothesis 2 was used to check for the unidimen
 
 The same data as for the test of hypothesis 2 was used to check for the unidimensionality of the factor structure, as part of the exploratory analyses. A check for unidimensionality as validity evidence only makes sense if the measure was intended to be unidimensional. Therefore, for each replication for which data was available, the protocol was checked to ensure that the scores on each measure were meant to assess a single construct.
 
-```{r Check for Reliability and Validity Testability}
+```{r Check for Reliability and Validity Testability, include = FALSE}
 ## Checking the measures to recalculate the reliability and factor analysis for.
 ## The question: "Are they psychometrics scales or not?", is key here.
 View(coded_data_replications)
@@ -577,76 +577,78 @@ View(coded_data_replications)
 
 ## Analyses
 
-```{r Final Preparation of Data}
-### this code prepares the various pieces of data to be ready to use for the analyses.
+```{r Final Preparation of Data, include = FALSE, eval = FALSE}
+##### Data already available, code does not need to be run!
+### this code prepares the various pieces of data to be ready to use for the 
+### analyses.
 ## confirmatory analyses
 # for hypothesis 4
-data_H4 <- data_prep_H4(coded_data_original_shortened, coded_data_replications)
+data_h4 <- data_prep_H4(coded_data_original_shortened, coded_data_replications)
 # for hypothesis 5
-data_H5 <- data_prep_H5(coded_data_replications)
+data_h5 <- data_prep_H5(coded_data_replications)
 # for hypothesis 6
-data_H6 <- data_prep_H6(coded_data_original_shortened, coded_data_replications)
+data_h6 <- data_prep_H6(coded_data_original_shortened, coded_data_replications)
 
 # for hypothesis 1
-data_H1 <- data_prep_H1(coded_data_original_shortened, coded_data_replications)
+data_h1 <- data_prep_H1(coded_data_original_shortened, coded_data_replications)
 # for hypothesis 2
-data_H2 <- data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
+data_h2 <- data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
   data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
   data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
   data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
   data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
 # for hypothesis 3
-data_H3_multiple <- Data_prep_H3_multiple(data_H5, data_H2)
-data_H3_avg <- Data_prep_H3_avg(data_H5, data_H3_multiple)
+data_h3_multiple <- Data_prep_H3_multiple(data_h5, data_h2)
+data_h3_avg <- Data_prep_H3_avg(data_h5, data_h3_multiple)
 
 
 ## graphs
 # plot accompanying the results for Hypotheses 4, 5, & 6.
-plot_456_data <- data_prep_plot_456(data_H6)
+plot_456_data <- data_prep_plot_456(data_h6)
 # plot accompanying the results for Hypotheses 4, & 6
-Plot_46_data <- data_prep_plot_46(data_H6[c(3, 6, 9, 12, 15, 36, 39, 42, 45, 48)])
+Plot_46_data <- data_prep_plot_46(data_h6[c(3, 6, 9, 12, 15, 36, 39, 42, 45, 48)])
 # plot accompanying the results for Hypotheses 2, & 3
-plot_23_data_alpha <- data_prep_plot_23_alpha(data_H3_multiple)
-plot_23_data_omega <- data_prep_plot_23_omega(data_H3_multiple)
+plot_23_data_alpha <- data_prep_plot_23_alpha(data_h3_multiple)
+plot_23_data_omega <- data_prep_plot_23_omega(data_h3_multiple)
 
 
 ### Exporting the final datasets for the analyses
 # the open data
-open_data(data = data_H4, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H4))), ".csv"),
+open_data(data = data_h4, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_h4))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H4))), ".Rmd"),
+    deparse(substitute(data_h4))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H4))), ".yml")) 
+    deparse(substitute(data_h4))), ".yml")) 
 
-open_data(data = data_H6, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H6))), ".csv"),
+open_data(data = data_h6, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_h6))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H6))), ".Rmd"),
+    deparse(substitute(data_h6))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H6))), ".yml")) 
+    deparse(substitute(data_h6))), ".yml")) 
 
-open_data(data = data_H5, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H5))), ".csv"),
+open_data(data = data_h5, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_h5))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H5))), ".Rmd"),
+    deparse(substitute(data_h5))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H5))), ".yml")) 
+    deparse(substitute(data_h5))), ".yml")) 
 
-open_data(data = data_H1, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H1))), ".csv"),
+open_data(data = data_h1, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_h1))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H1))), ".Rmd"),
+    deparse(substitute(data_h1))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H1))), ".yml")) 
+    deparse(substitute(data_h1))), ".yml")) 
 
 open_data(data = plot_456_data, filename = paste0(paste0(
   "Data/AnalysisData/", deparse(substitute(plot_456_data))), ".csv"),
@@ -666,32 +668,32 @@ open_data(data = Plot_46_data, filename = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
     deparse(substitute(Plot_46_data))), ".yml")) 
 
-open_data(data = data_H2, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H2))), ".csv"),
+open_data(data = data_h2, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_h2))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H2))), ".Rmd"),
+    deparse(substitute(data_h2))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H2))), ".yml")) 
+    deparse(substitute(data_h2))), ".yml")) 
 
-open_data(data = data_H3_multiple, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H3_multiple))), ".csv"),
+open_data(data = data_h3_multiple, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_h3_multiple))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H3_multiple))), ".Rmd"),
+    deparse(substitute(data_h3_multiple))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H3_multiple))), ".yml")) 
+    deparse(substitute(data_h3_multiple))), ".yml")) 
 
-open_data(data = data_H3_avg, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_H3_avg))), ".csv"),
+open_data(data = data_h3_avg, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(data_h3_avg))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_H3_avg))), ".Rmd"),
+    deparse(substitute(data_h3_avg))), ".Rmd"),
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_H3_avg))), ".yml")) 
+    deparse(substitute(data_h3_avg))), ".yml")) 
 
 open_data(data = plot_23_data_alpha, filename = paste0(paste0(
   "Data/AnalysisData/", deparse(substitute(plot_23_data_alpha))), ".csv"),
@@ -711,9 +713,6 @@ open_data(data = plot_23_data_omega, filename = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
     deparse(substitute(plot_23_data_omega))), ".yml")) 
 
-# clearing up memory space by removing intermediate files from the environment
-rm(coded_data_original, coded_data_original_shortened, coded_data_replications)
-
 ```
 
 ### Analyses Measurement Error
@@ -727,16 +726,16 @@ Thus for testing hypothesis 1, instead of comparing the reported Cronbach's alph
 ```{r Hypothesis 1 Model}
 # first some descriptives of reliability reporting
 # Measurement type per original and replication:
-H1_descriptive_table_1 <- table(data_H1$rep_org, data_H1$N_items)
+H1_descriptive_table_1 <- table(data_h1$rep_org, data_h1$N_items)
 
 # amount of reliability reported per original and replication 
 # (given that measure is a multiple item measure):
-H1_descriptive_table_2 <- table(data_H1$rep_org[data_H1$N_items == "multiple item measure"], data_H1$reliability_type[data_H1$N_items == "multiple item measure"])
+H1_descriptive_table_2 <- table(data_h1$rep_org[data_h1$N_items == "multiple item measure"], data_h1$reliability_type[data_h1$N_items == "multiple item measure"])
 
 # New H1 test
 # A chi square test for difference in N reliability reported for multiple 
 # item measures.
-H1_test_result <- chisq.test(data_H1$rep_org[data_H1$N_items == "multiple item measure"], data_H1$reliability_reported[data_H1$N_items == "multiple item measure"])
+H1_test_result <- chisq.test(data_h1$rep_org[data_h1$N_items == "multiple item measure"], data_h1$reliability_reported[data_h1$N_items == "multiple item measure"])
 
 ```
 
@@ -751,17 +750,15 @@ Using the lmer function from the lme4 package [@bates2015lme4], a multilevel nul
 & Mixed: alpha_{ij} = \gamma_{00} + u_{0j} + e_{ij}
 \end{align*}
 ```
-
 ```{r Hypothesis 2 Model}
 # intercept only model to check the within and between group variance.
-H2_test_result_alpha <- summary(lmer(formula = alpha ~ 1 + (1|g), data = data_H2))
+H2_test_result_alpha <- summary(lmer(formula = alpha ~ 1 + (1|g), data = data_h2))
 
 # and same analyses for omega
 # intercept only model to check the within and between group variance.
-H2_test_result_omega <- summary(lmer(formula = omega.tot ~ 1 + (1|g), data = data_H2[complete.cases(data_H2),]))
+H2_test_result_omega <- summary(lmer(formula = omega.tot ~ 1 + (1|g), data = data_h2[complete.cases(data_h2),]))
 
 ```
-
 
 The purpose of this analysis was to investigate variability in calculated reliability coefficients within and between replication sets. However, to the author's knowledge no formal test exists as of the writing of this thesis for testing the significance of within group variance after controlling for between group variance. Instead the intraclass correlation (ICC) coefficient was calculated an indicator of within vs. between variability. The formula used to calculate the ICC is presented below.
 
@@ -782,7 +779,6 @@ ICC_omega <- 0.034025 / (0.003779 + 0.034025)
 
 ```
 
-
 In order to test hypothesis 3, the average calculated Cronbach's alpha level within a replication set is used as a predictor of replication success. Replication success was either set to 1 if it reached meta analytic significance at an alpha of .05 in the same direction as that found in the original study, or 0 otherwise. This test aligns with a logistic regression model. With $i = 1,..., n_{replications}$, $p_{replicated}$ being binomially distributed, and $alpha$ referring to the averaged calculated Cronbach's alpha coefficient, the following regression equation was used to model the relation:
 
 $$f(replicated_{i}) = \beta_{0} + \beta_{1} alpha_{i}$$
@@ -794,17 +790,16 @@ $$f(.) = log\frac{p_{replicated}}{1 - p_{replicated}}$$
 ```{r Hypothesis 3 Main Test}
 ## The main model to test hypothesis 3, through a logistic regression model.
 H3_test_result_main_alpha <- summary(glm(formula = replication ~ 1 + alpha_avg, 
-                                     family = binomial(), data = data_H3_avg))
+                                     family = binomial(), data = data_h3_avg))
 
 # and for omega
 H3_test_result_main_omega <- summary(glm(formula = replication ~ 1 + 
                                      omega.tot_avg, family = binomial(), 
-                                     data = data_H3_avg))
+                                     data = data_h3_avg))
 
 # alpha says negative, omega says positive, neither are significant though.
 
 ```
-
 
 In this data, replication attempts at different lab locations can be seen as nested within a replication set. In order to see if this nesting might impact the analyses of hypothesis 3, multilevel logistic regression models were included as sensitivity checks. The dependent variable remains replication success at the replication set level, while Cronbach's alpha is no longer averaged across locations. The models used were a multilevel logistic random intercept and random slope model.
 
@@ -814,13 +809,13 @@ In this data, replication attempts at different lab locations can be seen as nes
 H3_test_result_int_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
                                                 + alpha + (1|g), family = 
                                                 binomial(), data = 
-                                                data_H3_multiple))
+                                                data_h3_multiple))
 
 # and for omega
 H3_test_result_int_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
                                                 + omega.tot + (1|g), family = 
                                                   binomial(), data = 
-                                                  data_H3_multiple))
+                                                  data_h3_multiple))
 
 # same as for non-multilevel model
 
@@ -828,17 +823,16 @@ H3_test_result_int_sensitivity_omega <- summary(glmer(formula = replication ~ 1
 H3_test_result_slp_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
                                                 + alpha + (1 + alpha|g), 
                                                 family = binomial(), data =
-                                                data_H3_multiple))
+                                                data_h3_multiple))
 
 # and for omega
 H3_test_result_slp_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
                                                 + omega.tot + (1 + omega.tot|g), 
                                                 family = binomial(), data =
-                                                data_H3_multiple))
+                                                data_h3_multiple))
 
 # alpha did not converge, and omega shows no significant effect.
 ```
-
 
 ### Analyses QMPs
 
@@ -864,7 +858,6 @@ H4_test_results_REV  <- betareg(QMP_REV_ratio ~ rep_org, data = data_h4)
 
 ```
 
-
 Where $replication_{i}$ is a dummy coded variable, which was coded as 1 in case the reported QMP ratio belonged to a replications, and 0 if it belonged to an original study. For hypothesis 5 a similar formula was used:
 
 $$g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replicated_{i}$$
@@ -879,17 +872,16 @@ H5_test_results_REV <- betareg(QMP_REV_ratio ~ hypothesis_support, data = data_h
 
 ```
 
-
 The relationship between original article QMPs and replication protocol QMPs was modelled to test hypothesis 6. The outcome variable remains the same as in the model for hypothesis 5. The independent variable is changed to the QMP ratio for original articles. The resulting model formula is as follows:
 
 $$g(QMP\_ratio\_replication_{i}) = \beta_{0} + \beta_{1} QMP\_ratio\_original_{i}$$
+
 ```{r Hypothesis 6 Model}
 H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
 
 H6_test_results_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6)
 
 ```
-
 
 These models had independence of observations as another assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models were implemented as sensitivity analyses for the tests of both hypothesis 5 & 6. In these models each replication set was treated as being nested in its respective Many Labs project. Worth noting is that currently the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@bates2015lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model.
 
@@ -951,7 +943,6 @@ Results_H6_between_REV <- Associations_H6_REV(data_h6)
 
 ```
 
-
 ### Exploratory Analyses
 
 Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. As these analyses are exploratory in nature, due to the large number of tests, the focus was on visualisation rather than inference.
@@ -990,19 +981,16 @@ for (i in 1:length(extracted_data_list)){
   cfa_results <- rbind(cfa_results, c(RMSEA_value, parallel_N_factors, 
                                       single_factor))
 }
+
 # removing the initial empty row
 cfa_results <- cfa_results[-1,]
 
-
-
 ```
 
-
-# Results
+# Results 
 
 ## Descriptives
-
-The mean sample size within the replications was 4844 participants (IQR = 3816). In the original articles the mean sample size was 244 (IQR = 140). In total, support was found for hypothesized effects of 34 of the 77 measures. Proportions of replication success per Many Labs project can be found in Table XXX.
+The mean sample size within the replications was `r printnum(round(mean(coded_data_replications$N, na.rm = TRUE)))` participants (IQR = `r printnum(round(IQR(coded_data_replications$N, na.rm = TRUE)))`). In the original articles the mean sample size was `r printnum(round(mean(coded_data_original_shortened$N, na.rm = TRUE)))` (IQR = `r printnum(round(IQR(coded_data_original_shortened$N, na.rm = TRUE)))`). In total, support was found for hypothesized effects of `r printnum(table(coded_data_replications$hypothesis_support)["Yes"])` of the `r printnum(nrow(coded_data_replications)` measures. Proportions of replication success per Many Labs project can be found in Table XXX.
 
 INSERT REPLICATION RATIO TABLE HERE
 
@@ -1012,7 +1000,7 @@ Existing materials were used for 73 of the 77 measures in replications and for 2
 
 Figure XXX depicts the type of measure (single-item, multiple item, or not a scale), if for the measure reliability was reported or not, and what type of reliability coefficient was reported. Reliabilities were only assessed for multiple item measures, which were approximately equal between replication and original (35 and 38, respectively). Looking at the multiple item measures, four in the replication protocols and twelve in the original articles reported a reliability coefficient. The most commonly reported reliability coefficient was Cronbach's alpha, which accounted for three out of four reported reliabilities in the replication protocols, and eleven out of twelve in the original articles.
 
-INSERT RELIABILITY REPORTING FLOW DIAGRAM FIGURE
+![Figure 1. Reliability reporting flow diagram](../../SupplementaryMaterials/reliability_reporting_flow_diagram.png)
 
 A chi-squared test compared whether the number of reliabilities reported among multiple item measures differed between replications and original. Reliabilities were found to be more commonly reported in original articles compared to replication protocols ($\chi^{2}(1) = 4.09, p = 0.043$). These results are contradictory to hypothesis 1.
 
@@ -1110,7 +1098,7 @@ Finally, this paper investigated the consistency of measures, by assessing the v
 
 Taking all the findings together, the following assessments will be relevant to consider for future replication research. With respect to the quality of measurement reporting, the small number of reported reliabilities, small number of reported psychometric validity evidence, and lack of unidimensionality evidence for data aggregated to a single indicator corroborate findings by @shaw2020measurement & @flake2022construct. Evidence supporting the measures used in replication should be reported more frequently, so that they can be evaluated and the validity of replication research can be improved.
 
-There are additional validity issues in measurement as the result of QMPs. While it is debatable whether or not $17.9\%$ average QMP ratio in replications is too much, the association between original paper and replication protocol QMPs demonstrates how a lack of information for measurement in the original can spill over to the reporting in replications. This could lead to issues for replication attempts if the measure in an original article has poor reliability and validity. In that case, the tests in the original article are based on data from measures that do not accurately capture the construct they were intended to measure. The results of any direct replication attempt will face the same issues, and as a consequence the replication is unlikely to provide a relevant test of a psychological theory, as the original study itself was not a robust test of that psychological theory to begin with [@isager2020deciding, @isager2021deciding, @nuijten2022assessin]. Thus, future replicators should first evaluate the quality of the measurement (reporting) in an article before deciding to replicate it.
+There are additional validity issues in measurement as the result of QMPs. While it is debatable whether or not $17.9\%$ average QMP ratio in replications is too much, the association between original paper and replication protocol QMPs demonstrates how a lack of information for measurement in the original can spill over to the reporting in replications. This could lead to issues for replication attempts if the measure in an original article has poor reliability and validity. In that case, the tests in the original article are based on data from measures that do not accurately capture the construct they were intended to measure. The results of any direct replication attempt will face the same issues, and as a consequence the replication is unlikely to provide a relevant test of a psychological theory, as the original study itself was not a robust test of that psychological theory to begin with [@isager2020deciding, @isager2021deciding, @nuijten2022assessing]. Thus, future replicators should first evaluate the quality of the measurement (reporting) in an article before deciding to replicate it.
 
 In case the quality appears low, replication attempts can still proceed with some adjustments. One option is to change the focus of the replication to be conceptual rather than direct. In that case the measure and the operationalisation can be freely altered from the original, which means that a more sufficient test of the theory can be developed. If deemed necessary, a direct replication can always be performed later based on the conceptual replication. In that case, the direct replication will be able to provide a sufficient test of a psychological theory, on the condition that the conceptual replication's test improvements led to it becoming a sufficient test.
 

@@ -64,13 +64,13 @@ data:
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
   data/inputdata/coded_data_initial_raw.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
-    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    load_expression: read.csv(file = filename, stringsAsFactors = FALSE)
   data/inputdata/coded_data_revised_raw.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
-    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    load_expression: read.csv(file = filename, stringsAsFactors = FALSE)
   data/inputdata/coded_data_vignette_raw.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
-    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    load_expression: read.csv(file = filename, stringsAsFactors = FALSE)
   data/intermediatedata/data_1.3_clean.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
@@ -264,7 +264,7 @@ checksums:
   data/inputdata/data_5.7.csv: 1c2f4a0f72c9a0bc57dcdfbbdb4e8d71
   data/inputdata/data_5.9.1.csv: 06c44700f7790943155070c778b9d6f5
   data/inputdata/coded_data_initial_raw.csv: b82083b85dd3dde4ffca4fb5b66798ea
-  data/inputdata/coded_data_revised_raw.csv: 8fe3daa97e5ba6f96f7b556cc552414f
+  data/inputdata/coded_data_revised_raw.csv: 33a109827771621b81b1a17e37de2d87
   data/inputdata/coded_data_vignette_raw.csv: 42be25b49f534404e99976dae38679c9
   data/intermediatedata/data_1.3_clean.csv: 7de5f3b795dfed1ca816e0387ad9e1c2
   data/intermediatedata/data_1.10_clean.csv: 1c168447e19c4c31e6f5d045cfb1645a
@@ -287,14 +287,14 @@ checksums:
   data/intermediatedata/data_5.4_clean.csv: fae8ccc95e046a07aa1f048f1df0198a
   data/intermediatedata/data_5.7_clean.csv: 4eb41c4c1becdf67b1e9745223441f4d
   data/intermediatedata/data_5.9.1_clean.csv: a88936b13f189cbf580cb0db6a66e151
-  data/intermediatedata/coded_data_replications.csv: c835bcfb07bd2c624ce252b9feffb50b
-  data/intermediatedata/coded_data_original.csv: 0416862402ddf2ec8ab7e2ddd9573e36
-  data/intermediatedata/coded_data_original_shortened.csv: 334598178d8c7ea18245b32a2cd9107e
-  data/analysisdata/data_h4.csv: ba0e580a6878a62e734847965693cb47
-  data/analysisdata/data_h6.csv: c61fe7eb98969bb8db341f06ae2129ca
-  data/analysisdata/data_h5.csv: c196c840652baa53254f6dba968f5693
-  data/analysisdata/data_h1.csv: d974b3756ed1ceaced6c395f3848cac7
-  data/analysisdata/plot_456_data.csv: 83efffea21bb2925f7cc1a0aeaa0ce13
+  data/intermediatedata/coded_data_replications.csv: bca464ceefcc9d40e280c8e91eff362b
+  data/intermediatedata/coded_data_original.csv: 5d5e8429404fe61b6ccdf287b0d34d85
+  data/intermediatedata/coded_data_original_shortened.csv: df01253c4f691a18c2c0f2e3e6c9c070
+  data/analysisdata/data_h4.csv: c74430bd70bf41c79584948eb031272d
+  data/analysisdata/data_h6.csv: e4bf5d7f3f0f9231d5cb11b3a7b6f8ae
+  data/analysisdata/data_h5.csv: 837c2df51a3078aa7af1be40fbffc5bc
+  data/analysisdata/data_h1.csv: 145a4b4f397670a7ccb456169735fc0e
+  data/analysisdata/plot_456_data.csv: b512e66dda2475bd0eb975ef198f0287
   data/analysisdata/plot_46_data.csv: 0ceab231a2e3e6fff26b6782c1b68d97
   data/analysisdata/data_h2.csv: f0c0115722dd5d533cee5a22d6d19450
   data/analysisdata/data_h3_multiple.csv: 4e00db41adb72c77fd6878bb0a428d98
