@@ -1003,14 +1003,24 @@ replication_ratio_table <- data.frame("Many Labs Version" = c("1", "2", "3", "5"
 # and the N total measures, per Many Labs study.
 replication_ratio_table$"Replication Ratio" <- replication_ratio_table$N.Replicated / replication_ratio_table$N.Total
 
+# Changing column names to be less computer speak-y looking
+colnames(replication_ratio_table) <- c("Many Labs Version", "N Total", "N Replicated",
+                                       "Replication Ratio")
+
+# converting columns to string to then add a superscript to one of the elements
+# in the table.
+replication_ratio_table$"N Replicated" <- as.character(replication_ratio_table$"N Replicated")
+
+# adding a superscript for a later footnote
+replication_ratio_table$"N Replicated"[3] <- "$3^a$"
+
+  
 # print the table in apa formatting
 apa_table(
   replication_ratio_table, align = c("l", "r", "r", "r")
   , caption = "Ratio of measures for which the effect was considered replicated, across many labs projects"
-  , note = "AWITHSUPERSCRIPT replication was assessed as unclear for three of the measures, since their effect was not fully replicated. These have been treated as not replicated within this table and further analyses throughout the thesis"
-  , escape = TRUE, placement= "h")
-
-### add a midrule before total
+  , note = "$^a$replication was assessed as unclear for three of the measures, since their effect was not fully replicated. These have been treated as not replicated within this table and further analyses throughout the thesis"
+  , escape = FALSE, placement= "h", midrules = 4)
 
 ```
 
