@@ -723,7 +723,7 @@ The measurement error analyses testing hypotheses 1, 2, & 3 deviated from the pr
 
 Thus for testing hypothesis 1, instead of comparing the reported Cronbach's alpha coefficient between original and replication, the total number of reported reliability coefficients were compared instead. This total also included reliability coefficients other than Cronbach's alpha. This comparison was implemented via a chi-square test using the base R stats package [@R2021R].
 
-```{r Hypothesis 1 Model}
+```{r Hypothesis 1 Model, include = FALSE}
 # first some descriptives of reliability reporting
 # Measurement type per original and replication:
 H1_descriptive_table_1 <- table(data_h1$rep_org, data_h1$N_items)
@@ -750,7 +750,7 @@ Using the lmer function from the lme4 package [@bates2015lme4], a multilevel nul
 & Mixed: alpha_{ij} = \gamma_{00} + u_{0j} + e_{ij}
 \end{align*}
 ```
-```{r Hypothesis 2 Model}
+```{r Hypothesis 2 Model, include = FALSE}
 # intercept only model to check the within and between group variance.
 H2_test_result_alpha <- summary(lmer(formula = alpha ~ 1 + (1|g), data = data_h2))
 
@@ -766,7 +766,7 @@ $$ICC = \frac{u_{0j}}{(e_{ij} + u_{0j})}$$
 
 A high ICC indicates low within group variance relative to between group variance, which would be in line with hypothesis 2.
 
-```{r ICC calculations}
+```{r ICC calculations, include = FALSE}
 # alpha
 # within group variance: 0.04384
 # between group variance: 0.19824
@@ -787,7 +787,7 @@ Where:
 
 $$f(.) = log\frac{p_{replicated}}{1 - p_{replicated}}$$
 
-```{r Hypothesis 3 Main Test}
+```{r Hypothesis 3 Main Test, include = FALSE}
 ## The main model to test hypothesis 3, through a logistic regression model.
 H3_test_result_main_alpha <- summary(glm(formula = replication ~ 1 + alpha_avg, 
                                      family = binomial(), data = data_h3_avg))
@@ -803,7 +803,7 @@ H3_test_result_main_omega <- summary(glm(formula = replication ~ 1 +
 
 In this data, replication attempts at different lab locations can be seen as nested within a replication set. In order to see if this nesting might impact the analyses of hypothesis 3, multilevel logistic regression models were included as sensitivity checks. The dependent variable remains replication success at the replication set level, while Cronbach's alpha is no longer averaged across locations. The models used were a multilevel logistic random intercept and random slope model.
 
-```{r Hypothesis 3 Multilevel Model Sensitivity Analyses}
+```{r Hypothesis 3 Multilevel Model Sensitivity Analyses, include = FALSE}
 ## sensitivity analyses.
 # running a random intercept multilevel logistic model
 H3_test_result_int_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
@@ -848,7 +848,7 @@ To test hypothesis 4, the total QMP ratios between replication and original rese
 
 $$g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replication_{i}$$
 
-```{r Hypothesis 4 Model}
+```{r Hypothesis 4 Model, include = FALSE}
 ## Hypothesis 4 beta regression model
 # running the model with none revised QMP ratio's
 H4_test_results <- betareg(QMP_ratio ~ rep_org, data = data_h4)
@@ -864,7 +864,7 @@ $$g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replicated_{i}$$
 
 Where $replicated_{i}$ is a dummy coded variable, which was coded as 1 if the meta-analytic effect in the replication set matches the original effect in direction at a significance alpha level of .05, and 0 otherwise. Note here that unlike in the test for hypothesis 4, $QMP\_ratio_{i}$ refers only to the QMP ratios of the replications, meaning that original article QMPs were not included in this analysis.
 
-```{r Hypothesis 5 Model}
+```{r Hypothesis 5 Model, include = FALSE}
 ## Hypothesis 4 beta regression model
 H5_test_results <- betareg(QMP_ratio ~ hypothesis_support, data = data_h5)
 
@@ -876,7 +876,7 @@ The relationship between original article QMPs and replication protocol QMPs was
 
 $$g(QMP\_ratio\_replication_{i}) = \beta_{0} + \beta_{1} QMP\_ratio\_original_{i}$$
 
-```{r Hypothesis 6 Model}
+```{r Hypothesis 6 Model, include = FALSE}
 H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
 
 H6_test_results_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6)
@@ -885,7 +885,7 @@ H6_test_results_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6
 
 These models had independence of observations as another assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models were implemented as sensitivity analyses for the tests of both hypothesis 5 & 6. In these models each replication set was treated as being nested in its respective Many Labs project. Worth noting is that currently the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@bates2015lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model.
 
-```{r Hypotheses 5 & 6 Sensitivity Analyses}
+```{r Hypotheses 5 & 6 Sensitivity Analyses, include = FALSE}
 ## Hypothesis 5 sensitivity test using a random intercept Guassian model.
 # create dummy H5 dataframe for use in sensitivity test
 data_h5_sens <- data_h5
@@ -926,7 +926,7 @@ H6_n_check_results_REV <- betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = data_
 
 ```
 
-```{r Hypothesis 6 Associations}
+```{r Hypothesis 6 Associations, include = FALSE}
 ## Associations between the QMP categories
 # associations are generated using a helper function available in the source_ 
 # script. These associations correspond to the coefficients between replication
@@ -949,7 +949,7 @@ Follow-up analyses were preregistered for hypothesis 6. Using a similar model to
 
 Finally, in order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set. A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@revelle2022psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
 
-```{r Unidimensionality Exploratory Analysis}
+```{r Unidimensionality Exploratory Analysis, include = FALSE}
 extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
                             data_1.12.3.2_clean, data_2.10.1_clean,
                             data_2.12.1_clean, data_2.12.2_clean, 
@@ -991,18 +991,28 @@ cfa_results <- cfa_results[-1,]
 
 ## Descriptives
 
-```{r Code for Descriptives Retrieval}
-N_replications <- mean(coded_data_replications$N, na.rm = TRUE)
-IQR_replications <- IQR(coded_data_replications$N, na.rm = TRUE)
-N_original <- mean(coded_data_original_shortened$N, na.rm = TRUE)
-IQR_original <- IQR(coded_data_original_shortened$N, na.rm = TRUE)
+The mean sample size within the replications was `r apa_num(mean(coded_data_replications$N, na.rm = TRUE), digits = 0)` participants (IQR = `r apa_num(IQR(coded_data_replications$N, na.rm = TRUE), digits = 0)`). In the original articles the mean sample size was `r apa_num(mean(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)` (IQR = `r apa_num(IQR(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)`). In total, support was found for hypothesized effects of `r apa_num(table(coded_data_replications$hypothesis_support)["Yes"], digits = 0)` of the `r apa_num(nrow(coded_data_replications), digits = 0)` measures. Proportions of replication success per Many Labs project can be found in Table XXX.
 
-N_h_support <- table(coded_data_replications$hypothesis_support)["Yes"]
-N_measures <- nrow(coded_data_replications)
+```{r Replication Ratio Table}
+# construct the replication ratio table to be printed
+replication_ratio_table <- data.frame("Many Labs Version" = c("1", "2", "3", "5", "Total"),
+                                      "N Total" = c(table(coded_data_replications$many_labs_version), nrow(coded_data_replications)), 
+                                      "N Replicated" = c(table(coded_data_replications$many_labs_version, coded_data_replications$hypothesis_support)[, "Yes"], table(coded_data_replications$hypothesis_support)["Yes"]))
+
+# calculate the replication ratio from the N measures whose studies were replicated
+# and the N total measures, per Many Labs study.
+replication_ratio_table$"Replication Ratio" <- replication_ratio_table$N.Replicated / replication_ratio_table$N.Total
+
+# print the table in apa formatting
+apa_table(
+  replication_ratio_table, align = c("l", "r", "r", "r")
+  , caption = "Ratio of measures for which the effect was considered replicated, across many labs projects"
+  , note = "AWITHSUPERSCRIPT replication was assessed as unclear for three of the measures, since their effect was not fully replicated. These have been treated as not replicated within this table and further analyses throughout the thesis"
+  , escape = TRUE, placement= "h")
+
+### add a midrule before total
+
 ```
-
-
-The mean sample size within the replications was `r apa_num(N_replications, digits = 0)` participants (IQR = `r apa_num(IQR_replications, digits = 0)`). In the original articles the mean sample size was `r apa_num(N_original, digits = 0)` (IQR = `r apa_num(IQR_original, digits = 0)`). In total, support was found for hypothesized effects of `r apa_num(N_h_support, digits = 0)` of the `r apa_num(N_measures, digits = 0)` measures. Proportions of replication success per Many Labs project can be found in Table XXX.
 
 INSERT REPLICATION RATIO TABLE HERE
 
