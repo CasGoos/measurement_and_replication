@@ -68,9 +68,9 @@ knit              : worcs::cite_all
 library(papaja)
 library(worcs)
 library(tidyr)
-library(psych)
 library(betareg)
 library(lmerTest)
+library(psych)
 library(forcats)
 library(GPArotation)
 
@@ -987,10 +987,22 @@ cfa_results <- cfa_results[-1,]
 
 ```
 
-# Results 
+# Results
 
 ## Descriptives
-The mean sample size within the replications was `r printnum(round(mean(coded_data_replications$N, na.rm = TRUE)))` participants (IQR = `r printnum(round(IQR(coded_data_replications$N, na.rm = TRUE)))`). In the original articles the mean sample size was `r printnum(round(mean(coded_data_original_shortened$N, na.rm = TRUE)))` (IQR = `r printnum(round(IQR(coded_data_original_shortened$N, na.rm = TRUE)))`). In total, support was found for hypothesized effects of `r printnum(table(coded_data_replications$hypothesis_support)["Yes"])` of the `r printnum(nrow(coded_data_replications)` measures. Proportions of replication success per Many Labs project can be found in Table XXX.
+
+```{r Code for Descriptives Retrieval}
+N_replications <- mean(coded_data_replications$N, na.rm = TRUE)
+IQR_replications <- IQR(coded_data_replications$N, na.rm = TRUE)
+N_original <- mean(coded_data_original_shortened$N, na.rm = TRUE)
+IQR_original <- IQR(coded_data_original_shortened$N, na.rm = TRUE)
+
+N_h_support <- table(coded_data_replications$hypothesis_support)["Yes"]
+N_measures <- nrow(coded_data_replications)
+```
+
+
+The mean sample size within the replications was `r apa_num(N_replications, digits = 0)` participants (IQR = `r apa_num(IQR_replications, digits = 0)`). In the original articles the mean sample size was `r apa_num(N_original, digits = 0)` (IQR = `r apa_num(IQR_original, digits = 0)`). In total, support was found for hypothesized effects of `r apa_num(N_h_support, digits = 0)` of the `r apa_num(N_measures, digits = 0)` measures. Proportions of replication success per Many Labs project can be found in Table XXX.
 
 INSERT REPLICATION RATIO TABLE HERE
 
