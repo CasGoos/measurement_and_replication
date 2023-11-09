@@ -1,4 +1,4 @@
-Codebook created on 2023-11-07 at 2023-11-07 16:10:41.436286
+Codebook created on 2023-11-09 at 2023-11-09 13:46:46.345652
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -13,7 +13,7 @@ The data contains 658 cases and 5 variables.
 | name        | type    |   n | missing | unique | mean | median |   mode | mode_value                 |   sd |    v |   min |  max | range |  skew | skew_2se |  kurt | kurt_2se |
 |:------------|:--------|----:|--------:|-------:|-----:|-------:|-------:|:---------------------------|-----:|-----:|------:|-----:|------:|------:|---------:|------:|---------:|
 | alpha       | numeric | 658 |    0.00 |    658 | 0.76 |   0.83 |   0.83 |                            | 0.17 |      |  0.00 | 0.97 |  0.97 | -1.77 |    -9.29 |  3.93 |    10.34 |
-| omega.tot   | numeric | 558 |    0.15 |    559 | 0.77 |   0.83 |   0.83 |                            | 0.16 |      |  0.00 | 0.97 |  0.97 | -2.05 |    -9.91 |  5.79 |    14.01 |
+| omega       | numeric | 558 |    0.15 |    559 | 0.77 |   0.83 |   0.83 |                            | 0.16 |      |  0.00 | 0.97 |  0.97 | -2.05 |    -9.91 |  5.79 |    14.01 |
 | g           | factor  | 658 |    0.00 |     19 |      |        |  74.00 | Anderson et al. (2012), PA |      | 0.92 |       |      |       |       |          |       |          |
 | replication | logical | 658 |    0.00 |      3 |      |        | 532.00 | FALSE                      |      | 0.31 |       |      |       |       |          |       |          |
 | avg.alpha   | numeric | 658 |    0.00 |     18 | 0.75 |   0.83 |   0.83 |                            | 0.21 |      | -1.01 | 0.95 |  1.96 | -4.70 |   -24.68 | 32.94 |    86.57 |

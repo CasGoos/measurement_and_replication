@@ -1,4 +1,4 @@
-Codebook created on 2023-11-07 at 2023-11-07 16:10:39.617172
+Codebook created on 2023-11-09 at 2023-11-09 13:46:45.103283
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -10,11 +10,11 @@ The data contains 18 cases and 3 variables.
 
 ## Codebook
 
-| name          | type    |   n | missing | unique | mean | median |  mode | mode_value |   sd |    v |   min |  max | range |  skew | skew_2se | kurt | kurt_2se |
-|:--------------|:--------|----:|--------:|-------:|-----:|-------:|------:|:-----------|-----:|-----:|------:|-----:|------:|------:|---------:|-----:|---------:|
-| alpha_avg     | numeric |  18 |    0.00 |     18 | 0.63 |   0.72 |  0.72 |            | 0.44 |      | -1.01 | 0.95 |  1.96 | -2.73 |    -2.54 | 7.23 |     3.49 |
-| omega.tot_avg | numeric |  15 |    0.17 |     16 | 0.73 |   0.74 |  0.74 |            | 0.18 |      |  0.20 | 0.95 |  0.75 | -1.39 |    -1.20 | 1.90 |     0.85 |
-| replication   | logical |  18 |    0.00 |      3 |      |        | 12.00 | FALSE      |      | 0.44 |       |      |       |       |          |      |          |
+| name        | type    |   n | missing | unique | mean | median |  mode | mode_value |   sd |    v |   min |  max | range |  skew | skew_2se | kurt | kurt_2se |
+|:------------|:--------|----:|--------:|-------:|-----:|-------:|------:|:-----------|-----:|-----:|------:|-----:|------:|------:|---------:|-----:|---------:|
+| alpha       | numeric |  18 |    0.00 |     18 | 0.63 |   0.72 |  0.72 |            | 0.44 |      | -1.01 | 0.95 |  1.96 | -2.73 |    -2.54 | 7.23 |     3.49 |
+| omega       | numeric |  15 |    0.17 |     16 | 0.73 |   0.74 |  0.74 |            | 0.18 |      |  0.20 | 0.95 |  0.75 | -1.39 |    -1.20 | 1.90 |     0.85 |
+| replication | logical |  18 |    0.00 |      3 |      |        | 12.00 | FALSE      |      | 0.44 |       |      |       |       |          |      |          |
 
 ### Legend
 

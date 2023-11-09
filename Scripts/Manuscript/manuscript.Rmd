@@ -73,6 +73,9 @@ library(lmerTest)
 library(psych)
 library(forcats)
 library(GPArotation)
+library(ggplot2)
+library(grid)
+library(gridExtra)
 
 # loading source script
 source(file = "../source_script.R")
@@ -752,11 +755,11 @@ Using the lmer function from the lme4 package [@bates2015lme4], a multilevel nul
 ```
 ```{r Hypothesis 2 Model, include = FALSE}
 # intercept only model to check the within and between group variance.
-H2_test_result_alpha <- summary(lmer(formula = alpha ~ 1 + (1|g), data = data_h2))
+H2_test_result_alpha <- lmer(formula = alpha ~ 1 + (1|g), data = data_h2)
 
 # and same analyses for omega
 # intercept only model to check the within and between group variance.
-H2_test_result_omega <- summary(lmer(formula = omega.tot ~ 1 + (1|g), data = data_h2[complete.cases(data_h2),]))
+H2_test_result_omega <- lmer(formula = omega ~ 1 + (1|g), data = data_h2[complete.cases(data_h2),])
 
 ```
 
@@ -768,14 +771,19 @@ A high ICC indicates low within group variance relative to between group varianc
 
 ```{r ICC calculations, include = FALSE}
 # alpha
-# within group variance: 0.04384
-# between group variance: 0.19824
-ICC_alpha <- 0.19824 / (0.04384 + 0.19824)
+within_group_variance_alpha <- attr(VarCorr(H2_test_result_alpha), "sc")^2
+between_group_variance_alpha <- attr(VarCorr(H2_test_result_alpha)$g, "stddev")^2
+
+
+
+ICC_alpha <- between_group_variance_alpha / (within_group_variance_alpha + between_group_variance_alpha)
 
 # omega
-# within group variance: 0.003779
-# between group variance: 0.034025
-ICC_omega <- 0.034025 / (0.003779 + 0.034025)
+within_group_variance_omega <- attr(VarCorr(H2_test_result_omega), "sc")^2
+between_group_variance_omega <- attr(VarCorr(H2_test_result_omega)$g, "stddev")^2
+
+
+ICC_omega <- between_group_variance_omega / (within_group_variance_omega + between_group_variance_omega)
 
 ```
 
@@ -789,12 +797,14 @@ $$f(.) = log\frac{p_{replicated}}{1 - p_{replicated}}$$
 
 ```{r Hypothesis 3 Main Test, include = FALSE}
 ## The main model to test hypothesis 3, through a logistic regression model.
-H3_test_result_main_alpha <- summary(glm(formula = replication ~ 1 + alpha_avg, 
-                                     family = binomial(), data = data_h3_avg))
+H3_test_result_main_alpha <- apa_print(glm(formula = replication ~ 1 + alpha, 
+                                      family = binomial(), data = data_h3_avg))
+
+
 
 # and for omega
-H3_test_result_main_omega <- summary(glm(formula = replication ~ 1 + 
-                                     omega.tot_avg, family = binomial(), 
+H3_test_result_main_omega <- apa_print(glm(formula = replication ~ 1 + 
+                                     omega, family = binomial(), 
                                      data = data_h3_avg))
 
 # alpha says negative, omega says positive, neither are significant though.
@@ -806,28 +816,28 @@ In this data, replication attempts at different lab locations can be seen as nes
 ```{r Hypothesis 3 Multilevel Model Sensitivity Analyses, include = FALSE}
 ## sensitivity analyses.
 # running a random intercept multilevel logistic model
-H3_test_result_int_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
+H3_test_result_int_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 1 
                                                 + alpha + (1|g), family = 
                                                 binomial(), data = 
                                                 data_h3_multiple))
 
 # and for omega
-H3_test_result_int_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
-                                                + omega.tot + (1|g), family = 
+H3_test_result_int_sensitivity_omega <- apa_print(glmer(formula = replication ~ 1 
+                                                + omega + (1|g), family = 
                                                   binomial(), data = 
                                                   data_h3_multiple))
 
 # same as for non-multilevel model
 
 # running a random slope multilevel logistic model
-H3_test_result_slp_sensitivity_alpha <- summary(glmer(formula = replication ~ 1 
+H3_test_result_slp_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 1 
                                                 + alpha + (1 + alpha|g), 
                                                 family = binomial(), data =
                                                 data_h3_multiple))
 
 # and for omega
-H3_test_result_slp_sensitivity_omega <- summary(glmer(formula = replication ~ 1 
-                                                + omega.tot + (1 + omega.tot|g), 
+H3_test_result_slp_sensitivity_omega <- apa_print(glmer(formula = replication ~ 1 
+                                                + omega + (1 + omega|g), 
                                                 family = binomial(), data =
                                                 data_h3_multiple))
 
@@ -1035,20 +1045,79 @@ Figure XXX depicts the type of measure (single-item, multiple item, or not a sca
 
 A chi-squared test compared whether the number of reliabilities reported among multiple item measures differed between replications and original. Reliabilities were found to be more commonly reported in original articles compared to replication protocols ($\chi^{2}$(`r apa_num(H1_test_result$parameter)`) = `r apa_num(H1_test_result$statistic)`, *p* = `r apa_p(H1_test_result$p.value)`). These results are contradictory to hypothesis 1.
 
+The average Cronbach's alpha coefficient across replication sets was `r apa_num(mean(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(mean(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`, for omega the mean was `r apa_num(sd(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`. Figure XXX shows the distributions of the Cronbach's alpha coefficients for each replication set separated by successful and unsuccessful replication.
 
-The average Cronbach's alpha coefficient across replication sets was $0.618$ with a standard deviation of $0.554$, for omega the mean was $0.773$ with a standard deviation of $0.161$. Figure XXX shows the distributions of the Cronbach's alpha coefficients for each replication set separated by successful and unsuccessful replication.
+```{r Plot 23 Alpha Code}
+# plot for alpha
+ggplot(plot_23_data_alpha, aes(x = alpha, y = g)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_hline(yintercept = 6.5, color = "red", size = 1) +
+  geom_point(alpha = 0.1) +
+  theme_minimal() +
+  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
+                                                     "lines")) +
+  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0),
+    ymin = 7, ymax = 7, xmin = 1.08, xmax = 1.08) +
+  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0),
+    ymin = 6, ymax = 6, xmin = 1.08, xmax = 1.08) +
+  coord_cartesian(xlim = c(0, 1), clip = "off") +
+  ylab("") +
+  xlab("Cronbach's alpha")
 
-INSERT PLOT 34
 
-The between-group (across different replication set) variance and within-group (lab locations within a replication set) variance in the Cronbach's alpha coefficient were assessed using a multilevel model as specified in Formulas XXX, XXX, & XXX. The between-group and within-group variance for Cronbach's alpha were approximately $0.198$ and $0.044$ respectively. The resulting ICC, obtained using formula XXX, was approximately $0.819$. This suggests that variance was larger between replication sets than within. The same analysis for omega coefficients even showed a relatively larger degree of between group variance (between-group variance $= 0.034$, within-group variance $= 0.004$, ICC = $0.900$). Both results are in line with hypothesis 2, although caution in interpreting this result is advised due to the small sample size and the lack of an available inferential test.
+```
+
+```{r Plot 23 Omega Code, include = FALSE, eval = FALSE}
+# plot for omega
+ggplot(plot_23_data_omega, aes(x = alpha, y = g)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_hline(yintercept = 6.5, color = "red", size = 1) +
+  geom_point(alpha = 0.1) +
+  theme_minimal() +
+  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
+                                                     "lines")) +
+  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0),
+    ymin = 6, ymax = 6, xmin = 1.08, xmax = 1.08) +
+  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0),
+    ymin = 5, ymax = 5, xmin = 1.08, xmax = 1.08) +
+  coord_cartesian(xlim = c(0, 1), clip = "off") +
+  ylab("") +
+  xlab("Omega")
+
+```
+
+The between-group (across different replication set) variance and within-group (lab locations within a replication set) variance in the Cronbach's alpha coefficient were assessed using a multilevel model as specified in Formulas XXX, XXX, & XXX. The between-group and within-group variance for Cronbach's alpha were approximately `r apa_num(between_group_variance_alpha, digits = 3)` and `r apa_num(within_group_variance_alpha, digits = 3)` respectively. The resulting ICC, obtained using formula XXX, was approximately `r apa_num(ICC_alpha, digits = 3)`. This suggests that variance was larger between replication sets than within. The same analysis for omega coefficients even showed a relatively larger degree of between group variance (between-group variance `r apa_num(within_group_variance_omega, digits = 3)`, within-group variance `r apa_num(between_group_variance_omega, digits = 3)`, ICC = `r apa_num(ICC_omega, digits = 3)`). Both results are in line with hypothesis 2, although caution in interpreting this result is advised due to the small sample size and the lack of an available inferential test.
 
 The relationship between reliability and replication success was primarily tested via logistic regression, with replication success as the dependent variable. Further sensitivity analyses were performed using multilevel logistic models, with each measure as an overarching group wherein its reliability at each lab location is nested. The results of the logistic and multilevel logistic models are shown in Table XXX for both Cronbach's alpha and omega reliability coefficients.
 
-INSERT REPLICABILITY AND RELIAIBLITY TESTS TABLE HERE
+```{r Replicability and Reliability Test Table}
+# creating the dtaframe for the table
+H3_table_dataframe <- rbind(H3_test_result_main_alpha$table, H3_test_result_int_sensitivity_alpha$table, H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
 
-Cronbach's alpha and omega did not significantly relate to replication success in the main logistic regression model (Cronbach's alpha: $B = -1.621, SD = 1.527, p = .288$; omega: $B = 0.495, SD = 3.776, p = .896$), nor in any of the multilevel sensitivity analyses models (see Table XXX). This is contradictory to the expectation in hypothesis 3. However, the results from these analyses should be evaluated with caution, given the small sample number of measures used to estimate these models.
+# adding an asterix for significance to the significant p in the dataframe
+H3_table_dataframe[3,5] <- paste0(H3_table_dataframe[3,5], "^*")
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H3_table_for_printing <- rbind(c("Alpha", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[1:2,], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(3:4),], c("Omega", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[(5:6),], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(7:8),], c("Random-Slope Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(9:10),])
+
+  
+# print the table in apa formatting
+apa_table(
+  H3_table_for_printing, align = c("l", "r", "r", "r", "r")
+  , caption = "Model Results from Tests of Hypothesis 3"
+  , note = "The Cronbach's alpha section shows the models where the calculated Cronbach's alpha coefficient was the independent variable. In the Omega section it was the calculated omega coefficient. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
+  , escape = FALSE, placement= "ht", midrules = c(1, 2, 5, 7, 8, 9, 12, 15))
+
+```
+
+Cronbach's alpha and omega did not significantly relate to replication success in the main logistic regression model (Cronbachs alpha: `r H3_test_result_main_alpha$full_result$alpha`; omega: `r H3_test_result_main_omega$full_result$omega`), nor in any of the multilevel sensitivity analyses models (see Table XXX). This is contradictory to the expectation in hypothesis 3. However, the results from these analyses should be evaluated with caution, given the small sample number of measures used to estimate these models.
 
 ## Questionable Measurement Practices
+
+```{r}
+#apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)
+
+```
 
 The counts of the QMP ratio obtained for each QMP type (see Table XXX) are shown across the top layer of Figure XXX for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only 52 out of 77 measures in replications, and only ten measures used in original studies were modified. The bottom layer of Figure XXX shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
 

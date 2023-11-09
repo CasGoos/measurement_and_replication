@@ -596,8 +596,11 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
     
     Data_H2 <- rbind(Data_H2, reliability_frame)
   }
-  
+
   Data_H2 <- Data_H2[-1,]
+  
+  
+  colnames(Data_H2) <- c("alpha", "omega", "g")
   
   return(Data_H2)
 }
@@ -631,10 +634,10 @@ Data_prep_H3_multiple <- function(Data_H5, Data_H2){
 
 Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
   # alpha averaged across sites
-  Data_H3_avg <- data.frame(alpha_avg = sapply(split(Data_H3_multiple$alpha, 
+  Data_H3_avg <- data.frame(alpha = sapply(split(Data_H3_multiple$alpha, 
                                                      Data_H3_multiple$g), mean),
-                            omega.tot_avg = sapply(split(
-                              Data_H3_multiple$omega.tot, Data_H3_multiple$g), 
+                            omega = sapply(split(
+                              Data_H3_multiple$omega, Data_H3_multiple$g), 
                               mean),
                             replication = c(Data_H5[c(10, 11, 12, 13, 26, 29, 
                                                       30, 31, 34, 39, 42, 51, 
@@ -877,9 +880,9 @@ data_prep_plot_23_alpha <- function(Data){
 
 # and for omega
 data_prep_plot_23_omega <- function(Data){
-  Data <- Data[!is.na(Data$omega.tot),]
-  Data$avg.omega.tot <- ave(Data$omega.tot, Data$g)
-  Plot_23_data <- Data[order(-Data$replication, -Data$avg.omega.tot),]
+  Data <- Data[!is.na(Data$omega),]
+  Data$avg.omega <- ave(Data$omega, Data$g)
+  Plot_23_data <- Data[order(-Data$replication, -Data$avg.omega),]
   Plot_23_data$g <- fct_inorder(as.factor(Plot_23_data$g), ordered = NA)
   levels(Plot_23_data$g) <- c("Husnu & Crisp (2010)", 
                               "Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 

@@ -195,22 +195,22 @@ data:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_data_h4.rmd
-    labels: Data/AnalysisData/value_labels_data_H4.yml
+    labels: Data/AnalysisData/value_labels_data_h4.yml
   data/analysisdata/data_h6.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_data_h6.rmd
-    labels: Data/AnalysisData/value_labels_data_H6.yml
+    labels: Data/AnalysisData/value_labels_data_h6.yml
   data/analysisdata/data_h5.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_data_h5.rmd
-    labels: Data/AnalysisData/value_labels_data_H5.yml
+    labels: Data/AnalysisData/value_labels_data_h5.yml
   data/analysisdata/data_h1.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_data_h1.rmd
-    labels: Data/AnalysisData/value_labels_data_H1.yml
+    labels: Data/AnalysisData/value_labels_data_h1.yml
   data/analysisdata/plot_456_data.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
@@ -290,14 +290,14 @@ checksums:
   data/intermediatedata/coded_data_replications.csv: bca464ceefcc9d40e280c8e91eff362b
   data/intermediatedata/coded_data_original.csv: 5d5e8429404fe61b6ccdf287b0d34d85
   data/intermediatedata/coded_data_original_shortened.csv: df01253c4f691a18c2c0f2e3e6c9c070
-  data/analysisdata/data_h4.csv: c74430bd70bf41c79584948eb031272d
-  data/analysisdata/data_h6.csv: e4bf5d7f3f0f9231d5cb11b3a7b6f8ae
-  data/analysisdata/data_h5.csv: 837c2df51a3078aa7af1be40fbffc5bc
-  data/analysisdata/data_h1.csv: 145a4b4f397670a7ccb456169735fc0e
-  data/analysisdata/plot_456_data.csv: b512e66dda2475bd0eb975ef198f0287
+  data/analysisdata/data_h4.csv: 070e4c3f4d6435e36c186f8d680e2d3d
+  data/analysisdata/data_h6.csv: 0780ec86ee7b16326112b0334bad806a
+  data/analysisdata/data_h5.csv: 48debdee383f67f803b77c66dc642e26
+  data/analysisdata/data_h1.csv: 1b1ba2eb8c10a7d0dc2b1a9d4b88fae6
+  data/analysisdata/plot_456_data.csv: 83efffea21bb2925f7cc1a0aeaa0ce13
   data/analysisdata/plot_46_data.csv: 0ceab231a2e3e6fff26b6782c1b68d97
-  data/analysisdata/data_h2.csv: f0c0115722dd5d533cee5a22d6d19450
-  data/analysisdata/data_h3_multiple.csv: 4e00db41adb72c77fd6878bb0a428d98
-  data/analysisdata/data_h3_avg.csv: c93836ba5f901690067a810c0e26a91e
-  data/analysisdata/plot_23_data_alpha.csv: 7636054864b216e8dbc4db11e5693f02
-  data/analysisdata/plot_23_data_omega.csv: 85ebddd15b7c8a13a80e0fd03db00b54
+  data/analysisdata/data_h2.csv: b28fc13373f4506afb10703c89db2ef0
+  data/analysisdata/data_h3_multiple.csv: fca6acb3ff0e504c92cd905593792b4b
+  data/analysisdata/data_h3_avg.csv: 2616f757c6087b6600d8af3d02d8b271
+  data/analysisdata/plot_23_data_alpha.csv: 7f0e624a1ac3b64b38f8e253ec5516e6
+  data/analysisdata/plot_23_data_omega.csv: 6a3d98a4f230151ef1f361a961dac72a
