@@ -74,6 +74,9 @@ library(psych)
 library(forcats)
 library(GPArotation)
 library(ggplot2)
+library(ggridges)
+library(GGally)
+library(ggforce)
 library(grid)
 library(gridExtra)
 
@@ -1113,17 +1116,72 @@ apa_table(
 Cronbach's alpha and omega did not significantly relate to replication success in the main logistic regression model (Cronbachs alpha: `r H3_test_result_main_alpha$full_result$alpha`; omega: `r H3_test_result_main_omega$full_result$omega`), nor in any of the multilevel sensitivity analyses models (see Table XXX). This is contradictory to the expectation in hypothesis 3. However, the results from these analyses should be evaluated with caution, given the small sample number of measures used to estimate these models.
 
 ## Questionable Measurement Practices
+The counts of the QMP ratio obtained for each QMP type (see Table XXX) are shown across the top layer of Figure XXX for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only `r apa_num(table(coded_data_replications$mod_check)["True"])` out of `r apa_num(length(coded_data_replications$mod_check))` measures in replications, and only `r apa_num(table(coded_data_original_shortened$mod_check)["True"], numerals = FALSE)` measures used in original studies were modified. The bottom layer of Figure XXX shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
+
+INSERT HERE 256
+
+```{r Plot 456 Code}
+# plot for alpha
+### ratio (REV) Original and Rep
+Plot_456_1 <- ggplot(plot_456_data[plot_456_data$QMP_type != "Total",], 
+       aes(x = QMP_ratio, fill = RepOrg)) + 
+  geom_bar(position = "dodge", stat = "bin", bins = 10) +
+  facet_grid(~QMP_type) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold")) +
+  scale_fill_manual(values=c("brown", "blue4")) +
+  theme(legend.position = "none") +
+  ylab("Count") +
+  xlab("QMP Ratio") +
+  ggtitle("QMP Ratio's Per QMP Type Grouped by Original and Replication") +
+  scale_x_continuous(labels = c("0", "0.25", "0.5", "0.75", "1"))
+
+Mean_Rat_Rep <- mean(plot_456_data$QMP_ratio[
+  plot_456_data$QMP_type == "Total" & plot_456_data$RepOrg == "Replication"])
+Mean_Rat_Org <- mean(plot_456_data$QMP_ratio[
+  plot_456_data$QMP_type == "Total" & plot_456_data$RepOrg == "Original"])
+
+Plot_456_2 <- ggplot(plot_456_data[plot_456_data$QMP_type == "Total",], 
+       aes(x = QMP_ratio, fill = RepOrg, colour = RepOrg)) +
+  geom_density(alpha = 0.2) +
+  geom_point(y = 0, alpha = 0.2, size = 3) +
+  geom_segment(aes(x = Mean_Rat_Rep, xend = Mean_Rat_Rep, y = 0, yend = 2.66)
+               , color = "blue4") +
+  geom_segment(aes(x = Mean_Rat_Org, xend = Mean_Rat_Org, y = 0, yend = 2.183)
+               , color = "brown") +
+  coord_cartesian(xlim = c(0, 1)) +
+  theme_ridges() + 
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank()) +
+  scale_fill_manual(values=c("brown", "blue4")) +
+  scale_color_manual(values=c("brown2", "blue")) +
+  scale_x_continuous(breaks = c(0, Mean_Rat_Rep, 0.25, Mean_Rat_Org, 
+                                0.5, 0.75, 1), 
+                     labels = c("0", "0.18", "0.25", "0.31", "0.5", 
+                                "0.75", "1")) + 
+  ggtitle("Distribution of Total QMP Ratio's by Original and Replication") +
+  guides(color = "none") +
+  labs(fill = "Coded from") +
+  ylab("") +
+  xlab("") 
+
+Plot_456_2
+
+# combine both plots into one figure
+grid.arrange(Plot_456_1, 
+             Plot_456_2, 
+             nrow = 2)
+
+```
+
+
+Beta-regression was used to test the difference in QMP ratio between original articles and replication protocols. Results showed that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects (`r betareg_output_to_apa_full(H4_test_results_REV)`). This result is in line with hypothesis 4.
 
 ```{r}
 #apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)
 
+
 ```
-
-The counts of the QMP ratio obtained for each QMP type (see Table XXX) are shown across the top layer of Figure XXX for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only 52 out of 77 measures in replications, and only ten measures used in original studies were modified. The bottom layer of Figure XXX shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
-
-INSERT HERE 256
-
-Beta-regression was used to test the difference in QMP ratio between original articles and replication protocols. Results showed that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects ($B = -0.779, SD = 0.140, p < .001$). This result is in line with hypothesis 4.
 
 A similar beta-regression tested the association between replication success and QMP ratio in replication protocols. Results showed that successful replication significantly related to a decrease in the ratio of QMPs in replication protocols $\left(B = -0.588, SD = 0.212, p < .001 \right)$. Sensitivity analyses were performed using a random-intercept multilevel regression function. This model also found a significant association between replication success and QMP ratio $\left(B = -0.963, t(70.319) = -1.491, p = .011 \right)$. Both of these results are in line with hypothesis 5. However, the relationship in the multilevel model is no longer significant for QMP ratios obtained with the initial coding protocol $\left(B = -0.517, t(63.122) = -2.635, p = .140 \right)$.
 
