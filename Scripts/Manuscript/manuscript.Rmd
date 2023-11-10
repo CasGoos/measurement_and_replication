@@ -1098,7 +1098,7 @@ The relationship between reliability and replication success was primarily teste
 H3_table_dataframe <- rbind(H3_test_result_main_alpha$table, H3_test_result_int_sensitivity_alpha$table, H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
 
 # adding an asterix for significance to the significant p in the dataframe
-H3_table_dataframe[3,5] <- paste0(H3_table_dataframe[3,5], "^*")
+H3_table_dataframe[3,5] <- paste0(H3_table_dataframe[3,5], "$^*$")
 
 # adding rows to give indication of specific sections (apa_table being awkward)
 H3_table_for_printing <- rbind(c("Alpha", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[1:2,], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(3:4),], c("Omega", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[(5:6),], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(7:8),], c("Random-Slope Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(9:10),])
@@ -1108,7 +1108,7 @@ H3_table_for_printing <- rbind(c("Alpha", "", "", "", ""), c("Logistic Regressio
 apa_table(
   H3_table_for_printing, align = c("l", "r", "r", "r", "r")
   , caption = "Model Results from Tests of Hypothesis 3"
-  , note = "The Cronbach's alpha section shows the models where the calculated Cronbach's alpha coefficient was the independent variable. In the Omega section it was the calculated omega coefficient. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
+  , note = "The Alpha and Omega sections show the models where the independent variable was the calculated Cronbach's alpha and omega coefficient respectively. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
   , escape = FALSE, placement= "ht", midrules = c(1, 2, 5, 7, 8, 9, 12, 15))
 
 ```
@@ -1164,8 +1164,6 @@ Plot_456_2 <- ggplot(plot_456_data[plot_456_data$QMP_type == "Total",],
   labs(fill = "Coded from") +
   ylab("") +
   xlab("") 
-
-Plot_456_2
 
 # combine both plots into one figure
 grid.arrange(Plot_456_1, 

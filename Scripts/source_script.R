@@ -530,13 +530,13 @@ Sensitivity_H6 <- function(Data){
 
 # function to convert betareg output to apa full style from papaja's apa_print
 betareg_output_to_apa_full<- function(betareg_output, coefficient_number = 2){
-  sum_object <- summary(H4_test_results_REV)$coefficients$mean[coefficient_number,]
+  sum_object <- summary(betareg_output)$coefficients$mean[coefficient_number,]
   
   estimate <- sum_object[1]
   std_error <- sum_object[2]
   z_value <- sum_object[3]
   p_value <- sum_object[4]
-  n <- H4_test_results_REV$n
+  n <- betareg_output$n
   
   if(z_value < 0){
     CI_HI <- estimate - z_value * (std_error / sqrt(n))
