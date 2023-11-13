@@ -243,6 +243,11 @@ data:
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_plot_23_data_omega.rmd
     labels: Data/AnalysisData/value_labels_plot_23_data_omega.yml
+  data/analysisdata/plot_46_data_rev.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    codebook: data/analysisdata/codebook_plot_46_data_rev.rmd
+    labels: Data/AnalysisData/value_labels_plot_46_data_REV.yml
 checksums:
   data/inputdata/data_ml1.csv: c8c01092a13e0c49be9535fe323e8766
   data/inputdata/data_2.2.csv: 4e1a0541727d0dcf1df49f7248d5de50
@@ -301,3 +306,4 @@ checksums:
   data/analysisdata/data_h3_avg.csv: 2616f757c6087b6600d8af3d02d8b271
   data/analysisdata/plot_23_data_alpha.csv: 7f0e624a1ac3b64b38f8e253ec5516e6
   data/analysisdata/plot_23_data_omega.csv: 6a3d98a4f230151ef1f361a961dac72a
+  data/analysisdata/plot_46_data_rev.csv: 0da51a908e378d56e034d9734210b164

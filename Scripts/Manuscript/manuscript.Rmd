@@ -612,7 +612,8 @@ data_h3_avg <- Data_prep_H3_avg(data_h5, data_h3_multiple)
 # plot accompanying the results for Hypotheses 4, 5, & 6.
 plot_456_data <- data_prep_plot_456(data_h6)
 # plot accompanying the results for Hypotheses 4, & 6
-Plot_46_data <- data_prep_plot_46(data_h6[c(3, 6, 9, 12, 15, 36, 39, 42, 45, 48)])
+plot_46_data <- data_prep_plot_46(data_h6[c(3, 6, 9, 12, 15, 36, 39, 42, 45, 48)])
+plot_46_data_rev <- data_prep_plot_46(data_h6[c(3, 21, 24, 27, 30, 36, 54, 57, 60, 63)])
 # plot accompanying the results for Hypotheses 2, & 3
 plot_23_data_alpha <- data_prep_plot_23_alpha(data_h3_multiple)
 plot_23_data_omega <- data_prep_plot_23_omega(data_h3_multiple)
@@ -665,7 +666,7 @@ open_data(data = plot_456_data, filename = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
     deparse(substitute(plot_456_data))), ".yml")) 
 
-open_data(data = Plot_46_data, filename = paste0(paste0(
+open_data(data = plot_46_data, filename = paste0(paste0(
   "Data/AnalysisData/", deparse(substitute(Plot_46_data))), ".csv"),
   codebook = paste0(paste0(
     "Data/AnalysisData/codebook_", 
@@ -673,6 +674,15 @@ open_data(data = Plot_46_data, filename = paste0(paste0(
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
     deparse(substitute(Plot_46_data))), ".yml")) 
+
+open_data(data = plot_46_data_rev, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(plot_46_data_rev))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/AnalysisData/codebook_", 
+    deparse(substitute(plot_46_data_rev))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/AnalysisData/value_labels_", 
+    deparse(substitute(plot_46_data_rev))), ".yml")) 
 
 open_data(data = data_h2, filename = paste0(paste0(
   "Data/AnalysisData/", deparse(substitute(data_h2))), ".csv"),
@@ -908,12 +918,9 @@ data_h5_sens <- data_h5
 data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio))
 data_h5_sens$QMP_REV <- log(data_h5_sens$QMP_REV_ratio /(1 - data_h5_sens$QMP_REV_ratio))
 
-check_h5 <- lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens)
-H5_sensitivity_test_results <- summary(check_h5)$coefficients
+check_h5 <- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
 
-check_h5_REV <- lmer(formula = QMP_REV ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens)
-H5_sensitivity_test_results_REV <- summary(check_h5_REV)$coefficients
-
+check_h5_REV <- apa_print(lmer(formula = QMP_REV ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
 
 ## Hypothesis 6 sensitivity test using a random intercept Guassian model.
 # create dummy H6 dataframe for use in sensitivity test
@@ -927,13 +934,11 @@ data_h6_sens$QMP_REV <- log(data_h6_sens$QMP_REV_ratio /(1 - data_h6_sens$QMP_RE
 data_h6_sens$Rep_QMP_REV <- log(data_h6_sens$Rep_QMP_REV_ratio /(1 - data_h6_sens$Rep_QMP_REV_ratio))
 
 # running the models one with none revised QMP ratio's and one with
-check_h6 <- lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens)
-H6_sensitivity_test_results <- summary(check_h6)$coefficients
+check_h6 <- apa_print(lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens))
   
-check_h6_REV <- lmer(formula = Rep_QMP_REV ~ 1 + QMP_REV + (1|many_labs_version), data = data_h6_sens)
-H6_sensitivity_test_results_REV <- summary(check_h6_REV)$coefficients
+check_h6_REV <- apa_print(lmer(formula = Rep_QMP_REV ~ 1 + QMP_REV + (1|many_labs_version), data = data_h6_sens))
 
-# n of mod ratio's pressent check
+# n of mod ratio's that are present (check)
 H6_n_check_results <- betareg(Rep_op_ratio ~ mod_ratio, data = data_h6)$n
 H6_n_check_results_REV <- betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = data_h6)$n
 
@@ -1118,8 +1123,6 @@ Cronbach's alpha and omega did not significantly relate to replication success i
 ## Questionable Measurement Practices
 The counts of the QMP ratio obtained for each QMP type (see Table XXX) are shown across the top layer of Figure XXX for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only `r apa_num(table(coded_data_replications$mod_check)["True"])` out of `r apa_num(length(coded_data_replications$mod_check))` measures in replications, and only `r apa_num(table(coded_data_original_shortened$mod_check)["True"], numerals = FALSE)` measures used in original studies were modified. The bottom layer of Figure XXX shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
 
-INSERT HERE 256
-
 ```{r Plot 456 Code}
 # plot for alpha
 ### ratio (REV) Original and Rep
@@ -1175,19 +1178,59 @@ grid.arrange(Plot_456_1,
 
 Beta-regression was used to test the difference in QMP ratio between original articles and replication protocols. Results showed that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects (`r betareg_output_to_apa_full(H4_test_results_REV)`). This result is in line with hypothesis 4.
 
-```{r}
-#apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)
+A similar beta-regression tested the association between replication success and QMP ratio in replication protocols. Results showed that successful replication significantly related to a decrease in the ratio of QMPs in replication protocols (`r betareg_output_to_apa_full(H5_test_results_REV)`). Sensitivity analyses were performed using a random-intercept multilevel regression function. This model also found a significant association between replication success and QMP ratio (`r check_h5_REV$full_result$hypothesis_supportTRUE`). Both of these results are in line with hypothesis 5. However, the relationship in the multilevel model is no longer significant for QMP ratios obtained with the initial coding protocol (`r check_h5$full_result$hypothesis_supportTRUE`).
+
+
+
+The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. It showed that total QMP ratio in the original article can significantly predict total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`), which provides some evidence in favor of hypothesis 6. However, this relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Sensitivity analyses using a random intercept logistic multilevel model also found some discrepancy in results between revised and initial protocol, albeit with both being non-significant (revised protocol: `r check_h6_REV$full_result$QMP_REV`; initial protocol `r check_h6$full_result$QMP`).
+
+INSERT FIGURE 46 HERE
+
+```{r Plot 46 Initial Data Code, include = FALSE, eval = FALSE}
+# Initial
+ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) + 
+  geom_point() +
+  geom_jitter(width = 0.05, height = 0.05) +
+  stat_smooth(method="lm") + 
+  theme_bw() +
+  theme(strip.text.y = element_text(size = 7), strip.background = element_rect(
+    color = "black", fill = "white", size = 1, linetype = "solid"
+  )) +
+  xlab("QMP Ratio (Original)") + ylab("QMP Ratio (Replication)") +
+  scale_x_continuous(labels = c("0", "0.25", "0.5", "0.75", "1")) + 
+  facet_grid(vars(QMP_Rep_type), vars(QMP_type))
 
 
 ```
 
-A similar beta-regression tested the association between replication success and QMP ratio in replication protocols. Results showed that successful replication significantly related to a decrease in the ratio of QMPs in replication protocols $\left(B = -0.588, SD = 0.212, p < .001 \right)$. Sensitivity analyses were performed using a random-intercept multilevel regression function. This model also found a significant association between replication success and QMP ratio $\left(B = -0.963, t(70.319) = -1.491, p = .011 \right)$. Both of these results are in line with hypothesis 5. However, the relationship in the multilevel model is no longer significant for QMP ratios obtained with the initial coding protocol $\left(B = -0.517, t(63.122) = -2.635, p = .140 \right)$.
+1
+```{r Plot 46 Revised Data Code}
+# Revised
+ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) + 
+  geom_point() +
+  geom_jitter(width = 0.05, height = 0.05) +
+  stat_smooth(method="lm") + 
+  theme_bw() +
+  theme(strip.text.y = element_text(size = 7), strip.background = element_rect(
+    color = "black", fill = "white", size = 1, linetype = "solid"
+  )) +
+  xlab("QMP Ratio (Original)") + ylab("QMP Ratio (Replication)") +
+  scale_x_continuous(labels = c("0", "0.25", "0.5", "0.75", "1")) + 
+  facet_grid(vars(QMP_Rep_type), vars(QMP_type))
 
-The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. It showed that total QMP ratio in the original article can significantly predict total QMP ratio in the subsequent replication ($B = 1.477, SD = 0.579, p < .001$), which provides some evidence in favor of hypothesis 6. However, this relation was not significant for the QMP ratios obtained with the initial protocol ($B = -0.387, SD = 0.511, p = 0.449$). Sensitivity analyses using a random intercept logistic multilevel model also found similar discrepancy in results between revised and initial protocol (revised protocol: $B = 0.249, t(74.473) = 1.498, p < 0.001$; initial protocol $B = -0.057, t(74.620) = -0.332, p = 0.741$).
+```
 
-INSERT FIGURE 26 HERE
 
 ## Exploratory Results
+
+```{r}
+#apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)
+
+# $\left(B = -0.963, t(70.319) = -1.491, p = .011 \right)$
+
+
+
+```
 
 Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Table XXX shows the results from these tests with the revised protocol QMP coding, while Table XXX shows the results for the QMP ratios obtained via the initial protocol. There were few significant relations and even fewer that are consistent between both coding protocols. The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols, illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol.
 
