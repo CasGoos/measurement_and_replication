@@ -980,20 +980,24 @@ extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clea
 # creating an empty dataframe to store the results in
 cfa_results <- data.frame(RMSEA = 0,
                           N_factors = 0,
-                          Single_factor = FALSE)
+                          Single_factor = "")
 
 # running the cfas for all of the extracted datasets
 for (i in 1:length(extracted_data_list)){
   # obtaining single factor model cfa RMSEA value for evaluation
   RMSEA_value <- fa(extracted_data_list[[i]][-1])$RMSEA[1]
-    
+  
+  if(is.null(RMSEA_value) != TRUE){
+    RMSEA_value <- apa_num(RMSEA_value, digits = 3)
+  }
+  
   # conducting parallel test to check if one factor solution is best.
   parallel_N_factors <- fa.parallel(extracted_data_list[[i]][-1], 
                                     fa = "fa")$nfact
   
   # adding a single factor check indicator value
-  single_factor <- ifelse(RMSEA_value < 0.08 | parallel_N_factors == 1, TRUE, 
-                          FALSE)
+  single_factor <- ifelse(RMSEA_value < 0.08 | parallel_N_factors == 1, "Yes", 
+                          "No")
   
   # adding the cfa results of one factor analysis to the results dataframe.
   cfa_results <- rbind(cfa_results, c(RMSEA_value, parallel_N_factors, 
@@ -1180,13 +1184,10 @@ Beta-regression was used to test the difference in QMP ratio between original ar
 
 A similar beta-regression tested the association between replication success and QMP ratio in replication protocols. Results showed that successful replication significantly related to a decrease in the ratio of QMPs in replication protocols (`r betareg_output_to_apa_full(H5_test_results_REV)`). Sensitivity analyses were performed using a random-intercept multilevel regression function. This model also found a significant association between replication success and QMP ratio (`r check_h5_REV$full_result$hypothesis_supportTRUE`). Both of these results are in line with hypothesis 5. However, the relationship in the multilevel model is no longer significant for QMP ratios obtained with the initial coding protocol (`r check_h5$full_result$hypothesis_supportTRUE`).
 
-
-
 The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. It showed that total QMP ratio in the original article can significantly predict total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`), which provides some evidence in favor of hypothesis 6. However, this relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Sensitivity analyses using a random intercept logistic multilevel model also found some discrepancy in results between revised and initial protocol, albeit with both being non-significant (revised protocol: `r check_h6_REV$full_result$QMP_REV`; initial protocol `r check_h6$full_result$QMP`).
 
-INSERT FIGURE 46 HERE
 
-```{r Plot 46 Initial Data Code, include = FALSE, eval = FALSE}
+```{r Plot 46 Initial Data Code, include = FALSE, eval = FALSE, error = FALSE}
 # Initial
 ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
@@ -1203,8 +1204,8 @@ ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) +
 
 ```
 
-1
-```{r Plot 46 Revised Data Code}
+
+```{r Plot 46 Revised Data Code, error = FALSE}
 # Revised
 ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
@@ -1220,29 +1221,137 @@ ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) +
 
 ```
 
-
 ## Exploratory Results
-
-```{r}
-#apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)
-
-# $\left(B = -0.963, t(70.319) = -1.491, p = .011 \right)$
-
-
-
-```
 
 Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Table XXX shows the results from these tests with the revised protocol QMP coding, while Table XXX shows the results for the QMP ratios obtained via the initial protocol. There were few significant relations and even fewer that are consistent between both coding protocols. The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols, illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol.
 
-INSERT QMP REPLICATION ASSOCIATION TESTS TABLE
+```{r H6 Exploratory Associations Revised Table}
+# creating the dataframe for the table
+H6_table_dataframe_l_REV <- rbind(Results_H6_between_REV$def_def, Results_H6_between_REV$def_op,
+  Results_H6_between_REV$def_sel, Results_H6_between_REV$def_quant, Results_H6_between_REV$def_mod, 
+  Results_H6_between_REV$op_def, Results_H6_between_REV$op_op, Results_H6_between_REV$op_sel, 
+  Results_H6_between_REV$op_quant, Results_H6_between_REV$op_mod, Results_H6_between_REV$sel_def, 
+  Results_H6_between_REV$sel_op, Results_H6_between_REV$sel_sel, Results_H6_between_REV$sel_quant, 
+  Results_H6_between_REV$sel_mod)
 
-INSERT QMP ORIGINAL REPLICATION ASSOCIATION TESTS TABLE
+H6_table_dataframe_r_REV <- rbind(Results_H6_between_REV$quant_def, Results_H6_between_REV$quant_op,
+  Results_H6_between_REV$quant_sel, Results_H6_between_REV$quant_quant, Results_H6_between_REV$quant_mod, 
+  Results_H6_between_REV$mod_def, Results_H6_between_REV$mod_op, Results_H6_between_REV$mod_sel, 
+  Results_H6_between_REV$mod_quant, Results_H6_between_REV$mod_mod, Results_H6_between_REV$tot_def, 
+  Results_H6_between_REV$tot_op, Results_H6_between_REV$tot_sel, Results_H6_between_REV$tot_quant, 
+  Results_H6_between_REV$tot_mod)
+
+H6_table_dataframe_REV <- cbind(H6_table_dataframe_l_REV, H6_table_dataframe_r_REV)
+
+
+# adding asterices for significance to the significant p in the dataframe
+H6_table_dataframe_REV[11,3] <- paste0(H6_table_dataframe_REV[11,3], "$^*$")
+H6_table_dataframe_REV[13,3] <- paste0(H6_table_dataframe_REV[13,3], "$^*$")
+H6_table_dataframe_REV[14,3] <- paste0(H6_table_dataframe_REV[14,3], "$^*$")
+H6_table_dataframe_REV[4,6] <- paste0(H6_table_dataframe_REV[4,6], "$^*$")
+H6_table_dataframe_REV[11,6] <- paste0(H6_table_dataframe_REV[11,6], "$^*$")
+H6_table_dataframe_REV[13,6] <- paste0(H6_table_dataframe_REV[13,6], "$^*$")
+H6_table_dataframe_REV[14,6] <- paste0(H6_table_dataframe_REV[14,6], "$^*$")
+
+
+# adding a column to help indicate the original QMP type
+H6_table_dataframe_REV_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification"), H6_table_dataframe_REV)
+
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H6_table_REV_for_printing <- rbind(c("QMP Type", "", "Definition", "", "", "Quantification", ""), H6_table_dataframe_REV_expanded[1:5,], c("QMP Type", "", "Operationalisation", "", "", "Modification", ""),  H6_table_dataframe_REV_expanded[(6:10),], c("QMP Type", "", "Selection", "", "", "Total", ""), H6_table_dataframe_REV_expanded[(11:15),])
+
+
+colnames(H6_table_REV_for_printing) <-  c("Original", "$b$", "SD", "$p$", "$b$", "SD", "$p$")
+
+# print the table in apa formatting
+apa_table(
+  H6_table_REV_for_printing, align = c("l", "r", "c", "r", "r", "c", "r")
+  , caption = "Beta Regression Test Results for the Association between Replication
+QMP Ratio and Original QMP Ratio as obtained using the Revised Protocol"
+  , note = "Rows indicate Original QMP type, and within table indicates Replication QMP type. Sample size for comparisons involving modification were lower since not all measures were modified. Therefore the standard errors are larger. $^* p < .05$"
+  , escape = FALSE, placement= "ht", midrules = c(1, 6, 7, 12, 13))
+
+### Possible change: omit sd and p-value, and instead show CI and n, in which case also the note should be changed.
+
+```
+
+
+```{r H6 Exploratory Associations Initial Table}
+# creating the dataframe for the table
+H6_table_dataframe_l <- rbind(Results_H6_between$def_def, Results_H6_between$def_op,
+  Results_H6_between$def_sel, Results_H6_between$def_quant, Results_H6_between$def_mod, 
+  Results_H6_between$op_def, Results_H6_between$op_op, Results_H6_between$op_sel, 
+  Results_H6_between$op_quant, Results_H6_between$op_mod, Results_H6_between$sel_def, 
+  Results_H6_between$sel_op, Results_H6_between$sel_sel, Results_H6_between$sel_quant, 
+  Results_H6_between$sel_mod)
+
+H6_table_dataframe_r <- rbind(Results_H6_between$quant_def, Results_H6_between$quant_op,
+  Results_H6_between$quant_sel, Results_H6_between$quant_quant, Results_H6_between$quant_mod, 
+  Results_H6_between$mod_def, Results_H6_between$mod_op, Results_H6_between$mod_sel, 
+  Results_H6_between$mod_quant, Results_H6_between$mod_mod, Results_H6_between$tot_def, 
+  Results_H6_between$tot_op, Results_H6_between$tot_sel, Results_H6_between$tot_quant, 
+  Results_H6_between$tot_mod)
+
+H6_table_dataframe <- cbind(H6_table_dataframe_l, H6_table_dataframe_r)
+
+
+# adding asterices for significance to the significant p in the dataframe
+H6_table_dataframe[8,3] <- paste0(H6_table_dataframe[8,3], "$^*$")
+H6_table_dataframe[11,3] <- paste0(H6_table_dataframe[11,3], "$^*$")
+H6_table_dataframe[14,3] <- paste0(H6_table_dataframe[14,3], "$^*$")
+H6_table_dataframe[8,6] <- paste0(H6_table_dataframe[8,6], "$^*$")
+H6_table_dataframe[9,6] <- paste0(H6_table_dataframe[9,6], "$^*$")
+H6_table_dataframe[11,6] <- paste0(H6_table_dataframe[11,6], "$^*$")
+H6_table_dataframe[13,6] <- paste0(H6_table_dataframe[13,6], "$^*$")
+
+
+# adding a column to help indicate the original QMP type
+H6_table_dataframe_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification"), H6_table_dataframe)
+
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H6_table_for_printing <- rbind(c("QMP Type", "", "Definition", "", "", "Quantification", ""), H6_table_dataframe_expanded[1:5,], c("QMP Type", "", "Operationalisation", "", "", "Modification", ""),  H6_table_dataframe_expanded[(6:10),], c("QMP Type", "", "Selection", "", "", "Total", ""), H6_table_dataframe_expanded[(11:15),])
+
+
+colnames(H6_table_for_printing) <-  c("Original", "$b$", "SD", "$p$", "$b$", "SD", "$p$")
+
+# print the table in apa formatting
+apa_table(
+  H6_table_for_printing, align = c("l", "r", "c", "r", "r", "c", "r")
+  , caption = "Beta Regression Test Results for the Association between Replication
+QMP Ratio and Original QMP Ratio as obtained using the Initial Protocol"
+  , note = "Rows indicate Original QMP type, and within table indicates Replication QMP type. Sample size for comparisons involving modification were lower since not all measures were modified. Therefore the standard errors are larger. $^* p < .05$"
+  , escape = FALSE, placement= "ht", midrules = c(1, 6, 7, 12, 13))
+
+```
 
 Figure XXX visually illustrates the relations of QMP ratios from different QMP types between replication protocols and original articles further.
 
 The unidimensionality of the measures used in the Many Labs projects was assessed through factor analyses, and evaluated based on the criteria discussed in section XXX. Suitable data for factor analyses was available for nineteen measures. These measures were the same as those shown in Figure XXX, with the addition of one more measure from [@cacioppo1983effects]. A composite score based on the measurement responses was used for sixteen of the nineteen measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for six out of the nineteen evaluated measures. However, as shown in Table XXX the unidimensional model did not hold for any measure data based on the parallel analysis test alone. Only the RMSEA $< .08$ criteria suggested evidence for single factor structures.
 
-INSERT FACTOR ANALYSES RESULTS TABLE HERE
+
+```{r Unidimesnionality Test Results Table}
+# add the names of the relevant papers and a shortcut for the measure used.
+cfa_results_expanded <- cbind(c("Caruso et al. (2012)", "Husnu & Crisp (2010)", "Nosek et al. (2002), Art", "Nosek et al. (2002), Math", "Van Lange et al. (1997)", "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", "Giessner & Schubert (2007)", "Norenzayan et al. (2002)", "Zhong & Liljenquist (2006)", "Monin & Miller (2001), most", "Monin & Miller (2001), some", "Cacioppo et al. (1983), elm", "Cacioppo et al. (1983), nfc", "De Fruyt et al. (2000), consc", "Albarracín et al. (2008), exp. 5", "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)"), cfa_results)
+
+# adding sensible column names
+colnames(cfa_results_expanded) <- c("Original Article", "RMSEA", "N Factors", "Unidimensional")
+
+# Renaming the columns for the not converged cfa.
+cfa_results_for_print <- cfa_results_expanded
+cfa_results_for_print$RMSEA[16] <- "Did"
+cfa_results_for_print$`N Factors`[16] <- "Not"
+cfa_results_for_print$Unidimensional[16] <- "Converge"
+
+# print the table in apa formatting
+apa_table(
+  cfa_results_for_print, align = c("l", "r", "r", "r")
+  , caption = "RMSEA and Parallel Analysis Suggested Factors based on Factor Analysis
+for Measure Data", note = "N Factors refer to the number of factors suggested based on parallel analysis of the measure data. The word or abbreviation after the author names and year indicates the specific measure within that original article that was analysed.", escape = FALSE, row.names = FALSE, placement= "ht")
+
+```
+
 
 # Discussion
 

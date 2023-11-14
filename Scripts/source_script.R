@@ -546,15 +546,28 @@ betareg_output_to_apa_full<- function(betareg_output, coefficient_number = 2){
     CI_HI <- estimate + z_value * (std_error / sqrt(n))
   }
   
+  
   estimate_string <- paste0("$b = ", apa_num(estimate), "$, ")
   CI_string <- paste0("95\\% CI $[", apa_num(CI_LO), ", ", apa_num(CI_HI), "]$, ")
   z_string <- paste0("$z = ", apa_num(z_value), "$, ")
+
+  
   p_string <- paste0("$p = ", apa_p(p_value), "$")
   
   
   return(paste0(estimate_string, CI_string, z_string, p_string))
 }
 
+# function to convert betareg output to apa style for a simple table
+betareg_output_to_apa_simple_table <- function(betareg_output, coefficient_number = 2){
+  sum_object <- summary(betareg_output)$coefficients$mean[coefficient_number,]
+  
+  estimate <- apa_num(sum_object[1])
+  std_error <- apa_num(sum_object[2])
+  p_value <- apa_p(sum_object[4])
+  
+  return(c(estimate, std_error, p_value))
+}
 
 
 # Reliability Related Functions ------------------------------------------------
@@ -727,7 +740,7 @@ cfa_ML_measures <- function(Extracted_Data_List){
 
 
 # Analyses Test Functions ------------------------------------------------------
-# creates and returns the associations between QMP categories
+  # creates and returns the associations between QMP categories
 Associations_H6 <- function(Data){
   return_list <- list(def_def = 0, def_op = 0, def_sel = 0, def_quant = 0, 
                       def_mod = 0, op_def = 0, op_op = 0, op_sel = 0, 
@@ -740,66 +753,66 @@ Associations_H6 <- function(Data){
   # Associations between the QMP categories
   # Mod_ratio is compared on a subset of the data, because it has several 
   # missing cases, due to some files not having any modifications.
-  return_list[[1]] <- summary(betareg(Rep_def_ratio ~ def_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[2]] <- summary(betareg(Rep_def_ratio ~ op_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[3]] <- summary(betareg(Rep_def_ratio ~ sel_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[4]] <- summary(betareg(Rep_def_ratio ~ quant_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[5]] <- summary(betareg(Rep_def_ratio ~ mod_ratio, 
-                                      data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[6]] <- summary(betareg(Rep_op_ratio ~ def_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[7]] <- summary(betareg(Rep_op_ratio ~ op_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[8]] <- summary(betareg(Rep_op_ratio ~ sel_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[9]] <- summary(betareg(Rep_op_ratio ~ quant_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[10]] <- summary(betareg(Rep_op_ratio ~ mod_ratio, data = 
-                                         Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[11]] <- summary(betareg(Rep_sel_ratio ~ def_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[12]] <- summary(betareg(Rep_sel_ratio ~ op_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[13]] <- summary(betareg(Rep_sel_ratio ~ sel_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[14]] <- summary(betareg(Rep_sel_ratio ~ quant_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[15]] <- summary(betareg(Rep_sel_ratio ~ mod_ratio, 
-                                       data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[16]] <- summary(betareg(Rep_quant_ratio ~ def_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[17]] <- summary(betareg(Rep_quant_ratio ~ op_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[18]] <- summary(betareg(Rep_quant_ratio ~ sel_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[19]] <- summary(betareg(Rep_quant_ratio ~ quant_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[20]] <- summary(betareg(Rep_quant_ratio ~ mod_ratio, 
-                                       data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[21]] <- summary(betareg(Rep_mod_ratio ~ def_ratio, 
-                                       data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[22]] <- summary(betareg(Rep_mod_ratio ~ op_ratio, 
-                                       data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[23]] <- summary(betareg(Rep_mod_ratio ~ sel_ratio, 
-                                       data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[24]] <- summary(betareg(Rep_mod_ratio ~ quant_ratio, 
-                                       data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[25]] <- summary(betareg(Rep_mod_ratio ~ mod_ratio, 
-                                       data = Data[!is.na(Data$mod_ratio),]))$coefficients[1]
-  return_list[[26]] <- summary(betareg(Rep_QMP_ratio ~ def_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[27]] <- summary(betareg(Rep_QMP_ratio ~ op_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[28]] <- summary(betareg(Rep_QMP_ratio ~ sel_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[29]] <- summary(betareg(Rep_QMP_ratio ~ quant_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[30]] <- summary(betareg(Rep_QMP_ratio ~ mod_ratio, 
-                                       data = Data))$coefficients[1]
+  return_list[[1]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ def_ratio, 
+                                      data = Data))
+  return_list[[2]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ op_ratio, 
+                                      data = Data))
+  return_list[[3]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ sel_ratio, 
+                                      data = Data))
+  return_list[[4]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ quant_ratio, 
+                                      data = Data))
+  return_list[[5]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ mod_ratio, 
+                                      data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[6]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_ratio ~ def_ratio, 
+                                      data = Data))
+  return_list[[7]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_ratio ~ op_ratio, 
+                                      data = Data))
+  return_list[[8]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_ratio ~ sel_ratio, 
+                                      data = Data))
+  return_list[[9]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_ratio ~ quant_ratio, 
+                                      data = Data))
+  return_list[[10]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_ratio ~ mod_ratio, data = 
+                                         Data[!is.na(Data$mod_ratio),]))
+  return_list[[11]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_ratio ~ def_ratio, 
+                                       data = Data))
+  return_list[[12]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_ratio ~ op_ratio, 
+                                       data = Data))
+  return_list[[13]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_ratio ~ sel_ratio, 
+                                       data = Data))
+  return_list[[14]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_ratio ~ quant_ratio, 
+                                       data = Data))
+  return_list[[15]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_ratio ~ mod_ratio, 
+                                       data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[16]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_ratio ~ def_ratio, 
+                                       data = Data))
+  return_list[[17]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_ratio ~ op_ratio, 
+                                       data = Data))
+  return_list[[18]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_ratio ~ sel_ratio, 
+                                       data = Data))
+  return_list[[19]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_ratio ~ quant_ratio, 
+                                       data = Data))
+  return_list[[20]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_ratio ~ mod_ratio, 
+                                       data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[21]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_ratio ~ def_ratio, 
+                                       data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[22]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_ratio ~ op_ratio, 
+                                       data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[23]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_ratio ~ sel_ratio, 
+                                       data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[24]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_ratio ~ quant_ratio, 
+                                       data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[25]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_ratio ~ mod_ratio, 
+                                       data = Data[!is.na(Data$mod_ratio),]))
+  return_list[[26]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_ratio ~ def_ratio, 
+                                       data = Data))
+  return_list[[27]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_ratio ~ op_ratio, 
+                                       data = Data))
+  return_list[[28]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_ratio ~ sel_ratio, 
+                                       data = Data))
+  return_list[[29]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_ratio ~ quant_ratio, 
+                                       data = Data))
+  return_list[[30]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_ratio ~ mod_ratio, 
+                                       data = Data))
   
   return(return_list) 
 }
@@ -817,66 +830,66 @@ Associations_H6_REV <- function(Data){
   # Associations between the QMP categories
   # Mod_ratio is compared on a subset of the data, because it has several 
   # missing cases, due to some files not having any modifications.
-  return_list[[1]] <- summary(betareg(Rep_def_ratio ~ def_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[2]] <- summary(betareg(Rep_def_ratio ~ op_REV_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[3]] <- summary(betareg(Rep_def_ratio ~ sel_REV_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[4]] <- summary(betareg(Rep_def_ratio ~ quant_REV_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[5]] <- summary(betareg(Rep_def_ratio ~ mod_REV_ratio, 
-                                      data = Data[!is.na(Data$mod_REV_ratio),]))$coefficients[1]
-  return_list[[6]] <- summary(betareg(Rep_op_REV_ratio ~ def_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[7]] <- summary(betareg(Rep_op_REV_ratio ~ op_REV_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[8]] <- summary(betareg(Rep_op_REV_ratio ~ sel_REV_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[9]] <- summary(betareg(Rep_op_REV_ratio ~ quant_REV_ratio, 
-                                      data = Data))$coefficients[1]
-  return_list[[10]] <- summary(betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = 
-                                         Data[!is.na(Data$mod_REV_ratio),]))$coefficients[1]
-  return_list[[11]] <- summary(betareg(Rep_sel_REV_ratio ~ def_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[12]] <- summary(betareg(Rep_sel_REV_ratio ~ op_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[13]] <- summary(betareg(Rep_sel_REV_ratio ~ sel_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[14]] <- summary(betareg(Rep_sel_REV_ratio ~ quant_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[15]] <- summary(betareg(Rep_sel_REV_ratio ~ mod_REV_ratio, 
-                                       data = Data[!is.na(Data$mod_REV_ratio),]))$coefficients[1]
-  return_list[[16]] <- summary(betareg(Rep_quant_REV_ratio ~ def_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[17]] <- summary(betareg(Rep_quant_REV_ratio ~ op_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[18]] <- summary(betareg(Rep_quant_REV_ratio ~ sel_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[19]] <- summary(betareg(Rep_quant_REV_ratio ~ quant_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[20]] <- summary(betareg(Rep_quant_REV_ratio ~ mod_REV_ratio, 
-                                       data = Data[!is.na(Data$mod_REV_ratio),]))$coefficients[1]
-  return_list[[21]] <- summary(betareg(Rep_mod_REV_ratio ~ def_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[22]] <- summary(betareg(Rep_mod_REV_ratio ~ op_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[23]] <- summary(betareg(Rep_mod_REV_ratio ~ sel_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[24]] <- summary(betareg(Rep_mod_REV_ratio ~ quant_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[25]] <- summary(betareg(Rep_mod_REV_ratio ~ mod_REV_ratio, 
-                                       data = Data[!is.na(Data$mod_REV_ratio),]))$coefficients[1]
-  return_list[[26]] <- summary(betareg(Rep_QMP_REV_ratio ~ def_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[27]] <- summary(betareg(Rep_QMP_REV_ratio ~ op_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[28]] <- summary(betareg(Rep_QMP_REV_ratio ~ sel_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[29]] <- summary(betareg(Rep_QMP_REV_ratio ~ quant_REV_ratio, 
-                                       data = Data))$coefficients[1]
-  return_list[[30]] <- summary(betareg(Rep_QMP_REV_ratio ~ mod_REV_ratio, 
-                                       data = Data))$coefficients[1]
+  return_list[[1]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ def_ratio, 
+                                      data = Data))
+  return_list[[2]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ op_REV_ratio, 
+                                      data = Data))
+  return_list[[3]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ sel_REV_ratio, 
+                                      data = Data))
+  return_list[[4]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ quant_REV_ratio, 
+                                      data = Data))
+  return_list[[5]] <- betareg_output_to_apa_simple_table(betareg(Rep_def_ratio ~ mod_REV_ratio, 
+                                      data = Data[!is.na(Data$mod_REV_ratio),]))
+  return_list[[6]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_REV_ratio ~ def_ratio, 
+                                      data = Data))
+  return_list[[7]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_REV_ratio ~ op_REV_ratio, 
+                                      data = Data))
+  return_list[[8]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_REV_ratio ~ sel_REV_ratio, 
+                                      data = Data))
+  return_list[[9]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_REV_ratio ~ quant_REV_ratio, 
+                                      data = Data))
+  return_list[[10]] <- betareg_output_to_apa_simple_table(betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = 
+                                         Data[!is.na(Data$mod_REV_ratio),]))
+  return_list[[11]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_REV_ratio ~ def_ratio, 
+                                       data = Data))
+  return_list[[12]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_REV_ratio ~ op_REV_ratio, 
+                                       data = Data))
+  return_list[[13]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_REV_ratio ~ sel_REV_ratio, 
+                                       data = Data))
+  return_list[[14]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_REV_ratio ~ quant_REV_ratio, 
+                                       data = Data))
+  return_list[[15]] <- betareg_output_to_apa_simple_table(betareg(Rep_sel_REV_ratio ~ mod_REV_ratio, 
+                                       data = Data[!is.na(Data$mod_REV_ratio),]))
+  return_list[[16]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_REV_ratio ~ def_ratio, 
+                                       data = Data))
+  return_list[[17]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_REV_ratio ~ op_REV_ratio, 
+                                       data = Data))
+  return_list[[18]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_REV_ratio ~ sel_REV_ratio, 
+                                       data = Data))
+  return_list[[19]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_REV_ratio ~ quant_REV_ratio, 
+                                       data = Data))
+  return_list[[20]] <- betareg_output_to_apa_simple_table(betareg(Rep_quant_REV_ratio ~ mod_REV_ratio, 
+                                       data = Data[!is.na(Data$mod_REV_ratio),]))
+  return_list[[21]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_REV_ratio ~ def_ratio, 
+                                       data = Data))
+  return_list[[22]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_REV_ratio ~ op_REV_ratio, 
+                                       data = Data))
+  return_list[[23]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_REV_ratio ~ sel_REV_ratio, 
+                                       data = Data))
+  return_list[[24]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_REV_ratio ~ quant_REV_ratio, 
+                                       data = Data))
+  return_list[[25]] <- betareg_output_to_apa_simple_table(betareg(Rep_mod_REV_ratio ~ mod_REV_ratio, 
+                                       data = Data[!is.na(Data$mod_REV_ratio),]))
+  return_list[[26]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_REV_ratio ~ def_ratio, 
+                                       data = Data))
+  return_list[[27]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_REV_ratio ~ op_REV_ratio, 
+                                       data = Data))
+  return_list[[28]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_REV_ratio ~ sel_REV_ratio, 
+                                       data = Data))
+  return_list[[29]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_REV_ratio ~ quant_REV_ratio, 
+                                       data = Data))
+  return_list[[30]] <- betareg_output_to_apa_simple_table(betareg(Rep_QMP_REV_ratio ~ mod_REV_ratio, 
+                                       data = Data))
   
   
   return(return_list) 
