@@ -546,9 +546,41 @@ Two different types of score reliabilities were calculated: Cronbach's alpha and
 
 Hypothesis 3 as well as 5 specify an association between either score reliability or QMPs respectively, and replication success. Replication success was based on the test of the main effect of a study. However, the unit of measurement for the data in this thesis was a measure of a unique variable, not an effect. Fortunately, since only primary measures were included in the data, each measured a variable of the main effect, and as a result the measure remains related to the test of the main effect. Replication was based on the significance of the meta-analytic effect of the replication set as reported in its respective Many Labs report. An effect was considered replicated if the meta-analytic p-value was lower than .05, and in the same direction as the original effect. In all cases, meta-analytic significance of an effect meant that support in the direction of the original effect was found.
 
-The tests for hypotheses 4, 5, & 6 were all based on the number of QMPs per category that were determined by the research using the coding protocol. An overview of the QMP categories of the coding variables, based on @flake2020measurement, can be seen in Table INSERT TABLE 1 REF HERE
+The tests for hypotheses 4, 5, & 6 were all based on the number of QMPs per category that were determined by the research using the coding protocol. An overview of the QMP categories of the coding variables, based on @flake2020measurement, can be seen in Table \@ref(tab:QMPCodingInfoTable)
 
-INSERT TABLE 1 HERE
+\renewcommand{\arraystretch}{0.5}
+```{r QMPCodingInfoTable}
+QMP_info_dataframe <-data.frame(Category = c("Definition", "", "", "Operationalisation", "", "", "", "Selection/Creation", "", "", "Quantification", "Modification", "", "", "", "", ""),
+           'N Questions' = c("1", "", "", "5", "", "", "", "4", "", "", "4", "6", "", "", "", "", ""),
+           'Example Question' = c("A psychological/sociological definition",
+            "is given to the name of the measured",
+            "variable within the paper.", 
+            "The administration format (pen-and-",
+            "paper/computer) and environment (in",
+            "public/in a lab) are described (Note:",
+            "both should be present for a true rating).", 
+            "The source of the scale is provided",
+            "(in case the scale was newly developed",
+            "this should be clearly stated).", 
+            "The number of items are described.", 
+            "Any format changes are mentioned",
+            "(paper-and-pencil <–> computer), if no",
+            "changes were made to the format, and",
+            "this was mentioned then code as No",
+            "modification. If it is not clear, then code",
+            "as False."))
+
+
+
+# transfer the data to an APA table for printing
+apa_table(
+  QMP_info_dataframe, align = c("l", "r", "l")
+  , caption = "Information of QMP coding variables per category."
+  , note = "N Questions refers only to the questions considered quantative as specified in the text below."
+  , escape = FALSE, placement= "ht", booktabs = TRUE)
+
+```
+\renewcommand{\arraystretch}{1}
 
 Selection and creation share a category as the justifications and requirements in selecting a measure are similar to those for creating a new measure. Modification variables were only assessed when it was clear that the measure was modified from an original source in some way. The questions were all answered as either true, false, or not applicable. Questions related to modification had 'no modification' as an additional answer option, in case the specific aspect of the measure was explicitly not modified. Beside these quantitative variables, a total of four qualitative variables were also included to measure details surrounding measurement practices. These variables assessed: the specific version of the measure (if reported); whether and what previous materials were used for the study; what, if any, psychometric evidence beyond reliability score (e.g. factor analysis, IRT model, convergent validity) was provided; and whether it was specified or not that the measure was or was not modified.
 
@@ -1042,7 +1074,7 @@ apa_table(
   replication_ratio_table, align = c("l", "r", "r", "r")
   , caption = "Ratio of measures for which the effect was considered replicated, across many labs projects"
   , note = "$^a$replication was assessed as unclear for three of the measures, since their effect was not fully replicated. These have been treated as not replicated within this table and further analyses throughout the thesis"
-  , escape = FALSE, placement= "h", midrules = 4)
+  , escape = FALSE, placement = "ht", midrules = 4)
 
 
 ```
@@ -1125,6 +1157,7 @@ apa_table(
 Cronbach's alpha and omega did not significantly relate to replication success in the main logistic regression model (Cronbachs alpha: `r H3_test_result_main_alpha$full_result$alpha`; omega: `r H3_test_result_main_omega$full_result$omega`), nor in any of the multilevel sensitivity analyses models (see Table XXX). This is contradictory to the expectation in hypothesis 3. However, the results from these analyses should be evaluated with caution, given the small sample number of measures used to estimate these models.
 
 ## Questionable Measurement Practices
+
 The counts of the QMP ratio obtained for each QMP type (see Table XXX) are shown across the top layer of Figure XXX for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only `r apa_num(table(coded_data_replications$mod_check)["True"])` out of `r apa_num(length(coded_data_replications$mod_check))` measures in replications, and only `r apa_num(table(coded_data_original_shortened$mod_check)["True"], numerals = FALSE)` measures used in original studies were modified. The bottom layer of Figure XXX shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
 
 ```{r Plot 456 Code}
@@ -1179,13 +1212,11 @@ grid.arrange(Plot_456_1,
 
 ```
 
-
 Beta-regression was used to test the difference in QMP ratio between original articles and replication protocols. Results showed that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects (`r betareg_output_to_apa_full(H4_test_results_REV)`). This result is in line with hypothesis 4.
 
 A similar beta-regression tested the association between replication success and QMP ratio in replication protocols. Results showed that successful replication significantly related to a decrease in the ratio of QMPs in replication protocols (`r betareg_output_to_apa_full(H5_test_results_REV)`). Sensitivity analyses were performed using a random-intercept multilevel regression function. This model also found a significant association between replication success and QMP ratio (`r check_h5_REV$full_result$hypothesis_supportTRUE`). Both of these results are in line with hypothesis 5. However, the relationship in the multilevel model is no longer significant for QMP ratios obtained with the initial coding protocol (`r check_h5$full_result$hypothesis_supportTRUE`).
 
 The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. It showed that total QMP ratio in the original article can significantly predict total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`), which provides some evidence in favor of hypothesis 6. However, this relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Sensitivity analyses using a random intercept logistic multilevel model also found some discrepancy in results between revised and initial protocol, albeit with both being non-significant (revised protocol: `r check_h6_REV$full_result$QMP_REV`; initial protocol `r check_h6$full_result$QMP`).
-
 
 ```{r Plot 46 Initial Data Code, include = FALSE, eval = FALSE, error = FALSE}
 # Initial
@@ -1203,7 +1234,6 @@ ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) +
 
 
 ```
-
 
 ```{r Plot 46 Revised Data Code, error = FALSE}
 # Revised
@@ -1276,7 +1306,6 @@ QMP Ratio and Original QMP Ratio as obtained using the Revised Protocol"
 
 ```
 
-
 ```{r H6 Exploratory Associations Initial Table}
 # creating the dataframe for the table
 H6_table_dataframe_l <- rbind(Results_H6_between$def_def, Results_H6_between$def_op,
@@ -1330,7 +1359,6 @@ Figure XXX visually illustrates the relations of QMP ratios from different QMP t
 
 The unidimensionality of the measures used in the Many Labs projects was assessed through factor analyses, and evaluated based on the criteria discussed in section XXX. Suitable data for factor analyses was available for nineteen measures. These measures were the same as those shown in Figure XXX, with the addition of one more measure from [@cacioppo1983effects]. A composite score based on the measurement responses was used for sixteen of the nineteen measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for six out of the nineteen evaluated measures. However, as shown in Table XXX the unidimensional model did not hold for any measure data based on the parallel analysis test alone. Only the RMSEA $< .08$ criteria suggested evidence for single factor structures.
 
-
 ```{r Unidimesnionality Test Results Table}
 # add the names of the relevant papers and a shortcut for the measure used.
 cfa_results_expanded <- cbind(c("Caruso et al. (2012)", "Husnu & Crisp (2010)", "Nosek et al. (2002), Art", "Nosek et al. (2002), Math", "Van Lange et al. (1997)", "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", "Giessner & Schubert (2007)", "Norenzayan et al. (2002)", "Zhong & Liljenquist (2006)", "Monin & Miller (2001), most", "Monin & Miller (2001), some", "Cacioppo et al. (1983), elm", "Cacioppo et al. (1983), nfc", "De Fruyt et al. (2000), consc", "Albarracín et al. (2008), exp. 5", "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)"), cfa_results)
@@ -1351,7 +1379,6 @@ apa_table(
 for Measure Data", note = "N Factors refer to the number of factors suggested based on parallel analysis of the measure data. The word or abbreviation after the author names and year indicates the specific measure within that original article that was analysed.", escape = FALSE, row.names = FALSE, placement= "ht")
 
 ```
-
 
 # Discussion
 
