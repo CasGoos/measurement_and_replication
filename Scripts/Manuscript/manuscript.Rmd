@@ -90,7 +90,7 @@ load_data()
 r_refs("r-references.bib")
 
 # manually retrieving the Rstudio version
-RStudio.Version()
+rstudioapi::versionInfo()
 ```
 
 ```{r analysis-preferences}
@@ -515,7 +515,7 @@ rm(coded_data_initial_raw, coded_data_revised_raw, coded_data_vignette_raw,
 
 The data on the preregistered replication protocols, and replication datasets from Many Labs 1, 2, 3, & 5 were all retrieved from their respective OSF pages: <https://osf.io/wx7ck/>, <https://osf.io/8cd4r/>, <https://osf.io/ct89g/>, & <https://osf.io/7a6rd/>. When available, codebooks and study materials were used to identify the specific data for each measure.
 
-The publicly available datasets of the replication attempt were accessed through their OSF page and loaded into Rstudio XXXRSTUDIOREFERENCEHEREXXX. with R version 4.2.2 XXXRREFERENCEHEREXXX. Using the replication protocols, codebooks, and analysis scripts from each replication set as a guide, the variables associated with each measure were extracted into their own data frame containing the data from all studies in one replication set. These pieces of information formed the replication datasets in the analysis.
+The publicly available datasets of the replication attempt were accessed through their OSF page and loaded into Rstudio [@R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base] Using the replication protocols, codebooks, and analysis scripts from each replication set as a guide, the variables associated with each measure were extracted into their own data frame containing the data from all studies in one replication set. These pieces of information formed the replication datasets in the analysis.
 
 The OSF page for each Many Labs project was combed through, in order to identify the components of the research which contained information on the measurement practice and reported reliability. The focus was on finding the preregistered protocols which contained information on the entirety of the replication sets in each Many Labs project. This was successful for Many Labs 2, & 3. For Many Labs 1 the Proposal_V1.1 was selected as the proper candidate for the QMP analysis. Despite the difference in name, it is the equivalent in Many Labs 1 to the protocols of Many Labs 2 & 3. For Many Labs 5 the protocols were made accessible for each replication set separately. The relevant OSF page of each replication set was searched through for a file which contained protocol in its name. If available, a version of the protocol labelled as revised, post-review, peer-review, or endorsed was selected. In case there was doubt about which was most appropriate, the latest uploaded relevant protocol was selected. Only regular protocols were taken, meaning those not labelled as data collection, analysis protocol or anything similar[^1].
 
