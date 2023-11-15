@@ -90,11 +90,8 @@ load_data()
 r_refs("r-references.bib")
 
 # manually retrieving the Rstudio version
-
-### DON'T FORGET THAT I SHOULD REMOVE HERE THE R PACKAGE REFERENCES FROM MY REFERENCES BIB AND SHOULD HAVE THE R=REFERENCES BIB TAKE CARE OF THAT INSTEAD.
+RStudio.Version()
 ```
-
-This is an example of a non-essential citation [\@ @vanlissaWORCS2021]. If you change the rendering function to `worcs::cite_essential`, it will be removed.
 
 ```{r analysis-preferences}
 # Seed for random number generation
@@ -542,7 +539,7 @@ Two main sources of information were used to test hypothesis 1, the reported rel
 
 The test of hypothesis 2 was based on different score reliabilities. As stated earlier, only score reliabilities of scalar measures with multiple items were included in the test of hypothesis 2. Because data was available for each lab location within a replication set, it was possible to calculate score reliabilities of a measure for each lab location. With location specific score reliabilities, it was possible to assess the variation of score reliabilities of the same measure across different contexts.
 
-Two different types of score reliabilities were calculated: Cronbach's alpha and omega. Cronbach's alpha was used as it is one of the most popular indices of score reliability [@cho2015cronbach]. Omega was added to the analysis as it has been argued to be a more informative measure of score reliability, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Cronbach's alpha and omega were calculated using the alpha and omega functions respectively in the psych R package [@revelle2022psych]. Default arguments were used for both functions except the nfactors in the omega function, which was set to 1.
+Two different types of score reliabilities were calculated: Cronbach's alpha and omega. Cronbach's alpha was used as it is one of the most popular indices of score reliability [@cho2015cronbach]. Omega was added to the analysis as it has been argued to be a more informative measure of score reliability, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Cronbach's alpha and omega were calculated using the alpha and omega functions respectively in the psych R package [@R-psych]. Default arguments were used for both functions except the nfactors in the omega function, which was set to 1.
 
 ### Replicability Measure
 
@@ -572,7 +569,6 @@ QMP_info_dataframe <-data.frame(Category = c("Definition", "", "", "Operationali
             "this was mentioned then code as No",
             "modification. If it is not clear, then code",
             "as False."))
-
 
 
 # transfer the data to an APA table for printing
@@ -771,7 +767,7 @@ Every hypothesis test in this thesis used an alpha significance cutoff of .05. N
 
 The measurement error analyses testing hypotheses 1, 2, & 3 deviated from the preregistration for two main reasons: there were too few reported reliability coefficients, and too few multiple item scalar measures to calculate the reliability coefficients from. Because of the small sample size, the test for hypothesis 1 was changed, and the low power as a result of the sample size was accepted for hypothesis 2 & 3. This should be kept in mind while interpreting the results from these hypothesis tests.
 
-Thus for testing hypothesis 1, instead of comparing the reported Cronbach's alpha coefficient between original and replication, the total number of reported reliability coefficients were compared instead. This total also included reliability coefficients other than Cronbach's alpha. This comparison was implemented via a chi-square test using the base R stats package [@R2021R].
+Thus for testing hypothesis 1, instead of comparing the reported Cronbach's alpha coefficient between original and replication, the total number of reported reliability coefficients were compared instead. This total also included reliability coefficients other than Cronbach's alpha. This comparison was implemented via a chi-square test using the base R stats package [@R-base].
 
 ```{r Hypothesis 1 Model, include = FALSE}
 # first some descriptives of reliability reporting
@@ -791,7 +787,7 @@ H1_test_result <- chisq.test(data_h1$rep_org[data_h1$N_items == "multiple item m
 
 The number of usable datasets to calculate reliability coefficients from was similarly limited in number. However, the number of datasets were still sufficient to be able to estimate the models of the planned analysis for hypothesis 2, albeit with a more exploratory goal than intended.
 
-Using the lmer function from the lme4 package [@bates2015lme4], a multilevel null model with the Cronbach's alpha or omega coefficient of a replication as dependent was specified, where the random intercept was grouped by replication set. The formulas for this model, where $alpha_{ij}$ represents the calculated Cronbach's alpha coefficient of a single study at one lab location with $i = 1,..., n_{locations}$ and $j = 1,...,n_{replications}$ look as follows:
+Using the lmer function from the lme4 package [@R-lme4], a multilevel null model with the Cronbach's alpha or omega coefficient of a replication as dependent was specified, where the random intercept was grouped by replication set. The formulas for this model, where $alpha_{ij}$ represents the calculated Cronbach's alpha coefficient of a single study at one lab location with $i = 1,..., n_{locations}$ and $j = 1,...,n_{replications}$ look as follows:
 
 ```{=tex}
 \begin{align}
@@ -904,7 +900,7 @@ H3_test_result_slp_sensitivity_omega <- apa_print(glmer(formula = replication ~ 
 
 The reported analyses were primarily based on the revised set of QMP data. The results using the original QMP data are mentioned when the results led to different conclusions. The analysis code for both the original and revised QMP data are available in the R script on both the OSF page (<https://osf.io/9r8yt/>) and github page (<https://github.com/CasGoos/measurement_and_replication.git>) of this article.
 
-Hypothesis 4, 5, & 6 were all tested using a model with the same dependent variable: total QMP ratio. In order to model a ratio dependent variable, beta regression was used. Beta regression models operate similarly to standard generalized linear models with similar interpretations of the results. What differentiates them is that they are suitable to model dependent variables with values in the interval of $(0, 1)$, meaning ratios. Furthermore, they are well suited for modelling heteroskedastic and asymmetrically distributed dependent variables [@cribari2010beta]. The beta regression model was implemented using the betareg function within the betareg package [@cribari2010beta]. Defaults were used for all function parameters besides the model formula and data. All beta regression models used the beta link function, which is as follows:
+Hypothesis 4, 5, & 6 were all tested using a model with the same dependent variable: total QMP ratio. In order to model a ratio dependent variable, beta regression was used. Beta regression models operate similarly to standard generalized linear models with similar interpretations of the results. What differentiates them is that they are suitable to model dependent variables with values in the interval of $(0, 1)$, meaning ratios. Furthermore, they are well suited for modelling heteroskedastic and asymmetrically distributed dependent variables [@cribari2010beta]. The beta regression model was implemented using the betareg function within the betareg package [@R-betareg_a; @R-betareg_b]. Defaults were used for all function parameters besides the model formula and data. All beta regression models used the beta link function, which is as follows:
 
 ```{=tex}
 \begin{equation}
@@ -965,7 +961,7 @@ H6_test_results_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6
 
 ```
 
-These models had independence of observations as another assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models were implemented as sensitivity analyses for the tests of both hypothesis 5 & 6. In these models each replication set was treated as being nested in its respective Many Labs project. Worth noting is that currently the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@bates2015lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model.
+These models had independence of observations as another assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models were implemented as sensitivity analyses for the tests of both hypothesis 5 & 6. In these models each replication set was treated as being nested in its respective Many Labs project. Worth noting is that currently the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model.
 
 ```{r Hypotheses 5 & 6 Sensitivity Analyses, include = FALSE}
 ## Hypothesis 5 sensitivity test using a random intercept Guassian model.
@@ -1024,7 +1020,7 @@ Results_H6_between_REV <- Associations_H6_REV(data_h6)
 
 Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. As these analyses are exploratory in nature, due to the large number of tests, the focus was on visualisation rather than inference.
 
-Finally, in order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set. A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@revelle2022psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
+Finally, in order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set. A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@R-psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
 
 ```{r Unidimensionality Exploratory Analysis, include = FALSE}
 extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
