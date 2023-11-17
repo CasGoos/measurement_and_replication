@@ -99,8 +99,7 @@ set.seed(17042023)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
-# Introduction
-
+# Introduction 
 For many years, methodologists and statisticians have raised concerns about the way that research practices [@cumming2014new; @wicherts2016degrees], reporting practices [@bakker2011mis; @nuijten2016prevalence], and publication decisions [@sterling1959publication; @bakker2012rules; @giner2012science] may undermine the credibility of psychology's scientific claims. Replicability of a finding is seen as one crucial step in establishing its credibility [@nosek2022replicability]. In order to investigate the replicability of psychological science, the large scale Reproducibility Project: Psychology (RPP) was set-up [@osc2015estimating]. Replications of 100 published studies were performed using similar materials, procedures, and analyses, while using a new sample of participants for each study. They found however, that in many instances the results did no match those of the original studies. This lack of replicability of psychological findings illustrated that psychology was facing a so-called 'replication crisis' [@hughes2018psychology; @giner2019crisis].
 
 As a response, the demand to verify the credibility of psychological findings through replications rose. In order to attempt replications of various psychological findings, numerous large scale projects were set-up [@klein2014data; @camerer2016evaluating; @camerer2018evaluating; @ebersole2016many; @ebersole2020many; @klein2018many; @klein2022many]. Among these were the Many Labs projects, which operated similarly to the RPP, with the additional feature that each original article was replicated multiple times across different labs in various locations around the world. The results from these replication projects generally showed smaller effects than those reported in the original studies. Similarly, effects that had reached statistical significance in the original no longer did across the aggregate results of its replications.
@@ -525,13 +524,11 @@ The original articles were identified through the citations in each replication 
 
 The measures of primary variables were identified by combing through the entire methods section of each preregistered replication protocols. Then using the structured coding protocol (made using Qualtrics) available on the OSF page for this thesis (<https://osf.io/9r8yt/>), each measure of a unique variable was coded on measurement reporting and reported reliability.
 
-The structured coding protocol was used for both replication protocols and original studies. A series of questions relating to measurement practices and measurement error were used to extract the information. Descriptions of the extracted variables can be found in the Measures section below. The scope of the coding was limited to the abstract, method, procedure, materials, measure, and initial parts of the results sections. Additionally, a keyword search using the name of the measured variable was used to search for any potentially missed information. An exception to this procedure was a question asking about the presence of example items. For this question, information from supplementary materials was uniquely considered as relevant. Another exception was the question regarding the replication of the original effect. Tables from the final report of each Many Labs project were used to answer that question.
-
-<!-- @ref(sec:measures) didn't work for section cross-reference in the paragraph above-->
+The structured coding protocol was used for both replication protocols and original studies. A series of questions relating to measurement practices and measurement error were used to extract the information. Descriptions of the extracted variables can be found in the [Measures](#Measures) section below. The scope of the coding was limited to the abstract, method, procedure, materials, measure, and initial parts of the results sections. Additionally, a keyword search using the name of the measured variable was used to search for any potentially missed information. An exception to this procedure was a question asking about the presence of example items. For this question, information from supplementary materials was uniquely considered as relevant. Another exception was the question regarding the replication of the original effect. Tables from the final report of each Many Labs project were used to answer that question.
 
 After the data was initially coded according to the preregistered coding protocol, it was determined, based on discussion with the supervisor, that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more favourable judgement of QMPs. These changes included: accepting linked online appendices as a data source for example items; assuming that if no differences between replication and original are measurement is mentioned, that there is no difference, even if it is not explicitly clear; and generally simplified criteria for what constituted sufficiently clear reporting. The revision of the coding protocol happened after all the data were coded using the initial protocol. As a result the coded data using the initial protocol, and the coded data using the revised protocol are both available available on this thesis' OSF page: <https://osf.io/9r8yt/>. Both raw and processed formats are present.
 
-## Measures
+## Measures {#Measures}
 
 ### Measurement Error Measures
 
@@ -1016,7 +1013,7 @@ Results_H6_between_REV <- Associations_H6_REV(data_h6)
 
 ```
 
-### Exploratory Analyses
+### Exploratory Analyses {#ExploratoryAnalyses}
 
 Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. As these analyses are exploratory in nature, due to the large number of tests, the focus was on visualisation rather than inference.
 
@@ -1379,7 +1376,7 @@ QMP Ratio and Original QMP Ratio as obtained using the Initial Protocol"
 
 Figure \@ref(fig:Plot46RevisedDataCode) visually illustrates the relations of QMP ratios from different QMP types between replication protocols and original articles further.
 
-The unidimensionality of the measures used in the Many Labs projects was assessed through factor analyses, and evaluated based on the criteria discussed in the Exploratory Analyses section above. Suitable data for factor analyses was available for nineteen measures. These measures were the same as those shown in Figure \@ref(fig:Plot23AlphaCode), with the addition of one more measure from [@cacioppo1983effects]. A composite score based on the measurement responses was used for sixteen of the nineteen measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for six out of the nineteen evaluated measures. However, as shown in Table \@ref(tab:UnidimesnionalityTestResultsTable) the unidimensional model did not hold for any measure data based on the parallel analysis test alone. Only the RMSEA $< .08$ criteria suggested evidence for single factor structures.
+The unidimensionality of the measures used in the Many Labs projects was assessed through factor analyses, and evaluated based on the criteria discussed in the [Exploratory Analyses](#ExploratoryAnalyses) section above. Suitable data for factor analyses was available for nineteen measures. These measures were the same as those shown in Figure \@ref(fig:Plot23AlphaCode), with the addition of one more measure from [@cacioppo1983effects]. A composite score based on the measurement responses was used for sixteen of the nineteen measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for six out of the nineteen evaluated measures. However, as shown in Table \@ref(tab:UnidimesnionalityTestResultsTable) the unidimensional model did not hold for any measure data based on the parallel analysis test alone. Only the RMSEA $< .08$ criteria suggested evidence for single factor structures.
 
 ```{r UnidimesnionalityTestResultsTable}
 # add the names of the relevant papers and a shortcut for the measure used.
