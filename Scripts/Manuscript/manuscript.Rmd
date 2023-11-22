@@ -93,6 +93,17 @@ r_refs("r-references.bib")
 rstudioapi::versionInfo()
 ```
 
+<!-- altering latex defaults to get better figure and table placement -->
+\renewcommand{\arraystretch}{0.7} <!-- reducing the line spacing within tables -->
+\renewcommand{\topfraction}{.85} <!-- max fraction of page for floats at top -->
+\renewcommand{\bottomfraction}{.7} <!-- max fraction of page for floats at bottom -->
+\renewcommand{\textfraction}{.15} <!-- min fraction of page for text -->
+\renewcommand{\floatpagefraction}{.66} <!-- min fraction of page that should have floats -->
+\setcounter{topnumber}{3} <!-- max number of floats at top of page -->
+\setcounter{bottomnumber}{3} <!-- max number of floats at bottom of page -->
+\setcounter{totalnumber}{4} <!-- max number of floats on a page -->
+<!-- remember to use [htp] or [htpb] for placement -->
+
 ```{r analysis-preferences}
 # Seed for random number generation
 set.seed(17042023)
@@ -544,9 +555,7 @@ Hypothesis 3 as well as 5 specify an association between either score reliabilit
 
 The tests for hypotheses 4, 5, & 6 were all based on the number of QMPs per category that were determined by the research using the coding protocol. An overview of the QMP categories of the coding variables, based on @flake2020measurement, can be seen in Table \@ref(tab:QMPCodingInfoTable)
 
-\renewcommand{\arraystretch}{0.7}
-
-```{r QMPCodingInfoTable}
+```{r QMPCodingInfoTable, warning = FALSE}
 QMP_info_dataframe <-data.frame(Category = c("Definition", "", "", "Operationalisation", "", "", "", "Selection/Creation", "", "", "Quantification", "Modification", "", "", "", "", ""),
            'N Questions' = c("1", "", "", "5", "", "", "", "4", "", "", "4", "6", "", "", "", "", ""),
            'Example Question' = c("A psychological/sociological definition",
@@ -573,7 +582,7 @@ apa_table(
   QMP_info_dataframe, align = c("l", "r", "l")
   , caption = "Information of QMP coding variables per category."
   , note = "N Questions refers only to the questions considered quantative as specified in the text below."
-  , escape = FALSE, placement= "ht", booktabs = TRUE)
+  , escape = FALSE, placement= "htp", booktabs = TRUE)
 
 ```
 
@@ -591,7 +600,7 @@ The same data as for the test of hypothesis 2 was used to check for the unidimen
 
 The same data as for the test of hypothesis 2 was used to check for the unidimensionality of the factor structure, as part of the exploratory analyses. A check for unidimensionality as validity evidence only makes sense if the measure was intended to be unidimensional. Therefore, for each replication for which data was available, the protocol was checked to ensure that the scores on each measure were meant to assess a single construct.
 
-```{r Check for Reliability and Validity Testability, include = FALSE}
+```{r Check for Reliability and Validity Testability, include = FALSE, warning = FALSE}
 ## Checking the measures to recalculate the reliability and factor analysis for.
 ## The question: "Are they psychometrics scales or not?", is key here.
 View(coded_data_replications)
@@ -793,6 +802,7 @@ Using the lmer function from the lme4 package [@R-lme4], a multilevel null model
 & Mixed: alpha_{ij} = \gamma_{00} + u_{0j} + e_{ij} (\#eq:mixedH2)
 \end{align}
 ```
+
 ```{r Hypothesis 2 Model, include = FALSE}
 # intercept only model to check the within and between group variance.
 H2_test_result_alpha <- lmer(formula = alpha ~ 1 + (1|g), data = data_h2)
@@ -1067,7 +1077,7 @@ cfa_results <- cfa_results[-1,]
 
 The mean sample size within the replications was `r apa_num(mean(coded_data_replications$N, na.rm = TRUE), digits = 0)` participants (IQR = `r apa_num(IQR(coded_data_replications$N, na.rm = TRUE), digits = 0)`). In the original articles the mean sample size was `r apa_num(mean(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)` (IQR = `r apa_num(IQR(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)`). In total, support was found for hypothesized effects of `r apa_num(table(coded_data_replications$hypothesis_support)["Yes"], digits = 0)` of the `r apa_num(nrow(coded_data_replications), digits = 0)` measures. Proportions of replication success per Many Labs project can be found in Table \@ref(tab:ReplicationRatioTable).
 
-```{r ReplicationRatioTable}
+```{r ReplicationRatioTable, warning = FALSE}
 # construct the replication ratio table to be printed
 replication_ratio_table <- data.frame("Many Labs Version" = c("1", "2", "3", "5", "Total"),
                                       "N Total" = c(table(coded_data_replications$many_labs_version), nrow(coded_data_replications)), 
@@ -1094,7 +1104,7 @@ apa_table(
   replication_ratio_table, align = c("l", "r", "r", "r")
   , caption = "Ratio of measures for which the effect was considered replicated, across many labs projects"
   , note = "$^a$replication was assessed as unclear for three of the measures, since their effect was not fully replicated. These have been treated as not replicated within this table and further analyses throughout the thesis"
-  , escape = FALSE, placement = "ht", midrules = 4)
+  , escape = FALSE, placement = "htp", midrules = 4)
 
 ```
 
@@ -1112,7 +1122,7 @@ A chi-squared test compared whether the number of reliabilities reported among m
 
 The average Cronbach's alpha coefficient across replication sets was `r apa_num(mean(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(mean(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`, for omega the mean was `r apa_num(sd(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`. Figure \@ref(fig:Plot23AlphaCode) shows the distributions of the Cronbach's alpha coefficients for each replication set separated by successful and unsuccessful replication.
 
-```{r Plot23AlphaCode, fig.cap = "Distributions of calculated Cronbach’s alpha coefficients (> 0) calculated for the responses on a measure at each lab location, across the eighteen distinct measures for which suitable raw data was available to calculate Cronbach’s alpha coefficients from."}
+```{r Plot23AlphaCode,warning = FALSE,  fig.cap = "Distributions of calculated Cronbach’s alpha coefficients (> 0) calculated for the responses on a measure at each lab location, across the eighteen distinct measures for which suitable raw data was available to calculate Cronbach’s alpha coefficients from."}
 # plot for alpha
 ggplot(plot_23_data_alpha, aes(x = alpha, y = g)) +
   geom_boxplot(outlier.shape = NA) +
@@ -1153,7 +1163,7 @@ The between-group (across different replication set) variance and within-group (
 
 The relationship between reliability and replication success was primarily tested via logistic regression, with replication success as the dependent variable. Further sensitivity analyses were performed using multilevel logistic models, with each measure as an overarching group wherein its reliability at each lab location is nested. The results of the logistic and multilevel logistic models are shown in Table \@ref(tab:ReplicabilityReliabilityTestTable) for both Cronbach's alpha and omega reliability coefficients.
 
-```{r ReplicabilityReliabilityTestTable}
+```{r ReplicabilityReliabilityTestTable, warning = FALSE}
 # creating the dtaframe for the table
 H3_table_dataframe <- rbind(H3_test_result_main_alpha$table, H3_test_result_int_sensitivity_alpha$table, H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
 
@@ -1169,7 +1179,7 @@ apa_table(
   H3_table_for_printing, align = c("l", "r", "r", "r", "r")
   , caption = "Model Results from Tests of Hypothesis 3"
   , note = "The Alpha and Omega sections show the models where the independent variable was the calculated Cronbach's alpha and omega coefficient respectively. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
-  , escape = FALSE, placement= "ht", midrules = c(1, 2, 5, 7, 8, 9, 12, 15))
+  , escape = FALSE, placement= "htp", midrules = c(1, 2, 5, 7, 8, 9, 12, 15))
 
 ```
 
@@ -1179,7 +1189,7 @@ Cronbach's alpha and omega did not significantly relate to replication success i
 
 The counts of the QMP ratio obtained for each QMP type (see Table \@ref(tab:QMPCodingInfoTable)) are shown across the top layer of Figure \@ref(fig:Plot456Code) for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only `r apa_num(table(coded_data_replications$mod_check)["True"])` out of `r apa_num(length(coded_data_replications$mod_check))` measures in replications, and only `r apa_num(table(coded_data_original_shortened$mod_check)["True"], numerals = FALSE)` measures used in original studies were modified. The bottom layer of Figure \@ref(fig:Plot456Code) shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
 
-```{r Plot456Code, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by where each was coded from. The top row shows binned counts of QMP ratio’s that were observed for each replication protocol and original article, across the different QMP types. The bottom graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots"}
+```{r Plot456Code, warning = FALSE, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by where each was coded from. The top row shows binned counts of QMP ratio’s that were observed for each replication protocol and original article, across the different QMP types. The bottom graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots"}
 # plot for alpha
 ### ratio (REV) Original and Rep
 Plot_456_1 <- ggplot(plot_456_data[plot_456_data$QMP_type != "Total",], 
@@ -1254,7 +1264,7 @@ ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) +
 
 ```
 
-```{r Plot46RevisedDataCode, error = FALSE, fig.cap = "Scatterplot of original and replication QMP ratio’s per type with linear regression line. The abbreviations on the axes relate to the QMP categories described in Table 1: Def. is definition, Op. is operationalization, Sel. is selection/creation, Quant. is quantification, and Mod. is modification. The X axis facets across the QMP ratios in the original articles, and the Y axis facets across the QMP ratios in the replication protocols. Each dot in the figure relates to describes the QMP ratio for the types in that graph across an original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
+```{r Plot46RevisedDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication QMP ratio’s per type with linear regression line. The abbreviations on the axes relate to the QMP categories described in Table 1: Def. is definition, Op. is operationalization, Sel. is selection/creation, Quant. is quantification, and Mod. is modification. The X axis facets across the QMP ratios in the original articles, and the Y axis facets across the QMP ratios in the replication protocols. Each dot in the figure relates to describes the QMP ratio for the types in that graph across an original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
 # Revised
 ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
@@ -1274,7 +1284,7 @@ ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) +
 
 Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Table \@ref(tab:H6ExploratoryAssociationsRevisedTable) shows the results from these tests with the revised protocol QMP coding, while Table \@ref(tab:H6ExploratoryAssociationsInitialTable) shows the results for the QMP ratios obtained via the initial protocol. There were few significant relations and even fewer that are consistent between both coding protocols. The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols, illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol.
 
-```{r H6ExploratoryAssociationsRevisedTable}
+```{r H6ExploratoryAssociationsRevisedTable, warning = FALSE}
 # creating the dataframe for the table
 H6_table_dataframe_l_REV <- rbind(Results_H6_between_REV$def_def, Results_H6_between_REV$def_op,
   Results_H6_between_REV$def_sel, Results_H6_between_REV$def_quant, Results_H6_between_REV$def_mod, 
@@ -1319,13 +1329,13 @@ apa_table(
   , caption = "Beta Regression Test Results for the Association between Replication
 QMP Ratio and Original QMP Ratio as obtained using the Revised Protocol"
   , note = "Rows indicate Original QMP type, and within table indicates Replication QMP type. Sample size for comparisons involving modification were lower since not all measures were modified. Therefore the standard errors are larger. $^* p < .05$"
-  , escape = FALSE, placement= "ht", midrules = c(1, 6, 7, 12, 13))
+  , escape = FALSE, placement= "htp", midrules = c(1, 6, 7, 12, 13))
 
 ### Possible change: omit sd and p-value, and instead show CI and n, in which case also the note should be changed.
 
 ```
 
-```{r H6ExploratoryAssociationsInitialTable}
+```{r H6ExploratoryAssociationsInitialTable, warning = FALSE}
 # creating the dataframe for the table
 H6_table_dataframe_l <- rbind(Results_H6_between$def_def, Results_H6_between$def_op,
   Results_H6_between$def_sel, Results_H6_between$def_quant, Results_H6_between$def_mod, 
@@ -1370,7 +1380,7 @@ apa_table(
   , caption = "Beta Regression Test Results for the Association between Replication
 QMP Ratio and Original QMP Ratio as obtained using the Initial Protocol"
   , note = "Rows indicate Original QMP type, and within table indicates Replication QMP type. Sample size for comparisons involving modification were lower since not all measures were modified. Therefore the standard errors are larger. $^* p < .05$"
-  , escape = FALSE, placement= "ht", midrules = c(1, 6, 7, 12, 13))
+  , escape = FALSE, placement= "htp", midrules = c(1, 6, 7, 12, 13))
 
 ```
 
@@ -1378,7 +1388,7 @@ Figure \@ref(fig:Plot46RevisedDataCode) visually illustrates the relations of QM
 
 The unidimensionality of the measures used in the Many Labs projects was assessed through factor analyses, and evaluated based on the criteria discussed in the [Exploratory Analyses](#ExploratoryAnalyses) section above. Suitable data for factor analyses was available for nineteen measures. These measures were the same as those shown in Figure \@ref(fig:Plot23AlphaCode), with the addition of one more measure from [@cacioppo1983effects]. A composite score based on the measurement responses was used for sixteen of the nineteen measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for six out of the nineteen evaluated measures. However, as shown in Table \@ref(tab:UnidimesnionalityTestResultsTable) the unidimensional model did not hold for any measure data based on the parallel analysis test alone. Only the RMSEA $< .08$ criteria suggested evidence for single factor structures.
 
-```{r UnidimesnionalityTestResultsTable}
+```{r UnidimesnionalityTestResultsTable, warning = FALSE}
 # add the names of the relevant papers and a shortcut for the measure used.
 cfa_results_expanded <- cbind(c("Caruso et al. (2012)", "Husnu & Crisp (2010)", "Nosek et al. (2002), Art", "Nosek et al. (2002), Math", "Van Lange et al. (1997)", "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", "Giessner & Schubert (2007)", "Norenzayan et al. (2002)", "Zhong & Liljenquist (2006)", "Monin & Miller (2001), most", "Monin & Miller (2001), some", "Cacioppo et al. (1983), elm", "Cacioppo et al. (1983), nfc", "De Fruyt et al. (2000), consc", "Albarracín et al. (2008), exp. 5", "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)"), cfa_results)
 
@@ -1395,7 +1405,7 @@ cfa_results_for_print$Unidimensional[16] <- "Converge"
 apa_table(
   cfa_results_for_print, align = c("l", "r", "r", "r")
   , caption = "RMSEA and Parallel Analysis Suggested Factors based on Factor Analysis
-for Measure Data", note = "N Factors refer to the number of factors suggested based on parallel analysis of the measure data. The word or abbreviation after the author names and year indicates the specific measure within that original article that was analysed.", escape = FALSE, row.names = FALSE, placement= "ht")
+for Measure Data", note = "N Factors refer to the number of factors suggested based on parallel analysis of the measure data. The word or abbreviation after the author names and year indicates the specific measure within that original article that was analysed.", escape = FALSE, row.names = FALSE, placement= "htp")
 
 ```
 
