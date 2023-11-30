@@ -12,22 +12,24 @@ You can load this project in RStudio by opening the file called 'Measurement_and
 File                        | Description                      | Usage         
 --------------------------- | -------------------------------- | --------------
 README.md                   | Description of project           | Human editable
-Measurement_and_Replication.Rproj | Project file                     | Loads project 
+WORCSPersonalTemplate_a.Rproj | Project file                     | Loads project 
 LICENSE                     | User permissions                 | Read only     
 .worcs                      | WORCS metadata YAML              | Read only     
 renv.lock                   | Reproducible R environment       | Read only     
 renv/                       | storage of info for renv.lock    | Read only     
-Data/AnalysisData           | fully cleaned data, with codebook| Read only
-Data/LocalInputData         | raw data on local system         | Human editable
-Data/InputData              | raw data                         | Human editable
-Data/IntermediateData       | any semi-cleaned data            | Human editable
-Output/DataAppendixOutput   | data descriptives and figures    | Read only      
-Output/Results              | figures and supplements          | Read only      
-Scripts/Manuscript/manuscript.rmd | Source code for paper            | Human editable
+Data/AnalysisData/          | fully cleaned data, with codebooks  | Read only
+Data/InputData/             | pseudo-anonymized raw data       | Human editable
+Data/IntermediateData/      | any semi-cleaned data            | Human editable
+Data/LocalInputData/        | raw data on local system         | Human editable
+Data/DataPackageProtocol.Rmd| full instructions on content and use of data | Human editable
+Output/                     | digital copy of the final manuscript   | Read only
+Scripts/Manuscript/r-references.bib | BibTex references for R packages used | Human editable
 Scripts/Manuscript/references.bib | BibTex references for manuscript | Human editable
-Scripts/process_data.R      | Script to load in raw data       | Human editable
+Scripts/Manuscript/manuscript.rmd | Source code for paper (including data processing and analysis code)   | Human editable
+Scripts/preprocess_data.R   | Script to load in raw data       | Human editable
 Scripts/source_script.R     | Script with self-made functions for the manuscript | Human editable
-SupplementaryMaterials/     | misc. materials                  | Read only      
+SupplementaryMaterials/     | misc. materials                  | Read only    
+
 
 
 <!--  You can consider adding the following to this file:                    -->
