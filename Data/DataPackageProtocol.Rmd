@@ -1,14 +1,339 @@
-# Provide here a full description of each dataset in the project not captured by
-#  the automated dataset-specific codebooks.
+<!-- Provide here a full description of each dataset in the project not captured by the automated dataset-specific codebooks. -->
 
+# InputData
 
-# InputData --------------------------------------------------------------------
+### Coded_Data_Initial_raw.csv
 
+*Origin*: This dataset was created originally for this research project. It was obtained using the ???.pdf that can be found in the SupplementaryMaterials folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications.
 
+*Explanation*: The information in this dataset was used for analyses relating to QMP ratios among original articles and replication studies. It additionally contains peripheral information about the articles and study in it that were used throughout the analyses and for descriptives.
 
-# IntermediateData -------------------------------------------------------------
+*Variables*:
 
+### Coded_Data_Revised_raw.csv
 
+*Origin*: This dataset was created originally for this research project. It was obtained using the ???.pdf that can be found in the SupplementaryMaterials folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications (the same sample as was used to obtain the Coded_Data_Initial_raw.csv).
 
-# OutputData -------------------------------------------------------------------
+*Explanation*: After discussion with the supervisor based on the experiences of the initial coding round it was determined that several of the demarcation for meeting several QMP criteria were likely too strict, and thus several of the more strictly coded questions were revised and coded again using a new coding protocol. The goal being to offer an as lenient as possible overview of the errors in reporting in the investigated literature.
 
+*Variables*:
+
+### Coded_Data_Vignette_raw.csv
+
+*Origin*: This dataset was created originally for this research project. It was obtained using the ???.pdf that can be found in the SupplementaryMaterials folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications (the same sample as was used to obtain the Coded_Data_Initial_raw.csv).
+
+*Explanation*: This dataset was collected after the intial round of coding with the intention to control on certain analyses whether items described a vignette and not an ordinary questionnaire, which might have different standards with regards to measurement reporting and reliability. As of yet, it has remained unused in any analyses
+
+*Variables*:
+
+-   **RecordedDate**: Records the date the variable was coded, was not used further.
+
+-   **Vignette**: Boolean variable indicating whether or not a particular measure was inseparably tied to a vignette describing some form of quoted text, visual, imagined scenario, cognitive task, or game.
+
+### Data_ML1.csv
+
+*Origin*: This dataset was obtained from the Datasets.zip archive as "Full_Dataset_De-Identified.sav", from the following OSF page: <https://osf.io/pqf9r/>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Ratliff, K., Vianello, M., Adams Jr, R. B., Bahník, S., Bernstein, M. J., . . . Nosek, B. A. (2014). Investigating variation in replicability: A "many labs" replication project. Social Psychology, 45 (3), 142--152. <https://doi.org/10.1027/1864-9335/a000178>, the dataset itself has the following doi: 10.17605/OSF.IO/PQF9R.
+
+*Alterations*: the only alterations made to the dataset at this stage were: the name of the dataset was changed, and the format was changed from .sav to .csv.
+
+### Data_2.2.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Structure & Goal Pursuit (Kay et al., 2014)/Kay.1/Global/Data/" as "Kay_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.3.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Incidental Disfluency (Alter et al., 2007)/Alter.1/Global/Data/" as "Alter_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.4.1.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Moral Foundations (Graham et al., 2009)/Graham.1/Global/Data/" as "Graham_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.4.2.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Moral Foundations (Graham et al., 2009)/Graham.2/Global/Data/" as "Graham_2_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.8.2.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Disgust & Homophobia (Inbar et al., 2009)/Inbar.1b/Global/Data/" as "Inbar_1b_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.10.1.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Social Value Orientation (Van Lange et al., 1997)/vanLange.1/Global/Data/" as "vanLange_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.12.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "SMS & Well-Being (Anderson et al., 2012)/Anderson.1/Global/Data/" as "Anderson_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.15.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Position & Power (Giessner & Schubert, 2007)/Giessner.1/Global/Data/" as "Giessner_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.19.1.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Actions are Choices (Savani et al., 2010)/Savani.3a/Global/Data/" as "Savani_3a_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.20.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "Intuitive Reasoning (Norenzayan et al., 2002)/Norenzayan.1/Global/Data" as "Norenzayan_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_2.23.csv
+
+*Origin*: This dataset was obtained from the OSFdata.zip archive in file path "/Moral Cleansing (Zhong & Liljenquist, 2006)/Zhong.1/Global/Data/" as "Zhong_1_study_global_include_all_CLEAN_CASE.csv", from the following OSF page: <https://osf.io/ag2pd>.
+
+*Attribution*: The datatset is related to the following article: Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams Jr, R. B., Alper, S., . . . Bahnìk, Š. (2018). Many labs 2: Investigating variation in replicability across samples and settings. Advances in Methods and Practices in Psychological Science, 1 (4), 443--490. <https://doi.org/10.1177/2515245918810225>, the dataset itself has the following doi: 10.17605/OSF.IO/FANRE.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_ML3.csv
+
+*Origin*: This dataset was obtained from the ML3 Final Data.zip archive in the base folder as "ML3AllSitesandmTurk.csv", from the following OSF page: <https://osf.io/bxw8j>.
+
+*Attribution*: The datatset is related to the following article: Ebersole, C. R., Atherton, O. E., Belanger, A. L., Skulborstad, H. M., Allen, J. M., Banks, J. B., . . . Nosek, B. A. (2016). Many labs 3: Evaluating participant pool quality across the academic semester via replication. Journal of Experimental Social Psychology, 67, 68--82. <https://doi.org/10.1016/j.jesp.2015.10.012>.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_3.5.csv
+
+*Origin*: This dataset was obtained from the ML3 Final Data.zip archive in the base folder as "ML3StroopData.csv", from the following OSF page: <https://osf.io/bxw8j>.
+
+*Attribution*: The datatset is related to the following article: Ebersole, C. R., Atherton, O. E., Belanger, A. L., Skulborstad, H. M., Allen, J. M., Banks, J. B., . . . Nosek, B. A. (2016). Many labs 3: Evaluating participant pool quality across the academic semester via replication. Journal of Experimental Social Psychology, 67, 68--82. <https://doi.org/10.1016/j.jesp.2015.10.012>.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_5.1.csv
+
+*Origin*: This dataset was obtained as "ML5 Alb 5 Revised Protocol In Lab.xlsx", from the following OSF page: <https://osf.io/64njs>.
+
+*Attribution*: The datatset is related to the following article: Ebersole, C. R., Mathur, M. B., Baranski, E., Bart-Plange, D.-J., Buttrick, N. R., Chartier, C. R., . . . Nosek, B. A. (2020). Many labs 5: Testing pre-data-collection peer review as an intervention to increase replicability. Advances in Methods and Practices in Psychological Science, 3 (3), 309--331. <https://doi.org/10.1177/2515245920958687>.
+
+*Alterations*: the only alterations made to the dataset at this stage were: the name of the dataset was changed, and the format was changed from .xlsx to .csv.
+
+### Data_5.4.csv
+
+*Origin*: This dataset was obtained as "dataset_LoBue_raw.sav", from the following OSF page: <https://osf.io/w7ft9>.
+
+*Attribution*: The datatset is related to the following article: Ebersole, C. R., Mathur, M. B., Baranski, E., Bart-Plange, D.-J., Buttrick, N. R., Chartier, C. R., . . . Nosek, B. A. (2020). Many labs 5: Testing pre-data-collection peer review as an intervention to increase replicability. Advances in Methods and Practices in Psychological Science, 3 (3), 309--331. <https://doi.org/10.1177/2515245920958687>.
+
+*Alterations*: the only alterations made to the dataset at this stage were: the name of the dataset was changed, and the format was changed from .sav to .csv.
+
+### Data_5.5.csv
+
+*Origin*: This dataset was obtained as "Genova_ML5.csv", from the following OSF page: <https://osf.io/prj7y>.
+
+*Attribution*: The datatset is related to the following article: Ebersole, C. R., Mathur, M. B., Baranski, E., Bart-Plange, D.-J., Buttrick, N. R., Chartier, C. R., . . . Nosek, B. A. (2020). Many labs 5: Testing pre-data-collection peer review as an intervention to increase replicability. Advances in Methods and Practices in Psychological Science, 3 (3), 309--331. <https://doi.org/10.1177/2515245920958687>.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_5.7.csv
+
+*Origin*: This dataset was obtained as "ml5_computed_dataset.csv", from the following OSF page: <https://osf.io/da8bh>.
+
+*Attribution*: The datatset is related to the following article: Ebersole, C. R., Mathur, M. B., Baranski, E., Bart-Plange, D.-J., Buttrick, N. R., Chartier, C. R., . . . Nosek, B. A. (2020). Many labs 5: Testing pre-data-collection peer review as an intervention to increase replicability. Advances in Methods and Practices in Psychological Science, 3 (3), 309--331. <https://doi.org/10.1177/2515245920958687>.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+### Data_5.9.csv
+
+*Origin*: This dataset was obtained as "ML5_fulldataset_with_suspicion.csv", from the following OSF page: <https://osf.io/5w6e7>.
+
+*Attribution*: The datatset is related to the following article: Ebersole, C. R., Mathur, M. B., Baranski, E., Bart-Plange, D.-J., Buttrick, N. R., Chartier, C. R., . . . Nosek, B. A. (2020). Many labs 5: Testing pre-data-collection peer review as an intervention to increase replicability. Advances in Methods and Practices in Psychological Science, 3 (3), 309--331. <https://doi.org/10.1177/2515245920958687>.
+
+*Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
+
+<!-- Should look into the datasets that were considered not usable and see what I might find for them now. Particularly Data_2.4.1, Data_2.4.2, Data_5.5, and Data_2.19.2 -->
+
+# IntermediateData
+
+### coded_data_original.csv
+
+*Explanation*: contains all coded data on the original articles with renamed columns, fixed bad data, restructured to match the ordering of the protocols more ineligibly, recoded to be close to suitable for analysis, and with several composite variables added that were calculated from the raw data.
+
+<!-- add information here on all of the coded variables, and then paste it to the datasets below too. -->
+
+### coded_data_original_shortened.csv
+
+*Explanation*: similar to the coded_data_original.csv only with the coded data on 3 measures that did not appear in the replication protocols being removed to allow for easier comparisons between replications and original studies.
+
+### coded_data_replications.csv
+
+*Explanation*: contains all coded data on the replications as described in the many labs protocols with renamed columns, fixed bad data, restructured to match the ordering of the protocols more ineligibly, recoded to be close to suitable for analysis, and with several composite variables added that were calculated from the raw data.
+
+### Data_1.3_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to anchoring used in study 3 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+### Data_1.10_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to system justification used in study 10 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+### Data_1.11_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to intentions to engage used in study 11 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+### Data_1.12.3.1_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to explicit attitudes towards art used in study 12 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+### Data_1.12.3.2_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to explicit attitudes towards math used in study 12 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+### Data_2.10.1_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to social value orientation used in study 10 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+### Data_2.12.1_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to satisfaction with life used in study 12 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+### Data_2.12.2_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to positive affect used in study 12 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+### Data_2.12.3_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to negative affect used in study 12 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+### Data_2.15_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to rated power used in study 15 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+### Data_2.20_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to rule or similarity based judgement used in study 20 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+### Data_2.23_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to cleaning product ratings used in study 23 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+### Data_3.2.1.1_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to list of most expressions used in study 2 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+### Data_3.2.1.2_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to list of some expressions used in study 2 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+### Data_3.7.1_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to argument quality used in study 7 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+### Data_3.7.2_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to need for cognition used in study 7 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+### Data_3.8.2_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to conscientousness used in study 8 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+### Data_5.1.1_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to verbal ability used in study 1 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+### Data_5.1.2_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to quantitative ability used in study 1 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+### Data_5.4_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to antogonist trait description used in study 4 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+### Data_5.7_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to willingness to reconcile used in study 7 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+### Data_5.9.1_clean.csv
+
+*Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to free will used in study 9 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+# OutputData
+
+### data_H1.csv
+
+*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv except for an empty column that was meant to contain any types of reported psychometric evidence not included in the multiple choice response options, since it caused codebook generation issues. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. An additional variable was added which indicated for the multiple item measures only whether or not any form of reliability evidence was reported or not as a boolean variable.
+
+### data_H2.csv
+
+*Explanation*: This dataset list contains the calculated Cronbach's alpha and the omega reliability coefficient calculated for the responses to the questionnaire items from several of the Many Labs studies, namely those responses encoded in: Data_1.10_clean.csv, data_1.11_clean.csv, data_1.12.3.1_clean.csv, data_1.12.3.2_clean.csv, data_2.10.1_clean.csv, data_2.12.1_clean.csv, data_2.12.2_clean.csv, data_2.12.3_clean.csv, data_2.15_clean.csv, data_2.20_clean.csv, data_2.23_clean.csv, data_3.2.1.1_clean.csv, data_3.2.1.2_clean.csv, data_3.7.2_clean.csv, data_3.8.2_clean.csv, data_5.1.1_clean.csv, data_5.7_clean.csv, data_5.9.1_clean.csv. The Cronbach's alpha and omega are calculated separately for each lab location within each study/questionnaire in the Many Labs datasets.
+
+### data_H3_avg.csv
+
+*Explanation*: For each many labs replication, the mean Cronbach's alpha and omega reliability coefficients of each lab location are captured in the datasets. Additionally, a boolean indicator that indicated whether or not the original effect was replicated in the many labs replications when looking at the significance of the meta-analytic p-value was also included.
+
+### data_H3_multiple.csv
+
+*Explanation*: Combination of data_H2.csv and a boolean indicator that indicated whether or not the original effect was replicated in the many labs replications when looking at the significance of the meta-analytic p-value.
+
+### data_H4.csv
+
+*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv except for an empty column that was meant to contain any types of reported psychometric evidence not included in the multiple choice response options, since it caused codebook generation issues. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. Additionally, it contains two variables of the total QMP ratio based on both the initial and revised coded QMPs for each measure with some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model.
+
+### data_H5.csv
+
+*Explanation*: Contain all of the data from the coded_data_replications.csv except for two empty columns that were meant to contain any types of reported psychometric evidence and reliability measures respectively not included in the multiple choice response options, since it caused codebook generation issues. 3 rows were omitted from this analysis due to the fact that the support for the hypothesis was coded as being unclear. The support for hypothesis, variable, based on the significance of the meta-analytic p-value, was afterwards recoded from a factor to a boolean variable with True for support and False for no support. The many labs version variable was recoded from numeric into a factor. Additionally, it contains two variables of the total QMP ratio based on both the initial and revised coded QMPs for each measure with some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model. It furthermore contains
+
+### data_H6.csv
+
+*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. Additionally, the QMP ratio for each of the initial and revised QMP categories for both the original and revised codes had some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model.
+
+### plot_23_data_alpha.csv
+
+*Explanation*: Contain all of the data from the data_h3_multiple.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. For each remaining replication, the names of the articles were adjusted to look better in the figure this dataset was used for.
+
+### plot_23_data_omega.csv
+
+*Explanation*: Contain all of the data from the data_h3_multiple.csv. Additionally, it contains a column of omega scores averaged across many lab locations for each article. The names of the articles were adjusted to look better in the figure this dataset was used for.
+
+### plot_456_data.csv
+
+*Explanation*: Contains three variables for each QMP type for all the replication studies and original articles. The QMP_ratio column indicates the QMP ratio for that QMP type for that study/article. The RepOrg column indicates whether the QMP ratio belongs to a replication or an original article. The QMP_type column indicates the QMP type the QMP ratio belongs to. The rows are ordered to have the original studies first and then the replications, then they are ordered based on QMP type from Definition to Operationalization to Selection to Quantification to Modification to Total. Finally, within each type the QMPs are ordering matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+
+### plot_46_data.csv
+
+*Explanation*: Contains four variables for each QMP type for both replication studies and original articles combined per row. The QMP_ratio column indicates the initial QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the initial QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+
+### plot_46_data_REV.csv
+
+*Explanation*: Contains four variables for each QMP type for both replication studies and original articles combined per row. The QMP_ratio column indicates the revised QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the revised QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.

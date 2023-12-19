@@ -17,6 +17,8 @@ set.seed(17042023) # seed for random number generators
 ## List of measures X.Y.Z to extract, where X is Many Labs number, Y is study
 ## in the order as reported in the Many Labs protocol, & Z is the specific 
 ## measure from study Y as in line with the order of the measurement coding.
+## Each is indicated to reflect what the usefulness of the data should be based 
+## their reporting in the original article and initial screening.
 # Likely reliability: 1.10, 1.11, 1.12.3, 2.4.1, 2.4.2, 2.8, 2.10.1, 2.12.1, 
 # 2.12.2, 2.12.3, 2.15, 2.19.2, 2.23, 3.7.1, 3.7.2, 3.8.1, 3.8.2, 5.7, 5.9.1
 # Likely factor: 1.10, 1.11, 1.12.3, 2.4.1, 2.4.2, 2.8, 2.10.1, 2.12.1, 2.12.2,
@@ -37,9 +39,9 @@ Data_2.2 <- read.csv("Data/LocalInputData/MLRetrievedData/Kay_1_study_global_inc
 # 2.3
 Data_2.3 <- read.csv("Data/LocalInputData/MLRetrievedData/Alter_1_study_global_include_all_CLEAN_CASE.csv")
 # 2.4.1
-Data_2.4.1 <- read.csv("Data/LocalInputData/MLRetrievedData/Graham_2_study_global_include_all_CLEAN_CASE.csv")
+Data_2.4.1 <- read.csv("Data/LocalInputData/MLRetrievedData/Graham_1_study_global_include_all_CLEAN_CASE.csv")
 # 2.4.2
-Data_2.4.2 <- read.csv("Data/LocalInputData/MLRetrievedData/Graham_1_study_global_include_all_CLEAN_CASE.csv")
+Data_2.4.2 <- read.csv("Data/LocalInputData/MLRetrievedData/Graham_2_study_global_include_all_CLEAN_CASE.csv")
 # 2.8.2
 Data_2.8.2 <- read.csv("Data/LocalInputData/MLRetrievedData/Inbar_1b_study_global_include_all_CLEAN_CASE.csv")
 # 2.10.1

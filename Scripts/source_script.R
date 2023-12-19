@@ -977,7 +977,6 @@ data_prep_plot_456 <- function(Data){
   #  "Rep_quant_REV_count", "Rep_mod_REV_count", "Rep_MP_REV_count"), 
   #  factor_key = TRUE)
   
-  
   levels(Plot_456_ratio_data_REV$QMP_type) <- c("Definition", 
                                                 "Operationalization",
                                                 "Selection", "Quantification", 
