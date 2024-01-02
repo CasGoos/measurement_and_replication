@@ -4,25 +4,157 @@
 
 ### Coded_Data_Initial_raw.csv
 
-*Origin*: This dataset was created originally for this research project. It was obtained using the ???.pdf that can be found in the SupplementaryMaterials folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications.
+*Origin*: This dataset was created originally for this research project. It was obtained using the Measurement_Error_Reporting_Coding_Protocol.pdf that can be found in the SupplementaryMaterials/CodingProtocols folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications.
 
 *Explanation*: The information in this dataset was used for analyses relating to QMP ratios among original articles and replication studies. It additionally contains peripheral information about the articles and study in it that were used throughout the analyses and for descriptives.
 
 *Variables*:
 
+-   **StartDate, EndData, Status, IPAdress, Progress, Duration..in.seconds., Finished, RecordedDate, Responseid, RecipientLastName, RecipientFirstName, RecipientEmail, ExternalReference, LocationLatitude, LocationLongitude, DistributionChannel,** & **UserLanguage:** automated Qualtrics metadata, not used in study.
+
+-   **Many_labs_version:** Indicates using a number the Many Labs version the study/replication under investigation belongs to.
+
+-   **research_type:** Indicates using text whether a coded measurement comes from a Replication protocol, or an Original article.
+
+-   **research_title:** the title of the replicated study as it appears in the associated Many Labs protocol/original article.
+
+-   **measure_name:** the measure's name as stated within the Many Labs protocol/original article, or a short description based on what was said in the many labs protocol/original article.
+
+-   **variable_name:** the name of the variable the measure was intended to measure based on the description in the many labs protocol/original article.
+
+-   **Q58:** Boolean variable indicating whether or not the variable assessed by the measure was assessed as [part of a larger measure intending to measure multiple variables/dimensions of a construct.
+
+-   **variable_order:** a number indicating the order of appearance for the measure within the total number of measures for that study/article.
+
+-   **N:** the number of people that took the measure as indicated in the many labs report/original article.
+
+-   **N_items:** a three choice option variable indicating whether a measure was single item, multiple item, or not a scale expected to have regular psychometric properties.
+
+-   **hypothesis_support:** question indicating whether or not the Many Labs replications found support for the original hypothesis at a meta-analytic alpha level of .05 in the same direction as the original effect.
+
+-   Reliability Coefficient Variables
+
+    -   **reliability_type:** for multiple item measures only, a question asking if a reliability coefficient was reported, and if so which one with a couple of options and the option to select Other.
+
+    -   **reliability_type_5_TEXT:** for questions that answered Oher on the reliability_type question, a text description of the specific reliability index.
+
+    -   **reliability_coeff:** for all measures with a reliability coefficient, the value of that coefficient as reported in the Many Labs protocol or original article.
+
+-   QMP Variables
+
+    -   **Def1:** A boolean variable with an additional Not Applicable option, indicating whether or not a psychological/sociological definition was given within the protocol study description or original article to the measured variable from the measure.
+
+    -   **Op_version:** if described within the protocol or article, the name and citation for the specific version of the measure that was used.
+
+    -   **Op1:** A boolean variable with an additional Not Applicable option, indicating if the specific version of the measure is described.
+
+    -   **Op2:** A boolean variable with an additional Not Applicable option, indicating whether or not the administration format of the measure and the environment the measure was taken in was described.
+
+    -   **Op3:** A boolean variable with an additional Not Applicable option, indicating whether or not the steps taken in administering the measure were described or not.
+
+    -   **Op4:** A boolean variable with an additional Not Applicable option, indicating whether or not the authors justified the way they conducted the measurement and why the specific choice was necessary to properly measure what they were investigating.
+
+    -   **Op5:** A boolean variable with an additional Not Applicable option, indicating whether or not example items are presented in the text, or in an appendix.
+
+    -   **Sel_existing:** Variable indicating whether existing articles were used, the measure was newly created for the study, or if it was not clearly stated.
+
+    -   **Sel_existing_2_TEXT:** A textual description giving the (general) name or explanation of which previous measure was used, in case an already existing measure was used.
+
+    -   **Sel1:** A boolean variable with an additional Not Applicable option, indicating whether or not the source of the scale is provided, including if it is new that this is clearly stated.
+
+    -   **Sel2:** A boolean variable with an additional Not Applicable option, indicating whether or not reasoning is given for choosing a particular measure either existing or creating a new one.
+
+    -   **Sel3:** A boolean variable with an additional Not Applicable option, indicating whether or not psychometric evidence for the validity of a scale was presented.
+
+    -   **Sel4:** A boolean variable with an additional Not Applicable option, indicating whether or not there is psychometric evidence for the measure outside of the main analyses of the protocol or study, this can be either from an earlier study, or from a pilot study testing the measure.
+
+    -   **Sel_psych_evidence:** A variable meant to indicate whether an analysis of the measure's validity was applicable, and if so whether or not it was there, and if so too, what type of psychometric evidence was reported.
+
+    -   **Sel_psych_evidence_4_TEXT:** A textual description of the specific analyses of validity that was used in case the Other, namely: option was picked in the last question.
+
+    -   **Quant1:** A boolean variable with an additional Not Applicable option, indicating whether or not the number of items in the measure are described.
+
+    -   **Quant2:** A boolean variable with an additional Not Applicable option, indicating whether or not the number of response options for the items in the measure are described.
+
+    -   **Quant3:** A boolean variable with an additional Not Applicable option, indicating whether or not recoding of responses is indicated for multiple item measures.
+
+    -   **Quant4:** A boolean variable with an additional Not Applicable option, indicating whether or not the aggregation of the scores on the items on a multiple item measure into a single index was described.
+
+    -   **Mod_check:** A variable indicating whether or not measurement modifications were mentioned at all, and if so whether the measurement was modified or not.
+
+    -   **Mod1:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not any modification to the administration format was mentioned or not.
+
+    -   **Mod2:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not there is validity evidence to support the change in the administration format.
+
+    -   **Mod3:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not any modification to the language of the questionnaire was mentioned or not.
+
+    -   **Mod4:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not there is validity evidence for the translated measure.
+
+    -   **Mod5:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not any a change in the number of items or response options deviated from the orginal source.
+
+    -   **Mod6:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not there is validity evidence for the measure with a change in the number of items or response options.
+
+    -   **Mod_time:** A variable indicating whether or not the moment the modifications was reported, and if so whether this occurred before or after the data collection for the study.
+
 ### Coded_Data_Revised_raw.csv
 
-*Origin*: This dataset was created originally for this research project. It was obtained using the ???.pdf that can be found in the SupplementaryMaterials folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications (the same sample as was used to obtain the Coded_Data_Initial_raw.csv).
+*Origin*: This dataset was created originally for this research project. It was obtained using the Measurement_Error_Reporting_Revised_Coding_Protocol.pdf that can be found in the SupplementaryMaterials/CodingProtocols folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications (the same sample as was used to obtain the Coded_Data_Initial_raw.csv).
 
 *Explanation*: After discussion with the supervisor based on the experiences of the initial coding round it was determined that several of the demarcation for meeting several QMP criteria were likely too strict, and thus several of the more strictly coded questions were revised and coded again using a new coding protocol. The goal being to offer an as lenient as possible overview of the errors in reporting in the investigated literature.
 
 *Variables*:
 
+-   **StartDate, EndData, Status, IPAdress, Progress, Duration..in.seconds., Finished, RecordedDate, Responseid, RecipientLastName, RecipientFirstName, RecipientEmail, ExternalReference, LocationLatitude, LocationLongitude, DistributionChannel,** & **UserLanguage:** automated Qualtrics metadata, not used in study.
+
+-   **Many_labs_version:** Indicates using a number the Many Labs version the study/replication under investigation belongs to.
+
+-   **research_type:** Indicates using text whether a coded measurement comes from a Replication protocol, or an Original article.
+
+-   **research_title:** the title of the replicated study as it appears in the associated Many Labs protocol/original article.
+
+-   **variable_order:** a number indicating the order of appearance for the measure within the total number of measures for that study/article.
+
+-   QMP Variables
+
+    -   **Op1:** A boolean variable with an additional Not Applicable option, indicating if the specific version of the measure is described, or the item in a single item measure is itself described in sufficient detail.
+
+    -   **Op2:** A boolean variable with an additional Not Applicable option, indicating whether or not the administration format of the measure and the environment the measure was taken in was described generally in as far as it is relevant to the construct.
+
+    -   **Op5:** A boolean variable with an additional Not Applicable option, indicating whether or not example items are presented in the text, or in an (online) appendix.
+
+    -   **Sel1:** A boolean variable with an additional Not Applicable option, indicating whether or not the source of the scale is provided. In case the scale is new, the context should make this apparent such that no source needs to be provided for this scale.
+
+    -   **Sel3:** A boolean variable with an additional Not Applicable option, indicating whether or not psychometric evidence for the validity of a scale was presented. Or in case such evidence is not relevant for that particular measure, a statement that clarifies this.
+
+    -   **Sel_psych_evidence:** A variable meant to indicate whether an analysis of the measure's validity was applicable, and if so whether or not it was there, and if so too, what type of psychometric evidence was reported.
+
+    -   **Sel_psych_evidence_4_TEXT:** A textual description of the specific analyses of validity that was used in case the Other, namely: option was picked in the last question.
+
+    -   **Quant1:** A boolean variable with an additional Not Applicable option, indicating whether or not the number of items in the measure are described.
+
+    -   **Quant2:** A boolean variable with an additional Not Applicable option, indicating whether or not the number of response options for the items in the measure are described.
+
+    -   **Quant3:** A boolean variable with an additional Not Applicable option, indicating whether or not recoding of responses is indicated for multiple item measures.
+
+    -   **Mod_check:** A variable indicating whether or not there were known modifications to the measurement before use in the research, and if so whether the measurement was modified or not.
+
+    -   **Mod1:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not any modification to the administration format of the overarching study protocol was mentioned or not.
+
+    -   **Mod2:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect, or the modification was of little impact) and Not Applicable option, indicating whether or not there is validity evidence to support the change in the administration format.
+
+    -   **Mod3:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not any modification to the language of the overarching study protocol was mentioned or not.
+
+    -   **Mod4:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect, or the modification was of little impact) and Not Applicable option, indicating whether or not there is validity evidence for the translated measure.
+
+    -   **Mod5:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect) and Not Applicable option, indicating whether or not any a change in the number of items or response options deviated from the original source, for those items relevant to the original source.
+
+    -   **Mod6:** A boolean variable with an additional No Modification (in case there was clear that there was no modification to this aspect, or the modification was of little impact) and Not Applicable option, indicating whether or not there is validity evidence for the measure with a change in the number of items or response options.
+
 ### Coded_Data_Vignette_raw.csv
 
-*Origin*: This dataset was created originally for this research project. It was obtained using the ???.pdf that can be found in the SupplementaryMaterials folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications (the same sample as was used to obtain the Coded_Data_Initial_raw.csv).
+*Origin*: This dataset was created originally for this research project. It was obtained using the Vignette_Item_Coding_Protocol.pdf that can be found in the SupplementaryMaterials/CodingProtocols folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications (the same sample as was used to obtain the Coded_Data_Initial_raw.csv).
 
-*Explanation*: This dataset was collected after the intial round of coding with the intention to control on certain analyses whether items described a vignette and not an ordinary questionnaire, which might have different standards with regards to measurement reporting and reliability. As of yet, it has remained unused in any analyses
+*Explanation*: This dataset was collected after the initial round of coding with the intention to control on certain analyses whether items described a vignette and not an ordinary questionnaire, which might have different standards with regards to measurement reporting and reliability. As of yet, it has remained unused in any analyses
 
 *Variables*:
 
@@ -188,9 +320,19 @@
 
 ### coded_data_original.csv
 
-*Explanation*: contains all coded data on the original articles with renamed columns, fixed bad data, restructured to match the ordering of the protocols more ineligibly, recoded to be close to suitable for analysis, and with several composite variables added that were calculated from the raw data.
+*Explanation*: contains all coded data on the original articles with renamed columns, fixed bad data, restructured to match the ordering of the protocols more eligibly, recoded to be close to suitable for analysis, and with several composite variables added that were calculated from the raw data.
 
-<!-- add information here on all of the coded variables, and then paste it to the datasets below too. -->
+*Newly Coded Variables*:
+
+-   **\_REV variables:** these relate to the coding obtained for that particular variable using the revised coding protocol instead of the initial coding protocol.
+
+-   **Inseparable material:** the Vignette variable from the Coded_Data_Vignette_raw.csv dataset.
+
+-   **\_count variables**: a sum of the total number of TRUE coded variables within the named QMP category or the total across all categories.
+
+-   **\_total variables**: the sum of all the variables within the named QMP category or the total across all categories that was not coded as Not Applicable or No Modification.
+
+-   **\_ratio variables**: the ratio (rounded to four decimals) between the count of TRUE scores and the total applicable variables within the named QMP category or the total across all categories.
 
 ### coded_data_original_shortened.csv
 
@@ -199,6 +341,18 @@
 ### coded_data_replications.csv
 
 *Explanation*: contains all coded data on the replications as described in the many labs protocols with renamed columns, fixed bad data, restructured to match the ordering of the protocols more ineligibly, recoded to be close to suitable for analysis, and with several composite variables added that were calculated from the raw data.
+
+*Newly Coded Variables*:
+
+-   **\_REV variables:** these relate to the coding obtained for that particular variable using the revised coding protocol instead of the initial coding protocol.
+
+-   **Inseparable material:** the Vignette variable from the Coded_Data_Vignette_raw.csv dataset.
+
+-   **\_count variables**: a sum of the total number of TRUE coded variables within the named QMP category or the total across all categories.
+
+-   **\_total variables**: the sum of all the variables within the named QMP category or the total across all categories that was not coded as Not Applicable or No Modification.
+
+-   **\_ratio variables**: the ratio (rounded to four decimals) between the count of TRUE scores and the total applicable variables within the named QMP category or the total across all categories.
 
 ### Data_1.3_clean.csv
 

@@ -327,110 +327,194 @@ colnames(data_5.9.1_clean)[1] <- "g"
 
 
 ### Saving to Intermediate Data Folder
-closed_data(data = data_1.3_clean, filename = "Data/IntermediateData/data_1.3_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_1.3_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_1.3_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_1.3_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_1.3_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_1.3_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_1.3_clean))), ".yml")) 
 
-closed_data(data = data_1.10_clean, filename = "Data/IntermediateData/data_1.10_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_1.10_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_1.10_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_1.10_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_1.10_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_1.10_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_1.10_clean))), ".yml")) 
 
-closed_data(data = data_1.11_clean, filename = "Data/IntermediateData/data_1.11_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_1.11_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_1.11_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_1.11_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_1.11_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_1.11_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_1.11_clean))), ".yml")) 
 
-closed_data(data = data_1.12.3.1_clean, filename = "Data/IntermediateData/data_1.12.3.1_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_1.12.3.1_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_1.12.3.1_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_1.12.3.1_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_1.12.3.1_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_1.12.3.1_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_1.12.3.1_clean))), ".yml")) 
 
-closed_data(data = data_1.12.3.2_clean, filename = "Data/IntermediateData/data_1.12.3.2_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_1.12.3.2_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_1.12.3.2_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_1.12.3.2_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_1.12.3.2_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_1.12.3.2_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_1.12.3.2_clean))), ".yml")) 
 
-closed_data(data = data_2.10.1_clean, filename = "Data/IntermediateData/data_2.10.1_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_2.10.1_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_2.10.1_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_2.10.1_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_2.10.1_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_2.10.1_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_2.10.1_clean))), ".yml")) 
 
-closed_data(data = data_2.12.1_clean, filename = "Data/IntermediateData/data_2.12.1_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_2.12.1_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_2.12.1_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_2.12.1_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_2.12.1_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_2.12.1_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_2.12.1_clean))), ".yml")) 
 
-closed_data(data = data_2.12.2_clean, filename = "Data/IntermediateData/data_2.12.2_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_2.12.2_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_2.12.2_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_2.12.2_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_2.12.2_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_2.12.2_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_2.12.2_clean))), ".yml")) 
 
-closed_data(data = data_2.12.3_clean, filename = "Data/IntermediateData/data_2.12.3_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_2.12.3_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_2.12.3_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_2.12.3_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_2.12.3_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_2.12.3_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_2.12.3_clean))), ".yml")) 
 
-closed_data(data = data_2.15_clean, filename = "Data/IntermediateData/data_2.15_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_2.15_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_2.15_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_2.15_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_2.15_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_2.15_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_2.15_clean))), ".yml")) 
 
-closed_data(data = data_2.20_clean, filename = "Data/IntermediateData/data_2.20_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_2.20_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_2.20_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_2.20_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_2.20_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_2.20_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_2.20_clean))), ".yml")) 
 
-closed_data(data = data_2.23_clean, filename = "Data/IntermediateData/data_2.23_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_2.23_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_2.23_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_2.23_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_2.23_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_2.23_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_2.23_clean))), ".yml")) 
 
-closed_data(data = data_3.2.1.1_clean, filename = "Data/IntermediateData/data_3.2.1.1_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_3.2.1.1_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_3.2.1.1_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_3.2.1.1_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_3.2.1.1_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_3.2.1.1_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_3.2.1.1_clean))), ".yml")) 
 
-closed_data(data = data_3.2.1.2_clean, filename = "Data/IntermediateData/data_3.2.1.2_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_3.2.1.2_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_3.2.1.2_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_3.2.1.2_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_3.2.1.2_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_3.2.1.2_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_3.2.1.2_clean))), ".yml")) 
 
-closed_data(data = data_3.7.1_clean, filename = "Data/IntermediateData/data_3.7.1_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_3.7.1_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_3.7.1_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_3.7.1_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_3.7.1_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_3.7.1_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_3.7.1_clean))), ".yml")) 
 
-closed_data(data = data_3.7.2_clean, filename = "Data/IntermediateData/data_3.7.2_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_3.7.2_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_3.7.2_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_3.7.2_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_3.7.2_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_3.7.2_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_3.7.2_clean))), ".yml")) 
 
-closed_data(data = data_3.8.2_clean, filename = "Data/IntermediateData/data_3.8.2_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_3.8.2_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_3.8.2_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_3.8.2_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_3.8.2_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_3.8.2_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_3.8.2_clean))), ".yml")) 
 
-closed_data(data = data_5.1.1_clean, filename = "Data/IntermediateData/data_5.1.1_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_5.1.1_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_5.1.1_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_5.1.1_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_5.1.1_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_5.1.1_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_5.1.1_clean))), ".yml")) 
 
-closed_data(data = data_5.4_clean, filename = "Data/IntermediateData/data_5.4_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_5.4_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_5.4_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_5.4_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_5.4_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_5.4_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_5.4_clean))), ".yml")) 
 
-closed_data(data = data_5.7_clean, filename = "Data/IntermediateData/data_5.7_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_5.7_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_5.7_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_5.7_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_5.7_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_5.7_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_5.7_clean))), ".yml")) 
 
-closed_data(data = data_5.9.1_clean, filename = "Data/IntermediateData/data_5.9.1_clean.csv",
-            codebook = "Data/IntermediateData/codebook_data_5.9.1_clean.Rmd", 
-            value_labels = "Data/IntermediateData/value_labels_data_5.9.1_clean.yml", 
-            synthetic = FALSE) 
+open_data(data = data_5.9.1_clean, filename = paste0(paste0(
+  "Data/IntermediateData/", deparse(substitute(data_5.9.1_clean))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/IntermediateData/codebook_", 
+    deparse(substitute(data_5.9.1_clean))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/IntermediateData/value_labels_", 
+    deparse(substitute(data_5.9.1_clean))), ".yml")) 
 
 ```
 

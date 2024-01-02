@@ -10,6 +10,7 @@
 *.log
 *.tex
 .Rproj.user
+
 data/inputdata/data_ml1.csv
 data/inputdata/data_2.2.csv
 data/inputdata/data_2.3.csv
@@ -106,6 +107,6 @@ data/intermediatedata/data_5.9.1_clean.csv
 !data/analysisdata/plot_46_data_rev.csv
 !data/analysisdata/codebook_plot_46_data_rev.csv
 
-!SupplementaryMaterials/CodingProtocols/Measurement_Error__Reporting_Revised_Coding_Protocol.pdf
+!SupplementaryMaterials/CodingProtocols/Measurement_Error_Reporting_Revised_Coding_Protocol.pdf
 !SupplementaryMaterials/CodingProtocols/Measurement_Error_Reporting_Coding_Protocol.pdf
 !SupplementaryMaterials/CodingProtocols/Vignette_Item_Coding_Protocol.pdf
