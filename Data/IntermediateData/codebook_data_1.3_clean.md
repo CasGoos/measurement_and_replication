@@ -1,4 +1,4 @@
-Codebook created on 2023-11-07 at 2023-11-07 10:07:49.109291
+Codebook created on 2024-01-02 at 2024-01-02 11:34:56.146389
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -10,17 +10,17 @@ The data contains 6344 cases and 9 variables.
 
 ## Codebook
 
-| name        | type   |    n | missing | unique | mode | mode_value |    v |
-|:------------|:-------|-----:|--------:|-------:|-----:|:-----------|-----:|
-| g           | factor | 6344 |       0 |     37 | 1329 | pi         | 0.92 |
-| anchoring1a | factor | 6344 |       0 |    348 | 2639 | .          | 0.79 |
-| anchoring1b | factor | 6344 |       0 |    393 | 2629 | .          | 0.79 |
-| anchoring2a | factor | 6344 |       0 |    579 | 3128 | .          | 0.75 |
-| anchoring2b | factor | 6344 |       0 |    605 | 3234 | .          | 0.73 |
-| anchoring3a | factor | 6344 |       0 |    568 | 2600 | .          | 0.80 |
-| anchoring3b | factor | 6344 |       0 |    473 | 2674 | .          | 0.79 |
-| anchoring4a | factor | 6344 |       0 |    422 | 3185 | .          | 0.74 |
-| anchoring4b | factor | 6344 |       0 |    365 | 3183 | .          | 0.74 |
+| name        | type      |    n | missing | unique | mode | mode_value |    v |
+|:------------|:----------|-----:|--------:|-------:|-----:|:-----------|-----:|
+| g           | factor    | 6344 |       0 |     37 | 1329 | pi         | 0.92 |
+| anchoring1a | character | 6344 |       0 |    348 | 2639 | .          | 0.79 |
+| anchoring1b | character | 6344 |       0 |    393 | 2629 | .          | 0.79 |
+| anchoring2a | character | 6344 |       0 |    579 | 3128 | .          | 0.75 |
+| anchoring2b | character | 6344 |       0 |    605 | 3234 | .          | 0.73 |
+| anchoring3a | character | 6344 |       0 |    568 | 2600 | .          | 0.80 |
+| anchoring3b | character | 6344 |       0 |    473 | 2674 | .          | 0.79 |
+| anchoring4a | character | 6344 |       0 |    422 | 3185 | .          | 0.74 |
+| anchoring4b | character | 6344 |       0 |    365 | 3183 | .          | 0.74 |
 
 ### Legend
 

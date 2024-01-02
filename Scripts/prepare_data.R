@@ -181,7 +181,7 @@ open_data(data = Data_5.7,
           load_expression = read.csv(file = filename, stringsAsFactors = FALSE)) 
 
 open_data(data = Data_5.9.1, 
-          filename = "Data/InputData/Data_5.1.csv",
+          filename = "Data/InputData/Data_5.9.1.csv",
           codebook = NULL, value_labels = NULL, 
           load_expression = read.csv(file = filename, stringsAsFactors = FALSE)) 
 
