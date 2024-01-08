@@ -307,3 +307,5 @@ checksums:
   data/analysisdata/plot_23_data_alpha.csv: 7f0e624a1ac3b64b38f8e253ec5516e6
   data/analysisdata/plot_23_data_omega.csv: 6a3d98a4f230151ef1f361a961dac72a
   data/analysisdata/plot_46_data_rev.csv: 0da51a908e378d56e034d9734210b164
+  Scripts/Manuscript/manuscript.pdf: bf2584a5192614483901389659253687
+endpoints: Scripts/Manuscript/manuscript.pdf

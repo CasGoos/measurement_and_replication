@@ -81,7 +81,7 @@ library(grid)
 library(gridExtra)
 
 # loading source script
-source(file = "../source_script.R")
+source(file = "C:/Users/u686785/OneDrive - Tilburg University/Documents/uvt/PHD/Master Thesis to Paper/Reproducible_R_Project/Scripts/source_script.R")
 
 # Code below loads the processed data. The raw data was prepared for analysis in 'prepare_data.R.
 load_data() 
