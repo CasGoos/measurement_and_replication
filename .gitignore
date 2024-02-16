@@ -111,3 +111,7 @@
 !SupplementaryMaterials/CodingProtocols/Measurement_Error_Reporting_Coding_Protocol.pdf
 !SupplementaryMaterials/CodingProtocols/Vignette_Item_Coding_Protocol.pdf
 
+!data/analysisdata/plot_23_data_reported_alpha.csv
+!data/analysisdata/codebook_plot_23_data_reported_alpha.csv
+!data/intermediatedata/data_5.1.2_clean.csv
+!data/intermediatedata/codebook_data_5.1.2_clean.csv

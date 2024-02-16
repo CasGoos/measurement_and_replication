@@ -1,4 +1,4 @@
-Codebook created on 2024-01-02 at 2024-01-02 11:35:29.085027
+Codebook created on 2024-02-16 at 2024-02-16 14:19:38.624634
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -6,7 +6,7 @@ structure, and layout of a data file.
 
 ## Dataset description
 
-The data contains 471 cases and 22 variables.
+The data contains 471 cases and 16 variables.
 
 ## Codebook
 
@@ -28,12 +28,6 @@ The data contains 471 cases and 22 variables.
 | SAT13 | integer | 471 |       0 |      2 | 0.77 |      1 |    1 |            | 0.42 |      |   0 |   1 |     1 | -1.30 |    -5.77 | -0.32 |    -0.70 |
 | SAT14 | integer | 471 |       0 |      2 | 0.53 |      1 |    1 |            | 0.50 |      |   0 |   1 |     1 | -0.11 |    -0.51 | -1.99 |    -4.43 |
 | SAT15 | integer | 471 |       0 |      2 | 0.57 |      1 |    1 |            | 0.50 |      |   0 |   1 |     1 | -0.29 |    -1.27 | -1.92 |    -4.28 |
-| SAT16 | integer | 471 |       0 |      2 | 0.57 |      1 |    1 |            | 0.50 |      |   0 |   1 |     1 | -0.27 |    -1.20 | -1.93 |    -4.30 |
-| SAT17 | integer | 471 |       0 |      2 | 0.76 |      1 |    1 |            | 0.43 |      |   0 |   1 |     1 | -1.23 |    -5.46 | -0.49 |    -1.10 |
-| SAT18 | integer | 471 |       0 |      2 | 0.36 |      0 |    0 |            | 0.48 |      |   0 |   1 |     1 |  0.58 |     2.57 | -1.67 |    -3.72 |
-| SAT19 | integer | 471 |       0 |      2 | 0.63 |      1 |    1 |            | 0.48 |      |   0 |   1 |     1 | -0.55 |    -2.44 | -1.70 |    -3.79 |
-| SAT20 | integer | 471 |       0 |      2 | 0.38 |      0 |    0 |            | 0.48 |      |   0 |   1 |     1 |  0.51 |     2.27 | -1.74 |    -3.88 |
-| SAT21 | integer | 471 |       0 |      2 | 0.68 |      1 |    1 |            | 0.47 |      |   0 |   1 |     1 | -0.78 |    -3.45 | -1.40 |    -3.12 |
 
 ### Legend
 

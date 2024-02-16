@@ -476,6 +476,20 @@
 
 *Explanation*: Contain all of the data from the data_h3_multiple.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. For each remaining replication, the names of the articles were adjusted to look better in the figure this dataset was used for.
 
+### plot_23_data_reported_alpha.csv
+
+*Explanation:* Contains reported alpha reliability coefficients extracted from original articles from which such data was available, and for which data was available from the replications from the Many Labs data to calculate reliabilities for. The goal of this data was to be superimposed on top of figure 2 (plot_23_alpha) to compare calculated reliability coefficients with reported reliability coefficients.
+
+*Variables*:
+
+-   **title:** The title of the article relating to the particular measure of that row, extracted from coded_data_original_shortened.csv
+
+-   **graph_title:** author, year, and optional word indicating the specific measure. Relates directly to the indication of the measures as shown in figure 2 (plot_23_alpha).
+
+-   **article_order:** numerical variable giving the index for placing the reliability coefficients in the right row in figure 2 (plot_23_alpha).
+
+-   **coefficient:** the value for the reported alpha coefficient for the specific measure as extracted from the original article the measure was reported in.
+
 ### plot_23_data_omega.csv
 
 *Explanation*: Contain all of the data from the data_h3_multiple.csv. Additionally, it contains a column of omega scores averaged across many lab locations for each article. The names of the articles were adjusted to look better in the figure this dataset was used for.

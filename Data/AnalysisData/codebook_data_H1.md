@@ -1,4 +1,4 @@
-Codebook created on 2024-01-02 at 2024-01-02 11:37:16.972034
+Codebook created on 2024-02-14 at 2024-02-14 09:34:39.030063
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -23,7 +23,7 @@ The data contains 154 cases and 91 variables.
 | N_items                            | factor    | 154 |    0.00 |      4 |         |        |  73.00 | multiple item measure                                                                                                       |         | 0.55 |       |         |         |       |          |       |          |
 | hypothesis_support                 | factor    | 154 |    0.00 |      4 |         |        |  80.00 | No                                                                                                                          |         | 0.53 |       |         |         |       |          |       |          |
 | reliability_type                   | factor    | 154 |    0.00 |      6 |         |        |  78.00 |                                                                                                                             |         | 0.59 |       |         |         |       |          |       |          |
-| reliability_type_text              | character | 154 |    0.00 |      4 |         |        | 152.00 |                                                                                                                             |         | 0.03 |       |         |         |       |          |       |          |
+| reliability_type_text              | character |  77 |    0.50 |      4 |         |        |  77.00 |                                                                                                                             |         | 0.05 |       |         |         |       |          |       |          |
 | reliability_coeff                  | numeric   |  14 |    0.91 |     14 |    0.77 |   0.78 |   0.78 |                                                                                                                             |    0.09 |      |  0.62 |    0.89 |    0.27 | -0.40 |    -0.34 | -1.17 |    -0.51 |
 | def1                               | logical   | 140 |    0.09 |      3 |         |        |  92.00 | TRUE                                                                                                                        |         | 0.45 |       |         |         |       |          |       |          |
 | op_version                         | character | 154 |    0.00 |     24 |         |        | 132.00 |                                                                                                                             |         | 0.26 |       |         |         |       |          |       |          |

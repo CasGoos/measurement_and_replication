@@ -3,7 +3,6 @@ creator: u686785
 entry_point: run_me.R
 recipe:
   recipe: source('run_me.R')
-  terminal: no
 data:
   data/inputdata/data_ml1.csv:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
@@ -248,6 +247,15 @@ data:
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_plot_46_data_rev.rmd
     labels: Data/AnalysisData/value_labels_plot_46_data_rev.yml
+  data/analysisdata/plot_23_data_reported_alpha.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    codebook: data/analysisdata/codebook_plot_23_data_reported_alpha.rmd
+  data/intermediatedata/data_5.1.2_clean.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    codebook: data/intermediatedata/codebook_data_5.1.2_clean.rmd
+    labels: Data/IntermediateData/value_labels_data_5.1.2_clean.yml
 checksums:
   data/inputdata/data_ml1.csv: c8c01092a13e0c49be9535fe323e8766
   data/inputdata/data_2.2.csv: 4e1a0541727d0dcf1df49f7248d5de50
@@ -281,25 +289,25 @@ checksums:
   data/intermediatedata/data_2.12.2_clean.csv: edc00432cdea2ec814ce639f781dfb10
   data/intermediatedata/data_2.12.3_clean.csv: 3bc44282a4dd285df689c62c52009245
   data/intermediatedata/data_2.15_clean.csv: 04a1628d617e85bbd81d79d3c3499bec
-  data/intermediatedata/data_2.20_clean.csv: aacd5400809b4e7d1f0f35e7af7312c6
+  data/intermediatedata/data_2.20_clean.csv: 405085b3ddcf41998d5e2fff23d72d75
   data/intermediatedata/data_2.23_clean.csv: 8e7dc2f2d03cefa59d722f9b001a372e
   data/intermediatedata/data_3.2.1.1_clean.csv: a2bc04843c67baaaa816dcc61fab8d84
   data/intermediatedata/data_3.2.1.2_clean.csv: d5e98299293ef2ec887cd9340bc345f8
   data/intermediatedata/data_3.7.1_clean.csv: 342947053d826255c32579dfae5fc31f
   data/intermediatedata/data_3.7.2_clean.csv: 5e5df6851b4c08da475e103ada397f29
   data/intermediatedata/data_3.8.2_clean.csv: d97713e0a617ae584100a054246bc22c
-  data/intermediatedata/data_5.1.1_clean.csv: 9696252047a5dfe6d3f1a8f2568c9772
+  data/intermediatedata/data_5.1.1_clean.csv: 47b1515a4de80ec36f3cc122e178bada
   data/intermediatedata/data_5.4_clean.csv: fae8ccc95e046a07aa1f048f1df0198a
   data/intermediatedata/data_5.7_clean.csv: 4eb41c4c1becdf67b1e9745223441f4d
   data/intermediatedata/data_5.9.1_clean.csv: a88936b13f189cbf580cb0db6a66e151
   data/intermediatedata/coded_data_replications.csv: bca464ceefcc9d40e280c8e91eff362b
   data/intermediatedata/coded_data_original.csv: 5d5e8429404fe61b6ccdf287b0d34d85
   data/intermediatedata/coded_data_original_shortened.csv: df01253c4f691a18c2c0f2e3e6c9c070
-  data/analysisdata/data_h4.csv: c74430bd70bf41c79584948eb031272d
-  data/analysisdata/data_h6.csv: e4bf5d7f3f0f9231d5cb11b3a7b6f8ae
-  data/analysisdata/data_h5.csv: 837c2df51a3078aa7af1be40fbffc5bc
-  data/analysisdata/data_h1.csv: 145a4b4f397670a7ccb456169735fc0e
-  data/analysisdata/plot_456_data.csv: b512e66dda2475bd0eb975ef198f0287
+  data/analysisdata/data_h4.csv: 070e4c3f4d6435e36c186f8d680e2d3d
+  data/analysisdata/data_h6.csv: 0780ec86ee7b16326112b0334bad806a
+  data/analysisdata/data_h5.csv: 48debdee383f67f803b77c66dc642e26
+  data/analysisdata/data_h1.csv: 1b1ba2eb8c10a7d0dc2b1a9d4b88fae6
+  data/analysisdata/plot_456_data.csv: 83efffea21bb2925f7cc1a0aeaa0ce13
   data/analysisdata/plot_46_data.csv: 0ceab231a2e3e6fff26b6782c1b68d97
   data/analysisdata/data_h2.csv: b28fc13373f4506afb10703c89db2ef0
   data/analysisdata/data_h3_multiple.csv: fca6acb3ff0e504c92cd905593792b4b
@@ -308,4 +316,6 @@ checksums:
   data/analysisdata/plot_23_data_omega.csv: 6a3d98a4f230151ef1f361a961dac72a
   data/analysisdata/plot_46_data_rev.csv: 0da51a908e378d56e034d9734210b164
   Scripts/Manuscript/manuscript.pdf: bf2584a5192614483901389659253687
+  data/analysisdata/plot_23_data_reported_alpha.csv: 77ea5c546117393dc6a36ca457e6b97a
+  data/intermediatedata/data_5.1.2_clean.csv: d050d093de2adf892fa279acc1946f8d
 endpoints: Scripts/Manuscript/manuscript.pdf

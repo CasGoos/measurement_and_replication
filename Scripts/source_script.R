@@ -589,14 +589,49 @@ data_prep_H1 <- function(Data_Original, Data_Replications){
 
 
 ### Hypothesis 2
-# obtaining the omega and alpha values for each measure (helper function)
-omega_and_alpha <- function(Data, m_length){
-  return(omega(Data[2:m_length], nfactors = 1)[3:4])
+# ASE (alpha standard error) formula for a single lab
+ASE_for_Lab <- function(lab_data){
+  V_matrix <- cov(lab_data)
+  p_num <- ncol(lab_data)
+  j_vec <- rep(1, times = p_num)
+  
+  ### missing data issue
+  
+  # not sure about this implementation:
+  Q_value <- ((2 * p_num^2) / ((p_num - 1)^2 * (crossprod(j_vec, V_matrix) %*% 
+    j_vec)^3)) * ((crossprod(j_vec, V_matrix) %*% j_vec) * (sum(diag(
+      V_matrix^2)) + sum(diag(V_matrix))^2) - 2*(sum(diag(V_matrix))) * (
+        crossprod(j_vec, V_matrix^2) %*% j_vec))
+  
+  ASE <- as.numeric(sqrt(Q_value / nrow(lab_data)))
+  
+  return(ASE)
 }
 
-# obtaining the alpha values for 2.12.3, 2.20, & 3.2.1.1 (helper function)
+# obtaining the omega and alpha values for each measure (helper function).
+omega_and_alpha <- function(Data, m_length){
+  # selecting only the complete cases for the ASE calculations
+  Data_complete <- Data[complete.cases(Data),]
+  
+  omega_and_alpha_vec <- c(t(omega(Data[2:m_length], nfactors = 1)[3:4]), 
+                           ASE_for_Lab(Data_complete[2:m_length]))
+  
+  names(omega_and_alpha_vec) <- c("alpha", "omega.tot", "ASE")
+  
+  return(omega_and_alpha_vec)
+}
+
+# obtaining the alpha values for 2.12.3, 2.20, & 3.2.1.1 (helper function).
 just_alpha <- function(Data, m_length){
-  return(c(alpha = psych::alpha(Data[2:m_length])$total[[2]], omega.tot = NA))
+  # selecting only the complete cases for the ASE calculations
+  Data_complete <- Data[complete.cases(Data),]
+  
+  alpha_vec <- c(t(psych::alpha(Data[2:m_length])$total[[2]]), NA, 
+                 ASE_for_Lab(Data_complete[2:m_length]))
+ 
+  names(alpha_vec) <- c("alpha", "omega.tot", "ASE")
+  
+  return(alpha_vec)
 }
 
 
@@ -616,8 +651,10 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
     data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.7_clean, 
     data_5.9.1_clean) 
   # creating an empty dataframe to insert all the responses into
-  Data_H2 <- data.frame(alpha = 0, omega.tot = 0, g = 0)
+  Data_H2 <- data.frame(alpha = 0, omega.tot = 0, ASE = 0, g = 0)
   
+  # adding the alpha, omega (when applicable), and ASE into a dataframe for each
+  # lab for each replication.
   for (i in 1:length(Extracted_Data_List)){
     if(i %in% c(8, 10, 12)){
       reliability_frame <- data.frame(t(sapply(split(Extracted_Data_List[[i]], 
@@ -640,10 +677,43 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
   Data_H2 <- Data_H2[-1,]
   
   
-  colnames(Data_H2) <- c("alpha", "omega", "g")
+  colnames(Data_H2) <- c("alpha", "omega", "ASE", "g")
   
   return(Data_H2)
 }
+
+datAAA <-data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
+             data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
+             data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
+             data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
+             data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
+
+
+data.frame(t(sapply(split(data_3.7.1_clean, data_3.7.1_clean$g), 
+                    omega_and_alpha, 
+                    ncol(data_3.7.1_clean))))
+
+
+# Omit: 
+# Van Lange (2.10.1);  
+# add: 
+# Cacioppo (3.7.1); 
+# 5.1.1 (albaracin), SAT items 1-15 are about language competency (5.1.1), 16-21 about math (5.1.2);
+# norenzayan (2.20) might change results due to changes in data.
+
+
+# add the ASE, and then do a meta-analysis to obtain the tau^2 to then obtain 
+# tau and perhaps the prediction interval afterwards.
+
+# use the rma function from the metafor package, for each replication set:
+# yi = calculated alpha
+# sei = ASE
+# method = "REML" <- probably
+# then, extract tau^2 from metafor output for each replication set & use the
+# predict function to obtain prediction intervals (to add in green?)
+
+# first row of each data is the lab location indicator
+
 
 
 ### Hypothesis 3
@@ -675,14 +745,15 @@ Data_prep_H3_multiple <- function(Data_H5, Data_H2){
 Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
   # alpha averaged across sites
   Data_H3_avg <- data.frame(alpha = sapply(split(Data_H3_multiple$alpha, 
-                                                     Data_H3_multiple$g), mean),
-                            omega = sapply(split(
-                              Data_H3_multiple$omega, Data_H3_multiple$g), 
-                              mean),
+                                                 Data_H3_multiple$g), mean),
+                            omega = sapply(split(Data_H3_multiple$omega, 
+                                                 Data_H3_multiple$g), mean),
+                            ASE = sapply(split(Data_H3_multiple$ASE, 
+                                               Data_H3_multiple$g), mean),
                             replication = c(Data_H5[c(10, 11, 12, 13, 26, 29, 
                                                       30, 31, 34, 39, 42, 51, 
                                                       51, 57, 59, 62, 71, 73), 
-                                                    10]))
+                                                      10]))
   
   return(Data_H3_avg)
 }
@@ -918,6 +989,8 @@ data_prep_plot_23_alpha <- function(Data){
   return(Plot_23_data)
 }
 
+
+
 # and for omega
 data_prep_plot_23_omega <- function(Data){
   Data <- Data[!is.na(Data$omega),]
@@ -936,46 +1009,38 @@ data_prep_plot_23_omega <- function(Data){
   return(Plot_23_data)
 }
 
+# data of reported alpha coefficients from the studies for which alpha 
+# coefficients could be calculated.
+data_prep_plot_23_alpha_reported <- function(Data){
+  plot_23_data_on_reported <- data.frame(title = Data[!is.na(Data$reliability_coeff),
+  ]$title[c(11, 4, 4, 2, 9, 1, 6, 7, 8)], 
+  graph_title = c("Husnu & Crisp (2010)", "Nosek et al. (2002), Math", 
+                  "Nosek et al. (2002), Art", "Shnabel & Nadler (2008)",
+                  "Caruso et al. (2012)", "Anderson et al. (2012), SWL", 
+                  "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", 
+                  "Giessner & Schubert (2007)"), 
+  article_order = c(1, 2, 3, 5, 7, 9, 10, 11, 12), 
+  coefficient = Data[!is.na(Data$reliability_coeff),]$reliability_coeff[c(11, 
+                     4, 4, 2, 9, 1, 6, 7, 8)])
+  
+  return(plot_23_data_on_reported)
+}
+
 
 ### 456 plots data prep
 data_prep_plot_456 <- function(Data){
-  #Plot_456_ratio_data <- gather(Data[c("def_ratio", "op_ratio", "sel_ratio", 
-  #  "quant_ratio", "mod_ratio", "QMP_ratio")], QMP_type, QMP_ratio, 
-  #  c("def_ratio", "op_ratio", "sel_ratio", "quant_ratio", "mod_ratio", 
-  #    "QMP_ratio"), factor_key = TRUE)
-  #Plot_456_count_data <- gather(Data[c("def_count", "op_count", "sel_count", 
-  #  "quant_count", "mod_count", "MP_count")], QMP_type, QMP_count, 
-  #   c("def_count", "op_count", "sel_count", "quant_count", "mod_count", 
-  #     "MP_count"), factor_key = TRUE)
   Plot_456_ratio_data_REV <- gather(Data[c("def_ratio", "op_REV_ratio", 
                                            "sel_REV_ratio", "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio")], 
                                     QMP_type, QMP_ratio, c("def_ratio", "op_REV_ratio", "sel_REV_ratio", 
                                                            "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio"), factor_key = TRUE)
-  #Plot_456_count_data_REV <- gather(Data[c("def_count", "op_REV_count", 
-  #  "sel_REV_count", "quant_REV_count", "mod_REV_count", "MP_REV_count")], 
-  #  QMP_type, QMP_REV_count, c("def_count", "op_REV_count", "sel_REV_count", 
-  # "quant_REV_count", "mod_REV_count", "MP_REV_count"), factor_key = TRUE)
-  
-  #Plot_456_ratio_rep_data <- gather(Data[c("Rep_def_ratio", "Rep_op_ratio", 
-  #  "Rep_sel_ratio", "Rep_quant_ratio", "Rep_mod_ratio", "Rep_QMP_ratio")], 
-  #  QMP_type, Rep_QMP_ratio, c("Rep_def_ratio", "Rep_op_ratio", "Rep_sel_ratio",
-  #  "Rep_quant_ratio", "Rep_mod_ratio", "Rep_QMP_ratio"), factor_key = TRUE)
-  #Plot_456_count_rep_data <- gather(Data[c("Rep_def_count", "Rep_op_count", 
-  #  "Rep_sel_count", "Rep_quant_count", "Rep_mod_count", "Rep_MP_count")], 
-  #  QMP_type, Rep_QMP_count, c("Rep_def_count", "Rep_op_count", "Rep_sel_count", 
-  #  "Rep_quant_count", "Rep_mod_count", "Rep_MP_count"), factor_key = TRUE)
+
   Plot_456_ratio_rep_data_REV <- gather(Data[c("Rep_def_ratio", 
                                                "Rep_op_REV_ratio", "Rep_sel_REV_ratio", "Rep_quant_REV_ratio", 
                                                "Rep_mod_REV_ratio", "Rep_QMP_REV_ratio")], QMP_type, QMP_ratio, 
                                         c("Rep_def_ratio", "Rep_op_REV_ratio", "Rep_sel_REV_ratio", 
                                           "Rep_quant_REV_ratio", "Rep_mod_REV_ratio", "Rep_QMP_REV_ratio"), 
                                         factor_key = TRUE)
-  #Plot_256_count_rep_data_REV <- gather(Data[c("Rep_def_count", 
-  #  "Rep_op_REV_count", "Rep_sel_REV_count", "Rep_quant_REV_count", 
-  #  "Rep_mod_REV_count", "Rep_MP_REV_count")], QMP_type, Rep_QMP_REV_count, 
-  #  c("Rep_def_count", "Rep_op_REV_count", "Rep_sel_REV_count", 
-  #  "Rep_quant_REV_count", "Rep_mod_REV_count", "Rep_MP_REV_count"), 
-  #  factor_key = TRUE)
+
   
   levels(Plot_456_ratio_data_REV$QMP_type) <- c("Definition", 
                                                 "Operationalization",

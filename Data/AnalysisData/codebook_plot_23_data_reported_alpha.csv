@@ -1,0 +1,5 @@
+"name","type","n","missing","unique","mean","median","mode","mode_value","sd","v","min","max","range","skew","skew_2se","kurt","kurt_2se","category","description"
+"title","character",9,0,7,NA,NA,3,"The Local Ladder Effect: Social Status and Subjective Well-Being",NA,0.790123456790123,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"graph_title","character",9,0,10,NA,NA,1,"Anderson et al. (2012), NA",NA,0.888888888888889,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"article_order","numeric",9,0,9,6.66666666666667,7,7,NA,4.09267638593623,NA,1,12,11,-0.0886049259234233,-0.0617768330617843,-1.80847833799493,-0.64601966609894,NA,NA
+"coefficient","numeric",9,0,8,0.805555555555556,0.8,0.8,NA,0.0574697988318889,NA,0.72,0.89,0.17,0.046295670166203,0.0322781138580568,-1.41496474224431,-0.505449819951895,NA,NA
