@@ -775,11 +775,7 @@ data_h6 <- data_prep_H6(coded_data_original_shortened, coded_data_replications)
 # for hypothesis 1
 data_h1 <- data_prep_H1(coded_data_original_shortened, coded_data_replications)
 # for hypothesis 2
-data_h2 <- data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
-  data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
-  data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
-  data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
-  data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
+data_h2 <- data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, data_5.9.1_clean)
 # for hypothesis 3
 data_h3_multiple <- Data_prep_H3_multiple(data_h5, data_h2)
 data_h3_avg <- Data_prep_H3_avg(data_h5, data_h3_multiple)
@@ -794,7 +790,7 @@ plot_46_data_rev <- data_prep_plot_46(data_h6[c(3, 21, 24, 27, 30, 36, 54, 57, 6
 # plot accompanying the results for Hypotheses 2, & 3
 plot_23_data_alpha <- data_prep_plot_23_alpha(data_h3_multiple)
 plot_23_data_omega <- data_prep_plot_23_omega(data_h3_multiple)
-plot_23_data_reported_alpha <- data_prep_plot_23_alpha_reported(coded_data_original_shortened)
+plot_23_data_reported_alpha <- data_prep_plot_23_alpha_reported(coded_data_original_shortened, data_h3_avg, data_h3_multiple)
 
 
 ### Exporting the final datasets for the analyses
@@ -1163,14 +1159,7 @@ APPENDIX:
 Finally, in order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set. A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@R-psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
 
 ```{r UnidimensionalityExploratoryAnalysis, include = FALSE}
-extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
-                            data_1.12.3.2_clean, data_2.10.1_clean,
-                            data_2.12.1_clean, data_2.12.2_clean, 
-                            data_2.12.3_clean, data_2.15_clean, data_2.20_clean,
-                            data_2.23_clean, data_3.2.1.1_clean, 
-                            data_3.2.1.2_clean, data_3.7.1_clean, 
-                            data_3.7.2_clean, data_3.8.2_clean,
-                            data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
+extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean,data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.2_clean, data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
 
 # creating an empty dataframe to store the results in
 cfa_results <- data.frame(RMSEA = 0,
@@ -1206,9 +1195,9 @@ cfa_results <- cfa_results[-1,]
 
 # Results
 
-## Descriptives
+## Data Visualization
 
-The mean sample size within the replications was `r apa_num(mean(coded_data_replications$N, na.rm = TRUE), digits = 0)` participants (IQR = `r apa_num(IQR(coded_data_replications$N, na.rm = TRUE), digits = 0)`). In the original articles the mean sample size was `r apa_num(mean(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)` (IQR = `r apa_num(IQR(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)`). In total, support was found for hypothesized effects of `r apa_num(table(coded_data_replications$hypothesis_support)["Yes"], digits = 0)` of the `r apa_num(nrow(coded_data_replications), digits = 0)` measures. Proportions of replication success per Many Labs project can be found in Table \@ref(tab:ReplicationRatioTable).
+Table \@ref(tab:ReplicationRatioTable) displays the proportion of replication success per Many Labs project. ???Cronbach's alpha of the QMP items???
 
 ```{r ReplicationRatioTable, warning = FALSE}
 # construct the replication ratio table to be printed
@@ -1241,118 +1230,24 @@ apa_table(
 
 ```
 
-Existing materials were used for `r apa_num(table(coded_data_replications$sel_existing)["True, namely:"], digits = 0)` of the `r apa_num(nrow(coded_data_replications), digits = 0)` measures in replications (FOOTNOTE: the relevant question asking participants to rate how much they agreed with a certain quote remained the same, however the quote itself and the people it was attributed too were both completely new compared to the original) and for `r apa_num(table(coded_data_original_shortened$sel_existing)["True, namely:"], digits = 0)` in original studies. The specific version of the measure was reported for `r apa_num(length(coded_data_replications$op_version[coded_data_replications$op_version != ""]), numerals = FALSE)` measures in replications, and `r apa_num(length(coded_data_original_shortened$op_version[coded_data_original_shortened$op_version != ""]), numerals = FALSE)` measures in original articles. For those measures that were not based on existing materials, `r apa_num(table(coded_data_replications$sel_existing)["False, materials were newly developped for this study"], numerals = FALSE)` in the replications and `r apa_num(table(coded_data_original_shortened$sel_existing)["False, materials were newly developped for this study"], numerals = FALSE)` in original articles clearly stated that they were newly created for the study. Only `r apa_num(table(coded_data_original_shortened$mod_time)["After/During"], numerals = FALSE)` measure in the original articles was modified from its original source during the data collection period, all other measures were modified before that, if at all.
+In order to visualise the results on QMPs, the proportions of the QMP ratio obtained for each QMP type (see Table \@ref(tab:QMPCodingInfoTable)) are shown across the top layer of Figure \@ref(fig:Plot456Code) for both replication protocols and original articles. While in the bottom layer of Figure \@ref(fig:Plot456Code) the overlayed distributions of the total QMP ratios from the replication protocols and original studies are displaued, with dots indicating each datapoint, and the line indicating the mean for either distribution. A large number of QMP ratios are missing for the QMP modification type , because only `r apa_num(table(coded_data_replications$mod_check)["True"])` out of `r apa_num(length(coded_data_replications$mod_check))` measures in replications, and only `r apa_num(table(coded_data_original_shortened$mod_check)["True"], numerals = FALSE)` measures used in original studies were modified. .
 
-[BIG DESCRIPTIVES TABLE SOMEWHERE]
+```{r Plot456Code, warning = FALSE, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by whether the QMP ratio was obtained from an original article or a replication protocol. The top row shows for each QMP type the proportions of each QMP ratio obtained, darker colours represent proportionally more QMPS, grey means modification did not occur for that measure. The bottom graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots"}
+# re-ordering the QMP-types, because it didn't save
+plot_456_data$QMP_type <- factor(plot_456_data$QMP_type, levels = c("Definition", "Selection", "Operationalization", "Quantification", "Modification", "Total"))
 
-## Reliability
-
-Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures for which reliability was reported. The first split shows the number of measures which consisted of multiple items in a scale, which were approximately equal between replication and original (`r apa_num(table(coded_data_replications$N_items)["multiple item measure"])` and `r apa_num(table(coded_data_original_shortened$N_items)["multiple item measure"])`, respectively). Reliability was expected to be reported only for these measures. Taking these multiple item measures, the graph illustrates that `r apa_num(sum(table(coded_data_replications$N_items, coded_data_replications$reliability_type)["multiple item measure", - c(1, 3)]), numerals = FALSE)` measures in the replication protocols and `r apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", - c(1, 3, 4)]), numerals = FALSE)` in the original articles reported a reliability coefficient. Looking closer at these reported reliability coefficients, it can be seen in the graph that the most commonly reported coefficient was the Cronbach's alpha, which accounted for `r apa_num(sum(table(coded_data_replications$N_items, coded_data_replications$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)` out of `r apa_num(sum(table(coded_data_replications$N_items, coded_data_replications$reliability_type)["multiple item measure", - c(1, 3)]), numerals = FALSE)` reported reliabilities in the replication protocols, and `r apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)` out of `r apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", - c(1, 3, 4)]), numerals = FALSE)` in the original articles.
-
-```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it."}
-knitr::include_graphics(path = "../../SupplementaryMaterials/reliability_reporting_flow_diagram.png")
-```
-
-Based on a chi square comparison, reliabilities were found to be more commonly reported in original articles compared to replication protocols ($\chi^{2}$(`r apa_num(H1_test_result$parameter)`) = `r apa_num(H1_test_result$statistic)`, *p* = `r apa_p(H1_test_result$p.value)`). The effect size is ??? with CI of ??? these illustrate ???. These results are contradictory to hypothesis 1.
-
-Looking at the calculated reliabilities, figure \@ref(fig:Plot23AlphaCode) shows the distributions of the Cronbach's alpha coefficients for each replication set for which scalar data could be accessed, separated by successful and unsuccessful replication. The average calculated Cronbach's alpha coefficient across replication sets was `r apa_num(mean(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(mean(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`
-
-```{r Plot23AlphaCode,warning = FALSE,  fig.cap = "Distributions of calculated Cronbach’s alpha coefficients (> 0) calculated for the responses on a measure at each lab location, across the eighteen distinct measures for which suitable raw data was available to calculate Cronbach’s alpha coefficients from. The blue triangles indicate the reported alpha coefficient for that measure from the original article, when available"}
-
-# data re-ordering (was not saved in export)
-plot_23_data_alpha_reordered <- data_prep_plot_23_alpha(plot_23_data_alpha[,1:4])
-
-# plot for alpha
-ggplot(plot_23_data_alpha_reordered, aes(x = alpha, y = g)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_hline(yintercept = 6.5, color = "red", size = 1) +
-  geom_point(alpha = 0.1) +
-  theme_minimal() +
-  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
-                                                     "lines")) +
-  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0),
-    ymin = 7, ymax = 7, xmin = 1.08, xmax = 1.08) +
-  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0),
-    ymin = 6, ymax = 6, xmin = 1.08, xmax = 1.08) +
-  coord_cartesian(xlim = c(0, 1), clip = "off") +
-  geom_point(data = plot_23_data_reported_alpha, mapping = aes(x = coefficient, 
-             y = article_order), color = "blue", shape = 17, size = 3) +
-  ylab("") +
-  xlab("Cronbach's alpha") 
-```
-
-```{r Plot23OmegaCode}
-# data re-ordering (was not saved in export)
-plot_23_data_omega_reordered <- data_prep_plot_23_omega(plot_23_data_omega[,1:4])
-
-# plot for omega
-ggplot(plot_23_data_omega_reordered, aes(x = alpha, y = g)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_hline(yintercept = 5.5, color = "red", size = 1) +
-  geom_point(alpha = 0.1) +
-  theme_minimal() +
-  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
-                                                     "lines")) +
-  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0),
-    ymin = 6, ymax = 6, xmin = 1.08, xmax = 1.08) +
-  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0),
-    ymin = 5, ymax = 5, xmin = 1.08, xmax = 1.08) +
-  coord_cartesian(xlim = c(0, 1), clip = "off") +
-  ylab("") +
-  xlab("Omega")
-```
-
-The between-group (across different replication set) variance and within-group (lab locations within a replication set) variance in the Cronbach's alpha coefficient were assessed using a multilevel model as specified in Formulas \@ref(eq:level1H2), \@ref(eq:level2H2), & \@ref(eq:mixedH2) The between-group and within-group variance for Cronbach's alpha were approximately `r apa_num(between_group_variance_alpha, digits = 3)` and `r apa_num(within_group_variance_alpha, digits = 3)` respectively. The resulting ICC, obtained using formula \@ref(eq:ICC), was approximately `r apa_num(ICC_alpha, digits = 3)`. This suggests that variance was larger between replication sets than within. These results are in line with hypothesis 2. However, the measures with lower average reliabilities did show a large amount of variation in the reliability coefficient as can be seen figure \@ref(fig:Plot23AlphaCode)
-
-[APPENDIX sensitivity analyses & co: for omega the mean (values calculated in the population across replication sets) was `r apa_num(sd(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`.???... The same analysis for omega coefficients even showed a relatively larger degree of between group variance (between-group variance `r apa_num(within_group_variance_omega, digits = 3)`, within-group variance `r apa_num(between_group_variance_omega, digits = 3)`, ICC = `r apa_num(ICC_omega, digits = 3)`).]
-
-The relationship between reliability and replication success was primarily tested via logistic regression, with replication success as the dependent variable. The results of the logistic and multilevel sensitivity analysis models are shown in Table \@ref(tab:ReplicabilityReliabilityTestTable) for Cronbach's alpha.
-
-[???sensitivity analyses??? to appendix]
-
-```{r ReplicabilityReliabilityTestTable, warning = FALSE}
-# creating the dtaframe for the table
-H3_table_dataframe <- rbind(H3_test_result_main_alpha$table, H3_test_result_int_sensitivity_alpha$table, H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
-
-# adding an asterix for significance to the significant p in the dataframe
-H3_table_dataframe[3,5] <- paste0(H3_table_dataframe[3,5], "$^*$")
-
-# adding rows to give indication of specific sections (apa_table being awkward)
-H3_table_for_printing <- rbind(c("Alpha", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[1:2,], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(3:4),], c("Omega", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[(5:6),], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(7:8),], c("Random-Slope Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(9:10),])
-
-
-# print the table in apa formatting
-apa_table(
-  H3_table_for_printing, align = c("l", "r", "r", "r", "r")
-  , caption = "Model Results from Tests of Hypothesis 3"
-  , note = "The Alpha and Omega sections show the models where the independent variable was the calculated Cronbach's alpha and omega coefficient respectively. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
-  , escape = FALSE, placement= "htp", midrules = c(1, 2, 5, 7, 8, 9, 12, 15))
-
-```
-
-Cronbach's alpha did not significantly relate to replication success in the main logistic regression model (Cronbach's alpha: `r H3_test_result_main_alpha$full_result$alpha`), nor in any of the multilevel sensitivity analyses models (see Table \@ref(tab:ReplicabilityReliabilityTestTable)). This is contradictory to the expectation in hypothesis 3. Similar results were found for the analyses when using Omega as the reliability coefficient of choice (see supplementary materials ???). However, caution should be taken in evaluating the results from these analyses should, given the small sample number of measures used to estimate the models for these tests.
-
-[estimate + CI interpretations; AND other relevant info such as: ???]
-
-## Questionable Measurement Practices
-
-The counts of the QMP ratio obtained for each QMP type (see Table \@ref(tab:QMPCodingInfoTable)) are shown across the top layer of Figure \@ref(fig:Plot456Code) for both replication protocols and original articles. The overall number of counts for the QMP ratios of the QMP modification type were lower compared to the others, because only `r apa_num(table(coded_data_replications$mod_check)["True"])` out of `r apa_num(length(coded_data_replications$mod_check))` measures in replications, and only `r apa_num(table(coded_data_original_shortened$mod_check)["True"], numerals = FALSE)` measures used in original studies were modified. The bottom layer of Figure \@ref(fig:Plot456Code) shows the overlayed distributions of the total QMP ratios from the replication protocols and original studies, with dots indicating each datapoint, and the line indicating the mean for either distribution.
-
-```{r Plot456Code, warning = FALSE, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by whether the QMP ratio was obtained from an original article or a replication protocol. The top row shows counts on the y axis for groups of QMP ratios for each of the five QMP types. The bottom graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots"}
 # plot for alpha
 ### ratio (REV) Original and Rep
 Plot_456_1 <- ggplot(plot_456_data[plot_456_data$QMP_type != "Total",], 
-       aes(x = QMP_ratio, fill = RepOrg)) + 
-  geom_bar(position = "dodge", stat = "bin", bins = 10) +
-  facet_grid(~QMP_type) +
+                      aes(x = RepOrg, fill = as.factor(QMP_ratio_1))) + 
+  geom_bar(position = "fill") +
   theme_minimal() +
-  theme(plot.title = element_text(face = "bold")) +
-  scale_fill_manual(values=c("brown", "blue4")) +
+  scale_fill_manual(values = c("#ff766c", "#ef6f65", "#ce5f57", "#be5851", "#aa4f48", "#994741", "#803b36", "#672f2b", "#562824", "#411e1b", "#341816", "#030101","#4366ff", "#4265fc", "#3551cb", "#324dc1", "#324cbe", "#2d44aa", "#2c44a9", "#283d99", "#223380", "#162255", "#10193e", "#010206", "#000102")) +
   theme(legend.position = "none") +
-  ylab("Count") +
-  xlab("QMP Ratio") +
-  ggtitle("QMP Ratio's Per QMP Type Grouped by Original and Replication") +
-  scale_x_continuous(labels = c("0", "0.25", "0.5", "0.75", "1"))
+  facet_grid(~ QMP_type) + 
+  ylab("Percentage of Overal Coding") +
+  xlab("QMP Type") +
+  ggtitle("QMP Ratio's Per QMP Type Grouped by Original and Replication")
 
 Mean_Rat_Rep <- mean(plot_456_data$QMP_ratio[
   plot_456_data$QMP_type == "Total" & plot_456_data$RepOrg == "Replication"])
@@ -1390,27 +1285,156 @@ grid.arrange(Plot_456_1,
 
 ```
 
-Beta-regression was used to test the difference in QMP ratio between original articles and replication protocols. Results showed that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects (`r betareg_output_to_apa_full(H4_test_results_REV)`). This result is in line with hypothesis 4.
+Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures for which reliability was reported. The first split shows the number of measures which consisted of multiple items in a scale, which were approximately equal between replication and original (`r apa_num(table(coded_data_replications$N_items)["multiple item measure"])` and `r apa_num(table(coded_data_original_shortened$N_items)["multiple item measure"])`, respectively). Reliability was expected to be reported only for these measures. Taking these multiple item measures, the graph illustrates that `r apa_num(sum(table(coded_data_replications$N_items, coded_data_replications$reliability_type)["multiple item measure", - c(1, 3)]), numerals = FALSE)` measures in the replication protocols and `r apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", - c(1, 3, 4)]), numerals = FALSE)` in the original articles reported a reliability coefficient. Looking closer at these reported reliability coefficients, it can be seen in the graph that the most commonly reported coefficient was the Cronbach's alpha, which accounted for `r apa_num(sum(table(coded_data_replications$N_items, coded_data_replications$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)` out of `r apa_num(sum(table(coded_data_replications$N_items, coded_data_replications$reliability_type)["multiple item measure", - c(1, 3)]), numerals = FALSE)` reported reliabilities in the replication protocols, and `r apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)` out of `r apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", - c(1, 3, 4)]), numerals = FALSE)` in the original articles.
 
-[effect size and CI95 information]
+```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it."}
+knitr::include_graphics(path = "../../SupplementaryMaterials/reliability_reporting_flow_diagram.png")
+```
+
+If we look at the reliabilities obtained from the Many Labs responses on each measure for which scalar data could be accessed, the distributions of the Cronbach's alpha coefficients for each replication set for  are displayed in Figure \@ref(fig:Plot23AlphaCode), separated by successful and unsuccessful replication. The average calculated Cronbach's alpha coefficient across replication sets was `r apa_num(mean(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(mean(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`
+
+```{r Plot23AlphaCode,warning = FALSE,  fig.cap = "Distributions of calculated Cronbach’s alpha coefficients (> 0) calculated for the responses on a measure at each lab location, across the eighteen distinct measures for which suitable raw data was available to calculate Cronbach’s alpha coefficients from. The green lines indicate the meta-analytic prediction interval lower and upper bound. The blue triangles indicate the reported alpha coefficient for that measure from the original article, when available. The Tau column besides the figure shows the tau heterogeneity estimate based on a meta-analysis of the calculated reliabilities for each measure, meta-analysis for which the Q-test for Heterogeneity was signicant at alpha < .05 are in black, not significant results are left grey. The Diff column shows the difference between reported reliability and the average reliability calculated from the Many Labs data for the applicable measures, the differences in bold are for reported reliabilities that fell outside the 95% quantile of calculated reliability scores."}
+
+# data re-ordering (was not saved in export)
+plot_23_data_alpha_reordered <- data_prep_plot_23_alpha(plot_23_data_alpha)
+
+### use ggarange for aranging things at the side of this graph
+
+# plot for alpha
+ggplot(plot_23_data_alpha_reordered, aes(x = alpha, y = g)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_hline(yintercept = 6.5, color = "red", size = 1) +
+  geom_point(alpha = 0.1) +
+  
+  # adding in the tau values
+  geom_text(label = format(plot_23_data_alpha_reordered$tau, digits = 1), x = 1.15, size = 2.8, alpha = ifelse(plot_23_data_alpha_reordered$QEp < .05, 1, 0)) +
+  geom_text(label = format(plot_23_data_alpha_reordered$tau, digits = 1), x = 1.15, size = 2.8, alpha = ifelse(plot_23_data_alpha_reordered$QEp >= .05, 1, 0), colour = "grey") +
+  
+  # adding in the alpha annotations
+   annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[1], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[1], "bold", "plain"))), ymin = 1, ymax = 1, xmin = 1.24, xmax = 1.24) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[2], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[2], "bold", "plain"))), ymin = 2, ymax = 2, xmin = 1.24, xmax = 1.24) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[3], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[3], "bold", "plain"))), ymin = 3, ymax = 3, xmin = 1.24, xmax = 1.24) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[4], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[4], "bold", "plain"))), ymin = 5, ymax = 5, xmin = 1.24, xmax = 1.24) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[5], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[5], "bold", "plain"))), ymin = 8, ymax = 8, xmin = 1.25, xmax = 1.25) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[6], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[6], "bold", "plain"))), ymin = 9, ymax = 9, xmin = 1.24, xmax = 1.24) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[7], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[7], "bold", "plain"))), ymin = 10, ymax = 10, xmin = 1.24, xmax = 1.24) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[8], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[8], "bold", "plain"))), ymin = 11, ymax = 11, xmin = 1.24, xmax = 1.24) +
+  annotation_custom(grob = textGrob(label = format(round(plot_23_data_reported_alpha$coefficient_difference[9], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(plot_23_data_reported_alpha$significance[9], "bold", "plain"))), ymin = 12, ymax = 12, xmin = 1.25, xmax = 1.25) +
+  
+  theme_minimal() +
+  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), "lines")) +
+  
+  # adding the necessary indicative texts
+  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 7.25, ymax = 7.25, xmin = 0.01, xmax = 0.01) +
+  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 6, ymax = 6, xmin = 0.01, xmax = 0.01) +
+  annotation_custom(grob = textGrob(label = "Tau", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 1.08, xmax = 1.08) +
+  annotation_custom(grob = textGrob(label = "Diff", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 1.24, xmax = 1.24) +
+  
+  coord_cartesian(xlim = c(0, 1), clip = "off") +
+  
+  # adding the blue triangles for reported reliability and green prediction intervals
+  geom_point(data = plot_23_data_reported_alpha, mapping = aes(x = coefficient_reported, y = article_order), color = "blue", shape = 17, size = 3) +
+  geom_point(mapping = aes(x = pi.lb), color = "green", shape = 124, size = 2.5) + 
+  geom_point(mapping = aes(x = pi.ub), color = "green", shape = 124, size = 2.5) + 
+  
+  ylab("") +
+  xlab("Cronbach's alpha") 
+```
+
+[BIG Original vs. Replication DESCRIPTIVES TABLE SOMEWHERE]
+
+Existing materials were used for `r apa_num(table(coded_data_replications$sel_existing)["True, namely:"], digits = 0)` of the `r apa_num(nrow(coded_data_replications), digits = 0)` measures in replications (FOOTNOTE: the relevant question asking participants to rate how much they agreed with a certain quote remained the same, however the quote itself and the people it was attributed too were both completely new compared to the original) and for `r apa_num(table(coded_data_original_shortened$sel_existing)["True, namely:"], digits = 0)` in original studies. The specific version of the measure was reported for `r apa_num(length(coded_data_replications$op_version[coded_data_replications$op_version != ""]), numerals = FALSE)` measures in replications, and `r apa_num(length(coded_data_original_shortened$op_version[coded_data_original_shortened$op_version != ""]), numerals = FALSE)` measures in original articles. For those measures that were not based on existing materials, `r apa_num(table(coded_data_replications$sel_existing)["False, materials were newly developped for this study"], numerals = FALSE)` in the replications and `r apa_num(table(coded_data_original_shortened$sel_existing)["False, materials were newly developped for this study"], numerals = FALSE)` in original articles clearly stated that they were newly created for the study. Only `r apa_num(table(coded_data_original_shortened$mod_time)["After/During"], numerals = FALSE)` measure in the original articles was modified from its original source during the data collection period, all other measures were modified before that, if at all. The mean sample size within the replications was `r apa_num(mean(coded_data_replications$N, na.rm = TRUE), digits = 0)` participants (IQR = `r apa_num(IQR(coded_data_replications$N, na.rm = TRUE), digits = 0)`). In the original articles the mean sample size was `r apa_num(mean(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)` (IQR = `r apa_num(IQR(coded_data_original_shortened$N, na.rm = TRUE), digits = 0)`).
+
+## Reliability
+
+Based on a chi square comparison, reliabilities were found to be more commonly reported in original articles compared to replication protocols ($\chi^{2}$(`r apa_num(H1_test_result$parameter)`) = `r apa_num(H1_test_result$statistic)`, *p* = `r apa_p(H1_test_result$p.value)`). These results are contradictory to hypothesis 1.
+
+
+
+
+
+The between-group (across different replication set) variance and within-group (lab locations within a replication set) variance in the Cronbach's alpha coefficient were assessed using a multilevel model as specified in Formulas \@ref(eq:level1H2), \@ref(eq:level2H2), & \@ref(eq:mixedH2) The between-group and within-group variance for Cronbach's alpha were approximately `r apa_num(between_group_variance_alpha, digits = 3)` and `r apa_num(within_group_variance_alpha, digits = 3)` respectively. The resulting ICC, obtained using formula \@ref(eq:ICC), was approximately `r apa_num(ICC_alpha, digits = 3)`. This suggests that variance was larger between replication sets than within. These results are in line with hypothesis 2. However, the measures with lower average reliabilities did show a large amount of variation in the reliability coefficient as can be seen figure \@ref(fig:Plot23AlphaCode)
+
+The relationship between reliability and replication success was primarily tested via logistic regression, with replication success as the dependent variable. The results of the logistic and multilevel sensitivity analysis models are shown in Table \@ref(tab:ReplicabilityReliabilityTestTable) for Cronbach's alpha.
+
+[???sensitivity analyses??? to appendix]
+
+```{r ReplicabilityReliabilityTestTable, warning = FALSE}
+# creating the dtaframe for the table
+H3_table_dataframe <- rbind(H3_test_result_main_alpha$table, H3_test_result_int_sensitivity_alpha$table, H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
+
+# adding an asterix for significance to the significant p in the dataframe
+H3_table_dataframe[3,5] <- paste0(H3_table_dataframe[3,5], "$^*$")
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H3_table_for_printing <- rbind(c("Alpha", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[1:2,], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(3:4),], c("Omega", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[(5:6),], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(7:8),], c("Random-Slope Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(9:10),])
+
+
+# print the table in apa formatting
+apa_table(
+  H3_table_for_printing, align = c("l", "r", "r", "r", "r")
+  , caption = "Model Results from Tests of Hypothesis 3"
+  , note = "The Alpha and Omega sections show the models where the independent variable was the calculated Cronbach's alpha and omega coefficient respectively. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
+  , escape = FALSE, placement= "htp", midrules = c(1, 2, 5, 7, 8, 9, 12, 15))
+
+```
+
+Cronbach's alpha did not significantly relate to replication success in the main logistic regression model (Cronbach's alpha: `r H3_test_result_main_alpha$full_result$alpha`), nor in any of the multilevel sensitivity analyses models (see Table \@ref(tab:ReplicabilityReliabilityTestTable)). This is contradictory to the expectation in hypothesis 3. Similar results were found for the analyses when using Omega as the reliability coefficient of choice (see supplementary materials ???). However, caution should be taken in evaluating the results from these analyses should, given the small sample number of measures used to estimate the models for these tests.
+
+[other relevant info such as: ???]
+
+## Questionable Measurement Practices
+
+Beta-regression was used to test the difference in QMP ratio between original articles and replication protocols. Results showed that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects (`r betareg_output_to_apa_full(H4_test_results_REV)`). This result is in line with hypothesis 4.
 
 A similar beta-regression tested the association between replication success and QMP ratio in replication protocols. Results showed that successful replication significantly related to a decrease in the ratio of QMPs in replication protocols (`r betareg_output_to_apa_full(H5_test_results_REV)`).
 
-[effect size and CI95 information; logistic regression for interpretation/sensitivity analyses?]
+```{r Plot46RevisedDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratio’s with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
+ggplot(plot_46_data_rev[plot_46_data_rev$QMP_type == "QMP.Ratio" & plot_46_data_rev$QMP_Rep_type == "Rep.QMP.Ratio",], aes(QMP_ratio, QMP_Rep_ratio)) + 
+  geom_point() +
+  geom_jitter(width = 0.01, height = 0.01) +
+  stat_smooth(method="lm") + 
+  theme_minimal() +
+  theme(strip.text.y = element_text(size = 7), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  ylab("QMP Replication Ratio") +
+  xlab("QMP Ratio") 
 
-The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. It showed that total QMP ratio in the original article can significantly predict total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`), which provides some evidence in favor of hypothesis 6. However, this relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`).
+```
 
-[effect size-y interpretation, especially combined with the analyses of
+The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. It showed that total QMP ratio in the original article can significantly predict total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`), which provides some evidence in favor of hypothesis 6. Figure \@ref(fig:Plot46RevisedDataCode) displays this relationship visually. However, this relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`).
+
+## Appendixable Results
+
+[APPENDIX sensitivity analyses & co: for omega the mean (values calculated in the population across replication sets) was `r apa_num(sd(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`.???... The same analysis for omega coefficients even showed a relatively larger degree of between group variance (between-group variance `r apa_num(within_group_variance_omega, digits = 3)`, within-group variance `r apa_num(between_group_variance_omega, digits = 3)`, ICC = `r apa_num(ICC_omega, digits = 3)`).]
+
+```{r Plot23OmegaCode}
+# data re-ordering (was not saved in export)
+plot_23_data_omega_reordered <- data_prep_plot_23_omega(plot_23_data_omega)
+
+# plot for omega
+ggplot(plot_23_data_omega_reordered, aes(x = alpha, y = g)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_hline(yintercept = 5.5, color = "red", size = 1) +
+  geom_point(alpha = 0.1) +
+  theme_minimal() +
+  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
+                                                     "lines")) +
+  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0),
+    ymin = 6, ymax = 6, xmin = 1.08, xmax = 1.08) +
+  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0),
+    ymin = 5, ymax = 5, xmin = 1.08, xmax = 1.08) +
+  coord_cartesian(xlim = c(0, 1), clip = "off") +
+  ylab("") +
+  xlab("Omega")
+```
 
 [[[APPENDIX sensitivity analyses: H5, Sensitivity analyses using a random-intercept multilevel regression also found a similar significant association (`r check_h5_REV$full_result$hypothesis_supportTRUE`). Both of these results are in line with hypothesis 5. However, the relationship in the multilevel model was no longer significant for QMP ratios obtained with the initial coding protocol (`r check_h5$full_result$hypothesis_supportTRUE`). For the sensitivity analyses using a random intercept logistic multilevel mode both revised and initial protocol resulted in non-significant results (revised protocol: `r check_h6_REV$full_result$QMP_REV`; initial protocol `r check_h6$full_result$QMP`).]]]
-
-## Exploratory Results
 
 [[[APPENDIX??? sensitivity analyses and so on: Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Figure \@ref(fig:Plot46RevisedDataCode) visually illustrates the relations of the revised QMP ratios from different QMP types between replication protocols and original articles. As shown in the figure, no relation was strong and highly stable, and even fewer were consistent between initial and revised coding protocols. ]]] IF SO, check rest of article to remove this part by in large.
 
 [[[OMIT: The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols, illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol.]]]
 
-```{r Plot46InitialDataCode, include = FALSE, eval = FALSE, error = FALSE}
+```{r Plot46FullInitialDataCode, include = FALSE, eval = FALSE, error = FALSE}
 # Initial
 ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
@@ -1426,7 +1450,7 @@ ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) +
 
 ```
 
-```{r Plot46RevisedDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication QMP ratio’s per type with linear regression line. The abbreviations on the axes relate to the QMP categories described in Table 1: Def. is definition, Op. is operationalization, Sel. is selection/creation, Quant. is quantification, and Mod. is modification. The X axis facets across the QMP ratios in the original articles, and the Y axis facets across the QMP ratios in the replication protocols. Each dot in the figure relates to describes the QMP ratio for the types in that graph across an original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
+```{r Plot46FullRevisedDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication QMP ratio’s per type with linear regression line. The abbreviations on the axes relate to the QMP categories described in Table 1: Def. is definition, Op. is operationalization, Sel. is selection/creation, Quant. is quantification, and Mod. is modification. The X axis facets across the QMP ratios in the original articles, and the Y axis facets across the QMP ratios in the replication protocols. Each dot in the figure relates to describes the QMP ratio for the types in that graph across an original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
 # Revised
 ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
@@ -1548,16 +1572,17 @@ QMP Ratio and Original QMP Ratio as obtained using the Initial Protocol"
 
 ```{r UnidimesnionalityTestResultsTable, warning = FALSE}
 # add the names of the relevant papers and a shortcut for the measure used.
-cfa_results_expanded <- cbind(c("Caruso et al. (2012)", "Husnu & Crisp (2010)", "Nosek et al. (2002), Art", "Nosek et al. (2002), Math", "Van Lange et al. (1997)", "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", "Giessner & Schubert (2007)", "Norenzayan et al. (2002)", "Zhong & Liljenquist (2006)", "Monin & Miller (2001), most", "Monin & Miller (2001), some", "Cacioppo et al. (1983), elm", "Cacioppo et al. (1983), nfc", "De Fruyt et al. (2000), consc", "Albarracín et al. (2008), exp. 5", "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)"), cfa_results)
+cfa_results_expanded <- cbind(c("Caruso et al. (2012)", "Husnu & Crisp (2010)", "Nosek et al. (2002), Art", "Nosek et al. (2002), Math", "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", "Giessner & Schubert (2007)", "Norenzayan et al. (2002)", "Zhong & Liljenquist (2006)", "Monin & Miller (2001), most", "Monin & Miller (2001), some", "Cacioppo et al. (1983), elm", "Cacioppo et al. (1983), nfc", "De Fruyt et al. (2000), consc", "Albarracín et al. (2008), exp. 5, verb", "Albarracín et al. (2008), exp. 5, math", "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)"), cfa_results)
+
 
 # adding sensible column names
 colnames(cfa_results_expanded) <- c("Original Article", "RMSEA", "N Factors", "Unidimensional")
 
 # Renaming the columns for the not converged cfa.
 cfa_results_for_print <- cfa_results_expanded
-cfa_results_for_print$RMSEA[16] <- "Did"
-cfa_results_for_print$`N Factors`[16] <- "Not"
-cfa_results_for_print$Unidimensional[16] <- "Converge"
+cfa_results_for_print$RMSEA[15] <- "Did"
+cfa_results_for_print$`N Factors`[15] <- "Not"
+cfa_results_for_print$Unidimensional[15] <- "Converge"
 
 # print the table in apa formatting
 apa_table(

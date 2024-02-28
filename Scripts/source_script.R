@@ -591,11 +591,13 @@ data_prep_H1 <- function(Data_Original, Data_Replications){
 ### Hypothesis 2
 # ASE (alpha standard error) formula for a single lab
 ASE_for_Lab <- function(lab_data){
+  # NOTE: only works with non-missing data:
+  # selecting only the complete cases for the ASE calculations
+  lab_data <- lab_data[complete.cases(lab_data),]
+  
   V_matrix <- cov(lab_data)
   p_num <- ncol(lab_data)
   j_vec <- rep(1, times = p_num)
-  
-  ### missing data issue
   
   # not sure about this implementation:
   Q_value <- ((2 * p_num^2) / ((p_num - 1)^2 * (crossprod(j_vec, V_matrix) %*% 
@@ -610,11 +612,8 @@ ASE_for_Lab <- function(lab_data){
 
 # obtaining the omega and alpha values for each measure (helper function).
 omega_and_alpha <- function(Data, m_length){
-  # selecting only the complete cases for the ASE calculations
-  Data_complete <- Data[complete.cases(Data),]
-  
   omega_and_alpha_vec <- c(t(omega(Data[2:m_length], nfactors = 1)[3:4]), 
-                           ASE_for_Lab(Data_complete[2:m_length]))
+                           ASE_for_Lab(Data[2:m_length]))
   
   names(omega_and_alpha_vec) <- c("alpha", "omega.tot", "ASE")
   
@@ -623,11 +622,8 @@ omega_and_alpha <- function(Data, m_length){
 
 # obtaining the alpha values for 2.12.3, 2.20, & 3.2.1.1 (helper function).
 just_alpha <- function(Data, m_length){
-  # selecting only the complete cases for the ASE calculations
-  Data_complete <- Data[complete.cases(Data),]
-  
   alpha_vec <- c(t(psych::alpha(Data[2:m_length])$total[[2]]), NA, 
-                 ASE_for_Lab(Data_complete[2:m_length]))
+                 ASE_for_Lab(Data[2:m_length]))
  
   names(alpha_vec) <- c("alpha", "omega.tot", "ASE")
   
@@ -637,26 +633,29 @@ just_alpha <- function(Data, m_length){
 
 # data load and prep function (including calculations)
 data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
-                         data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
-                         data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
-                         data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
-                         data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean){
-  # Combining the data together (no 1.3, no 5.4, & no 3.7.1, and for omega no 
+                         data_1.12.3.2_clean, data_2.12.1_clean, 
+                         data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, 
+                         data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, 
+                         data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, 
+                         data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, 
+                         data_5.7_clean, data_5.9.1_clean){
+  # Combining the data together (no 1.3, & no 5.4 and for omega no 
   # 2.12.3, no 2.20, & no 3.2.1.1 due to issues with the running of the code for 
   # this data, likely due to negative relations or lack of variance)
   Extracted_Data_List <- list(data_1.10_clean, data_1.11_clean, 
-    data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.10.1_clean, 
-    data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, 
-    data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, 
-    data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.7_clean, 
-    data_5.9.1_clean) 
+    data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.12.1_clean, 
+    data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, 
+    data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, 
+    data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, 
+    data_5.7_clean, data_5.9.1_clean) 
   # creating an empty dataframe to insert all the responses into
-  Data_H2 <- data.frame(alpha = 0, omega.tot = 0, ASE = 0, g = 0)
+  Data_H2 <- data.frame(alpha = 0, omega.tot = 0, ASE = 0, tau = 0, QEp = 0, 
+                        pi.lb = 0, pi.ub = 0, g = 0)
   
   # adding the alpha, omega (when applicable), and ASE into a dataframe for each
   # lab for each replication.
   for (i in 1:length(Extracted_Data_List)){
-    if(i %in% c(8, 10, 12)){
+    if(i %in% c(7, 9, 11)){
       reliability_frame <- data.frame(t(sapply(split(Extracted_Data_List[[i]], 
                                                      Extracted_Data_List[[i]]$g), 
                                                just_alpha, 
@@ -669,37 +668,44 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
       reliability_frame$omega.tot <- as.numeric(reliability_frame$omega.tot)
     }
     reliability_frame$alpha <- as.numeric(reliability_frame$alpha)
+    reliability_frame$ASE <- as.numeric(reliability_frame$ASE)
     reliability_frame$g <- as.factor(i)
+    
+    # meta-analysis
+    rma_model <- rma(yi = reliability_frame$alpha, sei = reliability_frame$ASE, 
+                     method = "REML", control=list(stepadj=0.5, maxiter=1000))
+    
+    rma_prediction <- predict(rma_model)
+    
+    reliability_frame$tau <- sqrt(rma_model$tau2)
+    reliability_frame$QEp <- rma_model$QEp
+    reliability_frame$pi.lb <- rma_prediction$pi.lb
+    reliability_frame$pi.ub <- rma_prediction$pi.ub
     
     Data_H2 <- rbind(Data_H2, reliability_frame)
   }
 
   Data_H2 <- Data_H2[-1,]
   
+  Data_H2$reporting_index <- c(rep(10, 36), rep(11, 36), rep(14, 36), 
+                               rep(14, 36), rep(29, 74), rep(30, 74), 
+                               rep(31, 74), rep(34, 61), rep(39, 60), 
+                               rep(42, 58), rep(51, 21), rep(51, 21), 
+                               rep(56, 20), rep(57, 21), rep(59, 21), 
+                               rep(62, 4), rep(63, 4), rep(71, 8), rep(73, 5))
   
-  colnames(Data_H2) <- c("alpha", "omega", "ASE", "g")
+  colnames(Data_H2) <- c("alpha", "omega", "ASE", "tau", "QEp", "pi.lb", 
+                         "pi.ub", "g", "reporting_index")
   
   return(Data_H2)
 }
 
-datAAA <-data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, 
-             data_1.12.3.2_clean, data_2.10.1_clean, data_2.12.1_clean, data_2.12.2_clean, 
-             data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, 
-             data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.2_clean, data_3.8.2_clean, 
-             data_5.1.1_clean, data_5.7_clean, data_5.9.1_clean)
-
-
-data.frame(t(sapply(split(data_3.7.1_clean, data_3.7.1_clean$g), 
-                    omega_and_alpha, 
-                    ncol(data_3.7.1_clean))))
-
-
-# Omit: 
+# Omitted: 
 # Van Lange (2.10.1);  
-# add: 
+# added: 
 # Cacioppo (3.7.1); 
 # 5.1.1 (albaracin), SAT items 1-15 are about language competency (5.1.1), 16-21 about math (5.1.2);
-# norenzayan (2.20) might change results due to changes in data.
+# For Norenzayan (2.20) results might change due to changes in data.
 
 
 # add the ASE, and then do a meta-analysis to obtain the tau^2 to then obtain 
@@ -716,25 +722,20 @@ data.frame(t(sapply(split(data_3.7.1_clean, data_3.7.1_clean$g),
 
 
 
+
 ### Hypothesis 3
 # indexing whether or not an effect replicated (helper function)
-replication_indexer <- function(Data_H5){
+replication_indexer <- function(Data_H5, Data_H2){
   # creating an index of whether or not an effect replicated based on what was
   # coded from the paper
-  # table(reliability_frame_total$g)
-  replication_index <- c(Data_H5[c(rep(10, 36), rep(11, 36), rep(12, 36), 
-                                   rep(13, 36), rep(26, 67), rep(29, 74), 
-                                   rep(30, 74), rep(31, 74), rep(34, 61), 
-                                   rep(39, 60), rep(42, 58), rep(51, 21),
-                                   rep(51, 21), rep(57, 21), rep(59, 21), 
-                                   rep(62, 4), rep(71, 8), rep(73, 5)), 10])
+  replication_index <- c(Data_H5[Data_H2$reporting_index, 10])
   
   return(replication_index)
 }
 
 # data load and prep functions
 Data_prep_H3_multiple <- function(Data_H5, Data_H2){
-  replication_index <- replication_indexer(Data_H5)
+  replication_index <- replication_indexer(Data_H5, Data_H2)
   
   # alpha between sites
   Data_H3_multiple <- cbind(Data_H2, replication = replication_index)
@@ -750,35 +751,47 @@ Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
                                                  Data_H3_multiple$g), mean),
                             ASE = sapply(split(Data_H3_multiple$ASE, 
                                                Data_H3_multiple$g), mean),
-                            replication = c(Data_H5[c(10, 11, 12, 13, 26, 29, 
-                                                      30, 31, 34, 39, 42, 51, 
-                                                      51, 57, 59, 62, 71, 73), 
-                                                      10]))
+                            # group level variables
+                            tau = sapply(split(Data_H3_multiple$tau, 
+                                               Data_H3_multiple$g), mean),
+                            QEp = sapply(split(Data_H3_multiple$QEp, 
+                                               Data_H3_multiple$g), mean),
+                            pi.lb = sapply(split(Data_H3_multiple$pi.lb, 
+                                               Data_H3_multiple$g), mean),
+                            pi.ub = sapply(split(Data_H3_multiple$pi.ub, 
+                                               Data_H3_multiple$g), mean))
+  
+  Data_H3_avg <- Data_H3_avg[c(1, 12:19, 2:11),]
+  
+  Data_H3_avg$reporting_index <- append(append(unique(
+    Data_H3_multiple$reporting_index), 51, 10), 14, 3)
+  Data_H3_avg$replication <- c(Data_H5[append(append(unique(
+    Data_H3_multiple$reporting_index), 51, 10), 14, 3), 10])
   
   return(Data_H3_avg)
 }
 
 
-
 # Validity Related Functions ---------------------------------------------------
 # Data loading for the extracted measure data
 Data_unidimensionality_test <- function(Data_1.10, Data_1.11, Data_1.12.3.1, 
-                                    Data_1.12.3.2, Data_2.10.1, Data_2.12.1, 
-                                    Data_2.12.2, Data_2.12.3, Data_2.15, 
-                                    Data_2.20, Data_2.23, Data_3.2.1.1, 
-                                    Data_3.2.1.2, Data_3.7.1, Data_3.7.2, 
-                                    Data_3.8.2, Data_5.1.1, Data_5.7, 
+                                    Data_1.12.3.2, Data_2.12.1, Data_2.12.2, 
+                                    Data_2.12.3, Data_2.15, Data_2.20, 
+                                    Data_2.23, Data_3.2.1.1, Data_3.2.1.2, 
+                                    Data_3.7.1, Data_3.7.2, Data_3.8.2, 
+                                    Data_5.1.1, Data_5.1.2, Data_5.7, 
                                     Data_5.9.1){
   # the data will use the Extracted_Data_List list as a base.
   Extracted_Data_List <- list(Data_1.10, Data_1.11, Data_1.12.3.1, 
-                              Data_1.12.3.2, Data_2.10.1, Data_2.12.1, 
+                              Data_1.12.3.2, Data_2.12.1, 
                               Data_2.12.2, Data_2.12.3, Data_2.15, Data_2.20, 
                               Data_2.23, Data_3.2.1.1, Data_3.2.1.2, Data_3.7.1,
-                              Data_3.7.2, Data_3.8.2, Data_5.1.1, Data_5.7, 
-                              Data_5.9.1) 
+                              Data_3.7.2, Data_3.8.2, Data_5.1.1, Data_5.1.2, 
+                              Data_5.7, Data_5.9.1) 
   
   return(Extracted_Data_List)
 }
+
 
 # function testing whether or not the extracted measures meet the criteria for 
 # uni-dimensionality or not.
@@ -975,20 +988,29 @@ data_prep_plot_23_alpha <- function(Data){
   Plot_23_data <- Data[order(-Data$replication, -Data$avg.alpha),]
   Plot_23_data <- Plot_23_data[Plot_23_data$alpha > 0,]
   Plot_23_data$g <- fct_inorder(as.factor(Plot_23_data$g), ordered = NA)
-  levels(Plot_23_data$g) <- c("Husnu & Crisp (2010)", 
-                              "Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
-                              "Norenzayan et al. (2002)", "Shnabel & Nadler (2008)", 
-                              "Vohs & Schooler (2008)", "Caruso et al. (2012)",
-                              "Van Lange et al. (1997)", "Anderson et al. (2012), SWL", 
-                              "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", 
-                              "Giessner & Schubert, (2007)", "Zhong & Liljenquist (2006)", 
-                              "Monin & Miller (2001), most", "Monin & Miller (2001), some", 
-                              "Cacioppo et al. (1983)", "De Fruyt et al. (2000)", 
-                              "Albarracín et al. (2008), experiment 5")
+  
+  # checked with:
+  # data_h5[unique(plot_23_data_alpha_reordered$reporting_index), 3]
+  # data_h5[unique(plot_23_data_alpha_reordered$reporting_index), 5] 
+  levels(Plot_23_data$g) <- c("Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
+                              "Shnabel & Nadler (2008)", "Norenzayan et al. (2002)", 
+                              "Husnu & Crisp (2010)", "Vohs & Schooler (2008)", 
+                              "Cacioppo et al. (1983), arg", "Anderson et al. (2012), PA", 
+                              "Anderson et al. (2012), NA", "Giessner & Schubert, (2007)", 
+                              "Anderson et al. (2012), SWL", "Caruso et al. (2012)", 
+                              "Zhong & Lijenquist (2006)","Monin & Miller (2001), most", 
+                              "Monin & Miller (2001), some", "Cacioppo et al. (1983), nfc", 
+                              "Albarracín et al. (2008), exp 5 verb", 
+                              "Albarracín et al. (2008), exp 5 math",
+                              "De Fruyt et al. (2000)")
   
   return(Plot_23_data)
 }
 
+
+#c(caruso, husnu, nosek, nosek, anderson, anderson, anderson, giessner, 
+# norenzayan, zhong, monin, monin, cacciopo, cacciopo, defruyt, albaraccin, 
+#  albaraccin, shnabel, vos)
 
 
 # and for omega
@@ -997,34 +1019,59 @@ data_prep_plot_23_omega <- function(Data){
   Data$avg.omega <- ave(Data$omega, Data$g)
   Plot_23_data <- Data[order(-Data$replication, -Data$avg.omega),]
   Plot_23_data$g <- fct_inorder(as.factor(Plot_23_data$g), ordered = NA)
-  levels(Plot_23_data$g) <- c("Husnu & Crisp (2010)", 
-                              "Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
-                              "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)", 
-                              "Caruso et al. (2012)", "Van Lange et al. (1997)", 
-                              "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", 
-                              "Giessner & Schubert, (2007)", "Zhong & Liljenquist (2006)", 
-                              "Monin & Miller (2001), some", "Cacioppo et al. (1983)", 
-                              "De Fruyt et al. (2000)", "Albarracín et al. (2008), experiment 5")
+  levels(Plot_23_data$g) <- c("Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
+                              "Shnabel & Nadler (2008)", "Husnu & Crisp (2010)", 
+                              "Vohs & Schooler (2008)", "Cacioppo et al. (1983), arg", 
+                              "Anderson et al. (2012), PA", "Giessner & Schubert, (2007)", 
+                              "Anderson et al. (2012), SWL", "Caruso et al. (2012)", 
+                              "Zhong & Lijenquist (2006)", "Monin & Miller (2001), some", 
+                              "Cacioppo et al. (1983), nfc", "Albarracín et al. (2008), exp 5 verb", 
+                              "Albarracín et al. (2008), exp 5 math", "De Fruyt et al. (2000)")
   
   return(Plot_23_data)
 }
 
+
+
 # data of reported alpha coefficients from the studies for which alpha 
 # coefficients could be calculated.
-data_prep_plot_23_alpha_reported <- function(Data){
-  plot_23_data_on_reported <- data.frame(title = Data[!is.na(Data$reliability_coeff),
-  ]$title[c(11, 4, 4, 2, 9, 1, 6, 7, 8)], 
-  graph_title = c("Husnu & Crisp (2010)", "Nosek et al. (2002), Math", 
-                  "Nosek et al. (2002), Art", "Shnabel & Nadler (2008)",
-                  "Caruso et al. (2012)", "Anderson et al. (2012), SWL", 
+data_prep_plot_23_alpha_reported <- function(Data_reporting, Data_calculated, 
+                                             Data_calculated_multiple){
+  plot_23_data_on_reported <- data.frame(title = Data_reporting[
+    !is.na(Data_reporting$reliability_coeff),
+    ]$title[c(4, 4, 2, 11, 7, 8, 9, 6, 1)], 
+  graph_title = c("Nosek et al. (2002), Math", "Nosek et al. (2002), Art",  
+                  "Shnabel & Nadler (2008)", "Husnu & Crisp (2010)",
                   "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", 
-                  "Giessner & Schubert (2007)"), 
-  article_order = c(1, 2, 3, 5, 7, 9, 10, 11, 12), 
-  coefficient = Data[!is.na(Data$reliability_coeff),]$reliability_coeff[c(11, 
-                     4, 4, 2, 9, 1, 6, 7, 8)])
+                  "Giessner & Schubert (2007)", "Anderson et al. (2012), SWL", 
+                  "Caruso et al. (2012)"), 
+  article_order = c(1, 2, 3, 5, 8, 9, 10, 11, 12), 
+  coefficient_reported = Data_reporting[!is.na(Data_reporting$reliability_coeff),
+                ]$reliability_coeff[c(4, 4, 2, 11, 7, 8, 9, 6, 1)],
+  coefficient_calculated = Data_calculated$alpha[c(4, 3, 18, 2, 6, 7, 8, 5, 1)])
+  
+  
+  plot_23_data_on_reported$coefficient_difference <- 
+    plot_23_data_on_reported$coefficient_reported - 
+    plot_23_data_on_reported$coefficient_calculated
+  
+  
+  plot_23_data_on_reported$significance <- FALSE
+  study_index <- c(4, 3, 18, 2, 6, 7, 8, 5, 1)
+  
+  for (i in 1:nrow(plot_23_data_on_reported)){
+    population_95_bounds <- quantile(data_h3_multiple$alpha[data_h3_multiple$g == 
+                                    study_index[i]], probs = c(0.025, 0.975))
+    
+    plot_23_data_on_reported$significance[i] <- ifelse(
+      plot_23_data_reported_alpha$coefficient_reported[i] < population_95_bounds[1] , TRUE, ifelse(
+        plot_23_data_reported_alpha$coefficient_reported[i] > population_95_bounds[2] , TRUE, FALSE))
+
+  }
   
   return(plot_23_data_on_reported)
 }
+
 
 
 ### 456 plots data prep
@@ -1056,8 +1103,12 @@ data_prep_plot_456 <- function(Data){
   Plot_456_ratio_rep_data_REV$RepOrg <- as.factor(rep("Replication", 
                                                       times = nrow(Plot_456_ratio_data_REV)))
   
+  Plot_456_ratio_data_REV$QMP_ratio_1 <- Plot_456_ratio_data_REV$QMP_ratio
+  Plot_456_ratio_rep_data_REV$QMP_ratio_1 <- Plot_456_ratio_rep_data_REV$QMP_ratio + 1
+  
   
   Plot_456_data <- rbind(Plot_456_ratio_data_REV, Plot_456_ratio_rep_data_REV)
+  
   
   
   return(Plot_456_data)
@@ -1066,17 +1117,18 @@ data_prep_plot_456 <- function(Data){
 
 ### 46 plots data prep
 data_prep_plot_46 <- function(Data){
-  colnames(Data) <- c("Def. Ratio", "Op. Ratio", "Sel. Ratio", 
-                      "Quant. Ratio", "Mod. Ratio", "Rep. Def. Ratio", "Rep. Op. Ratio", 
-                      "Rep. Sel. Ratio", "Rep. Quant. Ratio", "Rep. Mod. Ratio")
+  colnames(Data) <- c("Def.Ratio", "Op.Ratio", "Sel.Ratio", 
+                      "Quant.Ratio", "Mod.Ratio", "QMP.Ratio", "Rep.Def.Ratio", "Rep.Op.Ratio", 
+                      "Rep.Sel.Ratio", "Rep.Quant.Ratio", "Rep.Mod.Ratio", "Rep.QMP.Ratio")
   
   Plot_46_data <- gather(Data, QMP_type, QMP_ratio, 
-                         c("Def. Ratio", "Op. Ratio", "Sel. Ratio", "Quant. Ratio", "Mod. Ratio"), 
+                         c("Def.Ratio", "Op.Ratio", "Sel.Ratio", "Quant.Ratio", "Mod.Ratio", "QMP.Ratio"), 
                          factor_key = TRUE)
   
   Plot_46_data <- gather(Plot_46_data, QMP_Rep_type, QMP_Rep_ratio, 
-                         c("Rep. Def. Ratio", "Rep. Op. Ratio", "Rep. Sel. Ratio", 
-                           "Rep. Quant. Ratio", "Rep. Mod. Ratio"), factor_key = TRUE)
+                         c("Rep.Def.Ratio", "Rep.Op.Ratio", "Rep.Sel.Ratio", 
+                           "Rep.Quant.Ratio", "Rep.Mod.Ratio", "Rep.QMP.Ratio"), factor_key = TRUE)
   
   return(Plot_46_data)
 }
+

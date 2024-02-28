@@ -1,4 +1,4 @@
-Codebook created on 2024-02-14 at 2024-02-14 09:47:30.71879
+Codebook created on 2024-02-26 at 2024-02-26 16:01:29.661356
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -6,16 +6,19 @@ structure, and layout of a data file.
 
 ## Dataset description
 
-The data contains 9 cases and 4 variables.
+The data contains 9 cases and 7 variables.
 
 ## Codebook
 
-| name          | type      |   n | missing | unique | mean | median | mode | mode_value                                                       |   sd |    v |  min |   max | range |  skew | skew_2se |  kurt | kurt_2se |
-|:--------------|:----------|----:|--------:|-------:|-----:|-------:|-----:|:-----------------------------------------------------------------|-----:|-----:|-----:|------:|------:|------:|---------:|------:|---------:|
-| title         | character |   9 |       0 |      7 |      |        |  3.0 | The Local Ladder Effect: Social Status and Subjective Well-Being |      | 0.79 |      |       |       |       |          |       |          |
-| graph_title   | character |   9 |       0 |     10 |      |        |  1.0 | Anderson et al. (2012), NA                                       |      | 0.89 |      |       |       |       |          |       |          |
-| article_order | numeric   |   9 |       0 |      9 | 6.67 |    7.0 |  7.0 |                                                                  | 4.09 |      | 1.00 | 12.00 | 11.00 | -0.09 |    -0.06 | -1.81 |    -0.65 |
-| coefficient   | numeric   |   9 |       0 |      8 | 0.81 |    0.8 |  0.8 |                                                                  | 0.06 |      | 0.72 |  0.89 |  0.17 |  0.05 |     0.03 | -1.41 |    -0.51 |
+| name                   | type      |   n | missing | unique |  mean | median |  mode | mode_value                                                       |   sd |    v |   min |   max | range |  skew | skew_2se |  kurt | kurt_2se |
+|:-----------------------|:----------|----:|--------:|-------:|------:|-------:|------:|:-----------------------------------------------------------------|-----:|-----:|------:|------:|------:|------:|---------:|------:|---------:|
+| title                  | character |   9 |       0 |      7 |       |        |  3.00 | The Local Ladder Effect: Social Status and Subjective Well-Being |      | 0.79 |       |       |       |       |          |       |          |
+| graph_title            | character |   9 |       0 |     10 |       |        |  1.00 | Anderson et al. (2012), NA                                       |      | 0.89 |       |       |       |       |          |       |          |
+| article_order          | numeric   |   9 |       0 |      9 |  6.78 |   8.00 |  8.00 |                                                                  | 4.12 |      |  1.00 | 12.00 | 11.00 | -0.16 |    -0.11 | -1.82 |    -0.65 |
+| coefficient_reported   | numeric   |   9 |       0 |      8 |  0.81 |   0.80 |  0.80 |                                                                  | 0.06 |      |  0.72 |  0.89 |  0.17 |  0.05 |     0.03 | -1.41 |    -0.51 |
+| coefficient_calculated | numeric   |   9 |       0 |      9 |  0.85 |   0.87 |  0.87 |                                                                  | 0.06 |      |  0.73 |  0.95 |  0.22 | -0.47 |    -0.33 | -0.35 |    -0.12 |
+| coefficient_difference | numeric   |   9 |       0 |      9 | -0.05 |  -0.06 | -0.06 |                                                                  | 0.09 |      | -0.15 |  0.15 |  0.30 |  1.02 |     0.71 |  0.04 |     0.01 |
+| significance           | logical   |   9 |       0 |      3 |       |        |  5.00 | FALSE                                                            |      | 0.49 |       |       |       |       |          |       |          |
 
 ### Legend
 

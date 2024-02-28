@@ -1,20 +1,21 @@
 g:
   class: factor
-  '1': Husnu & Crisp (2010)
-  '2': Nosek et al. (2002), Math
-  '3': Nosek et al. (2002), Art
+  '1': Nosek et al. (2002), Math
+  '2': Nosek et al. (2002), Art
+  '3': Shnabel & Nadler (2008)
   '4': Norenzayan et al. (2002)
-  '5': Shnabel & Nadler (2008)
+  '5': Husnu & Crisp (2010)
   '6': Vohs & Schooler (2008)
-  '7': Caruso et al. (2012)
-  '8': Van Lange et al. (1997)
-  '9': Anderson et al. (2012), SWL
-  '10': Anderson et al. (2012), PA
-  '11': Anderson et al. (2012), NA
-  '12': Giessner & Schubert, (2007)
-  '13': Zhong & Liljenquist (2006)
+  '7': Cacioppo et al. (1983), arg
+  '8': Anderson et al. (2012), PA
+  '9': Anderson et al. (2012), NA
+  '10': Giessner & Schubert, (2007)
+  '11': Anderson et al. (2012), SWL
+  '12': Caruso et al. (2012)
+  '13': Zhong & Lijenquist (2006)
   '14': Monin & Miller (2001), most
   '15': Monin & Miller (2001), some
-  '16': Cacioppo et al. (1983)
-  '17': De Fruyt et al. (2000)
-  '18': Albarracín et al. (2008), experiment 5
+  '16': Cacioppo et al. (1983), nfc
+  '17': Albarracín et al. (2008), exp 5 verb
+  '18': Albarracín et al. (2008), exp 5 math
+  '19': De Fruyt et al. (2000)
