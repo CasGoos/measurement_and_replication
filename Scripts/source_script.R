@@ -772,6 +772,20 @@ Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
 }
 
 
+
+OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE){
+  OR <- round(exp(as.numeric(substr(apa_print_result, start = 6, 
+                                    stop = 9 + negative_b))), 3) 
+  
+  result_string_with_OR <- paste0(substr(apa_print_result, start = 0, 
+                                  stop = 12 + negative_b), "$OR = ", OR, "$, ", 
+                                  substr(apa_print_result, 
+                                         start = 13 + negative_b, stop = 99))
+  
+  return(result_string_with_OR)
+}
+
+
 # Validity Related Functions ---------------------------------------------------
 # Data loading for the extracted measure data
 Data_unidimensionality_test <- function(Data_1.10, Data_1.11, Data_1.12.3.1, 
@@ -1131,4 +1145,7 @@ data_prep_plot_46 <- function(Data){
   
   return(Plot_46_data)
 }
+
+
+
 

@@ -1,0 +1,227 @@
+# Appendix A
+
+```{r setup, include=FALSE}
+# loading R libraries, perhaps unnecessary
+library(papaja)
+
+# loading source script, perhaps unnecessary
+source(file = "C:/Users/u686785/OneDrive - Tilburg University/Documents/uvt/PHD/Master Thesis to Paper/Reproducible_R_Project/Scripts/source_script.R")
+
+
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+This appendix contains all of the pre-registered analyses that were either changed or omitted from the article.
+
+## Test for H5 as Beta-Regression
+
+### Explanation Change
+
+This analysis was the originally planned analysis to test Hypothesis 5. However, for the sake of interpretation this test was changed to have the Independent Variable (IV) and Dependent Variable (DV) swapped in the article, and as a result it became a logistic regression.
+
+### Model
+
+The originally planned analysis made use of beta-regression similarly to the test for H4 and H6. The variables are the same as those used in the test published in the article, just swapped from IV to DV, and from DV to IV.
+
+```{=tex}
+\begin{equation}
+g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replicated_{i} (\#eq:H5AppendixA)
+\end{equation}
+```
+Where $g(.)$ refers to the same link function as described in formula \@ref(eq:BetaLink) in the article.
+
+```{r H5 beta-regression pre-registration model}
+## Hypothesis 5 beta regression model ADD FIRST PART TO INITIAL PROTOCOL RESULTS
+H5_prereg_test_results <- betareg(QMP_ratio ~ hypothesis_support, data = data_h5)
+H5_prereg_test_results_with_OR <- OR_to_apa_full_supplier(betareg_output_to_apa_full(H5_prereg_test_results), negative_b = TRUE)
+
+H5_prereg_test_results_REV <- betareg(QMP_REV_ratio ~ hypothesis_support, data = data_h5)
+H5_prereg_test_results_REV_with_OR <- OR_to_apa_full_supplier(betareg_output_to_apa_full(H5_prereg_test_results_REV))
+```
+
+## Results
+
+With this model specification the relationship between the two variables remains negative and significant (`r H5_prereg_test_results_REV_with_OR`).
+
+## Unidimensionality Exploratory Analyses
+
+### Pre-registration Analysis Justification & Reason for Omission from Article
+
+In order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set.
+
+This analysis was omitted from the main article due to the fact that determining when a measure should be unidimensional would require an in-depth review and expert evaluation for the literature surrounding the measure, which is outside of the scope of this article and the authors' expertise (it additionally may not always be available).
+
+For the sake of this analysis the simple heuristic was chosen that if the measure was used as a single composite variable in the analyses, then it should be uni-dimensional. This is similar to what was done by ..., but for the sake of this article it was deemed to strong an assumption to make that this heuristic would always hold. For instance, IQ score is often used as a single indicator score, however the construct of IQ is not considered unidimensional, and is instead understood to have many sub-dimensions (e.g. verbal comprehension, perceptual reasoning, etc.). As a result, the use of a single score in the analyses cannot be taken as evidence that the construct is considered unidimensional by the authors, or broader literature on the topic.
+
+Nevertheless, we present here the result of the analyses made under the assumption that the one score, one dimension heuristic holds, for those researchers that believe this heuristic to not undermine the relevance of these results in provding some valid information on the validity of the measures used in the Many Labs projects.
+
+## models
+
+A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@R-psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
+
+```{r UnidimensionalityExploratoryAnalysis, include = FALSE}
+extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean,data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, data_5.9.1_clean)
+
+
+# creating an empty dataframe to store the results in
+cfa_results <- data.frame(RMSEA = 0,
+                          N_factors = 0,
+                          Single_factor = "")
+
+# running the cfas for all of the extracted datasets
+for (i in 1:length(extracted_data_list)){
+  # obtaining single factor model cfa RMSEA value for evaluation
+  RMSEA_value <- fa(extracted_data_list[[i]][-1])$RMSEA[1]
+  
+  if(is.null(RMSEA_value) != TRUE){
+    RMSEA_value <- apa_num(RMSEA_value, digits = 3)
+  }
+  
+  # conducting parallel test to check if one factor solution is best.
+  parallel_N_factors <- fa.parallel(extracted_data_list[[i]][-1], 
+                                    fa = "fa")$nfact
+  
+  # adding a single factor check indicator value
+  single_factor <- ifelse(RMSEA_value < 0.08 | parallel_N_factors == 1, "Yes", 
+                          "No")
+  
+  # adding the cfa results of one factor analysis to the results dataframe.
+  cfa_results <- rbind(cfa_results, c(RMSEA_value, parallel_N_factors, 
+                                      single_factor))
+}
+
+# removing the initial empty row
+cfa_results <- cfa_results[-1,]
+
+```
+
+## Results
+
+Suitable data for factor analyses was available for `r nrow(cfa_results_expanded)` measures. These measures were the same as those shown in Figure \@ref(fig:Plot23AlphaCode). The results are shown in Table \@ref(tab:UnidimesnionalityTestResultsTable). A composite score based on the measurement responses was used for sixteen of the `r nrow(cfa_results_expanded)` measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for six out of the `r nrow(cfa_results_expanded)` evaluated measures. However, as shown in Table \@ref(tab:UnidimesnionalityTestResultsTable) the unidimensional model held based on the parallel analysis test alone, for only `r sum(cfa_results_expanded$`N Factors`== 1, na.rm = TRUE)` of the `r nrow(cfa_results_expanded)` measures. For those `r sum(cfa_results_expanded$`N Factors`== 1, na.rm = TRUE)` measures and an additional `r sum(cfa_results_expanded$RMSEA < .08, na.rm = TRUE) - sum(cfa_results_expanded$`N Factors`== 1, na.rm = TRUE)` the RMSEA $< .08$ criteria suggested evidence for single factor structures.
+
+```{r UnidimesnionalityTestResultsTable, warning = FALSE}
+# add the names of the relevant papers and a shortcut for the measure used.
+cfa_results_expanded <- cbind(c("Caruso et al. (2012)", "Husnu & Crisp (2010)", "Nosek et al. (2002), Art", "Nosek et al. (2002), Math", "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", "Giessner & Schubert (2007)", "Norenzayan et al. (2002)", "Zhong & Liljenquist (2006)", "Monin & Miller (2001), most", "Monin & Miller (2001), some", "Cacioppo et al. (1983), elm", "Cacioppo et al. (1983), nfc", "De Fruyt et al. (2000), consc", "Albarracín et al. (2008), exp. 5, math", "Albarracín et al. (2008), exp. 5, verb",  "Shnabel & Nadler (2008)", "Vohs & Schooler (2008)"), cfa_results)
+
+
+# adding sensible column names
+colnames(cfa_results_expanded) <- c("Original Article", "RMSEA", "N Factors", "Unidimensional")
+
+# Renaming the columns for the not converged cfa.
+cfa_results_for_print <- cfa_results_expanded
+cfa_results_for_print$RMSEA[15] <- "Did"
+cfa_results_for_print$`N Factors`[15] <- "Not"
+cfa_results_for_print$Unidimensional[15] <- "Converge"
+
+# print the table in apa formatting
+apa_table(
+  cfa_results_for_print, align = c("l", "r", "r", "r")
+  , caption = "RMSEA and Parallel Analysis Suggested Factors based on Factor Analysis
+for Measure Data", note = "N Factors refer to the number of factors suggested based on parallel analysis of the measure data. The word or abbreviation after the author names and year indicates the specific measure within that original article that was analysed.", escape = FALSE, row.names = FALSE, placement= "htp")
+
+```
+
+## H6 QMP-Category Specific Exploratory Analyses
+
+### Pre-registration Analysis Justification & Reason for Omission from Article
+Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. Due to the large number of tests, the focus was exploratory using visualisation rather than inference. 
+
+It is partly this large number of tests, as well as the resulting lack of clear interpretability in the results that caused this analysis to be omitted from the main article. However, for completeness and transparency sake it is reported here.
+
+### Model
+The model was the same as that used for the main test of hypothesis 6 (see formula \@ref(eq:H6Main)), only now QMP_ratio's for each of the five categories were used one at a time for each unique combination of original article and replication protocol QMP.
+
+```{r Hypothesis6Associations, include = FALSE}
+## Associations between the QMP categories
+# associations are generated using a helper function available in the source_ 
+# script. These associations correspond to the coefficients between replication
+# and original article QMPs of the various QMP types, as estimated through a 
+# beta regression.
+# Associations between the QMP categories (original QMP coding) MOVE THIS ANALYSIS TO INITIAL CODING APPENDIX
+Results_H6_between <- Associations_H6(data_h6)
+
+# keep in mind mod_ratio (not Rep) is based on a very small sample size, less
+# of a concern for the revised.
+
+# Associations between the QMP categories (revised QMP coding)
+Results_H6_between_REV <- Associations_H6_REV(data_h6)
+
+```
+
+### Results
+Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Figure \@ref(fig:Plot46RevisedDataCode) visually illustrates the relations of the revised QMP ratios from different QMP types between replication protocols and original articles. As shown in the figure, no relation was strong and highly stable, and even fewer were consistent between initial and revised coding protocols. 
+
+```{r Plot46FullRevisedDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication QMP ratio’s per type with linear regression line. The abbreviations on the axes relate to the QMP categories described in Table 1: Def. is definition, Op. is operationalization, Sel. is selection/creation, Quant. is quantification, and Mod. is modification. The X axis facets across the QMP ratios in the original articles, and the Y axis facets across the QMP ratios in the replication protocols. Each dot in the figure relates to describes the QMP ratio for the types in that graph across an original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
+# Revised
+ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) + 
+  geom_point() +
+  geom_jitter(width = 0.05, height = 0.05) +
+  stat_smooth(method="lm") + 
+  theme_bw() +
+  theme(strip.text.y = element_text(size = 7), strip.background = element_rect(
+    color = "black", fill = "white", size = 1, linetype = "solid"
+  )) +
+  xlab("QMP Ratio (Original)") + ylab("QMP Ratio (Replication)") +
+  scale_x_continuous(labels = c("0", "0.25", "0.5", "0.75", "1")) + 
+  facet_grid(vars(QMP_Rep_type), vars(QMP_type))
+
+```
+Table \@ref(tab:H6ExploratoryAssociationsRevisedTable) shows the beta-regression tests for each of the QMP category comparisons. The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols (see Appendix ???), illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol. 
+
+```{r H6ExploratoryAssociationsRevisedTable, warning = FALSE}
+# creating the dataframe for the table
+H6_table_dataframe_l_REV <- rbind(Results_H6_between_REV$def_def, Results_H6_between_REV$def_op,
+  Results_H6_between_REV$def_sel, Results_H6_between_REV$def_quant, Results_H6_between_REV$def_mod, 
+  Results_H6_between_REV$op_def, Results_H6_between_REV$op_op, Results_H6_between_REV$op_sel, 
+  Results_H6_between_REV$op_quant, Results_H6_between_REV$op_mod, Results_H6_between_REV$sel_def, 
+  Results_H6_between_REV$sel_op, Results_H6_between_REV$sel_sel, Results_H6_between_REV$sel_quant, 
+  Results_H6_between_REV$sel_mod)
+
+H6_table_dataframe_r_REV <- rbind(Results_H6_between_REV$quant_def, Results_H6_between_REV$quant_op,
+  Results_H6_between_REV$quant_sel, Results_H6_between_REV$quant_quant, Results_H6_between_REV$quant_mod, 
+  Results_H6_between_REV$mod_def, Results_H6_between_REV$mod_op, Results_H6_between_REV$mod_sel, 
+  Results_H6_between_REV$mod_quant, Results_H6_between_REV$mod_mod, Results_H6_between_REV$tot_def, 
+  Results_H6_between_REV$tot_op, Results_H6_between_REV$tot_sel, Results_H6_between_REV$tot_quant, 
+  Results_H6_between_REV$tot_mod)
+
+H6_table_dataframe_REV <- cbind(H6_table_dataframe_l_REV, H6_table_dataframe_r_REV)
+
+
+# adding asterices for significance to the significant p in the dataframe
+H6_table_dataframe_REV[11,3] <- paste0(H6_table_dataframe_REV[11,3], "$^*$")
+H6_table_dataframe_REV[13,3] <- paste0(H6_table_dataframe_REV[13,3], "$^*$")
+H6_table_dataframe_REV[14,3] <- paste0(H6_table_dataframe_REV[14,3], "$^*$")
+H6_table_dataframe_REV[4,6] <- paste0(H6_table_dataframe_REV[4,6], "$^*$")
+H6_table_dataframe_REV[11,6] <- paste0(H6_table_dataframe_REV[11,6], "$^*$")
+H6_table_dataframe_REV[13,6] <- paste0(H6_table_dataframe_REV[13,6], "$^*$")
+H6_table_dataframe_REV[14,6] <- paste0(H6_table_dataframe_REV[14,6], "$^*$")
+
+
+# adding a column to help indicate the original QMP type
+H6_table_dataframe_REV_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification"), H6_table_dataframe_REV)
+
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H6_table_REV_for_printing <- rbind(c("QMP Type", "", "Definition", "", "", "Quantification", ""), H6_table_dataframe_REV_expanded[1:5,], c("QMP Type", "", "Operationalisation", "", "", "Modification", ""),  H6_table_dataframe_REV_expanded[(6:10),], c("QMP Type", "", "Selection", "", "", "Total", ""), H6_table_dataframe_REV_expanded[(11:15),])
+
+
+colnames(H6_table_REV_for_printing) <-  c("Original", "$b$", "SD", "$p$", "$b$", "SD", "$p$")
+
+# print the table in apa formatting
+apa_table(
+  H6_table_REV_for_printing, align = c("l", "r", "c", "r", "r", "c", "r")
+  , caption = "Beta Regression Test Results for the Association between Replication
+QMP Ratio and Original QMP Ratio as obtained using the Revised Protocol"
+  , note = "Rows indicate Original QMP type, and within table indicates Replication QMP type. Sample size for comparisons involving modification were lower since not all measures were modified. Therefore the standard errors are larger. $^* p < .05$"
+  , escape = FALSE, placement= "htp", midrules = c(1, 6, 7, 12, 13))
+
+```
+
+A possibler explanation for these results could be that original articles have to provide a clear definition as well as details on the scale, in order for a replication to be able to justify selecting the measure. A replication may also be in general more dependent on the original article for information on the definition of the constructs and the choice of measurement, compared to a description of the Operationalisation, quantification, and any modifications. These former are features of a measurement, which while preferably similar in a replication to the original, can and should be reported in the replication protocol even if the original article does not contain the details on these features itself. However, these are just speculations as the results showed no clear relations between different QMP types across original and replication (see Figure \@ref(fig:Plot46RevisedDataCode)), the number of tests were many while multiple testing was not corrected for, and finally testing of causal links was not possible with this data.
+
+
