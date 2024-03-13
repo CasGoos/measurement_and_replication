@@ -1022,10 +1022,6 @@ data_prep_plot_23_alpha <- function(Data){
 }
 
 
-#c(caruso, husnu, nosek, nosek, anderson, anderson, anderson, giessner, 
-# norenzayan, zhong, monin, monin, cacciopo, cacciopo, defruyt, albaraccin, 
-#  albaraccin, shnabel, vos)
-
 
 # and for omega
 data_prep_plot_23_omega <- function(Data){
@@ -1087,17 +1083,33 @@ data_prep_plot_23_alpha_reported <- function(Data_reporting, Data_calculated,
 }
 
 
-
 ### 456 plots data prep
 data_prep_plot_456 <- function(Data){
+  Plot_456_ratio_data <- gather(Data[c("def_ratio", "op_ratio", 
+                                           "sel_ratio", "quant_ratio", "mod_ratio", "QMP_ratio")], 
+                                    QMP_type, QMP_ratio, c("def_ratio", "op_ratio", "sel_ratio", 
+                                                           "quant_ratio", "mod_ratio", "QMP_ratio"), factor_key = TRUE)
+  
+  Plot_456_ratio_rep_data <- gather(Data[c("Rep_def_ratio", 
+                                               "Rep_op_ratio", "Rep_sel_ratio", "Rep_quant_ratio", 
+                                               "Rep_mod_ratio", "Rep_QMP_ratio")], QMP_type, QMP_ratio, 
+                                        c("Rep_def_ratio", "Rep_op_ratio", "Rep_sel_ratio", 
+                                          "Rep_quant_ratio", "Rep_mod_ratio", "Rep_QMP_ratio"), 
+                                        factor_key = TRUE)
+  
+  Plot_456_ratio_data$QMP_ratio_1 <- Plot_456_ratio_data$QMP_ratio
+  Plot_456_ratio_rep_data$QMP_ratio_1 <- Plot_456_ratio_rep_data$QMP_ratio + 1
+  
+  
+  
   Plot_456_ratio_data_REV <- gather(Data[c("def_ratio", "op_REV_ratio", 
                                            "sel_REV_ratio", "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio")], 
-                                    QMP_type, QMP_ratio, c("def_ratio", "op_REV_ratio", "sel_REV_ratio", 
+                                    QMP_type, QMP_ratio_REV, c("def_ratio", "op_REV_ratio", "sel_REV_ratio", 
                                                            "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio"), factor_key = TRUE)
 
   Plot_456_ratio_rep_data_REV <- gather(Data[c("Rep_def_ratio", 
                                                "Rep_op_REV_ratio", "Rep_sel_REV_ratio", "Rep_quant_REV_ratio", 
-                                               "Rep_mod_REV_ratio", "Rep_QMP_REV_ratio")], QMP_type, QMP_ratio, 
+                                               "Rep_mod_REV_ratio", "Rep_QMP_REV_ratio")], QMP_type, QMP_ratio_REV, 
                                         c("Rep_def_ratio", "Rep_op_REV_ratio", "Rep_sel_REV_ratio", 
                                           "Rep_quant_REV_ratio", "Rep_mod_REV_ratio", "Rep_QMP_REV_ratio"), 
                                         factor_key = TRUE)
@@ -1117,12 +1129,12 @@ data_prep_plot_456 <- function(Data){
   Plot_456_ratio_rep_data_REV$RepOrg <- as.factor(rep("Replication", 
                                                       times = nrow(Plot_456_ratio_data_REV)))
   
-  Plot_456_ratio_data_REV$QMP_ratio_1 <- Plot_456_ratio_data_REV$QMP_ratio
-  Plot_456_ratio_rep_data_REV$QMP_ratio_1 <- Plot_456_ratio_rep_data_REV$QMP_ratio + 1
+  Plot_456_ratio_data_REV$QMP_ratio_1_REV <- Plot_456_ratio_data_REV$QMP_ratio
+  Plot_456_ratio_rep_data_REV$QMP_ratio_1_REV <- Plot_456_ratio_rep_data_REV$QMP_ratio + 1
   
   
-  Plot_456_data <- rbind(Plot_456_ratio_data_REV, Plot_456_ratio_rep_data_REV)
-  
+  Plot_456_data <- cbind(rbind(Plot_456_ratio_data[,2:3], Plot_456_ratio_rep_data[,2:3]), 
+                         rbind(Plot_456_ratio_data_REV, Plot_456_ratio_rep_data_REV))
   
   
   return(Plot_456_data)

@@ -64,7 +64,7 @@ Nevertheless, we present here the result of the analyses made under the assumpti
 
 A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@R-psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
 
-```{r UnidimensionalityExploratoryAnalysis, include = FALSE}
+```{r UnidimensionalityExploratoryAnalysis}
 extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean,data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, data_5.9.1_clean)
 
 
@@ -136,7 +136,7 @@ It is partly this large number of tests, as well as the resulting lack of clear 
 ### Model
 The model was the same as that used for the main test of hypothesis 6 (see formula \@ref(eq:H6Main)), only now QMP_ratio's for each of the five categories were used one at a time for each unique combination of original article and replication protocol QMP.
 
-```{r Hypothesis6Associations, include = FALSE}
+```{r Hypothesis6Associations}
 ## Associations between the QMP categories
 # associations are generated using a helper function available in the source_ 
 # script. These associations correspond to the coefficients between replication
@@ -171,7 +171,7 @@ ggplot(plot_46_data_rev, aes(QMP_ratio, QMP_Rep_ratio)) +
   facet_grid(vars(QMP_Rep_type), vars(QMP_type))
 
 ```
-Table \@ref(tab:H6ExploratoryAssociationsRevisedTable) shows the beta-regression tests for each of the QMP category comparisons. The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols (see Appendix ???), illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol. 
+Table \@ref(tab:H6ExploratoryAssociationsRevisedTable) shows the beta-regression tests for each of the QMP category comparisons. The relations that are consistent are those between original article definition QMPs with replication selection and total QMPs, original article selection QMPs with replication total QMPs, and finally original article quantification QMPs with replication selection QMPs. All of these relations were positive across both coding protocols (see Appendix D), illustrating that a greater QMP ratio of the specified type in an original article is associated with an increase in QMP ratio for the specific QMP type, or total QMP ratio in the replication protocol. 
 
 ```{r H6ExploratoryAssociationsRevisedTable, warning = FALSE}
 # creating the dataframe for the table
@@ -222,6 +222,6 @@ QMP Ratio and Original QMP Ratio as obtained using the Revised Protocol"
 
 ```
 
-A possibler explanation for these results could be that original articles have to provide a clear definition as well as details on the scale, in order for a replication to be able to justify selecting the measure. A replication may also be in general more dependent on the original article for information on the definition of the constructs and the choice of measurement, compared to a description of the Operationalisation, quantification, and any modifications. These former are features of a measurement, which while preferably similar in a replication to the original, can and should be reported in the replication protocol even if the original article does not contain the details on these features itself. However, these are just speculations as the results showed no clear relations between different QMP types across original and replication (see Figure \@ref(fig:Plot46RevisedDataCode)), the number of tests were many while multiple testing was not corrected for, and finally testing of causal links was not possible with this data.
+A possible explanation for these results could be that original articles have to provide a clear definition as well as details on the scale, in order for a replication to be able to justify selecting the measure. A replication may also be in general more dependent on the original article for information on the definition of the constructs and the choice of measurement, compared to a description of the Operationalisation, quantification, and any modifications. These former are features of a measurement, which while preferably similar in a replication to the original, can and should be reported in the replication protocol even if the original article does not contain the details on these features itself. However, these are just speculations as the results showed no clear relations between different QMP types across original and replication (see Figure \@ref(fig:Plot46RevisedDataCode)), the number of tests were many while multiple testing was not corrected for, and finally testing of causal links was not possible with this data.
 
 

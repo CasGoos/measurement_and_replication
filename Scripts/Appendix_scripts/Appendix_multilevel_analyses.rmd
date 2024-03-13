@@ -1,0 +1,109 @@
+# Appendix B
+
+```{r setup, include=FALSE}
+# loading R libraries, perhaps unnecessary
+library(papaja)
+
+# loading source script, perhaps unnecessary
+source(file = "C:/Users/u686785/OneDrive - Tilburg University/Documents/uvt/PHD/Master Thesis to Paper/Reproducible_R_Project/Scripts/source_script.R")
+
+
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6. These models were excluded from the published article for the sake of brevity, and because the sample size was no large enough to support multilevel modelling in most cases.
+
+## Hypothesis 3, nested within replication set
+### Explanation of Relevance
+In this data, replication attempts at different lab locations can be seen as nested within a replication set. In order to see if this nesting might impact the analyses of hypothesis 3, multilevel models are included here as sensitivity checks.
+
+## Model
+The specific models used were a multilevel logistic regression random intercept and random slope model. The dependent variable remains replication success at the replication set level, while Cronbach's alpha was no longer averaged across locations.
+
+```{r Hypothesis3MultilevelModelSensitivityAnalyses}
+## sensitivity analyses.
+# running a random intercept multilevel logistic model
+H3_test_result_int_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 1 
+                                                + alpha + (1|g), family = 
+                                                binomial(), data = 
+                                                data_h3_multiple))
+
+# same as for non-multilevel model
+
+# running a random slope multilevel logistic model
+H3_test_result_slp_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 1 
+                                                + alpha + (1 + alpha|g), 
+                                                family = binomial(), data =
+                                                data_h3_multiple))
+
+# did not converge
+```
+
+### Results
+The results of these analyses can be seen in the table below
+
+```{r ReplicabilityReliabilityTestTable, warning=FALSE}
+# creating the dtaframe for the table <- separate the OMEGA from here???
+H3_table_dataframe <- rbind(H3_test_result_int_sensitivity_alpha$table, H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
+
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H3_table_for_printing <- rbind(c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(1:2),], c("Omega", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[(3:4),], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(5:6),], c("Random-Slope Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(7:8),])
+
+
+# print the table in apa formatting
+apa_table(
+  H3_table_for_printing, align = c("l", "r", "r", "r", "r")
+  , caption = "Model Results from Tests of Hypothesis 3"
+  , note = "The Alpha and Omega sections show the models where the independent variable was the calculated Cronbach's alpha and omega coefficient respectively. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
+  , escape = FALSE, placement= "htp", midrules = c(3, 5, 6, 7, 10, 13))
+
+```
+
+In none of these models is the relation between reliability and replication success significant (random intercept: `r H3_test_result_int_sensitivity_alpha$full_result$alpha`; random slope: `r H3_test_result_slp_sensitivity_alpha$full_result$alpha`). This corroborates the findings in the article, only now using a random intercept and random slope multilevel model. However, also similarly to the results in the article and perhaps even more so for these multilevel models, the small sample size for these tests means that caution should be taken in interpreting these results.
+
+## Hypotheses 5 & 6, nested within Many Labs
+### Explanation of Relevance
+The models used in the article to test hypotheses 5 & 6 had independence of observations as an assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. 
+
+### Models
+In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models with each Many Labs project as a group were implemented as sensitivity analyses. As of writing this article the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model. 
+
+```{r Hypotheses5And6SensitivityAnalyses}
+## Hypothesis 5 sensitivity test using a random intercept Guassian model.
+# create dummy H5 dataframe for use in sensitivity test
+data_h5_sens <- data_h5
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform.
+data_h5_sens$QMP_REV <- log(data_h5_sens$QMP_REV_ratio /(1 - data_h5_sens$QMP_REV_ratio))
+
+check_h5_REV <- apa_print(lmer(formula = QMP_REV ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
+
+## Hypothesis 6 sensitivity test using a random intercept Guassian model.
+# create dummy H6 dataframe for use in sensitivity test
+data_h6_sens <- data_h6
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform. 
+data_h6_sens$QMP_REV <- log(data_h6_sens$QMP_REV_ratio /(1 - data_h6_sens$QMP_REV_ratio))
+data_h6_sens$Rep_QMP_REV <- log(data_h6_sens$Rep_QMP_REV_ratio /(1 - data_h6_sens$Rep_QMP_REV_ratio))
+
+# running the models one with none revised QMP ratio's and one with
+check_h6_REV <- apa_print(lmer(formula = Rep_QMP_REV ~ 1 + QMP_REV + (1|many_labs_version), data = data_h6_sens))
+
+# n of mod ratio's that are present (check)
+H6_n_check_results_REV <- betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = data_h6)$n
+
+```
+
+### Results
+For hypothesis 5, the sensitivity analyses using a random-intercept multilevel regression found a similar significant association as that found by the main test (`r check_h5_REV$full_result$hypothesis_supportTRUE`). This result is in line with hypothesis 5. This result provides some additional evidence for the stability of hypotehsis 5.
+
+For hypothesis 6, the sensitivity analyses using a random intercept logistic multilevel model resulted in non-significant results, which is contrary to the results found with the main test and is not in line with hypothesis 6 (revised protocol: `r check_h6_REV$full_result$QMP_REV`). This result puts some dents in the confidence that can be attached to the results found through the main test reported in the article.
+

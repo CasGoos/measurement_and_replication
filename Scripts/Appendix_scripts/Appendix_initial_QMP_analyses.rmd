@@ -1,0 +1,231 @@
+# Appendix D
+
+```{r setup, include=FALSE}
+# loading R libraries, perhaps unnecessary
+library(papaja)
+
+# loading source script, perhaps unnecessary
+source(file = "C:/Users/u686785/OneDrive - Tilburg University/Documents/uvt/PHD/Master Thesis to Paper/Reproducible_R_Project/Scripts/source_script.R")
+
+
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+This appendix contains all of the QMP analyses that in the article and appendices were based on the revised QMP, but then performed based on the QMPs obtained using the initial coding protocol.
+
+### Explanation Why
+The data was initially coded using to the preregistered coding protocol. After the coding was completed using the preregistered coding protocol, it was determined that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more lenient judgement of QMPs. The coded data using the initial protocol was still separately available, and because this protocol was the one that was pre-registered the results for those analyses are shown here.
+
+### Models
+To test hypothesis 4, the total QMP ratios between replication and original research was compared using a beta-regression where total QMP ratio was predicted by whether the QMP ratio came from an original article, or a replication protocol.
+
+```{r Hypothesis4ModelInitial, include = FALSE}
+## Hypothesis 4 beta regression model
+# running the model with none revised QMP ratio's
+H4_test_results <- betareg(QMP_ratio ~ rep_org, data = data_h4)
+
+```
+
+For hypothesis 5, a logistic regression model was used to test the association between the QMP ratio in replication protocols and replication success. In this appendix we run the model based on the QMP ratios obtained using the initial protocol.
+
+```{r Hypothesis5ModelInitial, include = FALSE}
+## Hypothesis 5 logistic regression model
+H5_test_results <- apa_print(glm(hypothesis_support ~ QMP_ratio, data = data_h5, family = binomial))
+
+H5_test_results_with_OR <- OR_to_apa_full_supplier(H5_test_results$full_result$QMP_ratio, negative_b = TRUE)
+
+```
+
+The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. 
+
+```{r Hypothesis6ModelInitial, include = FALSE}
+## Hypothesis 6 beta regression model
+H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
+
+```
+
+Appendix B already contained the results of the multilevel sensitivity models for hypothesis 5 & 6 based on the QMP ratios obtained using the revised coding protocol. In this appendix we show the result for the same models based on the QMP ratios obtained using the initial protocol.
+
+```{r Hypotheses5And6SensitivityAnalysesInitial}
+## Hypothesis 5 sensitivity test using a random intercept Guassian model.
+# create dummy H5 dataframe for use in sensitivity test
+data_h5_sens <- data_h5
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform.
+data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio)) # TO INITIAL APPENDIX
+
+check_h5 <- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
+
+
+## Hypothesis 6 sensitivity test using a random intercept Guassian model.
+# create dummy H6 dataframe for use in sensitivity test
+data_h6_sens <- data_h6
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform. FIRST ELEMENTS TO INITIAL APPENDIX
+data_h6_sens$QMP <- log(data_h6_sens$QMP_ratio /(1 - data_h6_sens$QMP_ratio))
+data_h6_sens$Rep_QMP <- log(data_h6_sens$Rep_QMP_ratio /(1 - data_h6_sens$Rep_QMP_ratio))
+
+
+# running the models one with none revised QMP ratio's and one with
+check_h6 <- apa_print(lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens)) 
+
+# n of mod ratio's that are present (check)
+H6_n_check_results <- betareg(Rep_op_ratio ~ mod_ratio, data = data_h6)$n
+
+```
+
+### Results + Comparison Interpretation
+The figure below displays the distribution of observed QMP ratio's across original articles and replication protocols based on the initial coding protocol.
+
+```{r Plot456CodeInitial, warning = FALSE, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by whether the QMP ratio was obtained from an original article or a replication protocol. The top row shows for each QMP type the proportions of each QMP ratio obtained, darker colours represent proportionally more QMPS, grey means modification did not occur for that measure. The bottom graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots"}
+# re-ordering the QMP-types, because it didn't save
+plot_456_data$QMP_type <- factor(plot_456_data$QMP_type, levels = c("Definition", "Selection", "Operationalization", "Quantification", "Modification", "Total"))
+
+
+### ratio Original and Rep
+Plot_456_1 <- ggplot(plot_456_data[plot_456_data$QMP_type != "Total",], 
+                      aes(x = RepOrg, fill = as.factor(QMP_ratio_1))) + 
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  scale_fill_manual(values = c("#ff766c", "#cb5e56", "#be5850", "#aa4f48", "#994741", "#803b36", "#672f2b", "#5b2a26", "#562824", "#411e1b", "#341816", "#120606", "#030101","#4366ff", "#4265fc", "#3652ce", "#324cbe", "#324cbe", "#2c44aa", "#2c44aa", "#293e9b", "#293e9b", "#213380", "#1c2a69", "#1c2a69", "#172256", "#172256", "#111a41", "#111a41", "#010103", "#010103")) +
+  theme(legend.position = "none") +
+  facet_grid(~ QMP_type) + 
+  ylab("Relative Prevalence of\nQMP Ratio in Sample") +
+  xlab("QMP Type") +
+  ggtitle("QMP Ratio's Per QMP Type Grouped by Original and Replication")
+
+Mean_Rat_Rep <- mean(plot_456_data$QMP_ratio[
+  plot_456_data$QMP_type == "Total" & plot_456_data$RepOrg == "Replication"])
+Mean_Rat_Org <- mean(plot_456_data$QMP_ratio[
+  plot_456_data$QMP_type == "Total" & plot_456_data$RepOrg == "Original"])
+
+Plot_456_2 <- ggplot(plot_456_data[plot_456_data$QMP_type == "Total",], 
+       aes(x = QMP_ratio, fill = RepOrg, colour = RepOrg)) +
+  geom_density(alpha = 0.2) +
+  geom_point(y = 0, alpha = 0.2, size = 3) +
+  geom_segment(aes(x = Mean_Rat_Rep, xend = Mean_Rat_Rep, y = 0, yend = 2.66)
+               , color = "blue4") +
+  geom_segment(aes(x = Mean_Rat_Org, xend = Mean_Rat_Org, y = 0, yend = 2.183)
+               , color = "brown") +
+  coord_cartesian(xlim = c(0, 1)) +
+  theme_ridges() + 
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank()) +
+  scale_fill_manual(values=c("brown", "blue4")) +
+  scale_color_manual(values=c("brown2", "blue")) +
+  scale_x_continuous(breaks = c(0, 0.25, Mean_Rat_Rep, Mean_Rat_Org, 
+                                0.5, 0.75, 1), 
+                     labels = c("0", "0.25", "0.28", "0.44", "0.5", 
+                                "0.75", "1")) + 
+  ggtitle("Distribution of Total QMP Ratio's by Original and Replication") +
+  guides(color = "none") +
+  labs(fill = "Coded from") +
+  ylab("") +
+  xlab("") 
+
+# combine both plots into one figure
+grid.arrange(Plot_456_1, 
+             Plot_456_2, 
+             nrow = 2)
+
+```
+
+The bottom panel of Figure \@ref(fig:Plot456CodeInitial) already shows that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects. Beta-regression was used to test the difference in QMP ratio based on the initial protocol coding, between original articles and replication protocols. The results of this test indicated that this difference was significant (`r betareg_output_to_apa_full(H4_test_results)`). This result is similar to the result found using the revised coding protocol in line with hypothesis 4.
+
+Contrary to the results based on the revised coding protocol, a decrease in QMP ratio based on the initial coding protocol did not significantly relate to replication success (`r H5_test_results_with_OR`). Thus not supporting hypothesis 5.
+
+Similarly to the previous test, the relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Thus not supporting hypothesis 6. Figure \@ref(fig:Plot46InitialDataCode) displays this relationship visually.
+
+```{r Plot46InitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratio’s with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
+ggplot(plot_46_data[plot_46_data$QMP_type == "QMP.Ratio" & plot_46_data$QMP_Rep_type == "Rep.QMP.Ratio",], aes(QMP_ratio, QMP_Rep_ratio)) + 
+  geom_point() +
+  geom_jitter(width = 0.01, height = 0.01) +
+  stat_smooth(method="lm") + 
+  theme_minimal() +
+  theme(strip.text.y = element_text(size = 7), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  ylab("QMP Ratio (Replication Protocol)") +
+  xlab("QMP Ratio (Original Article)") 
+```
+
+Table \@ref(tab:H6ExploratoryAssociationsInitialTable) shows the relations between original and replication QMP ratios for each QMP type based on the initial protocol. Figure \@ref(fig:Plot46FullInitialDataCode) shows the same relations displayed visually.
+
+```{r H6ExploratoryAssociationsInitialTable, warning = FALSE}
+# creating the dataframe for the table
+H6_table_dataframe_l <- rbind(Results_H6_between$def_def, Results_H6_between$def_op,
+  Results_H6_between$def_sel, Results_H6_between$def_quant, Results_H6_between$def_mod, 
+  Results_H6_between$op_def, Results_H6_between$op_op, Results_H6_between$op_sel, 
+  Results_H6_between$op_quant, Results_H6_between$op_mod, Results_H6_between$sel_def, 
+  Results_H6_between$sel_op, Results_H6_between$sel_sel, Results_H6_between$sel_quant, 
+  Results_H6_between$sel_mod)
+
+H6_table_dataframe_r <- rbind(Results_H6_between$quant_def, Results_H6_between$quant_op,
+  Results_H6_between$quant_sel, Results_H6_between$quant_quant, Results_H6_between$quant_mod, 
+  Results_H6_between$mod_def, Results_H6_between$mod_op, Results_H6_between$mod_sel, 
+  Results_H6_between$mod_quant, Results_H6_between$mod_mod, Results_H6_between$tot_def, 
+  Results_H6_between$tot_op, Results_H6_between$tot_sel, Results_H6_between$tot_quant, 
+  Results_H6_between$tot_mod)
+
+H6_table_dataframe <- cbind(H6_table_dataframe_l, H6_table_dataframe_r)
+
+
+# adding asterices for significance to the significant p in the dataframe
+H6_table_dataframe[8,3] <- paste0(H6_table_dataframe[8,3], "$^*$")
+H6_table_dataframe[11,3] <- paste0(H6_table_dataframe[11,3], "$^*$")
+H6_table_dataframe[14,3] <- paste0(H6_table_dataframe[14,3], "$^*$")
+H6_table_dataframe[8,6] <- paste0(H6_table_dataframe[8,6], "$^*$")
+H6_table_dataframe[9,6] <- paste0(H6_table_dataframe[9,6], "$^*$")
+H6_table_dataframe[11,6] <- paste0(H6_table_dataframe[11,6], "$^*$")
+H6_table_dataframe[13,6] <- paste0(H6_table_dataframe[13,6], "$^*$")
+
+
+# adding a column to help indicate the original QMP type
+H6_table_dataframe_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification"), H6_table_dataframe)
+
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H6_table_for_printing <- rbind(c("QMP Type", "", "Definition", "", "", "Quantification", ""), H6_table_dataframe_expanded[1:5,], c("QMP Type", "", "Operationalisation", "", "", "Modification", ""),  H6_table_dataframe_expanded[(6:10),], c("QMP Type", "", "Selection", "", "", "Total", ""), H6_table_dataframe_expanded[(11:15),])
+
+
+colnames(H6_table_for_printing) <-  c("Original", "$b$", "SD", "$p$", "$b$", "SD", "$p$")
+
+# print the table in apa formatting
+apa_table(
+  H6_table_for_printing, align = c("l", "r", "c", "r", "r", "c", "r")
+  , caption = "Beta Regression Test Results for the Association between Replication
+QMP Ratio and Original QMP Ratio as obtained using the Initial Protocol"
+  , note = "Rows indicate Original QMP type, and within table indicates Replication QMP type. Sample size for comparisons involving modification were lower since not all measures were modified. Therefore the standard errors are larger. $^* p < .05$"
+  , escape = FALSE, placement= "htp", midrules = c(1, 6, 7, 12, 13))
+
+```
+
+```{r Plot46FullInitialDataCode}
+# Initial
+ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) + 
+  geom_point() +
+  geom_jitter(width = 0.05, height = 0.05) +
+  stat_smooth(method="lm") + 
+  theme_bw() +
+  theme(strip.text.y = element_text(size = 7), strip.background = element_rect(
+    color = "black", fill = "white", size = 1, linetype = "solid"
+  )) +
+  xlab("QMP Ratio (Original)") + ylab("QMP Ratio (Replication)") +
+  scale_x_continuous(labels = c("0", "0.25", "0.5", "0.75", "1")) + 
+  facet_grid(vars(QMP_Rep_type), vars(QMP_type))
+
+```
+
+Now looking at the multilevel sensitivity analyses (see appendix B), only now using the QMP ratios based on the initial coding protocol.
+
+Contrary to the results of the multilevel sensitivity model testing hypothesis 5 using QMP ratios obtained with the revised coding protocol, the relationship in the multilevel model was no longer significant for QMP ratios obtained with the initial coding protocol (`r check_h5$full_result$hypothesis_supportTRUE`).
+
+Similarly to the results of the multilevel sensitivity model testing hypothesis 5 using QMP ratios obtained with the revised coding protocol, he relationship in the multilevel model was not significant for QMP ratios obtained with the initial coding protocol (`r check_h6$full_result$QMP`).
+
+
+

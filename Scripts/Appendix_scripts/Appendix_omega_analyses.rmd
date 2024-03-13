@@ -1,0 +1,112 @@
+# Appendix C
+
+```{r setup, include=FALSE}
+# loading R libraries, perhaps unnecessary
+library(papaja)
+
+# loading source script, perhaps unnecessary
+source(file = "C:/Users/u686785/OneDrive - Tilburg University/Documents/uvt/PHD/Master Thesis to Paper/Reproducible_R_Project/Scripts/source_script.R")
+
+
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+This appendix contains all results based on calculated reliabilities only using the omega coefficient as the coefficient of choice instead of the alpha coefficient.
+
+### explanation why
+Omega was included since it has been argued to be a more informative measure of score reliability than alpha, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Omega was calculated using the omega function in the psych R package [@R-psych]. Default arguments were used in the function except the nfactors argument, which was set to 1.
+
+### Models
+In order to separate between and within variance in reliability, a multilevel random intercept model was specified with replication set as the grouping variable, which was the same model used for testing. The difference was that the omega value of a replication was used as dependent variable in this instance, using the lmer function from the lme4 package [@R-lme4].
+
+```{r Hypothesis2ModelOmega, include = FALSE}
+# intercept only model to check the within and between group variance.
+H2_test_result_omega <- lmer(formula = omega ~ 1 + (1|g), data = data_h2[complete.cases(data_h2),])
+
+```
+
+The ICC was calculated similarly based on the omega as was done for Cronbach's alpha in the article.
+
+```{r ICCCalculations, include = FALSE}
+# Variances
+within_group_variance_omega <- attr(VarCorr(H2_test_result_omega), "sc")^2
+between_group_variance_omega <- attr(VarCorr(H2_test_result_omega)$g, "stddev")^2
+
+# ICC
+ICC_omega <- between_group_variance_omega / (within_group_variance_omega + between_group_variance_omega)
+
+```
+
+The analysis for H3 related the calculated average reliability coefficients for each replication set to whether or not the replication was successful when judged at meta-significance level of $alpha <.05$.
+
+```{r Hypothesis3MainTestOmega, include = FALSE}
+## The main model to test hypothesis 3, through a logistic regression model.
+H3_test_result_main_omega <- apa_print(glm(formula = replication ~ 1 + 
+                                     omega, family = binomial(), 
+                                     data = data_h3_avg))
+
+# coefficient is positive, but not significant
+
+# adding OR to the result
+H3_main_full_results_omega_with_OR <- OR_to_apa_full_supplier(H3_test_result_main_omega$full_result$omega, negative_b = FALSE)
+  
+# well this OR is still quite a ridiculous number now..., but then again a step from 0 omega to 1, is quite a jump too...
+```
+
+A multilevel random-intercept, and a random-slope equivalent model to the model above were also run for Omega, similarly to what was done for Cronbach's alpha in Appendix B.
+
+```{r Hypothesis3MultilevelModelSensitivityAnalysesOmega}
+## sensitivity analyses.
+# running a random intercept multilevel logistic model
+H3_test_result_int_sensitivity_omega <- apa_print(glmer(formula = replication ~ 1 
+                                                + omega + (1|g), family = 
+                                                  binomial(), data = 
+                                                  data_h3_multiple))
+
+# same as for non-multilevel model and alpha
+
+# running a random slope multilevel logistic model
+H3_test_result_slp_sensitivity_omega <- apa_print(glmer(formula = replication ~ 1 
+                                                + omega + (1 + omega|g), 
+                                                family = binomial(), data =
+                                                data_h3_multiple))
+
+# omega shows no significant effect just like main.
+```
+
+### Results + Comparison Interpretation
+For omega the mean (values calculated in the population across replication sets) was `r apa_num(mean(data_h3_multiple$omega), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`.
+
+When looking at the between and within group variance in omega coefficients, compared to alpha an even larger relative degree of the variance was between group rather than within group when compared (between-group variance `r apa_num(within_group_variance_omega, digits = 3)`, within-group variance `r apa_num(between_group_variance_omega, digits = 3)`, ICC = `r apa_num(ICC_omega, digits = 3)`). This result thus provides evidence in a similar direction to the Cronbach's Alpha results, meaning that most variance in reliability coefficients is observed between studies rather than within studies.
+
+The calculated Omega coefficient did not significantly relate to replication success in the main logistic regression model. Similarly, non-significance was also observed in the multilevel random-intercept and random-slope models (random intercept: `r H3_test_result_int_sensitivity_omega$full_result$omega`; random slope: `r H3_test_result_slp_sensitivity_omega$full_result$omega`). 
+
+Thus no evidence for hypothesis 3 was found. However, caution in interpreting the test results is needed. The number of measures for which the omega coefficient could be and was calculated was quite low (`r apa_num(sum(!is.na(data_h3_avg$omega)), numerals = FALSE)`).
+
+The figure below shows additional information on the distributions of the calculated omega scores and their relation to replication success. It mostly resembles Figure \@ref(fig:Plot23AlphaCode) from the article, with some studies being omitted as the omega coefficient function did not converge or run properly for those results.
+
+```{r Plot23OmegaCode}
+# data re-ordering (was not saved in export)
+plot_23_data_omega_reordered <- data_prep_plot_23_omega(plot_23_data_omega)
+
+# plot for omega
+ggplot(plot_23_data_omega_reordered, aes(x = alpha, y = g)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_hline(yintercept = 5.5, color = "red", size = 1) +
+  geom_point(alpha = 0.1) +
+  theme_minimal() +
+  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
+                                                     "lines")) +
+  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0),
+    ymin = 6, ymax = 6, xmin = 1.08, xmax = 1.08) +
+  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0),
+    ymin = 5, ymax = 5, xmin = 1.08, xmax = 1.08) +
+  coord_cartesian(xlim = c(0, 1), clip = "off") +
+  ylab("") +
+  xlab("Omega")
+```
