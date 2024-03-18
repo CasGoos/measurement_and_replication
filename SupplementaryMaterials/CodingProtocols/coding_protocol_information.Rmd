@@ -1,0 +1,25 @@
+# Coding Protocol Information
+
+This supplementary material file contains information regarding the origin of the items used and how they were modified to better fit this study's aims; a summary of the changes between the initial and revised coding protocol; & general notes on the procedure of coding measurement information in the replication protocols and original articles using the the coding protocol (further details can be found in the coding protocol pdf files present in this folder of the supplementary materials).
+
+## Item origin & modifications
+Eleven out of twenty of the QMP variables used to calculate the QMP ratio have an equivalent in the coding key of @flake2022construct. The remaining nine were altered from the coding key to better fit the QMP counting operationalization. Because QMPs were aggregated they would need to have equivalent weighting in the importance of the overall QMP judgement of the protocol or article being evaluated.
+
+All of the newly created or modified items were based on the definitions of the QMP categories and their criteria as specified in @flake2020measurement. The information to report for each of the categories as presented in Table 1 in @flake2020measurement were used to determine what information there should be questions about in the protocol. However, feasibility of coding the information was also taken into account, and whether a lack of information could clearly be labelled as a QMP.
+
+Two of the qualitative items have an equivalent in the coding key of Variables related to the specific measurement scaling and purpose in the paper, were omitted from the analyses of this study as they were deemed neither relevant for the analyses of this study, nor necessary in matching this study to the key results of @flake2022construct. Questions about more general measurement features such as the number of items and how scores were aggregated were altered from @flake2022construct to be used for obtaining QMP ratios.
+
+These (qualitative) variables assessed with two having an equivalent in @flake2022construct: the specific version of the measure (if reported); whether and what previous materials were used for the study; what, if any, psychometric evidence beyond reliability score (e.g. factor analysis, IRT model, convergent validity) was provided; and whether it was specified or not that the measure was or was not modified.
+
+## summary of changes between initial and revised protocol
+Based on discussion with the supervising author, the initial coding protocol was revised and changed to be more lenient in the judgement of attributing QMPs.
+
+These changes to the QMP coding protocol included: accepting linked online appendices as a data source for example items; assuming that if no differences between replication and original are measurement is mentioned, that there is no difference, even if it is not explicitly clear; and generally simplified criteria for what constituted sufficiently clear reporting.
+
+## General description coding procedure
+The scope of the coding was limited to the abstract, method, procedure, materials, measure, and initial parts of the results sections. Additionally, a keyword search using the name of the measured variable was used to search for any potentially missed information. An exception to this procedure was a question asking about the presence of example items. For this question, information from supplementary materials was uniquely considered as relevant. Another exception was the question regarding the replication of the original effect. Tables from the final report of each Many Labs project were used to answer that question.
+
+Further details about the description of the coding procedure for each section and item is explained in the coding protocols themselves.
+
+
+

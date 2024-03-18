@@ -126,6 +126,8 @@ for Measure Data", note = "N Factors refer to the number of factors suggested ba
 
 ```
 
+These results are potentially quite worrying given that many studies made use of single item measures, which assume unidimensionality by default without being able to assess it. These results show that for the measures that could be tested for unidimensionality, and that were mostly used as single indicators in the analyses for the replication protocol, unidimensionality commonly did not hold. However, one could argue that measures being used as singular indicators does not necessarily mean these measures all assessed constructs with a unidimensional structure. For example, IQ is often used as a singular indicator, even though it consists of several factors [@weiss2013wisc]. However, it should be noted that at least with respect to Many Labs 2, all of the measures that were considered unidimensional for the analyses in this study were also considered unidimensional in the investigation by @shaw2020measurement} who also observed a lack of unidimensionality evidence in their investigation of Many Labs 2. To conclude, there is an indication that validity evidence for measures used in replication research is lacking, and that this may have further implications beyond the measures for which it could be assessed here.
+
 ## H6 QMP-Category Specific Exploratory Analyses
 
 ### Pre-registration Analysis Justification & Reason for Omission from Article

@@ -714,13 +714,9 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
 # use the rma function from the metafor package, for each replication set:
 # yi = calculated alpha
 # sei = ASE
-# method = "REML" <- probably
+# method = "REML" 
 # then, extract tau^2 from metafor output for each replication set & use the
 # predict function to obtain prediction intervals (to add in green?)
-
-# first row of each data is the lab location indicator
-
-
 
 
 ### Hypothesis 3

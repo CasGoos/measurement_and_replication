@@ -1,0 +1,134 @@
+# Reproducible data retrieval information
+
+This supplementary material file contains detailed information on the specific path files and names of the used registered replication protocols and datasets.
+
+## Registered Replication Protocols
+
+Below are the relevant OSF pages, and exact path and file names of the relevant pre-registered replication protocols that were extracted, to be then coded on measurement reporting information in the Many Labs replications projects.
+
+???look up and add osf pages + project path + file names, and format like:???
+
+Many Labs 1 (<https://osf.io/wx7ck/>):
+- Path: OSF Storage (United States)/
+- Protocol File: ManyLabsProposal_V1.1.docx
+
+Many Labs 2 (<https://osf.io/8cd4r/>):
+- Path: OSF Storage (United States)/
+- Protocol File: ML2_-_Protocol.pdf
+
+Many Labs 3 (<https://osf.io/ct89g/>):
+- Path: OSF Storage (United States)/
+- Protocol File: ML3_Protocol_9152014.pdf
+
+Many Labs 5 Study 1, Albarracín et al. (2008), Experiment 5 (<https://osf.io/a9hk2/>):
+-	Path: ML5 Site Replications/Protocol and Analysis Plan/OSF Storage (United States)/
+-	Protocol File: ML5Alb5Pre-RegProtocolAndAnalysisPlan.docx
+
+Many Labs 5 Study 2, Albarracín et al. (2008), Experiment 7 (<https://osf.io/j5s8c/>):
+-	Path: OSF Storage (United States)/Proposal and Manuscript/
+-	Protocol File: Albarracinetal.Study7RevisedProtocol.docx
+
+Many Labs 5 Study 3, Förster, Liberman, & Kuschel (2008) (<https://osf.io/rje4t/>):
+-	Path: Materials/Revised Protocol/
+-	Protocol File: Förster et al. Replication Endorsed Protocol Final.docx
+
+Many Labs 5 Study 4, LoBue & DeLoache (2008) (<https://osf.io/9g7pw/>):
+-	Path: OSF Storage (United States)/ 0. Protocols/
+-	Protocol File: LoBueDeLoache2008_ML5RevisedProtocol.pdf
+
+Many Labs 5 Study 5, Payne, Burkley, & Stokes (2008) (<https://osf.io/wxd4g/>):
+-	Path: OSF Storage (United States)/
+-	Protocol File: PayneBurkleyStokes2008RevisedProtocol.docx
+
+Many Labs 5 Study 6, Risen & Gilovich (2008) (<https://osf.io/h5a9y/>):
+-	Path: Dropbox: ML5_risen_Gilovich_git/protocols/Post-review protocol (for preregistration)/
+-	Protocol File: Risen & Gilovich Revised Protocol.docx
+
+Many Labs 5 Study 7, Shnabel & Nadler (2008) (<https://osf.io/vz5ru/>):
+-	Path: OSF Storage (United States)/
+-	Protocol File: ML5 ShnabelNadler Revised Protocol.docx
+
+Many Labs 5 Study 8, van Dijk et al. (2008)) (<https://osf.io/f6n27/>):
+-	Path: Replications/OSF Storage (United States)/Protocols/
+-	Protocol File: vanDijketal.2008RevisedProtocol.pdf
+
+Many Labs 5 Study 9, Vohs & Schooler (2008) (<https://osf.io/8rcbk/>):
+-	Path: Research Protocols (and other things you might want to read)/OSF Storage (United States)/
+-	Protocol File: ML5 Protocol.docx
+
+
+## Registered Replication Datasets
+Below are the relevant OSF pages, and exact path and file names of the relevant replication datasets that were extracted, to be then used for calculating the reliability and testing the unidimensionality of the measures used in the Many Labs replications projects.
+
+Many Labs 1 (<https://osf.io/wx7ck/>):
+-	Path: Data/Datasets.zip
+-	Data File: Full_Dataset_De-Identified.sav
+ 
+Many Labs 2 Study 2, Kay et al. (2014) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Structure & Goal Pursuit (Kay et al., 2014)/Kay.1/Global/Data/
+-	Data File: Kay_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 3, Alter et al. (2007) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Incidental Disfluency (Alter et al., 2007)/Alter.1/Global/Data/
+-	Data File: Alter_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 4 measure 1, Graham et al. (2009) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Moral Foundations (Graham et al., 2009)/Graham.1/Global/Data/
+-	Data File: Graham_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 4 measure 2, Graham et al. (2009) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Moral Foundations (Graham et al., 2009)/Graham.2/Global/Data/
+-	Data File: Graham_2_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 8 measure 2, Inbar et al. (2009) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Disgust & Homophobia (Inbar et al., 2009)/Graham.1b/Global/Data/
+-	Data File: Inbar_1b_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 10 measure 1, vanLange et al. (1997) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Social Value Orientation (Van Lange et al., 1997)/vanLange.1/Global/Data/
+-	Data File: vanLange_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 12, Anderson et al. (2012) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/SMS & Well-Being (Anderson et al., 2012)/Anderson.1/Global/Data/
+-	Data File: Anderson_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 15, Giessner & Schubert (2007) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Position & Power (Giessner & Schubert, 2007)/Giessner.1/Global/Data/
+-	Data File: Giessner_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 19 measure 1, Savani et al. (2010) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Actions are Choices (Savani et al., 2010)/Savani.3a/Global/Data/
+-	Data File: Savani_3a_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 20, Norenzayan (2002) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Intuitive Reasoning (Norenzayan et al., 2002)/Savani.1/Global/Data/
+-	Data File: Norenzayan_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 2 Study 23, Zhong & Liljenquist (2006) (<https://osf.io/8cd4r/>):
+-	Path: Data and Results (per site, etc.)/OSF Storage (United States)/Moral Cleansing (Zhong & Liljenquist, 2006)/Zhong.1/Global/Data/
+-	Data File: Zhong_1_study_global_include_all_CLEAN_CASE.csv
+
+Many Labs 3 (<https://osf.io/ct89g/>):
+-	Path: OSF Storage (United States)/ML3 Final Data.zip
+-	Data File: ML3AllSitesandmTurk.csv
+
+Many Labs 5 Study 1, Albarracín et al. (2008), Experiment 5 (<https://osf.io/a9hk2/>):
+-	Path: Data/OSF Storage (United States)/
+-	Data File: ML5 Alb 5 Revised Protocol In Lab.xlsx
+
+Many Labs 5 Study 4, LoBue & DeLoache (2008) (<https://osf.io/9g7pw/>):
+-	Path: ML5 Dataset & Analysis LoBue & DeLoache/OSF Storage (United States)/
+-	Data File: dataset_LoBue_raw.sav
+
+Many Labs 5 Study 5, Payne, Burkley, & Stokes (2008) (<https://osf.io/wxd4g/>):
+-	Path: Data/OSF Storage (United States)/
+-	Data File: Genova_ML5.csv
+
+Many Labs 5 Study 7, Shnabel & Nadler (2008) (<https://osf.io/vz5ru/>):
+-	Path: Data, Materials, Reports: ML5 Replication of Shnabel & Nadler (2008)/Data, Codebook, and syntax/OSF Storage (United States)/
+-	Data File: ml5_computed_dataset.csv
+
+Many Labs 5 Study 9 measure 1, Vohs & Schooler (2008) (<https://osf.io/8rcbk/>):
+-	Path: Data/OSF Storage (United States)/FinalData/
+-	Data File: ML5_fulldataset_with_suspicion.csv
+

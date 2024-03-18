@@ -450,11 +450,29 @@
 
 ### data_H2.csv
 
-*Explanation*: This dataset list contains the calculated Cronbach's alpha and the omega reliability coefficient calculated for the responses to the questionnaire items from several of the Many Labs studies, namely those responses encoded in: Data_1.10_clean.csv, data_1.11_clean.csv, data_1.12.3.1_clean.csv, data_1.12.3.2_clean.csv, data_2.10.1_clean.csv, data_2.12.1_clean.csv, data_2.12.2_clean.csv, data_2.12.3_clean.csv, data_2.15_clean.csv, data_2.20_clean.csv, data_2.23_clean.csv, data_3.2.1.1_clean.csv, data_3.2.1.2_clean.csv, data_3.7.2_clean.csv, data_3.8.2_clean.csv, data_5.1.1_clean.csv, data_5.7_clean.csv, data_5.9.1_clean.csv. The Cronbach's alpha and omega are calculated separately for each lab location within each study/questionnaire in the Many Labs datasets.
+*Explanation*: This dataset list contains information on the calculated Cronbach's alpha and the omega reliability coefficient calculated for the responses to the questionnaire items from several of the Many Labs studies, namely those responses encoded in: Data_1.10_clean.csv, data_1.11_clean.csv, data_1.12.3.1_clean.csv, data_1.12.3.2_clean.csv, data_2.10.1_clean.csv, data_2.12.1_clean.csv, data_2.12.2_clean.csv, data_2.12.3_clean.csv, data_2.15_clean.csv, data_2.20_clean.csv, data_2.23_clean.csv, data_3.2.1.1_clean.csv, data_3.2.1.2_clean.csv, data_3.7.2_clean.csv, data_3.8.2_clean.csv, data_5.1.1_clean.csv, data_5.7_clean.csv, data_5.9.1_clean.csv.
+
+*Variables*:
+
+-   **alpha:** Cronbach's alpha calculated for a measure at a particular lab location within a single study/questionnaire as extracted from the Many Labs datasets.
+
+-   **omega:** McDonald's omega calculated for a measure at a particular lab location within a single study/questionnaire as extracted from the Many Labs datasets.
+
+-   **ASE:** Standard error of Cronbach's alpha at a particular lab location, based on formulas 2 & 3 from @duhachek2004AlphaStandardError.
+
+-   **tau:** the tau estimate fo heterogeneity as obtained from a meta-analysis of the Cronbach's alpha of the same measure across multiple lab locations.
+
+-   **Qep:** the p-value of the Q test for heterogeneity as obtained from a meta-analysis of the Cronbach's alpha of the same measure across multiple lab locations.
+
+-   **pi.lb & pi.ub:** the lower and upper bound of the meta-analytic prediction interval for the meta-analysis of the Cronbach's alpha of the same measure across multiple lab locations.
+
+-   **g:** index showing that the alpha values belonged to a particular single measure.
+
+-   **reporting_index:** same as above, only now the numbers correspond to the row in the coded_data_replication.csv dataset that the indexed measure belongs to.
 
 ### data_H3_avg.csv
 
-*Explanation*: For each many labs replication, the mean Cronbach's alpha and omega reliability coefficients of each lab location are captured in the datasets. Additionally, a boolean indicator that indicated whether or not the original effect was replicated in the many labs replications when looking at the significance of the meta-analytic p-value was also included.
+*Explanation*: For each measure, the mean of the variables from data_H2.csv, excluding the g indexing variable. Additionally, a boolean indicator that indicated whether or not the original effect was replicated in the many labs replications when looking at the significance of the meta-analytic p-value was also included.
 
 ### data_H3_multiple.csv
 
@@ -474,7 +492,7 @@
 
 ### plot_23_data_alpha.csv
 
-*Explanation*: Contain all of the data from the data_h3_multiple.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. For each remaining replication, the names of the articles were adjusted to look better in the figure this dataset was used for.
+*Explanation*: Contain all of the data from the data_h3_multiple.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. For each remaining replication, the g indexing variable was changed to reflect the names of the articles were adjusted to look better in the figure this dataset was used for.
 
 ### plot_23_data_reported_alpha.csv
 
@@ -488,20 +506,36 @@
 
 -   **article_order:** numerical variable giving the index for placing the reliability coefficients in the right row in figure 2 (plot_23_alpha).
 
--   **coefficient:** the value for the reported alpha coefficient for the specific measure as extracted from the original article the measure was reported in.
+-   **coefficient_reported:** the value for the reported alpha coefficient for the specific measure as extracted from the original article the measure was reported in.
+
+-   **coefficient_calculated:** the mean value of the calculated alpha coefficients for the specific measure in the row.
+
+-   **coefficient_difference:** The difference between coefficient_reported and coefficient_calculated.
+
+-   **significance:** boolean value indicating whether or not the coeffcient_reported value of a measure is outside the 95% percentile of calculated alpha coefficient score of the same measure.
 
 ### plot_23_data_omega.csv
 
-*Explanation*: Contain all of the data from the data_h3_multiple.csv. Additionally, it contains a column of omega scores averaged across many lab locations for each article. The names of the articles were adjusted to look better in the figure this dataset was used for.
+*Explanation*: Contain all of the data from the data_h3_multiple.csv. Additionally, it contains a column of omega scores averaged across many lab locations for each article. The g indexing variable was changed to reflect the names of the articles were adjusted to look better in the figure this dataset was used for.
 
 ### plot_456_data.csv
 
-*Explanation*: Contains three variables for each QMP type for all the replication studies and original articles. The QMP_ratio column indicates the QMP ratio for that QMP type for that study/article. The RepOrg column indicates whether the QMP ratio belongs to a replication or an original article. The QMP_type column indicates the QMP type the QMP ratio belongs to. The rows are ordered to have the original studies first and then the replications, then they are ordered based on QMP type from Definition to Operationalization to Selection to Quantification to Modification to Total. Finally, within each type the QMPs are ordering matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+*Explanation*: Contains four variables for each QMP type for all the replication studies and original articles that were coded on QMPs. The rows are ordered to have the original studies first and then the replications, then they are ordered based on QMP type from Definition to Operationalization to Selection to Quantification to Modification to Total. Within each type the QMPs are ordering matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+
+*Variables:*
+
+-   **QMP_type:** factor that indicates the QMP type the QMP ratio belongs to (Definition, Operationalization, Selection, Quantification, or Modification).
+
+-   **QMP_ratio:** float number between 0 and 1 that indicates the QMP ratio for that QMP type for that study/article.
+
+-   **RepOrg:** factor that indicates whether the QMP ratio belongs to a replication or an original article.
+
+-   **QMP_ratio_1:** transformed version of the QMP_ratio column, where QMPs for all original articles have a 1 added to their ratio. This was done for the sake of making the figure possible in ggplot as it is right now.
 
 ### plot_46_data.csv
 
-*Explanation*: Contains four variables for each QMP type for both replication studies and original articles combined per row. The QMP_ratio column indicates the initial QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the initial QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+*Explanation*: Contains four variables for each QMP type (including total) for both replication studies and original articles combined per row. The QMP_ratio column indicates the initial QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the initial QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
 
 ### plot_46_data_REV.csv
 
-*Explanation*: Contains four variables for each QMP type for both replication studies and original articles combined per row. The QMP_ratio column indicates the revised QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the revised QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+*Explanation*: Contains four variables for each QMP type (including total) for both replication studies and original articles combined per row. The QMP_ratio column indicates the revised QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the revised QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
