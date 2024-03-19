@@ -256,6 +256,10 @@ data:
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/intermediatedata/codebook_data_5.1.2_clean.rmd
     labels: Data/IntermediateData/value_labels_data_5.1.2_clean.yml
+  data/analysisdata/cfa_results.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    codebook: data/analysisdata/codebook_cfa_results.rmd
 checksums:
   data/inputdata/data_ml1.csv: c8c01092a13e0c49be9535fe323e8766
   data/inputdata/data_2.2.csv: 4e1a0541727d0dcf1df49f7248d5de50
@@ -307,7 +311,7 @@ checksums:
   data/analysisdata/data_h6.csv: 0780ec86ee7b16326112b0334bad806a
   data/analysisdata/data_h5.csv: 48debdee383f67f803b77c66dc642e26
   data/analysisdata/data_h1.csv: 1b1ba2eb8c10a7d0dc2b1a9d4b88fae6
-  data/analysisdata/plot_456_data.csv: cbcb86be533b4d85b99dcd7d132d4b72
+  data/analysisdata/plot_456_data.csv: 7e1828bda11b9b00155e557c8c4bbc36
   data/analysisdata/plot_46_data.csv: cd08de1118ddb00cd540040472961ef9
   data/analysisdata/data_h2.csv: 43b1674f43a4c7f0edc6372d15770f0c
   data/analysisdata/data_h3_multiple.csv: 85d38b6c13e392beb0ab82e52fae82f7
@@ -318,4 +322,5 @@ checksums:
   Scripts/Manuscript/manuscript.pdf: bf2584a5192614483901389659253687
   data/analysisdata/plot_23_data_reported_alpha.csv: 00c86da5f3b2b26511d83a2c497e9789
   data/intermediatedata/data_5.1.2_clean.csv: d050d093de2adf892fa279acc1946f8d
+  data/analysisdata/cfa_results.csv: a676c4c56a597e91281182cd6290e533
 endpoints: Scripts/Manuscript/manuscript.pdf

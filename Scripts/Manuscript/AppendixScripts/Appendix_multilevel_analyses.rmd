@@ -1,20 +1,6 @@
-# Appendix B
+<!-- Appendix B -->
 
-```{r setup, include=FALSE}
-# loading R libraries, perhaps unnecessary
-library(papaja)
-
-# loading source script, perhaps unnecessary
-source(file = "C:/Users/u686785/OneDrive - Tilburg University/Documents/uvt/PHD/Master Thesis to Paper/Reproducible_R_Project/Scripts/source_script.R")
-
-
-```
-
-```{r analysis-preferences}
-# Seed for random number generation
-set.seed(17042023)
-knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
-```
+# Multilevel Analyses
 
 This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6. These models were excluded from the published article for the sake of brevity, and because the sample size was no large enough to support multilevel modelling in most cases.
 
@@ -25,7 +11,7 @@ In this data, replication attempts at different lab locations can be seen as nes
 ## Model
 The specific models used were a multilevel logistic regression random intercept and random slope model. The dependent variable remains replication success at the replication set level, while Cronbach's alpha was no longer averaged across locations.
 
-```{r Hypothesis3MultilevelModelSensitivityAnalyses}
+```{r Hypothesis3MultilevelModelSensitivityAnalyses, warning = FALSE}
 ## sensitivity analyses.
 # running a random intercept multilevel logistic model
 H3_test_result_int_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 1 
@@ -47,21 +33,17 @@ H3_test_result_slp_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 
 ### Results
 The results of these analyses can be seen in the table below
 
-```{r ReplicabilityReliabilityTestTable, warning=FALSE}
-# creating the dtaframe for the table <- separate the OMEGA from here???
-H3_table_dataframe <- rbind(H3_test_result_int_sensitivity_alpha$table, H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
-
-
+```{r ReplicabilityReliabilityTestTable, warning = FALSE}
 # adding rows to give indication of specific sections (apa_table being awkward)
-H3_table_for_printing <- rbind(c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(1:2),], c("Omega", "", "", "", ""), c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe[(3:4),], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(5:6),], c("Random-Slope Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe[(7:8),])
+H3_table_for_printing <- rbind(c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_test_result_int_sensitivity_alpha$table)
 
 
 # print the table in apa formatting
 apa_table(
   H3_table_for_printing, align = c("l", "r", "r", "r", "r")
   , caption = "Model Results from Tests of Hypothesis 3"
-  , note = "The Alpha and Omega sections show the models where the independent variable was the calculated Cronbach's alpha and omega coefficient respectively. The random slope model for Cronbach's alpha did not converge, thus it results are not shown here. $^* p < .05$"
-  , escape = FALSE, placement= "htp", midrules = c(3, 5, 6, 7, 10, 13))
+  , note = "The random slope model for Cronbach's alpha did not converge, thus it results are not shown here."
+  , escape = FALSE, placement= "htp", midrules = 1)
 
 ```
 
@@ -74,7 +56,7 @@ The models used in the article to test hypotheses 5 & 6 had independence of obse
 ### Models
 In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models with each Many Labs project as a group were implemented as sensitivity analyses. As of writing this article the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model. 
 
-```{r Hypotheses5And6SensitivityAnalyses}
+```{r Hypotheses5And6SensitivityAnalyses, warning = FALSE}
 ## Hypothesis 5 sensitivity test using a random intercept Guassian model.
 # create dummy H5 dataframe for use in sensitivity test
 data_h5_sens <- data_h5

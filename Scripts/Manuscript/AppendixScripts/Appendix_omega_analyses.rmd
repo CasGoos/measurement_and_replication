@@ -1,20 +1,6 @@
-# Appendix C
+<!-- Appendix C -->
 
-```{r setup, include=FALSE}
-# loading R libraries, perhaps unnecessary
-library(papaja)
-
-# loading source script, perhaps unnecessary
-source(file = "C:/Users/u686785/OneDrive - Tilburg University/Documents/uvt/PHD/Master Thesis to Paper/Reproducible_R_Project/Scripts/source_script.R")
-
-
-```
-
-```{r analysis-preferences}
-# Seed for random number generation
-set.seed(17042023)
-knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
-```
+# Omega Coefficient Analyses
 
 This appendix contains all results based on calculated reliabilities only using the omega coefficient as the coefficient of choice instead of the alpha coefficient.
 
@@ -32,7 +18,7 @@ H2_test_result_omega <- lmer(formula = omega ~ 1 + (1|g), data = data_h2[complet
 
 The ICC was calculated similarly based on the omega as was done for Cronbach's alpha in the article.
 
-```{r ICCCalculations, include = FALSE}
+```{r ICCCalculationsOmega, include = FALSE}
 # Variances
 within_group_variance_omega <- attr(VarCorr(H2_test_result_omega), "sc")^2
 between_group_variance_omega <- attr(VarCorr(H2_test_result_omega)$g, "stddev")^2
@@ -85,6 +71,23 @@ For omega the mean (values calculated in the population across replication sets)
 When looking at the between and within group variance in omega coefficients, compared to alpha an even larger relative degree of the variance was between group rather than within group when compared (between-group variance `r apa_num(within_group_variance_omega, digits = 3)`, within-group variance `r apa_num(between_group_variance_omega, digits = 3)`, ICC = `r apa_num(ICC_omega, digits = 3)`). This result thus provides evidence in a similar direction to the Cronbach's Alpha results, meaning that most variance in reliability coefficients is observed between studies rather than within studies.
 
 The calculated Omega coefficient did not significantly relate to replication success in the main logistic regression model. Similarly, non-significance was also observed in the multilevel random-intercept and random-slope models (random intercept: `r H3_test_result_int_sensitivity_omega$full_result$omega`; random slope: `r H3_test_result_slp_sensitivity_omega$full_result$omega`). 
+
+```{r ReplicabilityReliabilityTestTableOmega, warning=FALSE}
+# creating the dataframe for the table <- separate the OMEGA from here???
+H3_table_dataframe_omega <- rbind(H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
+
+
+# adding rows to give indication of specific sections (apa_table being awkward)
+H3_table_for_printing_omega <- rbind(c("Logistic Regression Model", "", "", "", ""), H3_table_dataframe_omega[(1:2),], c("Random-Intercept Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe_omega[(3:4),], c("Random-Slope Multilevel Logistic Model", "", "", "", ""), H3_table_dataframe_omega[(5:6),])
+
+
+# print the table in apa formatting
+apa_table(
+  H3_table_for_printing_omega, align = c("l", "r", "r", "r", "r")
+  , caption = "Model Results from Tests of Hypothesis 3 based on the Omega COefficient"
+  , escape = FALSE, placement= "htp", midrules = c(2, 4, 6))
+
+```
 
 Thus no evidence for hypothesis 3 was found. However, caution in interpreting the test results is needed. The number of measures for which the omega coefficient could be and was calculated was quite low (`r apa_num(sum(!is.na(data_h3_avg$omega)), numerals = FALSE)`).
 

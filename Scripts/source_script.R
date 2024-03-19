@@ -1137,6 +1137,17 @@ data_prep_plot_456 <- function(Data){
 }
 
 
+
+### Function to extract legend from plot for plot 456
+get_legend <- function(a_plot){ 
+  tmp <- ggplot_gtable(ggplot_build(a_plot)) 
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+  legend <- tmp$grobs[[leg]] 
+  legend
+} 
+
+
+
 ### 46 plots data prep
 data_prep_plot_46 <- function(Data){
   colnames(Data) <- c("Def.Ratio", "Op.Ratio", "Sel.Ratio", 

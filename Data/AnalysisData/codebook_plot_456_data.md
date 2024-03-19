@@ -1,4 +1,4 @@
-Codebook created on 2024-02-27 at 2024-02-27 16:22:04.046895
+Codebook created on 2024-03-18 at 2024-03-18 13:59:09.491224
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -6,16 +6,18 @@ structure, and layout of a data file.
 
 ## Dataset description
 
-The data contains 924 cases and 4 variables.
+The data contains 924 cases and 6 variables.
 
 ## Codebook
 
-| name        | type    |   n | missing | unique | mean | median |   mode | mode_value |   sd |    v |  min |  max | range | skew | skew_2se |  kurt | kurt_2se |
-|:------------|:--------|----:|--------:|-------:|-----:|-------:|-------:|:-----------|-----:|-----:|-----:|-----:|------:|-----:|---------:|------:|---------:|
-| QMP_type    | factor  | 924 |    0.00 |      7 |      |        | 154.00 | Definition |      | 0.83 |      |      |       |      |          |       |          |
-| QMP_ratio   | numeric | 820 |    0.11 |     54 | 0.24 |   0.11 |   0.11 |            | 0.30 |      | 0.01 | 0.99 |  0.99 | 1.16 |     6.77 |  0.36 |     1.06 |
-| RepOrg      | factor  | 924 |    0.00 |      3 |      |        | 462.00 | Original   |      | 0.50 |      |      |       |      |          |       |          |
-| QMP_ratio_1 | numeric | 820 |    0.11 |     75 | 0.76 |   1.01 |   1.01 |            | 0.55 |      | 0.01 | 1.99 |  1.99 | 0.16 |     0.96 | -0.75 |    -2.20 |
+| name            | type    |   n | missing | unique | mean | median |   mode | mode_value |   sd |    v |  min |  max | range | skew | skew_2se |  kurt | kurt_2se |
+|:----------------|:--------|----:|--------:|-------:|-----:|-------:|-------:|:-----------|-----:|-----:|-----:|-----:|------:|-----:|---------:|------:|---------:|
+| QMP_ratio       | numeric | 829 |    0.10 |     67 | 0.35 |   0.29 |   0.29 |            | 0.34 |      | 0.01 | 0.99 |  0.99 | 0.58 |     3.41 | -0.89 |    -2.64 |
+| QMP_ratio_1     | numeric | 829 |    0.10 |     86 | 0.88 |   1.01 |   1.01 |            | 0.56 |      | 0.01 | 1.99 |  1.99 | 0.00 |     0.01 | -0.83 |    -2.46 |
+| QMP_type        | factor  | 924 |    0.00 |      7 |      |        | 154.00 | Definition |      | 0.83 |      |      |       |      |          |       |          |
+| QMP_ratio_REV   | numeric | 820 |    0.11 |     54 | 0.24 |   0.11 |   0.11 |            | 0.30 |      | 0.01 | 0.99 |  0.99 | 1.16 |     6.77 |  0.36 |     1.06 |
+| RepOrg          | factor  | 924 |    0.00 |      3 |      |        | 462.00 | Original   |      | 0.50 |      |      |       |      |          |       |          |
+| QMP_ratio_1_REV | numeric | 820 |    0.11 |     75 | 0.76 |   1.01 |   1.01 |            | 0.55 |      | 0.01 | 1.99 |  1.99 | 0.16 |     0.96 | -0.75 |    -2.20 |
 
 ### Legend
 

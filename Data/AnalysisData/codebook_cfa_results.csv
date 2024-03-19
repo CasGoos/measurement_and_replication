@@ -1,0 +1,4 @@
+"name","type","n","missing","unique","mean","median","mode","mode_value","sd","v","min","max","range","skew","skew_2se","kurt","kurt_2se","category","description"
+"RMSEA","character",18,0.0526315789473684,18,NA,NA,2,"0.062",NA,0.938271604938272,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"N_factors","character",18,0.0526315789473684,7,NA,NA,7,"2",NA,0.740740740740741,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Single_factor","character",18,0.0526315789473684,3,NA,NA,11,"No",NA,0.475308641975309,NA,NA,NA,NA,NA,NA,NA,NA,NA

@@ -29,7 +29,7 @@ Data/IntermediateData/      | any semi-cleaned data            | Read only
 Data/LocalInputData/        | raw data on local system (empty on github)  | Read only
 Data/Data_package_description.Rmd| full description of content and use of data | Human editable
 Output/                     | digital copy of the final manuscript   | Read only
-Scripts/AppendixScripts/    | this folder contains the Rmarkdown files that form the source code for the appendices | Human Editable
+Scripts/Manuscript/AppendixScripts/    | this folder contains the Rmarkdown files that form the source code for the appendices | Human Editable
 Scripts/Manuscript/r-references.bib | BibTex references for R packages used | Human editable
 Scripts/Manuscript/references.bib | BibTex references for manuscript | Human editable
 Scripts/Manuscript/manuscript.rmd | Source code for paper (including data processing and analysis code)   | Human editable
@@ -37,6 +37,7 @@ Scripts/prepare_data.R   | Script to load in raw data       | Human editable
 Scripts/source_script.R     | Script with self-made functions for the manuscript | Human editable
 SupplementaryMaterials/     | misc. materials                  | Read only
 SupplementaryMaterials/Pre-registration.pdf     | The manuscript's original pre-registration | Read only 
+SupplementaryMaterials/manuscript_v.master_thesis.Rmd     | depricated master thesis version of the manuscript (Note: does not run in this folder, move to manuscript folder if desired to run)  | Human editable 
 SupplementaryMaterials/reproducible_data_retrieval_information.Rmd     | Description of the file paths and names of the Many Labs protocols and datasets used as the sample | Human editable 
 SupplementaryMaterials/CodingProtocols/ | the coding protocols used to code the articles & studies | Read only
 SupplementaryMaterials/CodingProtocols/coding_protocol_information.Rmd | additional clarifying information on the coding protocol and its modifications | Read only

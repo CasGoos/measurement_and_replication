@@ -115,3 +115,5 @@
 !data/analysisdata/codebook_plot_23_data_reported_alpha.csv
 !data/intermediatedata/data_5.1.2_clean.csv
 !data/intermediatedata/codebook_data_5.1.2_clean.csv
+!data/analysisdata/cfa_results.csv
+!data/analysisdata/codebook_cfa_results.csv

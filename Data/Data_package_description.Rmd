@@ -442,7 +442,19 @@
 
 *Explanation*: The first column of this dataset indicates the lab location where the data was collected as a factor. Besides that, this dataset contains all of the columns that could be identified as item scores on the scale relating to free will used in study 9 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
 
-# OutputData
+# AnalysisData
+
+### cfa_results.csv
+
+*Explanation:* contains the results obtained from the exploratory unidimensionality check analyses based on factor analyses of the measures related to the data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean,data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, & data_5.9.1_clean datasets. This is part of the pre-registered exploratory analyses documented in appendix A.
+
+*Variables:*
+
+-   **RMSEA:** the rmsea value for a single factor confirmatory factor analysis model when in turn applied to each of the datasets under consideration.
+
+-   **N factors:** the number of factors selected for each of the datasets based on the parallel test for selecting factors.
+
+-   **Single_factor:** a boolean variable indicating whether or not the measure was unidimensional based on the criteria that either the rmsea for the single factor model was smaller than .08, or the parallel test returned a single factor solution.
 
 ### data_H1.csv
 
@@ -524,13 +536,17 @@
 
 *Variables:*
 
+-   **QMP_ratio:** float number between 0 and 1 that indicates the QMP ratio based on the initial coding protocol for that QMP type for that study/article.
+
+-   **QMP_ratio_1:** transformed version of the QMP_ratio column, where QMPs for all original articles have a 1 added to their ratio. This was done for the sake of making the figure possible in ggplot as it is right now.
+
 -   **QMP_type:** factor that indicates the QMP type the QMP ratio belongs to (Definition, Operationalization, Selection, Quantification, or Modification).
 
--   **QMP_ratio:** float number between 0 and 1 that indicates the QMP ratio for that QMP type for that study/article.
+-   **QMP_ratio_REV:** float number between 0 and 1 that indicates the QMP ratio based on the revised coding protocol for that QMP type for that study/article.
 
 -   **RepOrg:** factor that indicates whether the QMP ratio belongs to a replication or an original article.
 
--   **QMP_ratio_1:** transformed version of the QMP_ratio column, where QMPs for all original articles have a 1 added to their ratio. This was done for the sake of making the figure possible in ggplot as it is right now.
+-   **QMP_ratio_1_REV:** transformed version of the QMP_ratio_REV column, where QMPs for all original articles have a 1 added to their ratio. This was done for the sake of making the figure possible in ggplot as it is right now.
 
 ### plot_46_data.csv
 
