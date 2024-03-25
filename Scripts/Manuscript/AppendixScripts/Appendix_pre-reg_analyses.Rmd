@@ -2,37 +2,7 @@
 
 # Pre-registration Analyses
 
-This appendix contains all of the pre-registered analyses that were either changed or omitted from the article.
-
-## Test for H5 as Beta-Regression
-
-### Explanation Change
-
-This analysis was the originally planned analysis to test Hypothesis 5. However, for the sake of interpretation this test was changed to have the Independent Variable (IV) and Dependent Variable (DV) swapped in the article, and as a result it became a logistic regression.
-
-### Model
-
-The originally planned analysis made use of beta-regression similarly to the test for H4 and H6. The variables are the same as those used in the test published in the article, just swapped from IV to DV, and from DV to IV.
-
-```{=tex}
-\begin{equation}
-g(QMP\_ratio_{i}) = \beta_{0} + \beta_{1} replicated_{i} (\#eq:H5AppendixA)
-\end{equation}
-```
-Where $g(.)$ refers to the same link function as described in formula \@ref(eq:BetaLink) in the article.
-
-```{r H5 beta-regression pre-registration model}
-## Hypothesis 5 beta regression model ADD FIRST PART TO INITIAL PROTOCOL RESULTS
-H5_prereg_test_results <- betareg(QMP_ratio ~ hypothesis_support, data = data_h5)
-H5_prereg_test_results_with_OR <- OR_to_apa_full_supplier(betareg_output_to_apa_full(H5_prereg_test_results), negative_b = TRUE)
-
-H5_prereg_test_results_REV <- betareg(QMP_REV_ratio ~ hypothesis_support, data = data_h5)
-H5_prereg_test_results_REV_with_OR <- OR_to_apa_full_supplier(betareg_output_to_apa_full(H5_prereg_test_results_REV))
-```
-
-## Results
-
-With this model specification the relationship between the two variables remains negative and significant (`r H5_prereg_test_results_REV_with_OR`).
+This appendix contains the pre-registered analyses that were either changed or omitted from the article.
 
 ## Unidimensionality Exploratory Analyses
 
@@ -40,13 +10,13 @@ With this model specification the relationship between the two variables remains
 
 In order to present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set.
 
-This analysis was omitted from the main article due to the fact that determining when a measure should be unidimensional would require an in-depth review and expert evaluation for the literature surrounding the measure, which is outside of the scope of this article and the authors' expertise (it additionally may not always be available).
+This analysis was omitted from the main article due to the fact that determining when a measure should be unidimensional would require an in-depth review and expert evaluation for the literature surrounding the measure, which is outside of the scope of this article and the authors' expertise. Additionally, this information may also simply not be available, further complicating the analyses.
 
-For the sake of this analysis the simple heuristic was chosen that if the measure was used as a single composite variable in the analyses, then it should be uni-dimensional. This is similar to what was done by ..., but for the sake of this article it was deemed to strong an assumption to make that this heuristic would always hold. For instance, IQ score is often used as a single indicator score, however the construct of IQ is not considered unidimensional, and is instead understood to have many sub-dimensions (e.g. verbal comprehension, perceptual reasoning, etc.). As a result, the use of a single score in the analyses cannot be taken as evidence that the construct is considered unidimensional by the authors, or broader literature on the topic.
+For the sake of this analysis the simple heuristic was chosen that if the measure was used as a single composite variable in the analyses, then it should be uni-dimensional. This is somewhat similar to what was done by @shaw2020measurement, but for the sake of this article it was deemed to strong an assumption to make that this heuristic would always hold. For instance, IQ score is often used as a single indicator score, however the construct of IQ is not considered unidimensional, and is instead understood to have many sub-dimensions (e.g. verbal comprehension, perceptual reasoning, etc.). As a result, the use of a single score in the analyses cannot be taken as evidence that the construct is considered unidimensional by neither the authors, nor the broader literature on the topic.
 
-Nevertheless, we present here the result of the analyses made under the assumption that the one score, one dimension heuristic holds, for those researchers that believe this heuristic to not undermine the relevance of these results in provding some valid information on the validity of the measures used in the Many Labs projects.
+Nevertheless, we present here the result of the analyses made under the assumpti on that the one score, one dimension heuristic holds, for the readers that are comfortable with this heuristic. 
 
-## models
+## Model
 
 A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@R-psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
 
@@ -101,7 +71,7 @@ open_data(data = cfa_results, filename = paste0(paste0(
 
 ## Results
 
-Suitable data for factor analyses was available for `r apa_num(nrow(cfa_results), numerals = FALSE)` measures. These measures were the same as those shown in Figure \@ref(fig:Plot23AlphaCode). The results are shown in Table \@ref(tab:UnidimesnionalityTestResultsTable). A composite score based on the measurement responses was used for sixteen of the `r apa_num(nrow(cfa_results), numerals = FALSE)` measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for `r apa_num(sum(cfa_results$Single_factor == "Yes", na.rm = TRUE), numerals = FALSE)` out of the `r apa_num(nrow(cfa_results), numerals = FALSE)` evaluated measures. However, as shown in Table \@ref(tab:UnidimesnionalityTestResultsTable) the unidimensional model held based on the parallel analysis test alone, for only `r apa_num(sum(cfa_results$N_factors == 1, na.rm = TRUE), numerals = FALSE)` of the `r apa_num(nrow(cfa_results), numerals = FALSE)` measures. For those `r apa_num(sum(cfa_results$N_factors == 1, na.rm = TRUE), numerals = FALSE)` measures and an additional `r apa_num(sum(cfa_results$RMSEA < .08, na.rm = TRUE) - sum(cfa_results$N_factors == 1, na.rm = TRUE), numerals = FALSE)` the RMSEA $< .08$ criteria suggested evidence for single factor structures.
+Suitable data for factor analyses was available for `r apa_num(nrow(cfa_results), numerals = FALSE)` measures. These measures were the same as those shown in Figure \@ref(fig:Plot23AlphaCode). The results are shown in Table \@ref(tab:UnidimesnionalityTestResultsTable). A composite score based on the measurement responses was used for sixteen of the `r apa_num(nrow(cfa_results), numerals = FALSE)` measures to form a single variable in the analyses, and were thus regarded as intended to be unidimensional. The number of dimensions for the remaining three were unclear. Sufficient fit of the unidimensional model was found for `r apa_num(sum(cfa_results$Single_factor == "Yes", na.rm = TRUE), numerals = FALSE)` out of the `r apa_num(nrow(cfa_results), numerals = FALSE)` evaluated measures. However, as shown in Table \@ref(tab:UnidimesnionalityTestResultsTable), based on the parallel analysis test alone the unidimensional model held for only `r apa_num(sum(cfa_results$N_factors == 1, na.rm = TRUE), numerals = FALSE)` of the `r apa_num(nrow(cfa_results), numerals = FALSE)` measures. For those `r apa_num(sum(cfa_results$N_factors == 1, na.rm = TRUE), numerals = FALSE)` measures and an additional `r apa_num(sum(cfa_results$RMSEA < .08, na.rm = TRUE) - sum(cfa_results$N_factors == 1, na.rm = TRUE), numerals = FALSE)` the RMSEA $< .08$ criteria suggested evidence for single factor structures.
 
 ```{r UnidimesnionalityTestResultsTable, warning = FALSE}
 # add the names of the relevant papers and a shortcut for the measure used.
@@ -124,19 +94,19 @@ for Measure Data", note = "N Factors refer to the number of factors suggested ba
 
 ```
 
-These results are potentially quite worrying given that many studies made use of single item measures, which assume unidimensionality by default without being able to assess it. These results show that for the measures that could be tested for unidimensionality, and that were mostly used as single indicators in the analyses for the replication protocol, unidimensionality commonly did not hold. However, one could argue that measures being used as singular indicators does not necessarily mean these measures all assessed constructs with a unidimensional structure. For example, IQ is often used as a singular indicator, even though it consists of several factors [@weiss2013wisc]. However, it should be noted that at least with respect to Many Labs 2, all of the measures that were considered unidimensional for the analyses in this study were also considered unidimensional in the investigation by @shaw2020measurement} who also observed a lack of unidimensionality evidence in their investigation of Many Labs 2. To conclude, there is an indication that validity evidence for measures used in replication research is lacking, and that this may have further implications beyond the measures for which it could be assessed here.
+These results are potentially quite worrying given that many studies made use of single item measures, which assume unidimensionality by default without being able to assess it. These results show that for the measures that could be tested for unidimensionality, and that were mostly used as single indicators in the analyses for the replication protocol, unidimensionality commonly did not hold. However, one could argue that measures being used as singular indicators does not necessarily mean these measures all assessed constructs with a unidimensional structure. For example, IQ is often used as a singular indicator, even though it consists of several factors [@weiss2013wisc]. However, it should be noted that at least with respect to Many Labs 2, all of the measures that were considered unidimensional for the analyses in this study were also considered unidimensional in the investigation by @shaw2020measurement who also observed a lack of unidimensionality evidence in their investigation of Many Labs 2. To conclude, there is an indication that validity evidence for measures used in replication research is lacking, and that this may have further implications beyond the measures for which it could be assessed here.
 
 ## H6 QMP-Category Specific Exploratory Analyses
 
 ### Pre-registration Analysis Justification & Reason for Omission from Article
 
-Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. Due to the large number of tests, the focus was exploratory using visualisation rather than inference.
+Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. Due to the large number of tests, the focus was exploratory using visualization rather than inference.
 
-It is partly this large number of tests, as well as the resulting lack of clear interpretability in the results that caused this analysis to be omitted from the main article. However, for completeness and transparency sake it is reported here.
+It is partly this large number of tests, as well as the resulting lack of clear interpretability in the results that caused this analysis to be omitted from the main article. However, for completeness and transparency it is reported here.
 
 ### Model
 
-The model was the same as that used for the main test of hypothesis 6 (see formula \@ref(eq:H6Main)), only now QMP_ratio's for each of the five categories were used one at a time for each unique combination of original article and replication protocol QMP.
+The model was the same as that used for the main test of hypothesis 6 (see formula \@ref(eq:H6Main)), only now QMP ratios for each of the five categories were used one at a time for each unique combination of original article and replication protocol QMP.
 
 ```{r Hypothesis6Associations, warning = FALSE}
 ## Associations between the QMP categories
@@ -157,7 +127,7 @@ Results_H6_between_REV <- Associations_H6_REV(data_h6)
 
 ### Results
 
-Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Figure \@ref(fig:Plot46RevisedDataCode) visually illustrates the relations of the revised QMP ratios from different QMP types between replication protocols and original articles. As shown in the figure, no relation was strong and highly stable, and even fewer were consistent between initial and revised coding protocols.
+Planned exploratory analyses were preformed to expand on the test for hypothesis 6. The relationships between original article QMP ratios and replication protocol QMP ratios were investigated for each QMP type separately. Figure \@ref(fig:Plot46RevisedDataCode) visually illustrates the relations of the revised QMP ratios from different QMP types between replication protocols and original articles. As shown in the figure, no relation was strong nor highly stable, and few were consistent between initial and revised coding protocols.
 
 ```{r Plot46FullRevisedDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication QMP ratio’s per type with linear regression line. The abbreviations on the axes relate to the QMP categories described in Table 1: Def. is definition, Op. is operationalization, Sel. is selection/creation, Quant. is quantification, and Mod. is modification. The X axis facets across the QMP ratios in the original articles, and the Y axis facets across the QMP ratios in the replication protocols. Each dot in the figure relates to describes the QMP ratio for the types in that graph across an original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
 # Revised
@@ -226,4 +196,4 @@ QMP Ratio and Original QMP Ratio as obtained using the Revised Protocol"
 
 ```
 
-A possible explanation for these results could be that original articles have to provide a clear definition as well as details on the scale, in order for a replication to be able to justify selecting the measure. A replication may also be in general more dependent on the original article for information on the definition of the constructs and the choice of measurement, compared to a description of the Operationalisation, quantification, and any modifications. These former are features of a measurement, which while preferably similar in a replication to the original, can and should be reported in the replication protocol even if the original article does not contain the details on these features itself. However, these are just speculations as the results showed no clear relations between different QMP types across original and replication (see Figure \@ref(fig:Plot46RevisedDataCode)), the number of tests were many while multiple testing was not corrected for, and finally testing of causal links was not possible with this data.
+A possible explanation for these results could be that original articles have to provide a clear definition as well as details on the scale, in order for a replication to be able to justify selecting the measure. A replication may also be in general more dependent on the original article for information on the definition of the constructs and the choice of measurement, compared to a description of the operationalisation, quantification, and any modifications. These former are features of a measurement, which while preferably similar in a replication to the original, can and should be reported in the replication protocol even if the original article does not contain the details on these features itself. However, these are just speculations as the results showed no clear relations between different QMP types across original and replication (see Figure \@ref(fig:Plot46RevisedDataCode)), the number of tests were many while multiple testing was not corrected for, and finally testing of causal links was not possible with this data.

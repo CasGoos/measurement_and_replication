@@ -4,7 +4,7 @@
 
 This appendix contains all of the QMP analyses that in the article and appendices were based on the revised QMP, but then performed based on the QMPs obtained using the initial coding protocol.
 
-### Explanation Why
+### Explanation
 The data was initially coded using to the preregistered coding protocol. After the coding was completed using the preregistered coding protocol, it was determined that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more lenient judgement of QMPs. The coded data using the initial protocol was still separately available, and because this protocol was the one that was pre-registered the results for those analyses are shown here.
 
 ### Models
@@ -110,7 +110,8 @@ Plot_456_2 <- ggplot(plot_456_data[plot_456_data$QMP_type == "Total",],
   coord_cartesian(xlim = c(0, 1)) +
   theme_ridges() + 
   theme(axis.text.y=element_blank(),
-        axis.ticks.y=element_blank()) +
+        axis.ticks.y=element_blank(),
+        axis.text.x = element_text(size = 7)) +
   scale_fill_manual(values=c("brown", "blue4")) +
   scale_color_manual(values=c("brown2", "blue")) +
   scale_x_continuous(breaks = c(0, 0.25, Mean_Rat_Rep, Mean_Rat_Org, 
@@ -246,7 +247,7 @@ Now looking at the multilevel sensitivity analyses (see appendix B), only now us
 
 Contrary to the results of the multilevel sensitivity model testing hypothesis 5 using QMP ratios obtained with the revised coding protocol, the relationship in the multilevel model was no longer significant for QMP ratios obtained with the initial coding protocol (`r check_h5$full_result$hypothesis_supportTRUE`).
 
-Similarly to the results of the multilevel sensitivity model testing hypothesis 5 using QMP ratios obtained with the revised coding protocol, he relationship in the multilevel model was not significant for QMP ratios obtained with the initial coding protocol (`r check_h6$full_result$QMP`).
+Similarly to the results of the multilevel sensitivity model testing hypothesis 5 using QMP ratios obtained with the revised coding protocol, the relationship in the multilevel model was not significant for QMP ratios obtained with the initial coding protocol (`r check_h6$full_result$QMP`).
 
 
 

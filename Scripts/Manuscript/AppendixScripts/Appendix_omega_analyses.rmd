@@ -2,7 +2,7 @@
 
 # Omega Coefficient Analyses
 
-This appendix contains all results based on calculated reliabilities only using the omega coefficient as the coefficient of choice instead of the alpha coefficient.
+This appendix contains all results based on calculated reliabilities using the omega coefficient as the coefficient of choice instead of the alpha coefficient.
 
 ### explanation why
 Omega was included since it has been argued to be a more informative measure of score reliability than alpha, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Omega was calculated using the omega function in the psych R package [@R-psych]. Default arguments were used in the function except the nfactors argument, which was set to 1.
@@ -66,7 +66,7 @@ H3_test_result_slp_sensitivity_omega <- apa_print(glmer(formula = replication ~ 
 ```
 
 ### Results + Comparison Interpretation
-For omega the mean (values calculated in the population across replication sets) was `r apa_num(mean(data_h3_multiple$omega), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`.
+For omega the mean (values calculated in the population across replication sets) was `r apa_num(mean(data_h3_multiple$omega, na.rm = TRUE), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`.
 
 When looking at the between and within group variance in omega coefficients, compared to alpha an even larger relative degree of the variance was between group rather than within group when compared (between-group variance `r apa_num(within_group_variance_omega, digits = 3)`, within-group variance `r apa_num(between_group_variance_omega, digits = 3)`, ICC = `r apa_num(ICC_omega, digits = 3)`). This result thus provides evidence in a similar direction to the Cronbach's Alpha results, meaning that most variance in reliability coefficients is observed between studies rather than within studies.
 
@@ -91,7 +91,7 @@ apa_table(
 
 Thus no evidence for hypothesis 3 was found. However, caution in interpreting the test results is needed. The number of measures for which the omega coefficient could be and was calculated was quite low (`r apa_num(sum(!is.na(data_h3_avg$omega)), numerals = FALSE)`).
 
-The figure below shows additional information on the distributions of the calculated omega scores and their relation to replication success. It mostly resembles Figure \@ref(fig:Plot23AlphaCode) from the article, with some studies being omitted as the omega coefficient function did not converge or run properly for those results.
+The figure below shows additional information on the distributions of the calculated omega scores and their relation to replication success. It mostly resembles Figure \@ref(fig:Plot23AlphaCode) from the article, with some studies being omitted as the omega coefficient function did not converge or run properly on those data. Furthermore, information with regard to heterogeneity was not present since the standard error of omega was not known, and comparisons between reported coefficients were omitted, since no article reported any omega coefficients.
 
 ```{r Plot23OmegaCode}
 # data re-ordering (was not saved in export)

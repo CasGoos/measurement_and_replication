@@ -2,13 +2,13 @@
 
 # Multilevel Analyses
 
-This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6. These models were excluded from the published article for the sake of brevity, and because the sample size was no large enough to support multilevel modelling in most cases.
+This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6. These models were excluded from the published article for the sake of brevity, and because the sample size was not large enough to support multilevel modelling in most cases.
 
 ## Hypothesis 3, nested within replication set
 ### Explanation of Relevance
 In this data, replication attempts at different lab locations can be seen as nested within a replication set. In order to see if this nesting might impact the analyses of hypothesis 3, multilevel models are included here as sensitivity checks.
 
-## Model
+### Model
 The specific models used were a multilevel logistic regression random intercept and random slope model. The dependent variable remains replication success at the replication set level, while Cronbach's alpha was no longer averaged across locations.
 
 ```{r Hypothesis3MultilevelModelSensitivityAnalyses, warning = FALSE}
@@ -31,7 +31,7 @@ H3_test_result_slp_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 
 ```
 
 ### Results
-The results of these analyses can be seen in the table below
+The results of these analyses can be seen in the table below. In none of these models is the relation between reliability and replication success significant (random intercept: `r H3_test_result_int_sensitivity_alpha$full_result$alpha`; random slope: `r H3_test_result_slp_sensitivity_alpha$full_result$alpha`). This corroborates the findings in the article, only now using a random intercept multilevel model. However, also similarly to the results in the article and perhaps even more so for the multilevel model, the small sample size for these tests means that caution should be taken in interpreting these results.
 
 ```{r ReplicabilityReliabilityTestTable, warning = FALSE}
 # adding rows to give indication of specific sections (apa_table being awkward)
@@ -42,12 +42,10 @@ H3_table_for_printing <- rbind(c("Random-Intercept Multilevel Logistic Model", "
 apa_table(
   H3_table_for_printing, align = c("l", "r", "r", "r", "r")
   , caption = "Model Results from Tests of Hypothesis 3"
-  , note = "The random slope model for Cronbach's alpha did not converge, thus it results are not shown here."
+  , note = "The random slope model for Cronbach's alpha did not converge, thus its results are not shown here."
   , escape = FALSE, placement= "htp", midrules = 1)
 
 ```
-
-In none of these models is the relation between reliability and replication success significant (random intercept: `r H3_test_result_int_sensitivity_alpha$full_result$alpha`; random slope: `r H3_test_result_slp_sensitivity_alpha$full_result$alpha`). This corroborates the findings in the article, only now using a random intercept and random slope multilevel model. However, also similarly to the results in the article and perhaps even more so for these multilevel models, the small sample size for these tests means that caution should be taken in interpreting these results.
 
 ## Hypotheses 5 & 6, nested within Many Labs
 ### Explanation of Relevance
@@ -87,5 +85,5 @@ H6_n_check_results_REV <- betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = data_
 ### Results
 For hypothesis 5, the sensitivity analyses using a random-intercept multilevel regression found a similar significant association as that found by the main test (`r check_h5_REV$full_result$hypothesis_supportTRUE`). This result is in line with hypothesis 5. This result provides some additional evidence for the stability of hypotehsis 5.
 
-For hypothesis 6, the sensitivity analyses using a random intercept logistic multilevel model resulted in non-significant results, which is contrary to the results found with the main test and is not in line with hypothesis 6 (revised protocol: `r check_h6_REV$full_result$QMP_REV`). This result puts some dents in the confidence that can be attached to the results found through the main test reported in the article.
+For hypothesis 6, the sensitivity analyses using a random intercept logistic multilevel model resulted in non-significant results, which is contrary to the results found with the main test and is not in line with hypothesis 6 (revised protocol: `r check_h6_REV$full_result$QMP_REV`). This result places some doubt in the results found through the main test reported in the article.
 
