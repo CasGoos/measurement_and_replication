@@ -117,3 +117,5 @@
 !data/intermediatedata/codebook_data_5.1.2_clean.csv
 !data/analysisdata/cfa_results.csv
 !data/analysisdata/codebook_cfa_results.csv
+!data/analysisdata/plot_data_structure_data.csv
+!data/analysisdata/codebook_plot_data_structure_data.csv

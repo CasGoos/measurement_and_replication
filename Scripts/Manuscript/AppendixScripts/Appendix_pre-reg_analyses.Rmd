@@ -4,6 +4,36 @@
 
 This appendix contains the pre-registered analyses that were either changed or omitted from the article.
 
+
+## Intraclasscorelation assessment for within measure variation in reliability
+
+### Pre-registration Analysis Justification & Reason for Omission from Article
+Reliabilities could be calculated from the replication datasets. On top of that, reliabilities could be calculated for each individual lab per replication set so that the variance of them could be assessed. In order to separate between and within variance in reliability, a multilevel random intercept model was specified with replication set as the grouping variable and the Cronbach's alpha or omega value of a replication as dependent using the lmer function from the lme4 package [@R-lme4] t.
+
+```{r Hypothesis2Model, include = FALSE}
+# intercept only model to check the within and between group variance.
+H2_test_result_alpha <- lmer(formula = alpha ~ 1 + (1|g), data = data_h2)
+
+```
+
+The purpose of this analysis was to investigate variability in calculated reliability coefficients within and between replication sets. However, at the time of pre-registering we did not know of any formal test for the significance of within group variance after controlling for between group variance. Instead the intraclass correlation (ICC) coefficient was calculated an indicator of within vs. between variability. 
+
+```{r ICCCalculations, include = FALSE}
+# Variances
+within_group_variance_alpha <- attr(VarCorr(H2_test_result_alpha), "sc")^2
+between_group_variance_alpha <- attr(VarCorr(H2_test_result_alpha)$g, "stddev")^2
+
+# ICC
+ICC_alpha <- between_group_variance_alpha / (within_group_variance_alpha + between_group_variance_alpha)
+
+```
+
+
+This analysis was omitted from the article because it did not link well enough to hypothesis 2. THe test results also do not give use a very informative representations of variance in reliability in the data for us to draw further inferences from. For instance, it assumes that we should observe large differences in reliabilities between measures for this to provide an accurate test of whether or not the variance within measures is large or not.
+
+### Results
+The between-group and within-group variance for Cronbach's alpha were approximately `r apa_num(between_group_variance_alpha, digits = 3)` and `r apa_num(within_group_variance_alpha, digits = 3)` respectively. The resulting ICC, was approximately `r apa_num(ICC_alpha, digits = 3)`. This suggests that variance was larger between replication sets than within. These results are generally in line with hypothesis 2. However, this statistic does not necessarily gives a test of hypothesis 2, as outlined above.
+
 ## Unidimensionality Exploratory Analyses
 
 ### Pre-registration Analysis Justification & Reason for Omission from Article
@@ -106,7 +136,7 @@ It is partly this large number of tests, as well as the resulting lack of clear 
 
 ### Model
 
-The model was the same as that used for the main test of hypothesis 6 (see formula \@ref(eq:H6Main)), only now QMP ratios for each of the five categories were used one at a time for each unique combination of original article and replication protocol QMP.
+The model was the same as that used for the main test of hypothesis 6, only now QMP ratios for each of the five categories were used one at a time for each unique combination of original article and replication protocol QMP.
 
 ```{r Hypothesis6Associations, warning = FALSE}
 ## Associations between the QMP categories

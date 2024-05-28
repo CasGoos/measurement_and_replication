@@ -1,0 +1,69 @@
+rep_org:
+  class: factor
+  '1': Original
+  '2': Replication
+multi:
+  class: factor
+  '1': 'False'
+  '2': 'True'
+appearance:
+  class: factor
+  '1': '1'
+  '2': '2'
+  '3': '3'
+  '4': '5'
+N_items:
+  class: factor
+  '1': 1 item measure
+  '2': multiple item measure
+  '3': The measure is not a scale
+hypothesis_support:
+  class: factor
+  '1': 'No'
+  '2': Unclear
+  '3': 'Yes'
+reliability_type:
+  class: factor
+  '1': ''
+  '2': alpha
+  '3': Not Reported
+  '4': Other
+  '5': retest
+sel_existing:
+  class: factor
+  '1': False, materials were newly developped for this study
+  '2': Not Clearly Stated
+  '3': 'True, namely:'
+sel_psychometric_evidence:
+  class: factor
+  '1': Exploratory Factor Analysis
+  '2': None
+  '3': Not Apllicable (only report this if psychometric evidence would not be possible
+    for this measure, otherwise report as None)
+mod_check:
+  class: factor
+  '1': 'False'
+  '2': None Reported
+  '3': 'True'
+mod_time:
+  class: factor
+  '1': ''
+  '2': After/During
+  '3': Before
+  '4': Not reported
+sel_psychometric_evidence_REV:
+  class: factor
+  '1': Exploratory Factor Analysis
+  '2': None
+  '3': Not Apllicable (only report this if psychometric evidence would not be possible
+    for this measure, otherwise report as None)
+  '4': 'Other, namely:'
+mod_check_REV:
+  class: factor
+  '1': 'False'
+  '2': None Reported
+  '3': 'True'
+inseperable_material:
+  class: factor
+  '1': 'False'
+  '2': 'True'

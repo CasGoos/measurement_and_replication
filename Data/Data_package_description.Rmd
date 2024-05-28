@@ -6,7 +6,7 @@
 
 *Origin*: This dataset was created originally for this research project. It was obtained using the Measurement_Error_Reporting_Coding_Protocol.pdf that can be found in the SupplementaryMaterials/CodingProtocols folder of this project on the Many Labs protocols mentioned in the texts and the related original articles for each of the many labs replications.
 
-*Explanation*: The information in this dataset was used for analyses relating to QMP ratios among original articles and replication studies. It additionally contains peripheral information about the articles and study in it that were used throughout the analyses and for descriptives.
+*Explanation*: The information in this dataset was used for analyses relating to QMP ratios among original articles and replication studies. It additionally contains peripheral information about the articles and study in it that were used throughout the analyses and for descriptives. Questions related to modification had 'no modification' as an additional answer option, in case that specific aspect of the measure was explicitly not modified, but might possibly have been applicable, because it was a relevant aspect albeit unmodified. But these operated equivalently to the Not applicable response with respect to the calculation of the QMP ratio. They are included here for future reference.
 
 *Variables*:
 
@@ -501,6 +501,10 @@
 ### data_H6.csv
 
 *Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. Additionally, the QMP ratio for each of the initial and revised QMP categories for both the original and revised codes had some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model.
+
+### plot_data_structure_data.csv
+
+*Explanation*: Contain all of the data from the data_h4.csv filtered based on having a unique title (that was not due to a typo or copying error) to extract the individual studies and replication rather than individual measures into a dataset. Furthermore, the total count of measures for each study or replication was added to this dataset.
 
 ### plot_23_data_alpha.csv
 

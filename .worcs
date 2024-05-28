@@ -260,6 +260,11 @@ data:
     save_expression: write.csv(x = data, file = filename, row.names = FALSE)
     load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
     codebook: data/analysisdata/codebook_cfa_results.rmd
+  data/analysisdata/plot_data_structure_data.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    codebook: data/analysisdata/codebook_plot_data_structure_data.rmd
+    labels: Data/AnalysisData/value_labels_plot_data_structure_data.yml
 checksums:
   data/inputdata/data_ml1.csv: c8c01092a13e0c49be9535fe323e8766
   data/inputdata/data_2.2.csv: 4e1a0541727d0dcf1df49f7248d5de50
@@ -323,4 +328,5 @@ checksums:
   data/analysisdata/plot_23_data_reported_alpha.csv: 00c86da5f3b2b26511d83a2c497e9789
   data/intermediatedata/data_5.1.2_clean.csv: d050d093de2adf892fa279acc1946f8d
   data/analysisdata/cfa_results.csv: a676c4c56a597e91281182cd6290e533
+  data/analysisdata/plot_data_structure_data.csv: 481e383e15e121461e069cd94a61a2f2
 endpoints: Scripts/Manuscript/manuscript.pdf

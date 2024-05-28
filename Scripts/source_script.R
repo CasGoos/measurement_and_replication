@@ -992,6 +992,34 @@ Associations_H6_REV <- function(Data){
 
 
 # Plotting Related Functions ---------------------------------------------------
+### Data Structure Plot data prep
+data_prep_data_structure_plot <- function(Data){
+  data_structure_plot <- Data
+  data_structure_plot$appearance[18] <- 1
+  data_structure_plot$appearance[19] <- 2
+  
+  #unique(data_structure_plot$title)
+  
+  data_structure_plot$title[62] <- data_structure_plot$title[61]
+  data_structure_plot$title[77] <- data_structure_plot$title[76]
+  data_structure_plot$title[90] <- data_structure_plot$title[89]
+  data_structure_plot$title[91] <- data_structure_plot$title[89]
+  data_structure_plot$title[137] <- data_structure_plot$title[136]
+  data_structure_plot$title[149] <- data_structure_plot$title[148]
+  data_structure_plot$title[154] <- data_structure_plot$title[153]
+  
+  measure_count <- c(table(data_structure_plot$title))
+  
+  data_structure_plot <- data_structure_plot[!duplicated(
+    data_structure_plot$title),]
+  
+  data_structure_plot$measure_count <- measure_count
+  
+  return(data_structure_plot)
+}
+
+
+
 ### Plot 23 data prep
 data_prep_plot_23_alpha <- function(Data){
   Data$avg.alpha <- ave(Data$alpha, Data$g)
