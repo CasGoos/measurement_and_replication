@@ -773,10 +773,17 @@ OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE){
   OR <- round(exp(as.numeric(substr(apa_print_result, start = 6, 
                                     stop = 9 + negative_b))), 3) 
   
+  ORCILO <- round(exp(as.numeric(substr(apa_print_result, start = 23 + negative_b, 
+                                        stop = 26 + negative_b*2))), 3) 
+  
+  ORCIHI <- round(exp(as.numeric(substr(apa_print_result, start = 29 + negative_b * 2, 
+                                        stop = 33 + negative_b * 2))), 3)
+  
   result_string_with_OR <- paste0(substr(apa_print_result, start = 0, 
-                                  stop = 12 + negative_b), "$OR = ", OR, "$, ", 
+                                  stop = 12 + negative_b), "$OR = ", OR, 
+                                  "$, 95\\% $[", ORCILO, ", ", ORCIHI,
                                   substr(apa_print_result, 
-                                         start = 13 + negative_b, stop = 99))
+                                         start = 34 + negative_b * 2, stop = 99))
   
   return(result_string_with_OR)
 }

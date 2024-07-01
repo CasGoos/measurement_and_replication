@@ -6,7 +6,7 @@ This appendix contains the multilevel model versions of the models used to test 
 
 ## Hypothesis 3, nested within replication set
 ### Explanation of Relevance
-In this data, replication attempts at different lab locations can be seen as nested within a replication set. In order to see if this nesting might impact the analyses of hypothesis 3, multilevel models are included here as sensitivity checks.
+In this data, replication attempts at different lab locations can be seen as nested within a replication set. To see if this nesting might impact the analyses of hypothesis 3, multilevel models are included here as sensitivity checks.
 
 ### Model
 The specific models used were a multilevel logistic regression random intercept and random slope model. The dependent variable remains replication success at the replication set level, while Cronbach's alpha was no longer averaged across locations.
@@ -49,10 +49,10 @@ apa_table(
 
 ## Hypotheses 5 & 6, nested within Many Labs
 ### Explanation of Relevance
-The models used in the article to test hypotheses 5 & 6 had independence of observations as an assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. 
+The models used in the article to test Hypotheses 5 & 6 had independence of observations as an assumption, the observations here referring to a replication set. this is known to be false since the data is nested within four separate Many Labs projects. 
 
 ### Models
-In order to test if this nested structure might influence the relations described in hypothesis 5 & 6, random intercept and random slope multilevel models with each Many Labs project as a group were implemented as sensitivity analyses. As of writing this article the betareg package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the lmer function from the lme4 package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the betareg package) to better fit the Gaussian model. 
+To test if this nested structure might influence the relations described in Hypothesis 5 & 6, random intercept, and random slope multilevel models with each Many Labs project as a group were implemented as sensitivity analyses. As of writing this article the *betareg* package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the *lmer* function from the *lme4* package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the *betareg* package) to better fit the Gaussian model. 
 
 ```{r Hypotheses5And6SensitivityAnalyses, warning = FALSE}
 ## Hypothesis 5 sensitivity test using a random intercept Guassian model.
@@ -83,7 +83,7 @@ H6_n_check_results_REV <- betareg(Rep_op_REV_ratio ~ mod_REV_ratio, data = data_
 ```
 
 ### Results
-For hypothesis 5, the sensitivity analyses using a random-intercept multilevel regression found a similar significant association as that found by the main test (`r check_h5_REV$full_result$hypothesis_supportTRUE`). This result is in line with hypothesis 5. This result provides some additional evidence for the stability of hypotehsis 5.
+For Hypothesis 5, the sensitivity analyses using a random-intercept multilevel regression found a similar significant association as that found by the main test (`r check_h5_REV$full_result$hypothesis_supportTRUE`). This result is in line with hypothesis 5. This result provides some additional evidence for the stability of hypotehsis 5.
 
-For hypothesis 6, the sensitivity analyses using a random intercept logistic multilevel model resulted in non-significant results, which is contrary to the results found with the main test and is not in line with hypothesis 6 (revised protocol: `r check_h6_REV$full_result$QMP_REV`). This result places some doubt in the results found through the main test reported in the article.
+For Hypothesis 6, the sensitivity analyses using a random intercept logistic multilevel model resulted in non-significant results, which is contrary to the results found with the main test and is not in line with hypothesis 6 (revised protocol: `r check_h6_REV$full_result$QMP_REV`). This result places some doubt in the results found through the main test reported in the article.
 

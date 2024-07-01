@@ -2,10 +2,10 @@
 
 # Initial Coding Protocol QMP Analyses
 
-This appendix contains all of the QMP analyses that in the article and appendices were based on the revised QMP, but then performed based on the QMPs obtained using the initial coding protocol.
+This appendix contains the QMP analyses that in the article and appendices were based on the revised QMP, but then performed based on the QMPs obtained using the initial coding protocol.
 
 ### Explanation
-The data was initially coded using to the preregistered coding protocol. After the coding was completed using the preregistered coding protocol, it was determined that some of the initial ratings were possibly to stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more lenient judgement of QMPs. The coded data using the initial protocol was still separately available, and because this protocol was the one that was pre-registered the results for those analyses are shown here.
+The data was initially coded using to the preregistered coding protocol. After the coding was completed using the preregistered coding protocol, it was determined that some of the initial ratings were possibly too stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more lenient judgement of QMPs. The coded data using the initial protocol was still separately available, and because this protocol was the one that was pre-registered the results for those analyses are shown here.
 
 ### Models
 To test hypothesis 4, the total QMP ratios between replication and original research was compared using a beta-regression where total QMP ratio was predicted by whether the QMP ratio came from an original article, or a replication protocol.
@@ -68,9 +68,9 @@ H6_n_check_results <- betareg(Rep_op_ratio ~ mod_ratio, data = data_h6)$n
 ```
 
 ### Results + Comparison Interpretation
-The figure below displays the distribution of observed QMP ratio's across original articles and replication protocols based on the initial coding protocol.
+The figure below displays the distribution of observed QMP ratios across original articles and replication protocols based on the initial coding protocol.
 
-```{r Plot456CodeInitial, warning = FALSE, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by whether the QMP ratio was obtained from an original article or a replication protocol. The top row shows for each QMP type the proportions of each QMP ratio obtained, darker colours represent proportionally more QMPS, grey means modification did not occur for that measure. The bottom graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots"}
+```{r Plot456CodeInitial, warning = FALSE, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by whether the QMP ratio was obtained from an original article or a replication protocol. The top graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots. The bottom row shows for each QMP type the proportions of each QMP ratio obtained, darker colors represent proportionally more QMPS, grey means modification did not occur for that measure.."}
 # re-ordering the QMP-types, because it didn't save
 plot_456_data$QMP_type <- factor(plot_456_data$QMP_type, levels = c("Definition", "Selection", "Operationalization", "Quantification", "Modification", "Total"))
 
@@ -150,22 +150,22 @@ legend_456_rep <- get_legend(for_legend_plot_456_rep)
 
 
 # combining both plots and the legends into one figure
-grid.arrange(Plot_456_1, 
-             Plot_456_2, 
+grid.arrange(Plot_456_2, 
+             Plot_456_1, 
              legend_456_org,
              legend_456_rep,
-             layout_matrix = rbind(c(1, 3, 4),
-                                    c(2, 2, 2)),
+             layout_matrix = rbind(c(1, 1, 1),
+                                    c(2, 3, 4)),
               widths = c(8, 1, 1))
 ```
 
 The bottom panel of Figure \@ref(fig:Plot456CodeInitial) already shows that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects. Beta-regression was used to test the difference in QMP ratio based on the initial protocol coding, between original articles and replication protocols. The results of this test indicated that this difference was significant (`r betareg_output_to_apa_full(H4_test_results)`). This result is similar to the result found using the revised coding protocol in line with hypothesis 4.
 
-Contrary to the results based on the revised coding protocol, a decrease in QMP ratio based on the initial coding protocol did not significantly relate to replication success (`r H5_test_results_with_OR`). Thus not supporting hypothesis 5.
+Contrary to the results based on the revised coding protocol, a decrease in QMP ratio based on the initial coding protocol did not significantly relate to replication success (`r H5_test_results_with_OR`). Thus, not supporting hypothesis 5.
 
-Similarly to the previous test, the relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Thus not supporting hypothesis 6. Figure \@ref(fig:Plot46InitialDataCode) displays this relationship visually.
+Similarly to the previous test, the relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Thus, not supporting hypothesis 6. Figure \@ref(fig:Plot46InitialDataCode) displays this relationship visually.
 
-```{r Plot46InitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratio’s with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
+```{r Plot46InitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratios with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present"}
 ggplot(plot_46_data[plot_46_data$QMP_type == "QMP.Ratio" & plot_46_data$QMP_Rep_type == "Rep.QMP.Ratio",], aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
   geom_jitter(width = 0.01, height = 0.01) +
@@ -227,7 +227,7 @@ QMP Ratio and Original QMP Ratio as obtained using the Initial Protocol"
 
 ```
 
-```{r Plot46FullInitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratio’s obtained using the intial coding protocol with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots in order to show the number of observations at points where multiple dots were present"}
+```{r Plot46FullInitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratios obtained using the intial coding protocol with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present"}
 # Initial
 ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +

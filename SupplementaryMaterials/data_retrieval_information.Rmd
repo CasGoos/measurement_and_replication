@@ -1,12 +1,23 @@
-# Reproducible data retrieval information
+# Data retrieval information
 
-This supplementary material file contains detailed information on the specific path files and names of the used registered replication protocols and datasets.
+This supplementary material file contains information on the search strategy that was used to retrieve the three main data sources used in this study: the replication protocols, replication datasets, and the original articles. 
 
-## Registered Replication Protocols
+Furthermore, for the replications protocols and replication datasets, we specify here the exact OSF file paths and file names of the specific protocols and datasets that were retrieved.
+
+
+## Replication Protocols
+
+### Search
+
+The OSF page for each Many Labs project was combed through, in order to identify the documents that contained information on the measurement practice and reported reliability. For Many Labs 1 2, & 3 a single replication protocol for all studies could be identified, while for Many Labs 5 protocols were available for each set of replications separately. For Many Labs 5 for each replication set the relevant OSF page was searched through for a protocol file. 
+
+If available, a version of the protocol labelled as revised, post-review, peer-review, or endorsed was selected. Otherwise, the latest uploaded relevant protocol was selected. Protocols labelled as data collection, analysis protocol or anything similar were excluded.
+
+The steps taken to access the replication protocol data from Many Labs 5 were not preregistered, and only became clear upon further investigation of the accessible information. 
+
+### OSF pages
 
 Below are the relevant OSF pages, and exact path and file names of the relevant pre-registered replication protocols that were extracted, to be then coded on measurement reporting information in the Many Labs replications projects.
-
-???look up and add osf pages + project path + file names, and format like:???
 
 Many Labs 1 (<https://osf.io/wx7ck/>):
 - Path: OSF Storage (United States)/
@@ -132,3 +143,36 @@ Many Labs 5 Study 9 measure 1, Vohs & Schooler (2008) (<https://osf.io/8rcbk/>):
 -	Path: Data/OSF Storage (United States)/FinalData/
 -	Data File: ML5_fulldataset_with_suspicion.csv
 
+## Original Articles
+The original articles were identified using the citations for these articles in each replication protocol. They were then retrieved and extracted through searches on Web of Science, Google Scholar, and PsycINFO (in that order). All articles except Hyman and Sheatsley (1950) could be retrieved through this method. Howeever, after contacting the first author of Klein et al. (2014) a suitable version of the article was obtained. Thus in the end all original articles could be retrieved.
+
+# Plot of data information
+
+This can only be run after data is loaded with the main manuscript file.
+
+```{r DataStructurePlotCode, warning = FALSE, fig.cap = "This figure displays the sample size for the included original articles and total sample size for multiple replications. The color of each point indicates whether it represents an original article or a replication. Each point's shape relates to whether the hypothesis was supported or not, while the size indicates the number of measures used within that article or replication. The figure is log10-scaled, each light grey vertical line represents a step of 500 in sample size. Two original articles are not represented in this figure due to them containing no reported sample size.", fig.height = 4, fig.width = 12}
+
+# plot of the multilevel data structure
+ggplot(plot_data_structure_data, aes(x = N, y = factor(many_labs_version, levels = c("5", "3", "2", "1")), 
+                                colour = rep_org, shape = hypothesis_support, size = measure_count)) +
+  geom_point(alpha = .33) +
+  
+  scale_x_continuous(trans = "log10", breaks = c(10, 100, 1000, 10000), 
+                     labels = c(10, 100, 1000, 10000), limits = c(10, 10000),  
+                     minor_breaks = seq(500, 10000, 500)) +
+  
+  theme_minimal() +
+  theme(plot.margin = unit(c(1, 6.5, 1, 1), "lines"), 
+        panel.grid.major.x = element_line(color = "grey",
+                                          size = 0.5,
+                                          linetype = 1),
+        text = element_text(size = 15)) +
+  
+  guides(color = guide_legend(nrow = 1, byrow = TRUE)) +
+  guides(shape = guide_legend(nrow = 2, byrow = TRUE)) +
+  guides(size = guide_legend(nrow = 2, byrow = TRUE)) +
+  
+  labs(x = "N", y = "Many Labs Version", color = "Obtained from:", 
+       size = "Nr. measures", shape = "Replicated")
+
+```

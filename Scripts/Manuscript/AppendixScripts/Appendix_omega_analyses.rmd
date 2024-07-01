@@ -5,10 +5,10 @@
 This appendix contains all results based on calculated reliabilities using the omega coefficient as the coefficient of choice instead of the alpha coefficient.
 
 ### explanation why
-Omega was included since it has been argued to be a more informative measure of score reliability than alpha, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Omega was calculated using the omega function in the psych R package [@R-psych]. Default arguments were used in the function except the nfactors argument, which was set to 1.
+Omega was included since it has been argued to be a more informative measure of reliability than alpha, while also providing validity evidence for the scale [@crutzen2017scale; @deng2017testing]. Omega was calculated using the omega function in the *psych* R package [@R-psych]. Default arguments were used in the function except the nfactors argument, which was set to 1.
 
 ### Models
-In order to separate between and within variance in reliability, a multilevel random intercept model was specified with replication set as the grouping variable, which was the same model used for testing. The difference was that the omega value of a replication was used as dependent variable in this instance, using the lmer function from the lme4 package [@R-lme4].
+To separate between and within variance in reliability, a multilevel random intercept model was specified with replication set as the grouping variable, which was the same model used for testing. The difference was that the omega value of a replication was used as dependent variable in this instance, using the *lmer* function from the *lme4* package [@R-lme4].
 
 ```{r Hypothesis2ModelOmega, include = FALSE}
 # intercept only model to check the within and between group variance.
@@ -28,7 +28,7 @@ ICC_omega <- between_group_variance_omega / (within_group_variance_omega + betwe
 
 ```
 
-The analysis for H3 related the calculated average reliability coefficients for each replication set to whether or not the replication was successful when judged at meta-significance level of $alpha <.05$.
+The analysis for H3 related the calculated average reliability coefficients for each replication set to whether the replication was successful when judged at meta-significance level of $alpha <.05$.
 
 ```{r Hypothesis3MainTestOmega, include = FALSE}
 ## The main model to test hypothesis 3, through a logistic regression model.
@@ -73,7 +73,7 @@ When looking at the between and within group variance in omega coefficients, com
 The calculated Omega coefficient did not significantly relate to replication success in the main logistic regression model. Similarly, non-significance was also observed in the multilevel random-intercept and random-slope models (random intercept: `r H3_test_result_int_sensitivity_omega$full_result$omega`; random slope: `r H3_test_result_slp_sensitivity_omega$full_result$omega`). 
 
 ```{r ReplicabilityReliabilityTestTableOmega, warning=FALSE}
-# creating the dataframe for the table <- separate the OMEGA from here???
+# creating the dataframe for the table 
 H3_table_dataframe_omega <- rbind(H3_test_result_main_omega$table, H3_test_result_int_sensitivity_omega$table, H3_test_result_slp_sensitivity_omega$table)
 
 
@@ -84,14 +84,14 @@ H3_table_for_printing_omega <- rbind(c("Logistic Regression Model", "", "", "", 
 # print the table in apa formatting
 apa_table(
   H3_table_for_printing_omega, align = c("l", "r", "r", "r", "r")
-  , caption = "Model Results from Tests of Hypothesis 3 based on the Omega COefficient"
+  , caption = "Model Results from Tests of Hypothesis 3 based on the Omega Coefficient"
   , escape = FALSE, placement= "htp", midrules = c(2, 4, 6))
 
 ```
 
-Thus no evidence for hypothesis 3 was found. However, caution in interpreting the test results is needed. The number of measures for which the omega coefficient could be and was calculated was quite low (`r apa_num(sum(!is.na(data_h3_avg$omega)), numerals = FALSE)`).
+Thus, no evidence for hypothesis 3 was found. However, caution in interpreting the test results is needed. The number of measures for which the omega coefficient could be and was calculated was quite low (`r apa_num(sum(!is.na(data_h3_avg$omega)), numerals = FALSE)`).
 
-The figure below shows additional information on the distributions of the calculated omega scores and their relation to replication success. It mostly resembles Figure \@ref(fig:Plot23AlphaCode) from the article, with some studies being omitted as the omega coefficient function did not converge or run properly on those data. Furthermore, information with regard to heterogeneity was not present since the standard error of omega was not known, and comparisons between reported coefficients were omitted, since no article reported any omega coefficients.
+The figure below shows additional information on the distributions of the calculated omega scores and their relation to replication success. It mostly resembles Figure \@ref(fig:Plot23AlphaCode) from the article, with some studies being omitted as the omega coefficient function did not converge or run properly on those data. Furthermore, information reagrding heterogeneity was not present since the standard error of omega was not known, and comparisons between reported coefficients were omitted, since no article reported any omega coefficients.
 
 ```{r Plot23OmegaCode}
 # data re-ordering (was not saved in export)
