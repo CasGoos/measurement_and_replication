@@ -22,11 +22,13 @@ author:
   - name          : "Bakker, M."
     affiliation   : "1"
     role:
+      - "Conceptualization"
       - "Supervision"
       - "Writing - Review & Editing"
   - name          : "Wicherts, J.M."
     affiliation   : "1"
     role:
+      - "Conceptualization"
       - "Supervision"
       - "Writing - Review & Editing"
   - name          : "Nuijten, M.B."
@@ -305,7 +307,7 @@ We retrieved the data on the replication protocols, and replication datasets of 
 
 The replication datasets refer to the publicly available datasets containing the data obtained from all labs that took part in a Many Labs study. For the analyses, we extracted the scores on the items of each previously identified measure that met our inclusion criteria specified below. When scores could not be clearly identified, any available codebooks, analysis scripts or study materials were used to identify the relevant scores.
 
-To be included in the planned analyses on calculated reliabilities, the measure had to be a scale consisting of multiple items. If cleaned data was available this was chosen over raw data, to ensure that variables were coded as intended (e.g. no reverse-coded items). Pilot data were omitted from the analyses entirely. These criteria resulted in suitable item score data from `r apa_num(length(unique(data_h3_multiple$g)))` replication sets spread across on average approximately `r apa_num(mean(table(data_h3_multiple$g)), digits = 0)` lab locations for the analyses of Hypotheses 2 & 3.
+To be included in the planned analyses on calculated reliabilities, the measure had to be a scale consisting of multiple items. If cleaned data was available this was chosen over raw data, to ensure that variables were coded as intended (e.g. no reverse-coded items). Pilot data were omitted from the analyses entirely. These criteria resulted in suitable item score data from `r apa_num(nrow(data_h3_avg))` replication sets spread across on average approximately `r apa_num(mean(table(data_h3_multiple$g)), digits = 0)` lab locations for the analyses of Hypotheses 2 & 3.
 
 ```{r CleaningReplicationDatasetsData, include = FALSE, eval = FALSE}
 ##### Data already available, code does not need to be run!
@@ -816,8 +818,6 @@ data_h3_avg <- Data_prep_H3_avg(data_h5, data_h3_multiple)
 
 
 ## graphs
-# plot for data visualization overview
-plot_data_structure_data <- data_prep_data_structure_plot(data_h4)
 # plot accompanying the results for Hypotheses 4, 5, & 6.
 plot_456_data <- data_prep_plot_456(data_h6)
 # plot accompanying the results for Hypotheses 4, & 6
@@ -920,15 +920,6 @@ open_data(data = data_h3_avg, filename = paste0(paste0(
   value_labels = paste0(paste0(
     "Data/AnalysisData/value_labels_", 
     deparse(substitute(data_h3_avg))), ".yml")) 
-
-open_data(data = plot_data_structure_data, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_data_structure_data))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_data_structure_data))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_data_structure_data))), ".yml")) 
 
 open_data(data = plot_23_data_alpha, filename = paste0(paste0(
   "Data/AnalysisData/", deparse(substitute(plot_23_data_alpha))), ".csv"),
@@ -1060,7 +1051,6 @@ ggplot(plot_23_data_alpha_reordered, aes(x = alpha, y = g)) +
   xlab("Cronbach's alpha") 
 
 
-
 ```
 
 The distribution of reliabilities varied across measures. Most of the measures near the bottom showed average reliability scores of at least .80, corresponding to adequate reliability for general research purposes [@nunnally1994assessment], with minimal variation between labs. However, other measures showed not only considerably lower average reliability scores, but also greater variation.
@@ -1112,7 +1102,7 @@ Cronbach's alpha did not significantly predict replication success in the main l
 
 ### Reliability & Validity Reporting
 
-Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures in relation to reliability reporting. First, it shows that almost half of the measures in both replication (n = `r apa_num(table(coded_data_replications$N_items)["1 item measure"])`) and original research (n = `r apa_num(table(coded_data_original_shortened$N_items)["1 item measure"])`) were single-item measures. When looking at the multiple item measures, the graph illustrates that `r N_reported_reliabilities_replications` measures in the replication protocols and `r N_reported_reliabilities_original` in the original articles reported a reliability coefficient. The most commonly reported reliability coefficient was Cronbach's Alpha, which accounted for `r apa_num(sum(table(coded_data_replications$N_items, coded_data_replications$reliability_type)["multiple item measure", "alpha"]), numerals = FALSE)` reported reliabilities in the replication protocols, and `r apa_num(sum(table(coded_data_original_shortened$N_items, coded_data_original_shortened$reliability_type)["multiple item measure", "alpha"]))` in the original articles.
+Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures in relation to reliability reporting. First, it shows that almost half of the measures in both replication (n = `r apa_num(sum(coded_data_replications$N_items == "1 item measure"))`) and original research (n = `r apa_num(sum(coded_data_original_shortened$N_items == "1 item measure"))`) were single-item measures. When looking at the multiple item measures, the graph illustrates that `r N_reported_reliabilities_replications` measures in the replication protocols and `r N_reported_reliabilities_original` in the original articles reported a reliability coefficient. The most commonly reported reliability coefficient was Cronbach's Alpha, which accounted for `r apa_num(sum(coded_data_replications$reliability_type == "alpha"), numerals = FALSE)` reported reliabilities in the replication protocols, and `r apa_num(sum(coded_data_original_shortened$reliability_type == "alpha"))` in the original articles.
 
 ```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it."}
 knitr::include_graphics(path = "../../SupplementaryMaterials/reliability_reporting_flow_diagram.png")
@@ -1353,6 +1343,16 @@ Furthermore, we argue that researchers seeking to replicate a study should first
 # Conclusion
 
 Through our investigations into the reliability, and reporting of measurement in the Many Labs replications and associated original studies, we found that reliability and validity evidence was reported infrequently. Furthermore, QMPs that obscured important information needed to evaluate and reconstruct the measurement were common, especially in original research. QMPs were in turn related to the replicability of a finding. Results were less clear for reliability differences between original and replication, due to lack of power. However, around a quarter of measures showed signs of significant variation in reliability across labs. Combined these findings illustrate the need for more concrete standards in measurement reporting, and that researchers should consider the validity and reporting completeness of a study's measurement before attempting to replicate it.
+
+
+## ORCID iDs
+Cas Goos https://orcid.org/0009-0005-3792-4148
+Marjan Bakker https://orcid.org/0000-0001-9024-337X
+Jelte M. Wicherts https://orcid.org/0000-0003-2415-2933
+Michèle B. Nuijten https://orcid.org/0000-0002-1468-8585
+
+## Funding
+The preparation of this article was supported by the veni grant ??? awarded to Michèle Nuijten, and the vici grant ???  awarded to Jelte M. Wicherts from the Netherlands Organization for Scientific Research (NWO).
 
 \newpage
 

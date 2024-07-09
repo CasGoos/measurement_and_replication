@@ -1,5 +1,6 @@
 # source_script
 
+
 # Data Cleaning Functions ------------------------------------------------------
 ### renaming the columns and rows to accommodate the joining of the three 
 ### datasets.
@@ -102,7 +103,8 @@ restructuring <- function(Data){
 
 ### Recoding Dataset Content for Analysis
 recoding <- function(Data){
-  # changing the variable types for each column
+  # changing the variable types for each column to better represent their 
+  # intended variable type
   class(Data$many_labs_version) <- "numeric"
   Data$rep_org <- droplevels(as.factor(Data$rep_org))
   Data$multi <- droplevels(as.factor(Data$multi))
@@ -218,6 +220,7 @@ calculating <- function(Data){
   return(Data)
 }
 
+
 # QMP Related Functions --------------------------------------------------------
 ### Hypothesis 4 
 # data load and prep function
@@ -234,13 +237,15 @@ data_prep_H4 <- function(Data_Original, Data_Replications){
   return(Data_H4)
 }
 
+
 # modelling and results returning function
 Model_H4 <- function(Data){
   return_list <- list(first = 0, revised = 0)
-  # running the models one with none revised QMP ratio's and one with
+  # running the model with initial QMP ratio's
   Model_H4 <- betareg(QMP_ratio ~ rep_org, data = Data)
   return_list[[1]] <- summary(Model_H4)$coefficients
   
+  # running the model with revised QMP ratio's
   Model_H4_REV <- betareg(QMP_REV_ratio ~ rep_org, data = Data)
   return_list[[2]] <- summary(Model_H4_REV)$coefficients
   
@@ -269,18 +274,21 @@ data_prep_H5 <- function(Data_Replications){
   return(Data_H5)
 }
 
+
 # modelling and results returning function
 Model_H5 <- function(Data){
   return_list <- list(first = 0, revised = 0)
-  # running the models one with none revised QMP ratio's and one with
+  # running the model with initial QMP ratio's
   Model_H5 <- betareg(QMP_ratio ~ hypothesis_support, data = Data)
   return_list[[1]] <- summary(Model_H5)$coefficients
   
+  # running the model with revised QMP ratio's
   Model_H5_REV <- betareg(QMP_REV_ratio ~ hypothesis_support, data = Data)
   return_list[[2]] <- summary(Model_H5_REV)$coefficients
   
   return(return_list) 
 }
+
 
 # sensitivity check (using a random intercept model) function
 Sensitivity_H5 <- function(Data){
@@ -290,11 +298,12 @@ Sensitivity_H5 <- function(Data){
   Data$QMP <- log(Data$QMP_ratio /(1 - Data$QMP_ratio))
   Data$QMP_REV <- log(Data$QMP_REV_ratio /(1 - Data$QMP_REV_ratio))
   
-  # running the models one with none revised QMP ratio's and one with
+  # running the model with initial QMP ratio's
   Check_H5 <- lmer(formula = QMP ~ 1 + hypothesis_support + 
                      (1|many_labs_version), data = Data)
   return_list[[1]] <- summary(Check_H5)$coefficients
   
+  # running the model with revised QMP ratio's
   Check_H5_REV <- lmer(formula = QMP_REV ~ 1 + hypothesis_support + 
                          (1|many_labs_version), data = Data)
   return_list[[2]] <- summary(Check_H5_REV)$coefficients
@@ -338,20 +347,23 @@ data_prep_H6 <- function(Data_Original, Data_Replications){
   return(Data_H6)
 }
 
+
 # modelling and results returning function for overall effect (unplanned)
 Model_H6 <- function(Data){
   return_list <- list(first = 0, revised = 0)
-  # running the models one with none revised QMP ratio's and one with
+  # running the model with initial QMP ratio's
   Model_H6 <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = Data)
   return_list[[1]] <- summary(Model_H6)$coefficients
   
+  # running the model with revised QMP ratio's
   Model_H6_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = Data)
   return_list[[2]] <- summary(Model_H6_REV)$coefficients
   
   return(return_list) 
 }
 
-# creates and returns the associations between QMP categories
+
+# creates and returns the associations between each of the QMP categories
 Associations_H6 <- function(Data){
   return_list <- list(def_def = 0, def_op = 0, def_sel = 0, def_quant = 0, 
                       def_mod = 0, op_def = 0, op_op = 0, op_sel = 0, 
@@ -428,7 +440,9 @@ Associations_H6 <- function(Data){
   return(return_list) 
 }
 
-# creates and returns the associations between QMP categories (revised)
+
+# creates and returns the associations between each of the QMP categories 
+# (revised)
 Associations_H6_REV <- function(Data){
   return_list <- list(def_def = 0, def_op = 0, def_sel = 0, def_quant = 0, 
                       def_mod = 0, op_def = 0, op_op = 0, op_sel = 0, 
@@ -506,6 +520,7 @@ Associations_H6_REV <- function(Data){
   return(return_list) 
 }
 
+
 # sensitivity check (using a random intercept model) function
 Sensitivity_H6 <- function(Data){
   return_list <- list(first = 0, revised = 0)
@@ -516,11 +531,12 @@ Sensitivity_H6 <- function(Data){
   Data$QMP_REV <- log(Data$QMP_REV_ratio /(1 - Data$QMP_REV_ratio))
   Data$Rep_QMP_REV <- log(Data$Rep_QMP_REV_ratio /(1 - Data$Rep_QMP_REV_ratio))
   
-  # running the models one with none revised QMP ratio's and one with
+  # running the model with initial QMP ratio's
   Check_H6 <- lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), 
                    data = Data)
   return_list[[1]] <- summary(Check_H6)$coefficients
   
+  # running the model with revised QMP ratio's
   Check_H6_REV <- lmer(formula = Rep_QMP_REV ~ 1 + QMP_REV + 
                          (1|many_labs_version), data = Data)
   return_list[[2]] <- summary(Check_H6_REV)$coefficients
@@ -528,16 +544,20 @@ Sensitivity_H6 <- function(Data){
   return(return_list) 
 }
 
+
 # function to convert betareg output to apa full style from papaja's apa_print
 betareg_output_to_apa_full<- function(betareg_output, coefficient_number = 2){
+  # extracting the relevant betareg output
   sum_object <- summary(betareg_output)$coefficients$mean[coefficient_number,]
   
+  # extracting statistics from the betareg output
   estimate <- sum_object[1]
   std_error <- sum_object[2]
   z_value <- sum_object[3]
   p_value <- sum_object[4]
   n <- betareg_output$n
   
+  # calculating the confidence intervals
   if(z_value < 0){
     CI_HI <- estimate - z_value * (std_error / sqrt(n))
     CI_LO <- estimate + z_value * (std_error / sqrt(n))
@@ -546,28 +566,30 @@ betareg_output_to_apa_full<- function(betareg_output, coefficient_number = 2){
     CI_HI <- estimate + z_value * (std_error / sqrt(n))
   }
   
-  
+  # formatting the statistics for printing
   estimate_string <- paste0("$b = ", apa_num(estimate), "$, ")
   CI_string <- paste0("95\\% CI $[", apa_num(CI_LO), ", ", apa_num(CI_HI), "]$, ")
   z_string <- paste0("$z = ", apa_num(z_value), "$, ")
-
-  
   p_string <- paste0("$p = ", apa_p(p_value), "$")
   
   
   return(paste0(estimate_string, CI_string, z_string, p_string))
 }
 
+
 # function to convert betareg output to apa style for a simple table
 betareg_output_to_apa_simple_table <- function(betareg_output, coefficient_number = 2){
+  # extracting the relevant betareg output
   sum_object <- summary(betareg_output)$coefficients$mean[coefficient_number,]
   
+  # extracting statistics from the betareg output
   estimate <- apa_num(sum_object[1])
   std_error <- apa_num(sum_object[2])
   p_value <- apa_p(sum_object[4])
   
   return(c(estimate, std_error, p_value))
 }
+
 
 
 # Reliability Related Functions ------------------------------------------------
@@ -588,18 +610,19 @@ data_prep_H1 <- function(Data_Original, Data_Replications){
 }
 
 
+
 ### Hypothesis 2
 # ASE (alpha standard error) formula for a single lab
 ASE_for_Lab <- function(lab_data){
   # NOTE: only works with non-missing data:
-  # selecting only the complete cases for the ASE calculations
+  # Therefore, selecting only the complete cases for the ASE calculations
   lab_data <- lab_data[complete.cases(lab_data),]
   
   V_matrix <- cov(lab_data)
   p_num <- ncol(lab_data)
   j_vec <- rep(1, times = p_num)
   
-  # not sure about this implementation:
+  # calculating the Q-value from @duhachek2004AlphaStandardError
   Q_value <- ((2 * p_num^2) / ((p_num - 1)^2 * (crossprod(j_vec, V_matrix) %*% 
     j_vec)^3)) * ((crossprod(j_vec, V_matrix) %*% j_vec) * (sum(diag(
       V_matrix^2)) + sum(diag(V_matrix))^2) - 2*(sum(diag(V_matrix))) * (
@@ -610,6 +633,7 @@ ASE_for_Lab <- function(lab_data){
   return(ASE)
 }
 
+
 # obtaining the omega and alpha values for each measure (helper function).
 omega_and_alpha <- function(Data, m_length){
   omega_and_alpha_vec <- c(t(omega(Data[2:m_length], nfactors = 1)[3:4]), 
@@ -619,6 +643,7 @@ omega_and_alpha <- function(Data, m_length){
   
   return(omega_and_alpha_vec)
 }
+
 
 # obtaining the alpha values for 2.12.3, 2.20, & 3.2.1.1 (helper function).
 just_alpha <- function(Data, m_length){
@@ -648,6 +673,7 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
     data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, 
     data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, 
     data_5.7_clean, data_5.9.1_clean) 
+  
   # creating an empty dataframe to insert all the responses into
   Data_H2 <- data.frame(alpha = 0, omega.tot = 0, ASE = 0, tau = 0, QEp = 0, 
                         pi.lb = 0, pi.ub = 0, g = 0)
@@ -671,7 +697,7 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
     reliability_frame$ASE <- as.numeric(reliability_frame$ASE)
     reliability_frame$g <- as.factor(i)
     
-    # meta-analysis
+    # conducting the reliability-generalization meta-analysis
     rma_model <- rma(yi = reliability_frame$alpha, sei = reliability_frame$ASE, 
                      method = "REML", control=list(stepadj=0.5, maxiter=1000))
     
@@ -684,7 +710,9 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
     
     Data_H2 <- rbind(Data_H2, reliability_frame)
   }
-
+  
+  # indexing the meta-analysis results with a specific index relating to a 
+  # row (measure) in coded_data_replication
   Data_H2 <- Data_H2[-1,]
   
   Data_H2$reporting_index <- c(rep(10, 36), rep(11, 36), rep(14, 36), 
@@ -708,16 +736,6 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
 # For Norenzayan (2.20) results might change due to changes in data.
 
 
-# add the ASE, and then do a meta-analysis to obtain the tau^2 to then obtain 
-# tau and perhaps the prediction interval afterwards.
-
-# use the rma function from the metafor package, for each replication set:
-# yi = calculated alpha
-# sei = ASE
-# method = "REML" 
-# then, extract tau^2 from metafor output for each replication set & use the
-# predict function to obtain prediction intervals (to add in green?)
-
 
 ### Hypothesis 3
 # indexing whether or not an effect replicated (helper function)
@@ -729,6 +747,7 @@ replication_indexer <- function(Data_H5, Data_H2){
   return(replication_index)
 }
 
+
 # data load and prep functions
 Data_prep_H3_multiple <- function(Data_H5, Data_H2){
   replication_index <- replication_indexer(Data_H5, Data_H2)
@@ -738,6 +757,7 @@ Data_prep_H3_multiple <- function(Data_H5, Data_H2){
   
   return(Data_H3_multiple)
 }
+
 
 Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
   # alpha averaged across sites
@@ -757,6 +777,7 @@ Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
                             pi.ub = sapply(split(Data_H3_multiple$pi.ub, 
                                                Data_H3_multiple$g), mean))
   
+  # ensuring that the reporting index is in order
   Data_H3_avg <- Data_H3_avg[c(1, 12:19, 2:11),]
   
   Data_H3_avg$reporting_index <- append(append(unique(
@@ -768,17 +789,21 @@ Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
 }
 
 
-
+# function to add Odds-Ratio to apa_full output of logistic regressions
 OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE){
+  # the odds-ratio
   OR <- round(exp(as.numeric(substr(apa_print_result, start = 6, 
                                     stop = 9 + negative_b))), 3) 
   
+  # the lower bound 95% confidence interval for the odds-ratio
   ORCILO <- round(exp(as.numeric(substr(apa_print_result, start = 23 + negative_b, 
                                         stop = 26 + negative_b*2))), 3) 
   
+  # the upper bound 95% confidence interval for the odds-ratio
   ORCIHI <- round(exp(as.numeric(substr(apa_print_result, start = 29 + negative_b * 2, 
                                         stop = 33 + negative_b * 2))), 3)
   
+  # combining the calculated and existing results into a printable string
   result_string_with_OR <- paste0(substr(apa_print_result, start = 0, 
                                   stop = 12 + negative_b), "$OR = ", OR, 
                                   "$, 95\\% $[", ORCILO, ", ", ORCIHI,
@@ -787,6 +812,7 @@ OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE){
   
   return(result_string_with_OR)
 }
+
 
 
 # Validity Related Functions ---------------------------------------------------
@@ -827,6 +853,8 @@ cfa_ML_measures <- function(Extracted_Data_List){
     parallel_N_factors <- fa.parallel(Extracted_Data_List[[i]][-1], 
                                       fa = "fa")$nfact
     
+    # checking whether the evidence of at least one test is in favor of 
+    # unidimensionality
     single_factor <- ifelse(RMSEA_value < 0.08 | 
                               parallel_N_factors == 1, TRUE, FALSE)
     
@@ -841,7 +869,7 @@ cfa_ML_measures <- function(Extracted_Data_List){
 
 
 # Analyses Test Functions ------------------------------------------------------
-  # creates and returns the associations between QMP categories
+# creates and returns the associations between QMP categories
 Associations_H6 <- function(Data){
   return_list <- list(def_def = 0, def_op = 0, def_sel = 0, def_quant = 0, 
                       def_mod = 0, op_def = 0, op_op = 0, op_sel = 0, 
@@ -917,6 +945,7 @@ Associations_H6 <- function(Data){
   
   return(return_list) 
 }
+
 
 # creates and returns the associations between QMP categories (revised)
 Associations_H6_REV <- function(Data){
@@ -999,41 +1028,18 @@ Associations_H6_REV <- function(Data){
 
 
 # Plotting Related Functions ---------------------------------------------------
-### Data Structure Plot data prep
-data_prep_data_structure_plot <- function(Data){
-  data_structure_plot <- Data
-  data_structure_plot$appearance[18] <- 1
-  data_structure_plot$appearance[19] <- 2
-  
-  #unique(data_structure_plot$title)
-  
-  data_structure_plot$title[62] <- data_structure_plot$title[61]
-  data_structure_plot$title[77] <- data_structure_plot$title[76]
-  data_structure_plot$title[90] <- data_structure_plot$title[89]
-  data_structure_plot$title[91] <- data_structure_plot$title[89]
-  data_structure_plot$title[137] <- data_structure_plot$title[136]
-  data_structure_plot$title[149] <- data_structure_plot$title[148]
-  data_structure_plot$title[154] <- data_structure_plot$title[153]
-  
-  measure_count <- c(table(data_structure_plot$title))
-  
-  data_structure_plot <- data_structure_plot[!duplicated(
-    data_structure_plot$title),]
-  
-  data_structure_plot$measure_count <- measure_count
-  
-  return(data_structure_plot)
-}
-
-
-
 ### Plot 23 data prep
 data_prep_plot_23_alpha <- function(Data){
+  # calculating the average alpha per group
   Data$avg.alpha <- ave(Data$alpha, Data$g)
+  
+  # reordering the plot from least to most reliable split by replication success
   Plot_23_data <- Data[order(-Data$replication, -Data$avg.alpha),]
   Plot_23_data <- Plot_23_data[Plot_23_data$alpha > 0,]
   Plot_23_data$g <- fct_inorder(as.factor(Plot_23_data$g), ordered = NA)
   
+  # noting down the names of the relevant articles and if needed for 
+  # clarification, the specific variable they assessed.
   # checked with:
   # data_h5[unique(plot_23_data_alpha_reordered$reporting_index), 3]
   # data_h5[unique(plot_23_data_alpha_reordered$reporting_index), 5] 
@@ -1053,13 +1059,20 @@ data_prep_plot_23_alpha <- function(Data){
 }
 
 
-
 # and for omega
 data_prep_plot_23_omega <- function(Data){
+  # checking for each data row that they have a calculated omega coefficient
   Data <- Data[!is.na(Data$omega),]
+  
+  # calculating the average omega per group
   Data$avg.omega <- ave(Data$omega, Data$g)
+  
+  # reordering the plot from least to most reliable split by replication success
   Plot_23_data <- Data[order(-Data$replication, -Data$avg.omega),]
   Plot_23_data$g <- fct_inorder(as.factor(Plot_23_data$g), ordered = NA)
+  
+  # noting down the names of the relevant articles and if needed for 
+  # clarification, the specific variable they assessed.
   levels(Plot_23_data$g) <- c("Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
                               "Shnabel & Nadler (2008)", "Husnu & Crisp (2010)", 
                               "Vohs & Schooler (2008)", "Cacioppo et al. (1983), arg", 
@@ -1071,7 +1084,6 @@ data_prep_plot_23_omega <- function(Data){
   
   return(Plot_23_data)
 }
-
 
 
 # data of reported alpha coefficients from the studies for which alpha 
@@ -1091,12 +1103,14 @@ data_prep_plot_23_alpha_reported <- function(Data_reporting, Data_calculated,
                 ]$reliability_coeff[c(4, 4, 2, 11, 7, 8, 9, 6, 1)],
   coefficient_calculated = Data_calculated$alpha[c(4, 3, 18, 2, 6, 7, 8, 5, 1)])
   
-  
+  # calculating the difference between reported and mean calculated alpha
+  # coefficient
   plot_23_data_on_reported$coefficient_difference <- 
     plot_23_data_on_reported$coefficient_reported - 
     plot_23_data_on_reported$coefficient_calculated
   
-  
+  # testing whether or not (for those studies that had a reported alpha) if
+  # it was out of the 95% bounds arround the mean calculated alpha
   plot_23_data_on_reported$significance <- FALSE
   study_index <- c(4, 3, 18, 2, 6, 7, 8, 5, 1)
   
@@ -1116,6 +1130,8 @@ data_prep_plot_23_alpha_reported <- function(Data_reporting, Data_calculated,
 
 ### 456 plots data prep
 data_prep_plot_456 <- function(Data){
+  # creating a dataset where each row contains the QMP ratio for each QMP type 
+  # of each measure in the original and replication data.
   Plot_456_ratio_data <- gather(Data[c("def_ratio", "op_ratio", 
                                            "sel_ratio", "quant_ratio", "mod_ratio", "QMP_ratio")], 
                                     QMP_type, QMP_ratio, c("def_ratio", "op_ratio", "sel_ratio", 
@@ -1128,11 +1144,13 @@ data_prep_plot_456 <- function(Data){
                                           "Rep_quant_ratio", "Rep_mod_ratio", "Rep_QMP_ratio"), 
                                         factor_key = TRUE)
   
+  # creating a QMP_ratio + 1 variable to enable creating the legend for the plot
   Plot_456_ratio_data$QMP_ratio_1 <- Plot_456_ratio_data$QMP_ratio
   Plot_456_ratio_rep_data$QMP_ratio_1 <- Plot_456_ratio_rep_data$QMP_ratio + 1
   
   
-  
+  # creating a dataset where each row contains the revised QMP ratio for each 
+  # QMP type of each measure in the original and replication data.
   Plot_456_ratio_data_REV <- gather(Data[c("def_ratio", "op_REV_ratio", 
                                            "sel_REV_ratio", "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio")], 
                                     QMP_type, QMP_ratio_REV, c("def_ratio", "op_REV_ratio", "sel_REV_ratio", 
@@ -1146,6 +1164,7 @@ data_prep_plot_456 <- function(Data){
                                         factor_key = TRUE)
 
   
+  # creating nicer names for in the graph
   levels(Plot_456_ratio_data_REV$QMP_type) <- c("Definition", 
                                                 "Operationalization",
                                                 "Selection", "Quantification", 
@@ -1155,15 +1174,19 @@ data_prep_plot_456 <- function(Data){
                                                     "Quantification", "Modification", 
                                                     "Total")
   
+  # adding the lables of original and replication to each of the QMP ratios
   Plot_456_ratio_data_REV$RepOrg <- as.factor(rep("Original", 
                                                   times = nrow(Plot_456_ratio_data_REV)))
   Plot_456_ratio_rep_data_REV$RepOrg <- as.factor(rep("Replication", 
                                                       times = nrow(Plot_456_ratio_data_REV)))
   
+  # creating a revised QMP_ratio + 1 variable to enable creating the legend for 
+  # the plot
   Plot_456_ratio_data_REV$QMP_ratio_1_REV <- Plot_456_ratio_data_REV$QMP_ratio
   Plot_456_ratio_rep_data_REV$QMP_ratio_1_REV <- Plot_456_ratio_rep_data_REV$QMP_ratio + 1
   
-  
+  # combining the original, replication, revised original, and revised 
+  # replication together into one dataset.
   Plot_456_data <- cbind(rbind(Plot_456_ratio_data[,2:3], Plot_456_ratio_rep_data[,2:3]), 
                          rbind(Plot_456_ratio_data_REV, Plot_456_ratio_rep_data_REV))
   
@@ -1172,8 +1195,7 @@ data_prep_plot_456 <- function(Data){
 }
 
 
-
-### Function to extract legend from plot for plot 456
+### Function to extract legend from a plot so that it can be added to plot 456
 get_legend <- function(a_plot){ 
   tmp <- ggplot_gtable(ggplot_build(a_plot)) 
   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
@@ -1185,17 +1207,21 @@ get_legend <- function(a_plot){
 
 ### 46 plots data prep
 data_prep_plot_46 <- function(Data){
+  # renaming the column names to be shorter and fit easier
   colnames(Data) <- c("Def.Ratio", "Op.Ratio", "Sel.Ratio", 
                       "Quant.Ratio", "Mod.Ratio", "QMP.Ratio", "Rep.Def.Ratio", "Rep.Op.Ratio", 
                       "Rep.Sel.Ratio", "Rep.Quant.Ratio", "Rep.Mod.Ratio", "Rep.QMP.Ratio")
   
+  # putting into rows both the type and ratio of each combination of a specific 
+  # category of a QMP for each measure in original articles and in replications.
   Plot_46_data <- gather(Data, QMP_type, QMP_ratio, 
-                         c("Def.Ratio", "Op.Ratio", "Sel.Ratio", "Quant.Ratio", "Mod.Ratio", "QMP.Ratio"), 
-                         factor_key = TRUE)
+                         c("Def.Ratio", "Op.Ratio", "Sel.Ratio", "Quant.Ratio", 
+                           "Mod.Ratio", "QMP.Ratio"), factor_key = TRUE)
   
   Plot_46_data <- gather(Plot_46_data, QMP_Rep_type, QMP_Rep_ratio, 
                          c("Rep.Def.Ratio", "Rep.Op.Ratio", "Rep.Sel.Ratio", 
-                           "Rep.Quant.Ratio", "Rep.Mod.Ratio", "Rep.QMP.Ratio"), factor_key = TRUE)
+                           "Rep.Quant.Ratio", "Rep.Mod.Ratio", "Rep.QMP.Ratio"), 
+                         factor_key = TRUE)
   
   return(Plot_46_data)
 }

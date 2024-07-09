@@ -502,10 +502,6 @@
 
 *Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. Additionally, the QMP ratio for each of the initial and revised QMP categories for both the original and revised codes had some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model.
 
-### plot_data_structure_data.csv
-
-*Explanation*: Contain all of the data from the data_h4.csv filtered based on having a unique title (that was not due to a typo or copying error) to extract the individual studies and replication rather than individual measures into a dataset. Furthermore, the total count of measures for each study or replication was added to this dataset.
-
 ### plot_23_data_alpha.csv
 
 *Explanation*: Contain all of the data from the data_h3_multiple.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. For each remaining replication, the g indexing variable was changed to reflect the names of the articles were adjusted to look better in the figure this dataset was used for.
