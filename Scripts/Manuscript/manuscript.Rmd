@@ -1104,7 +1104,7 @@ Cronbach's alpha did not significantly predict replication success in the main l
 
 Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures in relation to reliability reporting. First, it shows that almost half of the measures in both replication (n = `r apa_num(sum(coded_data_replications$N_items == "1 item measure"))`) and original research (n = `r apa_num(sum(coded_data_original_shortened$N_items == "1 item measure"))`) were single-item measures. When looking at the multiple item measures, the graph illustrates that `r N_reported_reliabilities_replications` measures in the replication protocols and `r N_reported_reliabilities_original` in the original articles reported a reliability coefficient. The most commonly reported reliability coefficient was Cronbach's Alpha, which accounted for `r apa_num(sum(coded_data_replications$reliability_type == "alpha"), numerals = FALSE)` reported reliabilities in the replication protocols, and `r apa_num(sum(coded_data_original_shortened$reliability_type == "alpha"))` in the original articles.
 
-```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it."}
+```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it.", out.height = "60%"}
 knitr::include_graphics(path = "../../SupplementaryMaterials/reliability_reporting_flow_diagram.png")
 ```
 
