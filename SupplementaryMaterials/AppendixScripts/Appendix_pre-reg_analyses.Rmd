@@ -1,14 +1,20 @@
 <!-- Appendix A -->
 
-# Pre-registration Analyses
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Appendix A: Pre-registration Analyses
 
 This appendix contains the pre-registered analyses that were either changed or omitted from the article.
 
 
-## Intraclasscorelation assessment for within measure variation in reliability
+## Intraclasscorelation Assessment for Within Measure Variation in Reliability
 
 ### Pre-registration Analysis Justification & Reason for Omission from Article
-Reliabilities could be calculated from the replication datasets. On top of that, reliabilities could be calculated for each individual lab per replication set so that the variance of them could be assessed. To separate between and within variance in reliability, a multilevel random intercept model was specified with replication set as the grouping variable and the Cronbach's alpha or omega value of a replication as dependent using the lmer function from the lme4 package [@R-lme4] t.
+Reliabilities could be calculated from the replication datasets. On top of that, reliabilities could be calculated for each individual lab per replication set so that the variance of them could be assessed. To separate between and within variance in reliability, a multilevel random intercept model was specified with replication set as the grouping variable and the Cronbach's alpha or omega value of a replication as dependent using the *lmer* function from the *lme4* package [*v`r getNamespaceVersion("lme4")[[1]]`*; @R-lme4].
 
 ```{r Hypothesis2Model, include = FALSE}
 # intercept only model to check the within and between group variance.
@@ -37,17 +43,15 @@ The between-group and within-group variance for Cronbach's alpha were approximat
 
 ### Pre-registration Analysis Justification & Reason for Omission from Article
 
-To present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, the unidimensionality of each measure was investigated. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set.
+To present additional validity evidence alongside the analyses of Cronbach's alpha and omega coefficients, we investigated the unidimensionality of each measure. To test this, each multiple item scalar measure had their factor structure investigated on the entire measure data of the replication set.
 
 This analysis was omitted from the main article since determining when a measure should be unidimensional would require an in-depth review and expert evaluation for the literature surrounding the measure, which is outside of the scope of this article and the authors' expertise. Additionally, this information may also simply not be available, further complicating the analyses.
 
-For the sake of this analysis the simple heuristic was chosen that if the measure was used as a single composite variable in the analyses, then it should be uni-dimensional. This is somewhat similar to what was done by @shaw2020measurement, but for the sake of this article it was deemed to strong an assumption to make that this heuristic would always hold. For instance, IQ score is often used as a single indicator score, however the construct of IQ is not considered unidimensional, and is instead understood to have many sub-dimensions (e.g. verbal comprehension, perceptual reasoning, etc.). As a result, the use of a single score in the analyses cannot be taken as evidence that the construct is considered unidimensional by neither the authors, nor the broader literature on the topic.
-
-Nevertheless, we present here the result of the analyses made under the assumption that the one score, one dimension heuristic holds, for the readers that are comfortable with this heuristic. 
+For the sake of this analysis the simple heuristic was chosen that if the measure was used as a single composite variable in the analyses, then it should be uni-dimensional. This is somewhat similar to what was done by @shaw2020measurement, but for the sake of this article it was deemed to strong an assumption to make that this heuristic would always hold. For instance, IQ score is often used as a single indicator score, however the construct of IQ is not considered unidimensional, and is instead understood to have many sub-dimensions (e.g. verbal comprehension, perceptual reasoning, etc.). As a result, the use of a single score in the analyses cannot be taken as evidence that the construct is considered unidimensional by neither the authors, nor the broader literature on the topic. Nevertheless, we present here the result of the analyses made under the assumption that the one score, one dimension heuristic holds.
 
 ## Model
 
-A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [@R-psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the psych package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
+A single factor confirmatory factor analysis was implemented using the *fa* function from the *psych* package [*v`r getNamespaceVersion("psych")[[1]]`*; @R-psych] in R. The maximum likelihood factoring method was used, with defaults being used for all other function arguments. From this analysis, the RMSEA of the one factor solution was extracted. Additionally, a parallel test was conducted using the *fa.parallel* function also from the *psych* package. If either the RMSEA score \< .08, or the parallel analysis returned a one factor solution, unidimensionality was coded as true, otherwise it was coded as false.
 
 ```{r UnidimensionalityExploratoryAnalysis, include = FALSE}
 extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean,data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, data_5.9.1_clean)
@@ -129,9 +133,9 @@ These results are potentially quite worrying given that many studies made use of
 
 ### Pre-registration Analysis Justification & Reason for Omission from Article
 
-Follow-up analyses were preregistered for hypothesis 6. Using a similar model to the main hypothesis test with all unique combination of the five different QMP types being tested across original and replication data. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. Due to the large number of tests, the focus was exploratory using visualization rather than inference.
+Follow-up analyses were preregistered for hypothesis 6. The pre-registered plan was to make use of contingency tables to compare relations between all five QMP types across original and replication studies. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. Due to the large number of tests, the focus was exploratory using visualization rather than inference.
 
-It is partly this large number of tests, as well as the resulting lack of clear interpretability in the results that caused this analysis to be omitted from the main article. However, for completeness and transparency it is reported here.
+It is partly this large number of tests, as well as the resulting lack of clear interpretability in the results that caused this analysis to be omitted from the main article. . However, This analysis was anyhow intended not as supplementary to the main test for hypothesis 6. Furthermore, the analyses would regardless have to be changed from the pre-registered analyses to beta-regressions for each unique combination of the QMP categories across original and replication. For completeness and transparency the analyses using beta-regressions are reported here.
 
 ### Model
 

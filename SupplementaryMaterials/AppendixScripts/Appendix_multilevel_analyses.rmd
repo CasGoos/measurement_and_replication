@@ -1,10 +1,16 @@
 <!-- Appendix B -->
 
-# Multilevel Analyses
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
 
-This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6. These models were excluded from the published article for the sake of brevity, and because the sample size was not large enough to support multilevel modelling in most cases.
+# Appendix B: Multilevel Analyses
 
-## Hypothesis 3, nested within replication set
+This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6. These models were excluded from the main text for the sake of brevity, and because the sample size was not large enough to support multilevel modelling in most cases.
+
+## Hypothesis 3, Nested Within Replication Sets
 ### Explanation of Relevance
 In this data, replication attempts at different lab locations can be seen as nested within a replication set. To see if this nesting might impact the analyses of hypothesis 3, multilevel models are included here as sensitivity checks.
 

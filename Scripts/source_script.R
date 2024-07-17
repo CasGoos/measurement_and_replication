@@ -555,20 +555,20 @@ betareg_output_to_apa_full<- function(betareg_output, coefficient_number = 2){
   std_error <- sum_object[2]
   z_value <- sum_object[3]
   p_value <- sum_object[4]
-  n <- betareg_output$n
   
   # calculating the confidence intervals
   if(z_value < 0){
-    CI_HI <- estimate - z_value * (std_error / sqrt(n))
-    CI_LO <- estimate + z_value * (std_error / sqrt(n))
+    CI_HI <- estimate - (1.96 * std_error)
+    CI_LO <- estimate + (1.96 * std_error)
   } else{
-    CI_LO <- estimate - z_value * (std_error / sqrt(n))
-    CI_HI <- estimate + z_value * (std_error / sqrt(n))
+    CI_LO <- estimate - (1.96 * std_error)
+    CI_HI <- estimate + (1.96 * std_error)
   }
   
   # formatting the statistics for printing
   estimate_string <- paste0("$b = ", apa_num(estimate), "$, ")
-  CI_string <- paste0("95\\% CI $[", apa_num(CI_LO), ", ", apa_num(CI_HI), "]$, ")
+  CI_string <- paste0("95\\% CI $[", apa_num(CI_LO), ", ", 
+                      apa_num(CI_HI), "]$, ")
   z_string <- paste0("$z = ", apa_num(z_value), "$, ")
   p_string <- paste0("$p = ", apa_p(p_value), "$")
   
@@ -790,25 +790,25 @@ Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
 
 
 # function to add Odds-Ratio to apa_full output of logistic regressions
-OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE){
+OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE, not_significant = FALSE){
   # the odds-ratio
   OR <- round(exp(as.numeric(substr(apa_print_result, start = 6, 
                                     stop = 9 + negative_b))), 3) 
   
   # the lower bound 95% confidence interval for the odds-ratio
   ORCILO <- round(exp(as.numeric(substr(apa_print_result, start = 23 + negative_b, 
-                                        stop = 26 + negative_b*2))), 3) 
+                                        stop = 26 + negative_b * 2))), 3) 
   
   # the upper bound 95% confidence interval for the odds-ratio
   ORCIHI <- round(exp(as.numeric(substr(apa_print_result, start = 29 + negative_b * 2, 
-                                        stop = 33 + negative_b * 2))), 3)
+                                        stop = 33 + negative_b * (2 - not_significant)))), 3)
   
   # combining the calculated and existing results into a printable string
   result_string_with_OR <- paste0(substr(apa_print_result, start = 0, 
-                                  stop = 12 + negative_b), "$OR = ", OR, 
+                                         stop = 12 + negative_b), "$OR = ", OR, 
                                   "$, 95\\% $[", ORCILO, ", ", ORCIHI,
                                   substr(apa_print_result, 
-                                         start = 34 + negative_b * 2, stop = 99))
+                                         start = 34 + negative_b * (2 - not_significant), stop = 99))
   
   return(result_string_with_OR)
 }
