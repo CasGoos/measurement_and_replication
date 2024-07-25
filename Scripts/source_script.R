@@ -722,6 +722,14 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
                                rep(56, 20), rep(57, 21), rep(59, 21), 
                                rep(62, 4), rep(63, 4), rep(71, 8), rep(73, 5))
   
+  
+  # one index 51 is being assigned not to Monin and miller, some, but instead to cacioppo, nfc, while that Monin and Miller has gotten the 57 from cacciopo
+  # The 56 and 57 isn't correct for Cacciopo: 59 for argument quality, and 60 for nfc.
+  # De Fruyt should link to 61 instead of 59
+  
+  
+  #data_5.1.1_clean: 65, data_5.1.2_clean: 66, data_5.7_clean: 74, data_5.9.1_clean: 76
+  
   colnames(Data_H2) <- c("alpha", "omega", "ASE", "tau", "QEp", "pi.lb", 
                          "pi.ub", "g", "reporting_index")
   
@@ -793,15 +801,15 @@ Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
 OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE, not_significant = FALSE){
   # the odds-ratio
   OR <- round(exp(as.numeric(substr(apa_print_result, start = 6, 
-                                    stop = 9 + negative_b))), 3) 
+                                    stop = 9 + negative_b))), 2) 
   
   # the lower bound 95% confidence interval for the odds-ratio
   ORCILO <- round(exp(as.numeric(substr(apa_print_result, start = 23 + negative_b, 
-                                        stop = 26 + negative_b * 2))), 3) 
+                                        stop = 26 + negative_b * 2))), 2) 
   
   # the upper bound 95% confidence interval for the odds-ratio
   ORCIHI <- round(exp(as.numeric(substr(apa_print_result, start = 29 + negative_b * 2, 
-                                        stop = 33 + negative_b * (2 - not_significant)))), 3)
+                                        stop = 33 + negative_b * (2 - not_significant)))), 2)
   
   # combining the calculated and existing results into a printable string
   result_string_with_OR <- paste0(substr(apa_print_result, start = 0, 

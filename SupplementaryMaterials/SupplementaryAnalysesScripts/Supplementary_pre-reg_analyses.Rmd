@@ -1,4 +1,4 @@
-<!-- Appendix A -->
+<!-- Supplementary Analyses A -->
 
 ```{r analysis-preferences}
 # Seed for random number generation
@@ -6,10 +6,9 @@ set.seed(17042023)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
-# Appendix A: Pre-registration Analyses
+# Supplementary Analyses A: Pre-registration Analyses
 
 This appendix contains the pre-registered analyses that were either changed or omitted from the article.
-
 
 ## Intraclasscorelation Assessment for Within Measure Variation in Reliability
 
@@ -34,7 +33,7 @@ ICC_alpha <- between_group_variance_alpha / (within_group_variance_alpha + betwe
 
 ```
 
-This analysis was omitted from the article because it did not link well enough to hypothesis 2. The test results also do not give use a very informative representations of variance in reliability in the data for us to draw further inferences from. For instance, it assumes that we should observe large differences in reliabilities between measures for this to provide an accurate test of whether the variance within measures is large or not.
+This analysis was omitted from the article because it did not link well enough to Hypothesis 2. The test results also do not give use a very informative representations of variance in reliability in the data for us to draw further inferences from. For instance, it assumes that we should observe large differences in reliabilities between measures for this to provide an accurate test of whether the variance within measures is large or not.
 
 ### Results
 The between-group and within-group variance for Cronbach's alpha were approximately `r apa_num(between_group_variance_alpha, digits = 3)` and `r apa_num(within_group_variance_alpha, digits = 3)` respectively. The resulting ICC was approximately `r apa_num(ICC_alpha, digits = 3)`. This suggests that variance was larger between replication sets than within. These results are generally in line with hypothesis 2. However, this statistic does not necessarily give a test of hypothesis 2, as outlined above.
@@ -47,7 +46,7 @@ To present additional validity evidence alongside the analyses of Cronbach's alp
 
 This analysis was omitted from the main article since determining when a measure should be unidimensional would require an in-depth review and expert evaluation for the literature surrounding the measure, which is outside of the scope of this article and the authors' expertise. Additionally, this information may also simply not be available, further complicating the analyses.
 
-For the sake of this analysis the simple heuristic was chosen that if the measure was used as a single composite variable in the analyses, then it should be uni-dimensional. This is somewhat similar to what was done by @shaw2020measurement, but for the sake of this article it was deemed to strong an assumption to make that this heuristic would always hold. For instance, IQ score is often used as a single indicator score, however the construct of IQ is not considered unidimensional, and is instead understood to have many sub-dimensions (e.g. verbal comprehension, perceptual reasoning, etc.). As a result, the use of a single score in the analyses cannot be taken as evidence that the construct is considered unidimensional by neither the authors, nor the broader literature on the topic. Nevertheless, we present here the result of the analyses made under the assumption that the one score, one dimension heuristic holds.
+For the sake of this analysis the simple heuristic was chosen that if the measure was used as a single composite variable in the analyses, then it should be unidimensional. This is somewhat similar to what was done by @shaw2020measurement, but for the sake of this article it was deemed to strong an assumption to make that this heuristic would always hold. For instance, IQ score is often used as a single indicator score, however the construct of IQ is not considered unidimensional, and is instead understood to have many sub-dimensions (e.g. verbal comprehension, perceptual reasoning, etc.). As a result, the use of a single score in the analyses cannot be taken as evidence that the construct is considered unidimensional by neither the authors, nor the broader literature on the topic. Nevertheless, we present here the result of the analyses made under the assumption that the one score, one dimension heuristic holds.
 
 ## Model
 
@@ -90,7 +89,7 @@ cfa_results <- cfa_results[-1,]
 ```
 
 ```{r cfaResultsStoring, include = FALSE, eval = FALSE}
-# storing the cfa_results, so they can be referenced within the main manuscript.
+# storing the cfa_results, so they can be referenced within the main manuscript. THIS DOES NOT NEED TO BE RUN FOR REPRODUCING THE RESULTS.
 open_data(data = cfa_results, filename = paste0(paste0(
   "Data/AnalysisData/", deparse(substitute(cfa_results))), ".csv"),
   codebook = paste0(paste0(
@@ -133,9 +132,9 @@ These results are potentially quite worrying given that many studies made use of
 
 ### Pre-registration Analysis Justification & Reason for Omission from Article
 
-Follow-up analyses were preregistered for hypothesis 6. The pre-registered plan was to make use of contingency tables to compare relations between all five QMP types across original and replication studies. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. Due to the large number of tests, the focus was exploratory using visualization rather than inference.
+Follow-up analyses were preregistered for hypothesis 6. The pre-registered plan was to make use of contingency tables to compare relations between all five QMP types across original and replication studies. The goal of these analyses was to see if there are any type specific carry-over effects in QMPs between original and replication. Theses analyses were changed from the pre-registered analyses to beta-regressions for each unique combination of the QMP categories across original and replication, as the original analysis using contingency tables was later deemed improper for our data and hypothesis 6. 
 
-It is partly this large number of tests, as well as the resulting lack of clear interpretability in the results that caused this analysis to be omitted from the main article. . However, This analysis was anyhow intended not as supplementary to the main test for hypothesis 6. Furthermore, the analyses would regardless have to be changed from the pre-registered analyses to beta-regressions for each unique combination of the QMP categories across original and replication. For completeness and transparency the analyses using beta-regressions are reported here.
+Due to the large number of tests, the focus was exploratory using visualization rather than inference. It is the large number of tests combined with the fact that our sample size was not large enough to support that number of tests that we omitted these analyses from the main text. Furthermore, this analysis was intended as supplementary to the main test for hypothesis 6, and was pre-registered as exploratory. For completeness and transparency the analyses using beta-regressions are reported here.
 
 ### Model
 

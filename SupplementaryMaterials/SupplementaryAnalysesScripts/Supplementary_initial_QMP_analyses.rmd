@@ -1,4 +1,4 @@
-<!-- Appendix D -->
+<!-- Supplementary Analyses D -->
 
 ```{r analysis-preferences}
 # Seed for random number generation
@@ -6,7 +6,7 @@ set.seed(17042023)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
-# Appendix D: Initial Coding Protocol QMP Analyses
+# Supplementary Analyses D: Initial Coding Protocol QMP Analyses
 
 This appendix contains the QMP analyses that in the article and appendices were based on the revised QMP, but then performed based on the QMPs obtained using the initial coding protocol.
 
@@ -23,7 +23,7 @@ H4_test_results <- betareg(QMP_ratio ~ rep_org, data = data_h4)
 
 ```
 
-For hypothesis 5, a logistic regression model was used to test the association between the QMP ratio in replication protocols and replication success. In this appendix we run the model based on the QMP ratios obtained using the initial protocol. The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. Appendix B already contained the results of the multilevel sensitivity models for hypothesis 5 & 6 based on the QMP ratios obtained using the revised coding protocol. In this appendix we show the result for the same models based on the QMP ratios obtained using the initial protocol.
+For Hypothesis 5, a logistic regression model was used to test the association between the QMP ratio in replication protocols and replication success. In this appendix we run the model based on the QMP ratios obtained using the initial protocol. The relation between QMP ratios in the replication protocols and corresponding original articles were investigated using a beta regression model. [Supplementary Analyses B](Supplementary_multilevel_analyses.Rmd) already contained the results of the multilevel sensitivity models for Hypothesis 5 & 6 based on the QMP ratios obtained using the revised coding protocol. In this appendix we show the result for the same models based on the QMP ratios obtained using the initial protocol.
 
 ```{r Hypothesis5ModelInitial, include = FALSE}
 ## Hypothesis 5 logistic regression model
@@ -42,32 +42,44 @@ H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
 
 
 ```{r Hypotheses5And6SensitivityAnalysesInitial}
-## Hypothesis 5 sensitivity test using a random intercept Guassian model.
+## Hypothesis 5 sensitivity test using a random intercept and a random slope Gaussian model.
 # create dummy H5 dataframe for use in sensitivity test
 data_h5_sens <- data_h5
 
 # convert outcome variable to be usable with Gaussian distribution via
 # logit transform.
-data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio)) # TO INITIAL APPENDIX
+data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio))
 
-check_h5 <- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
+# running the models
+random_intercept_h5_REV <- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
+
+random_slope_h5_REV <- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1+hypothesis_support|many_labs_version), data = data_h5_sens))
 
 
-## Hypothesis 6 sensitivity test using a random intercept Guassian model.
+## Hypothesis 6 sensitivity test using a random intercept and a random slope Gaussian model.
 # create dummy H6 dataframe for use in sensitivity test
 data_h6_sens <- data_h6
 
 # convert outcome variable to be usable with Gaussian distribution via
-# logit transform. FIRST ELEMENTS TO INITIAL APPENDIX
+# logit transform.
 data_h6_sens$QMP <- log(data_h6_sens$QMP_ratio /(1 - data_h6_sens$QMP_ratio))
 data_h6_sens$Rep_QMP <- log(data_h6_sens$Rep_QMP_ratio /(1 - data_h6_sens$Rep_QMP_ratio))
 
 
-# running the models one with none revised QMP ratio's and one with
-check_h6 <- apa_print(lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens)) 
+# running the models one with initial QMP ratio's
+random_intercept_h6_REV <- apa_print(lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens)) 
+
+random_slope_h6_REV <- apa_print(lmer(formula = Rep_QMP ~ 1 + QMP + (1+QMP|many_labs_version), data = data_h6_sens)) 
 
 # n of mod ratio's that are present (check)
 H6_n_check_results <- betareg(Rep_op_ratio ~ mod_ratio, data = data_h6)$n
+
+# Using a glm to check if results differs in direction and significance from the 
+# beta-regression, to check that including a linear regression line in figure 46
+# is representative of the relationship.
+H6_glm_test <- glm(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
+
+H6_glm_test_results <- apa_print(H6_glm_test)$full_result$QMP_ratio
 
 ```
 
@@ -163,13 +175,13 @@ grid.arrange(Plot_456_2,
               widths = c(8, 1, 1))
 ```
 
-The bottom panel of Figure \@ref(fig:Plot456CodeInitial) already shows that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects. Beta-regression was used to test the difference in QMP ratio based on the initial protocol coding, between original articles and replication protocols. The results of this test indicated that this difference was significant (`r betareg_output_to_apa_full(H4_test_results)`). This result is similar to the result found using the revised coding protocol in line with hypothesis 4.
+The bottom panel of Figure \@ref(fig:Plot456CodeInitial) already shows that original articles contained a significantly larger proportion of QMPs than replication protocols for the measures of the same effects. Beta-regression was used to test the difference in QMP ratio based on the initial protocol coding, between original articles and replication protocols. The results of this test indicated that this difference was significant (`r betareg_output_to_apa_full(H4_test_results)`). This result is similar to the result found using the revised coding protocol in line with Hypothesis 4.
 
-Contrary to the results based on the revised coding protocol, a decrease in QMP ratio based on the initial coding protocol did not significantly relate to replication success (`r H5_test_results_with_OR`). Thus, not supporting hypothesis 5.
+Contrary to the results based on the revised coding protocol, a decrease in QMP ratio based on the initial coding protocol did not significantly relate to replication success (`r H5_test_results_with_OR`). Thus, not supporting Hypothesis 5.
 
-Similarly to the previous test, the relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Thus, not supporting hypothesis 6. Figure \@ref(fig:Plot46InitialDataCode) displays this relationship visually. Table \@ref(tab:H6ExploratoryAssociationsInitialTable) shows the relations between original and replication QMP ratios for each QMP type based on the initial protocol. Figure \@ref(fig:Plot46FullInitialDataCode) shows the same relations displayed visually.
+Similarly to the previous test, the relation was not significant for the QMP ratios obtained with the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`). Thus, not supporting Hypothesis 6. Figure \@ref(fig:Plot46InitialDataCode) displays this relationship visually. Table \@ref(tab:H6ExploratoryAssociationsInitialTable) shows the relations between original and replication QMP ratios for each QMP type based on the initial protocol. Figure \@ref(fig:Plot46FullInitialDataCode) shows the same relations displayed visually.
 
-```{r Plot46InitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratios with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present"}
+```{r Plot46InitialDataCode, error = FALSE, warning = FALSE, fig.cap = paste0("Scatterplot of original QMP ratios and replication total QMP ratios based on the initial protocol with a linear regression line. The linear regression line is included, as the result based on linear regression was similarly in direction and significance to the beta regression used to test Hypothesis 6 (", H6_glm_test_results, "), while being easier to understand visually. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present.")}
 ggplot(plot_46_data[plot_46_data$QMP_type == "QMP.Ratio" & plot_46_data$QMP_Rep_type == "Rep.QMP.Ratio",], aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
   geom_jitter(width = 0.01, height = 0.01) +
@@ -178,6 +190,8 @@ ggplot(plot_46_data[plot_46_data$QMP_type == "QMP.Ratio" & plot_46_data$QMP_Rep_
   theme(strip.text.y = element_text(size = 7), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
   ylab("QMP Ratio (Replication Protocol)") +
   xlab("QMP Ratio (Original Article)") 
+
+
 ```
 
 
@@ -231,7 +245,7 @@ QMP Ratio and Original QMP Ratio as obtained using the Initial Protocol"
 
 ```
 
-```{r Plot46FullInitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original and replication total QMP ratios obtained using the intial coding protocol with linear regression line. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present"}
+```{r Plot46FullInitialDataCode, error = FALSE, warning = FALSE, fig.cap = "Scatterplot of original QMP ratios and replication total QMP ratios obtained using the intial coding protocol with linear regression lines. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present"}
 # Initial
 ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) + 
   geom_point() +
@@ -247,9 +261,9 @@ ggplot(plot_46_data, aes(QMP_ratio, QMP_Rep_ratio)) +
 
 ```
 
-Now looking at the multilevel sensitivity analyses (see appendix B), only now using the QMP ratios based on the initial coding protocol. Contrary to the results of the multilevel sensitivity model testing hypothesis 5 using QMP ratios obtained with the revised coding protocol, the relationship in the multilevel model was no longer significant for QMP ratios obtained with the initial coding protocol (`r check_h5$full_result$hypothesis_supportTRUE`).
+Now we look at the multilevel sensitivity analyses using the QMP ratios based on the initial coding protocol. Contrary to the results of the model presented in the main text and the random intercept model testing Hypothesis 5 using QMP ratios obtained with the revised coding protocol, the relationship in the random intercept and random slope was no longer significant for QMP ratios obtained with the initial coding protocol (random intercept: `r random_intercept_h5_REV$full_result$hypothesis_supportTRUE`; random slope: `r random_slope_h5_REV$full_result$hypothesis_supportTRUE`).
 
-Similarly to the results of the multilevel sensitivity model testing hypothesis 5 using QMP ratios obtained with the revised coding protocol, the relationship in the multilevel model was not significant for QMP ratios obtained with the initial coding protocol (`r check_h6$full_result$QMP`).
+For Hypothesis 6, similarly to the results of the multilevel sensitivity analysis models testing Hypothesis 5, using QMP ratios obtained with the revised coding protocol, the relationship in both the random intercept and random slope models was not significant for QMP ratios obtained with the initial coding protocol (random intercept: `r random_intercept_h6_REV$full_result$QMP`; random slope: `r random_slope_h6_REV$full_result$QMP`).
 
 
 

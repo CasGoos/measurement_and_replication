@@ -30,15 +30,17 @@ authornote: |
 
 
 abstract: |
-  Recent studies have shown that challenges in measurement practices in original and replication research may have contributed to the “replication crisis” in psychological science. 
-  However, the exact nature and extent of the association between measurement and replicability is not yet clear. 
-  We investigated the reliability and measurement reporting of 77 measures within 56 Many Labs replications [@klein2014investigating; @ebersole2016many; @klein2018many; @ebersole2020many] and related original psychological studies, and whether these were associated with replicability.
-  Results from logistic regression models indicated that questionable practices in measurement reporting in replication studies (b = -5.60, OR = 0.004, 95% [0,0.156]), but not the reliability of the measurement (b = 8.21, OR = 3677.542, 95% [1.271,1727601729.241]), was associated with lower replicability of the findings tested with that measure. <!-- the code for these two results is: ???; these lines will only work after code chunks 1, 2, 12, & 19 have been ran. -->
-  Furthermore, not all measures in the original and replication studies were sufficiently reliable across contexts. 
-  Additionally, we found that evidence on reliability and validity was rarely reported. 
-  These findings corroborate existing research that shows that validity evidence is rarely reported, and that these reporting practices may have negative consequences for the informativeness of replications. 
-  We offer suggestions on improving measurement validation and reporting practices. 
-  Finally, we argue that researchers should evaluate the reported measurement information when deciding what studies to replicate. 
+  Recent studies have shown that challenges in measurement practices may have contributed to the “replication crisis” in psychological science. 
+  However, the nature and extent of the association between measurement and replicability remains unclear. 
+  We investigated the reliability and measurement reporting of 77 measures within 56 Many Labs replications and related original articles [@klein2014investigating; @ebersole2016many; @klein2018many; @ebersole2020many], and their association with replicability. 
+  Results from logistic regressions indicated that questionable practices in reporting on measurement (QMPs) in replication studies (b = -5.60, p = .006), but not its reliability (b = 8.21, p =. 106) was associated with lower replicability. <!-- the code to retrieve these two results is: paste0("$b = ", H3_test_result_main_alpha$table$estimate[[2]], "$, p = ", H3_test_result_main_alpha$table$p.value[[2]], "$") & paste0("$b = ", H5_test_results_REV$table$estimate[[2]], "$, p = ", H5_test_results_REV$table$p.value[[2]], "$"); these lines will only work after code chunks 1, 2, 12, & 19 have been ran.--> 
+  Furthermore, Reliability Generalization Meta-analysis revealed that not all measures were sufficiently reliable across contexts. 
+  We additionally found that reliability and validity evidence was rarely reported. 
+  These findings corroborate existing research that construct validity in published research is low and that may have negative consequences for replications. 
+  We offer suggestions on improving measurement practices, and argue that reported measurement information should inform the decision to replicate.
+
+
+
 
 
 keywords          : "reliability, validity, measurement, reporting, replicability, credibility, psychology"
@@ -94,6 +96,8 @@ library(ggforce)
 library(grid)
 library(gridExtra)
 library(metafor)
+library(sandwich)
+library(lmtest)
 
 # loading source script
 source(file = "../source_script.R")
@@ -153,7 +157,7 @@ For solid scientific progress in psychology, we need to be able to rely on previ
 
 A prerequisite for a credible finding is that it is replicable [@vazire2022CredibilityReplicabilityImproving]. This means that the observed effect should be comparable across the original study and subsequent replications in new samples if the differences between them are believed to be of little relevance to the effect [@nosek2022replicability].
 
-But replications often fail. In 2015, the Replication Project: Psychology [RPP; @osc2015estimating] attempted replications of 100 research findings in psychology, they observed a substantial discrepancy between the replication findings and the original findings . Similarly, the Many Labs projects aimed to replicate the effects reported in original articles across different labs in various locations around the world [@klein2014investigating; @ebersole2016many; @klein2018many; @klein2022many; @ebersole2020many], and often found smaller effects in replications compared to original research. Furthermore, the estimates of the effect varied between different lab locations.
+But replications often fail. In 2015, the Replication Project: Psychology [RPP\; @osc2015estimating] attempted replications of 100 research findings in psychology, they observed a substantial discrepancy between the replication findings and the original findings . Similarly, the Many Labs projects aimed to replicate the effects reported in original articles across different labs in various locations around the world [@klein2014investigating; @ebersole2016many; @klein2018many; @klein2022many; @ebersole2020many], and often found smaller effects in replications compared to original research. Furthermore, the estimates of the effect varied between different lab locations.
 
 In response to this string of failed replications, there was widespread alarm regarding the credibility and robustness of findings in psychological science [@hughes2018psychology; @giner2019crisis], and efforts to explain the low replication rate. The factors that have been proposed include, questionable research practices [@simmons2011false; @john2012measuring; @cumming2014new; @wicherts2016degrees], questionable reporting practices [@bakker2011mis; @nuijten2016prevalence], and biased publication decisions [@sterling1959publication; @bakker2012rules; @giner2012science]. Another factor that has gained more traction recently is the impact of measurement-related challenges on replicability and credibility.
 
@@ -161,7 +165,7 @@ In response to this string of failed replications, there was widespread alarm re
 
 Psychological constructs, such as affective state or intelligence, cannot be measured directly [@flake2017construct]. Psychological measurements involve random measurement errors and uncertainties about whether the targeted construct is indeed well reflected in the scores retrieved from the measurement procedure. 
 
-The first issue relates to the concept of reliability, which gives an indication of how consistent the responses on a measurement are. Reliability is a critical first step to obtaining credible findings. Because if the scores on a measure are not consistent with themselves, it is unlikely that any effect associated with the measure can credibly be established. Psychometrics offers various ways to assess reliability empirically [e.g. @nunnally1978overview; @mellenbergh2011conceptual].
+The first issue relates to the concept of reliability, which gives an indication of how consistent the responses on a measurement are. Reliability is a critical first step to obtaining credible findings. Because if the scores on a measure are not consistent with themselves, it is unlikely that any effect associated with the measure can credibly be established. Psychometrics offers various ways to assess reliability empirically [@nunnally1978overview; @mellenbergh2011conceptual].
 
 The second issue relates to the concept of validity, specifically construct validity, or the overall extent to which a measure measures what it is supposed to  measure [@borsboom2004concept]. Construct validity of test scores is often assessed by comparing the test scores’ empirical associations to the theoretical associations of the constructs [@cronbach1955construct]. A researcher cannot claim to have found a credible psychological effect, if the measures do not relate to the psychological construct [@cook2002experimental].
 
@@ -181,7 +185,7 @@ The resulting variations in the measurement scores could contribute to the discr
 
 ### Measurement Reporting
 
-Despite the importance of having reliable and valid measures, research has shown that Questionable Measurement Practices (QMPs) are not uncommon. QMPs are practices that raise doubts about a measurement's validity [@flake2020measurement], and have been coined as a term analogous to Questionable Research Practices [QRPs, @john2012measuring]. QMPs range from lack of transparency and unclear motivation in choice of measure, to poor justification for modifications of a measure and procedure of an existing measure [@flake2020measurement]. More specifically,  @flake2020measurement identified six key questions than an article should answer to avoid QMPs: the definition of the construct, how the measure was selected, how the measure was operationalized, how the measure was quantified, whether it was modified or not and why, and the reasons and details of creating a measure if applicable. If these questions can be answered based on the reported measurement information, then reporting is sufficiently transparent to promote a more cumulative psychological science.
+Despite the importance of having reliable and valid measures, research has shown that Questionable Measurement Practices (QMPs) are not uncommon. QMPs are practices that raise doubts about a measurement's validity [@flake2020measurement], and have been coined as a term analogous to Questionable Research Practices [QRPs\; @john2012measuring]. QMPs range from lack of transparency and unclear motivation in choice of measure, to poor justification for modifications of a measure and procedure of an existing measure [@flake2020measurement]. More specifically,  @flake2020measurement identified six key questions than an article should answer to avoid QMPs: the definition of the construct, how the measure was selected, how the measure was operationalized, how the measure was quantified, whether it was modified or not and why, and the reasons and details of creating a measure if applicable. If these questions can be answered based on the reported measurement information, then reporting is sufficiently transparent to promote a more cumulative psychological science.
 
 @flake2022construct documented QMPs among 100 replications and their respective original articles from the RPP [@osc2015estimating]. They coded the number of measures, the number of items in the measure, and the information that was reported describing the measure and providing evidence justifying its use. Besides limited reporting of validity and reliability evidence for the coded measures, @flake2022construct found that several of the measures in the RPP did not report the number of items, the response format, or the scoring of the scale. Furthermore, only eight of the 40 translated scales contained validity evidence for the translated version of the scale. Measures were similarly modified between original and replication in other ways without evidence showing that the modification did not invalidate the measurement.
 
@@ -197,57 +201,32 @@ Furthermore, this research conceptually replicates the study by @flake2022constr
 
 ### Reliability
 
-Measurement reliability varies across samples. It is crucial for evaluating replications that differences between replication and original are understood and accounted for.
+Measurement reliability varies across samples. Therefore, we investigated what the reliability is in replications of psychological research (RQ1a) and original psychological research (RQ1b).
 
--   RQ1a. What is the reliability in replications of psychological research?
--   RQ1b. What is the reliability in original psychological research?
+The Many Labs studies were intended as direct replications. In direct replications, any remaining deviations from the original research should be irrelevant for testing the same effect as the original study [@nosek2022replicability]. As a result, we expected that there would be, no difference present in the reliability between replication research and original psychological research (H1).
 
-The Many Labs studies were intended as direct replications. In direct replications, any remaining deviations from the original research should be irrelevant for testing the same effect as the original study [@nosek2022replicability]. This means that, the reliability of measurements in replications should also not deviate systematically from the original research.
+Reliability has the potential to vary not only between replication and original research, but also across labs assessing the same effect [@vacha-haase1998ReliabilityGeneralizationExploring]. We thus investigated whether reliability estimates differed between replicating labs (RQ2).
 
--   H1. No difference is present in the reliability between replication research and original psychological research.
+Heterogeneity in reliability may be contributing strongly to the variation in reliability between labs. However, for effect sizes there is little empirical evidence of widespread heterogeneity among the Many Labs replications [@klein2018many; @olsson2020heterogeneity]. We expected that there would be no significant variation in the reliability estimates of replications of the same original study (H2) as well.
 
-Reliability has the potential to vary not only between replication and original research, but also across replicating labs assessing the same effect [@vacha-haase1998ReliabilityGeneralizationExploring].
+To see if reliability is related to replication success, we investigated whether there is an association between successfully replicated study reliability and replication outcome (RQ3).
 
--   RQ2. Do reliability estimates differ between replicating labs?
+Greater reliability means the variance around the estimate of the true effect is decreased [@nunnally1994assessment]. Assuming that the true effect is not null, then the statistical conclusions tested with reliable measures are more likely to converge to significance. THus, we expected to observe a positive association between reliability in replication research and successful replication of an original finding (H3).
 
-Heterogeneity in reliability may be contributing strongly to the variation in reliability between labs. However, for effect sizes there is little empirical evidence of widespread heterogeneity among the Many Labs replications [@klein2018many; @olsson2020heterogeneity]. We expect the same for the heterogeneity in reliability coefficients.
-
--   H2. There is no significant variation in the reliability estimates of replications of the same original study.
-
-To see if reliability is related to replication success, we investigated whether successfully replicated studies differ in the reliability of their measures as compared to non-replicated studies.
-
--   RQ3. What is the association between replication study reliability and replication outcome?
-
-Greater reliability means the variance around the estimate of the true effect is decreased [@nunnally1994assessment]. Assuming that the true effect is not null, then the statistical conclusions tested with reliable measures are more likely to converge to significance.
-
--   H3. Reliability in replication research is positively associated with successful replication of an original finding.
 
 ### Measurement Reporting
+This study aims to conceptually replicate the findings on measurement reporting of @flake2022construct. To do so we evaluate how common QMPs are in replications of psychological research (RQ4a) and original psychological research (RQ4b).
 
-This study aims to conceptually replicate the findings on measurement reporting of @flake2022construct.
+@flake2022construct found that QMPs were overall more common in the RPP replications as compared to the original research. We hypothesized that for our Many Labs sample QMPs would be more frequent in original psychological research than in replication research (H4), because of the use of structured protocols documenting the measurement. 
 
--   RQ4a. How common are QMPs in replications of psychological research?
--   RQ4b. How common are QMPs in original psychological research?
+QMPs obscure information relevant to mimic measurement from original research in subsequent replication attempts. The resulting deviations in measurement may be partly responsible for deviations in replication and original effects [@flake2022construct]. Thus we investigated whether QMPs in replication protocols were associated with the replication outcome (RQ5).
 
-@flake2022construct found that QMPs were overall more common in the RPP replications as compared to the original research. We did not hypothesize this to be the case in the Many Labs sample, because of the use of structured protocols documenting the measurement.
+A reduction in QMPs corresponds to greater transparency in reporting of measurement. In line with earlier research finding other transparency related practices to be associated with more robust estimates of effects [@wicherts2011willingness; @protzko2020high], we expected QMPs in replications to be negatively associated with replication success (H5).
 
--   H4. QMPs are more frequent in original psychological research than in replication research.
+QMPs obscure information about a particular measurement. This in turn may cause issues for reconstructing that measurement in subsequent replication attempts. We investigated the association between QMPs in original research and QMPs in replications of psychological research (RQ6).
 
-QMPs obscure information relevant to mimic measurement from original research in subsequent replication attempts. The resulting deviations in measurement may be partly responsible for deviations in replication and original effects [@flake2022construct]. 
+@flake2022construct already proposed that QMPs in original articles may cause issues for recreating measurements for replication research. @shaw2020measurement already found such a spill-over effect for validity. In line with this research we expected the total number of QMPs in original psychological research to be positively related to the total number of QMPs in replication research (H6).
 
--   RQ5. What is the association between QMPs in replication studies and replication outcome?
-
-A reduction in QMPs corresponds to greater transparency in reporting of measurement. In line with earlier research finding other transparency related practices to be associated with more robust estimates of effects [@wicherts2011willingness; @protzko2020high], we expect:
-
--   H5. QMPs in replications are negatively associated with replication success.
-
-QMPs obscure information about a particular measurement. This in turn may cause issues for reconstructing that measurement in subsequent replication attempts. 
-
--   RQ6. What is the association between QMPs in original research and QMPs in replications of psychological research?
-
-@flake2022construct already proposed that QMPs in original articles may cause issues for recreating measurements for replication research. @shaw2020measurement already found such a spill-over effect for validity. In line with this research we expect:
-
--   H6. The total number of QMPs in original psychological research is positively related to the total number of QMPs in replication research.
 
 # Disclosures
 
@@ -257,7 +236,7 @@ We preregistered data collection, coding protocol, and planned analyses: <https:
 
 ### Data, Materials, and Online Resources
 
-This manuscript was created in RStudio [@R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base], and generated using the Workflow for Open Reproducible Code in Science [WORCS version 0.1.1, @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and data used to generate this manuscript and its results are available at: <https://github.com/CasGoos/measurement_and_replication> and <https://osf.io/9r8yt/>.
+This manuscript was created in RStudio [@R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base], and generated using the Workflow for Open Reproducible Code in Science [*v`r getNamespaceVersion("worcs")[[1]]`*\; @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and data used to generate this manuscript and its results are available at: <https://github.com/CasGoos/measurement_and_replication> and <https://osf.io/9r8yt/>.
 
 ### Reporting
 
@@ -618,7 +597,7 @@ open_data(data = data_5.9.1_clean, filename = paste0(paste0(
 
 ### Replication Protocols
 
-The replication protocols refer to the publicly available protocols describing the background, methodology, and analysis of each set of replications replicating a single original study across multiple labs. These were retrieved from the OSF pages of the Many Labs projects (the search strategy and OSF file locations can be found in the [Data retrieval information](../../SupplementaryMaterials/data_retrieval_information.Rmd) supplementary document.
+The replication protocols refer to the publicly available protocols describing the background, methodology, and analysis of each set of replications replicating a single original study across multiple labs. These were retrieved from the OSF pages of the Many Labs projects (the search strategy and OSF file locations can be found in the [Data retrieval information](../../SupplementaryMaterials/data_retrieval_information.Rmd) supplementary document).
 
 ### Original Articles
 
@@ -709,7 +688,7 @@ We developed and used a coding protocol (the [coding protocol](../../Supplementa
 
 Because data from the Many Labs replications were available for each lab location within each replication set, it was possible to calculate reliabilities for any item scale measure used for each lab location separately. This made it possible to assess the variation of reliabilities of the same measure across different contexts.
 
-Cronbach's Alpha was calculated as the main reliability index used in the analyses, as it remains the most commonly used indicator of the reliability of a measure [@flake2017construct], thus allowing for comparisons with the reliabilities reported in original articles. Cronbach's Alpha was calculated using the alpha function from the psych R package [*v`r getNamespaceVersion("psych")[[1]]`*; @R-psych] with default arguments. Omega was pre-registered as an additional index of reliability, because it is regarded by numerous psychometricians as a more informative alternative to Cronbach’s Alpha [@crutzen2017scale; @deng2017testing]. The results based on Omega can be found in [Appendix C](../../SupplementaryMaterials/AppendixScripts/Appendix_multilevel_analyses.Rmd).
+Cronbach's Alpha was calculated as the main reliability index used in the analyses, as it remains the most commonly used indicator of the reliability of a measure [@flake2017construct], thus allowing for comparisons with the reliabilities reported in original articles. Cronbach's Alpha was calculated using the alpha function from the *psych* R package [*v`r getNamespaceVersion("psych")[[1]]`*\; @R-psych] with default arguments. Omega was pre-registered as an additional index of reliability, because it is regarded by numerous psychometricians as a more informative alternative to Cronbach’s Alpha [@crutzen2017scale; @deng2017testing]. The results based on Omega can be found in [Supplementary Analyses C](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_multilevel_analyses.Rmd).
 
 ```{r ReliabilityValidityTestabilityCheck, include = FALSE, warning = FALSE}
 ## Checking the measures to recalculate the reliability and factor analysis for.
@@ -770,7 +749,7 @@ apa_table(
 
 QMPs were all coded to be either true, false, or not applicable if not relevant for that measure (e.g. reporting results from a factor analysis for single item measures). For the analyses we calculated a ratio (both per QMP type and overall QMP) based on the number on the number of true responses divided by the number of responses coded to be applicable.
 
-After the initial coding, we made minor revisions to `r length(coded_data_revised_raw[1, c("Op1", "Op2", "Op5", "Sel1", "Sel3", "Quant1", "Quant2", "Quant3", "Mod1", "Mod2", "Mod3", "Mod4", "Mod5", "Mod6")])` of the `r length(coded_data_initial_raw[1, c("Def1", "Op1", "Op2", "Op3", "Op4", "Op5", "Sel1", "Sel2", "Sel3", "Sel4", "Quant1", "Quant2", "Quant3", "Quant4", "Mod1", "Mod2", "Mod3", "Mod4", "Mod5", "Mod6")])` QMP items in the preregistered coding protocol, because they were considered too stringent in some of their criteria for what constituted a QMP. For example, in the initial protocol an example item had to be present within the article or protocol itself, or else this was counted as a QMP. In the revised protocol, references to online appendices with example items were also considered sufficient for this item. The analyses, tables and figures presented in this article are all based on the revised coding protocol, the results of the equivalent analyses based on QMPs obtained with our initial protocol can be found in [Appendix D](../../SupplementaryMaterials/AppendixScripts/Appendix_initial_QMP_analyses.Rmd).
+After the initial coding, we made minor revisions to `r length(coded_data_revised_raw[1, c("Op1", "Op2", "Op5", "Sel1", "Sel3", "Quant1", "Quant2", "Quant3", "Mod1", "Mod2", "Mod3", "Mod4", "Mod5", "Mod6")])` of the `r length(coded_data_initial_raw[1, c("Def1", "Op1", "Op2", "Op3", "Op4", "Op5", "Sel1", "Sel2", "Sel3", "Sel4", "Quant1", "Quant2", "Quant3", "Quant4", "Mod1", "Mod2", "Mod3", "Mod4", "Mod5", "Mod6")])` QMP items in the preregistered coding protocol, because they were considered too stringent in some of their criteria for what constituted a QMP. For example, in the initial protocol an example item had to be present within the article or protocol itself, or else this was counted as a QMP. In the revised protocol, references to online appendices with example items were also considered sufficient for this item. The analyses, tables and figures presented in this article are all based on the revised coding protocol, the results of the equivalent analyses based on QMPs obtained with our initial protocol can be found in [Supplementary Analyses D](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_initial_QMP_analyses.Rmd).
 
 ### Measure of Replication Success
 
@@ -937,39 +916,105 @@ Every hypothesis test in this study was a two-sided test with an alpha of .05. N
 
 ## Descriptives
 
-Table \@ref(tab:ReplicationRatioTable) shows the number of replication sets, measures, and measures per study that were extracted, as well as the proportion of successful replications, for each of the Many Labs separately and in total.
+Table \@ref(tab:ReplicationNrTable) shows the number of replication sets, measures, and measures per study that were extracted, as well as the proportion of successful replications, for each of the Many Labs separately and in total.
 
-```{r ReplicationRatioTable, warning = FALSE}
+```{r ReplicationNrTable, warning = FALSE}
 # construct the replication ratio table to be printed
-replication_ratio_table <- data.frame("Many Labs Version" = c("1", "2", "3", "5", "Total"),
+replication_nr_table <- data.frame("Many Labs Version" = c("1", "2", "3", "5", "Total"),
                                       "N Total" = c(table(coded_data_replications$many_labs_version), nrow(coded_data_replications)), 
                                       "N Replicated" = c(table(coded_data_replications$many_labs_version, coded_data_replications$hypothesis_support)[, "Yes"], table(coded_data_replications$hypothesis_support)["Yes"]))
 
-# calculate the replication ratio from the N measures whose studies were replicated
-# and the N total measures, per Many Labs study.
-replication_ratio_table$"Replication Ratio" <- round(replication_ratio_table$N.Replicated / replication_ratio_table$N.Total, digits = 2)
 
 # Changing column names to be less computer speak-y looking
-colnames(replication_ratio_table) <- c("Many Labs Version", "Nr. Measures$^a$", 
-                                       "Nr. Replicated", "Replication Ratio")
+colnames(replication_nr_table) <- c("Many Labs Version", "Nr. Measures", 
+                                       "Nr. Replicated")
 
 
 # adding a superscript for a later footnote
-replication_ratio_table$"Nr. Replicated"[3] <- "$3^a$"
+replication_nr_table$"Nr. Replicated"[3] <- "$3^a$"
 
-  
+
 # print the table in apa formatting
 apa_table(
-  replication_ratio_table, align = c("l", "r", "r", "r")
+  replication_nr_table, align = c("l", "r", "r")
   , caption = "Ratio of measures for which the effect was considered replicated, across many labs projects"
   , note = "Nr. measures refers to the total number of primary measures extracted, while Nr. replicated displays the number of measures for which the associated effect was replicated successfully. $^a$replication was assessed as unclear for three other measures, since their effect was only partially replicated. These have been treated as not replicated within this table and in further analyses throughout the article. "
   , escape = FALSE, placement = "htp", midrules = 4)
 
 ```
 
-Our data had a multilevel structure. Each replication was nested within one of four Many Labs projects. Furthermore, `r sum(coded_data_replications$appearance != 1)` replications used more than one primary measure, resulting in `r nrow(coded_data_replications)` measures in both `r sum(coded_data_replications$appearance == 1)` replications protocols and `r sum(coded_data_original$appearance == 1)` original articles[^1]. Of these `r nrow(coded_data_replications)` measures `r sum(coded_data_replications$mod_check == "True")` were modified from the original to the replication. In the replications, the data of responses on the measures was further nested in several labs per replication. The combined sample size of all labs in the replications was on average `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N), 0)` which was approximately `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N) / mean(coded_data_original_shortened[coded_data_original_shortened$appearance == 1 & !is.na(coded_data_original_shortened$N),]$N), 0)` times larger than the average in original studies, which were conducted in single labs.
+Our data had a multilevel structure. Each replication was nested within one of four Many Labs projects. Furthermore, `r sum(coded_data_replications$appearance != 1)` replications used more than one primary measure, resulting in `r nrow(coded_data_replications)` measures in both `r sum(coded_data_replications$appearance == 1)` replications protocols and `r sum(coded_data_original$appearance == 1)` original articles[^1]. Of these `r nrow(coded_data_replications)` measures `r sum(coded_data_replications$mod_check == "True")` were modified from the original to the replication. In the replications, the data of responses on the measures was further nested in several labs per replication. The combined sample size of all labs in the replications was on average `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N), 0)` which was approximately `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N) / mean(coded_data_original_shortened[coded_data_original_shortened$appearance == 1 & !is.na(coded_data_original_shortened$N),]$N), 0)` times larger than the average in original studies, which were conducted in single labs. 
+
+```{r InformationOnMeasurementModification}
+# Here we determine whether items had the number of items changed, and how.
+
+# The code below indexes the scales for which either the number of items or 
+# number of response options were decreased. 
+
+item_number_change_data <- coded_data_replications[!is.na(coded_data_replications$mod_5_REV) & coded_data_replications$mod_5_REV, c(1, 2, 3, 56)]
+
+
+# Extracted information on the modification of measurement items. When NA is 
+# reported it means that we found no modification of number of items.
+item_number_change_data$context <- c("from 3 questions about 15 topics -> 1 question about four topics", NA, "from a list of quotations to only the 1 of interest", "From four IATs to 1 IAT in replications", "Initial study used 6 items from an 8-item short scale, 25-item four factor scale suggested by original authors, but 5-item subscale of specific factor of interest", NA,  "Original research had 19 scenarios, replication participants got randomly assigned to 1 control and 3 moral dilemmas from the set of 19", " from a 10-item scale, to single-item scale.", NA, NA, "Compared to the 'longer lists of anagrams used' in previous research (226 for 4 dimensions) on the topic, they switched to a shorter 4 anagram task of the 1 dimension of interest.", "Original measure assessed 4 constructs with 24 item, For the replication they switched to a different scale measuring the 1 construct relevant to the effect using 7 items.")
+
+# Whether the change was a decrease or increase in items
+item_number_change_data$direction <- as.factor(c("decrease", NA, "decrease", "decrease", "decrease", NA, "decrease", "decrease", NA, NA, "decrease", "increase"))
+
+# sum(item_number_change_data$direction == "decrease", na.rm = TRUE)
+
+
+# creating indexes for decreasing items to see if there are noteworthy differences.
+decreased_items_index <- rep(FALSE, nrow(coded_data_replications))
+
+# setting to true in case items were decreased.
+decreased_items_index[as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),]))] <- TRUE
+
+
+# getting information on hypothesis support
+hypothesis_support_index <- coded_data_replications$hypothesis_support
+
+hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "Yes"
+
+# coding Unclear into No instead of Yes didn't make a difference on the test.
+# hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "No"
+
+
+# chi-squared test of differences in hypothesis support between measures for 
+# which items were decreased and for which it was not.
+chisq.test(decreased_items_index, coded_data_replications$hypothesis_support)
+
+# Interestingly, when item numbers were decreased, the replicability seemed to have increased in this scenario.
+# Although the difference was not significant and there were too few modifications to the items to get a stable estimate.
+
+#mean(coded_data_replications$hypothesis_support[!as.numeric(rownames(coded_data_replications)) %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),]))] == "Yes")
+
+### Looking at the relevancy for Hypothesis tests.
+# H1
+coded_data_original_shortened$reliability_type[decreased_items_index]
+coded_data_replications$reliability_type[decreased_items_index]
+
+# Only one of these measures had a reported reliability in the original, so it
+# is unlikely to have been of much impact.
+
+
+# H2
+coded_data_original_shortened$reliability_coeff[decreased_items_index]
+coded_data_replications$reliability_coeff[decreased_items_index]
+
+
+data_h3_avg[data_h3_avg$reporting_index %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),])),]
+
+# Of the measures we could calculate the reliability of, only the measure of 
+# persistence was decreased in item count. This was interestingly the one with
+# the lowest calculated average alpha in the sample.
+
+
+```
 
 [^1]: Initially the original articles contained 3 more measures than the replication protocols. This difference was due to the way that the moral foundations questionnaire was framed in the original articles compared to in the original article. In the original article it was framed as measuring five different moral foundations, while in the replication protocol the measure assessed the two overarching categories that were used to test the main effect in both the original and replication research. The measurement information reported was comparable across all five categories, and thus it was deemed that the measurement could be reduced to reflect two overarching categories facilitate easier comparison between measurement in original and replication.
+
+Because of this multilevel structure we initially planned to conduct multilevel models alongside our single-level regression models for testing Hypothesis 3, 5, and 6. However, these analyses were omitted, because group sizes were small. The results from these analyses are reported in [Supplementary Analyses B](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_multilevel_analyses.Rmd)) for the sake of completeness and transparency. 
 
 ## Measurement Reliability
 
@@ -977,7 +1022,7 @@ If data from a multiple item scale could be accessed, we calculated the Cronbach
 
 For Cronbach's alpha, we used formulas 2 & 3 from @duhachek2004AlphaStandardError to calculate the standard error in the meta-analysis. Heterogeneity was estimated using the tau value, which indicates the standard deviation of the distribution of true Cronbach's alpha coefficients for a measure, and tested using the Cochran's Q test for each measure.
 
-The RG meta-analysis was performed using the *rma* function from the *metafor* R package [*v`r getNamespaceVersion("metafor")[[1]]`*; @R-metafor]. Defaults settings were used. We implemented no correction for bias, because the Many Labs replications were not at risk of publication bias.
+The RG meta-analysis was performed using the *rma* function from the *metafor* R package [*v`r getNamespaceVersion("metafor")[[1]]`*\; @R-metafor]. Defaults settings were used. We implemented no correction for bias, because the Many Labs replications were not at risk of publication bias.
 
 The average calculated Cronbach's alpha coefficient across replication sets was `r apa_num(mean(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$alpha, na.rm = TRUE), digits = 3)`. Figure \@ref(fig:Plot23AlphaCode) displays the distributions of the calculated Cronbach’s Alpha scores from each lab for each measure, separated by successful and unsuccessful replication.
 
@@ -1051,7 +1096,7 @@ The number of reported reliabilities was `r N_reported_reliabilities_original` i
 
 ### Hypotheis 2: Within Study Variation in Reliability.
 
-To get an indication of the true variability in the reliability scores, we used the RG meta-analyses to test for heterogeneity in the reliabilities in the replications. This analysis deviated from the multilevel analysis we preregistered, as the preregistered analysis was later deemed not suitable for testing Hypothesis 2 (results from the preregistered analysis are shown in [Appendix A](../../SupplementaryMaterials/AppendixScripts/Appendix_pre-reg_analyses.Rmd)).
+To get an indication of the true variability in the reliability scores, we used the RG meta-analyses to test for heterogeneity in the reliabilities in the replications. This analysis deviated from the multilevel analysis we preregistered, as the preregistered analysis was later deemed not suitable for testing Hypothesis 2 (results from the preregistered analysis are shown in [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_pre-reg_analyses.Rmd)).
 
 Figure \@ref(fig:Plot23AlphaCode) displays the tau estimates, which indicates the differences in true reliability scores between labs for a given measure. For `r sum(data_h3_avg$QEp > .05)` measures the tau estimate was not significantly different from 0, while for `r apa_num(sum(data_h3_avg$QEp < .05), numerals = FALSE)` measures, the true variation in reliability across labs was significant. The true reliability was quite variable for some measures. For instance, the estimate of the standard deviation of the true reliability of the top measure in the graph (a measure of conscientiousness from @gosling2003very used in the replication of @defruyt2000cloninger) equaled `r apa_num(plot_23_data_alpha_reordered[plot_23_data_alpha_reordered$g == "Albarracín et al. (2008), exp 5 math", "tau"][1], digits = 3, gt1 = FALSE)` points of Cronbach’s Alpha. 
 
@@ -1063,8 +1108,10 @@ We used a logistic regression model to test whether replication success as refle
 
 ```{r Hypothesis3MainTest, include = FALSE}
 ## The main model to test hypothesis 3, through a logistic regression model.
-H3_test_result_main_alpha <- apa_print(glm(formula = replication ~ 1 + alpha, 
-                                      family = binomial(), data = data_h3_avg))
+H3_test_main_alpha <- glm(formula = replication ~ 1 + alpha, 
+                                 family = binomial(), data = data_h3_avg)
+
+H3_test_result_main_alpha <- apa_print(H3_test_main_alpha)
 
 # coefficient is positive but not significant.
 
@@ -1072,11 +1119,39 @@ H3_test_result_main_alpha <- apa_print(glm(formula = replication ~ 1 + alpha,
 H3_main_full_results_alpha_with_OR <- OR_to_apa_full_supplier(H3_test_result_main_alpha$full_result$alpha, negative_b = FALSE)
   
 # well this OR is quite a ridiculous number..., but then again a step from 0 alpha to 1 is quite a jump too...
-H3_test_result_main_alpha$full_result$alpha
+```
+
+Cronbach's alpha did not significantly predict replication success in the main logistic regression model (`r H3_main_full_results_alpha_with_OR`). Results based on the Omega coefficient lead to a similar conclusion (see [Supplementary Analyses C](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_omega_analyses.Rmd)). 
+
+```{r Hypothesis3WhiteAdjustedSensitivityAnalysis, warning = FALSE}
+# We take the H3_test_main_alpha result from the main analysis on the aggregate
+# level as reported in the main text, and then calculate the White heteroskedastic 
+# variance/covariance matrix for the coefficients
+White_varcov_matrix <- vcovHC(H3_test_main_alpha, type = "HC1") # HC1 applies White's correction
+
+# now we apply this covariance matrix to get robust standard errors on our estimation
+H3_test_alpha_White_adjusted <- coeftest(H3_test_main_alpha, White_varcov_matrix)
+
+H3_coefficient_alpha_White_adjusted <- H3_test_alpha_White_adjusted[2,1]
+
+
+# first we calculate the odds-ratio
+OR_coefficient_alpha_White_adjusted <- round(exp(H3_coefficient_alpha_White_adjusted), 2) 
+
+# then we also calculate the log-odds ratio CIs
+log_OR_CI_LOW <- H3_coefficient_alpha_White_adjusted - (1.96 * H3_test_alpha_White_adjusted[2,2])
+log_OR_CI_HI <- H3_coefficient_alpha_White_adjusted + (1.96 * H3_test_alpha_White_adjusted[2,2])
+
+# and then convert them to odds ratio CIs
+OR_CI_LOW <- round(exp(log_OR_CI_LOW), 2)
+OR_CI_HI <- round(exp(log_OR_CI_HI), 2)
+
+# now we create the string to print in text
+H3_test_result_alpha_White_adjusted <- paste0("$\\hat{\\beta} = ", round(H3_test_alpha_White_adjusted[2,1], 2), "$, $OR = ", OR_coefficient_alpha_White_adjusted, "$, 95\\% CI $[", OR_CI_LOW, ", ", OR_CI_HI, "]$, $z = ", round(H3_test_alpha_White_adjusted[2,3], 2), "$, $p = ", apa_p(H3_test_alpha_White_adjusted[2,4]), "$")
 
 ```
 
-Cronbach's alpha did not significantly predict replication success in the main logistic regression model (`r H3_main_full_results_alpha_with_OR`). Results based on the Omega coefficient lead to a similar conclusion (see [Appendix C](../../SupplementaryMaterials/AppendixScripts/Appendix_omega_analyses.Rmd)). However, it should be noted that the reliability coefficient could be calculated for only `r nrow(data_h3_avg)` measures. As a result, the estimates of the relation between reliability and replication success obtained using these models each come with large uncertainty.
+We additionally pre-registered a random intercept and random-slope multilevel regression model of the same relationship with each lab's unique reliability nested within the set of replication of an effect. However, because our dependent variable (replicability) is at the group level, we decided based on suggestions in the literature [@foster-johnson2018Predicting] to use a test on the aggregate level using White's heteroscedasticity adjustment to address the dependency. This analysis also showed a non-significant relation (`r H3_test_result_alpha_White_adjusted`). However, it should be noted that for these analyses the reliability coefficient could be calculated for only `r nrow(data_h3_avg)` measures. As a result, the estimates of the relation between reliability and replication success obtained using these models each come with large uncertainty.
 
 ## Measurement Reporting
 
@@ -1104,7 +1179,7 @@ reliability_reporting_test_result <- chisq.test(data_h1$rep_org[data_h1$N_items 
 
 ```
 
-Reliability was more commonly reported in original (n = `r N_reported_reliabilities_original`) as compared to replication research (n = `r N_reported_reliabilities_replications_number_style`), $\chi^{2}$(`r apa_num(reliability_reporting_test_result$parameter)`) = `r apa_num(reliability_reporting_test_result$statistic)`, *p* = `r apa_p(reliability_reporting_test_result$p.value)`. Validity evidence was similarly reported infrequently. `r apa_num(sum(coded_data_original_shortened$sel_psychometric_evidence_REV != "None" & coded_data_original_shortened$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` original articles reported validity evidence from a factor analysis, while only `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` replications did.
+Reliability was more commonly reported in original (n = `r N_reported_reliabilities_original`) as compared to replication research (n = `r N_reported_reliabilities_replications_number_style`), $\chi^{2}$(`r apa_num(reliability_reporting_test_result$parameter)`) = `r apa_num(reliability_reporting_test_result$statistic)`, *p* = `r apa_p(reliability_reporting_test_result$p.value)`. Validity evidence was similarly reported infrequently. `r apa_num(sum(coded_data_original_shortened$sel_psychometric_evidence_REV != "None" & coded_data_original_shortened$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` original articles reported validity evidence from a factor analysis, while only `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` replications did. Furthermore, we conducted pre-registered exploratory analyses testing the unidimensionality of `r nrow(cfa_results)` measures with available replication data using a confirmatory factor analysis. We found that `r sum(cfa_results$Single_factor == "Yes")` of these measures met our criteria for unidimensionality (see [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_pre-reg_analyses.Rmd) for further details).
 
 ### Hypothesis 4: QMPs in Original Compared to Replication Research.
 
@@ -1215,12 +1290,13 @@ grid.arrange(Plot_456_2,
 
 ```
 
-We used a beta-regression model to test the difference in QMP ratio between original and replication was significant using the *betareg* R package [*v`r getNamespaceVersion("betareg")[[1]]`*; @R-betareg_a; @R-betareg_b]. Beta regression models are similar to other generalized linear regression models, but they are better suited to model dependent variables with values in the interval of $(0, 1)$, including ratios. Furthermore, they are robust for heteroskedastic and asymmetrically distributed dependent variables [@cribari2010beta].
+We used a beta-regression model to test the difference in QMP ratio between original and replication was significant using the *betareg* R package [*v`r getNamespaceVersion("betareg")[[1]]`*\; @R-betareg_a; @R-betareg_b]. Beta regression models are similar to other generalized linear regression models, but they are better suited to model dependent variables with values in the interval of $(0, 1)$, including ratios. Furthermore, they are robust for heteroskedastic and asymmetrically distributed dependent variables [@cribari2010beta].
 
 ```{r Hypothesis4Model, include = FALSE}
 ## Hypothesis 4 beta regression model
 # running the models with revised QMP ratio's
 H4_test_results_REV <- betareg(QMP_REV_ratio ~ rep_org, data = data_h4)
+
 ```
 
 Using a beta-regression model, the total QMP ratio was regressed on a dummy variable indicating whether the coded report was an original article or a replication protocol. The results supported Hypothesis 4 and indicated that this difference was significant (`r betareg_output_to_apa_full(H4_test_results_REV)`).
@@ -1233,7 +1309,6 @@ H5_test_results_REV <- apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = 
 
 H5_test_results_REV_with_OR <- OR_to_apa_full_supplier(H5_test_results_REV$full_result$QMP_REV_ratio, negative_b = TRUE)
 
-
 # and the same model using the QMPs from the initial coding protocol
 H5_test_results <- apa_print(glm(hypothesis_support ~ QMP_ratio, data = data_h5, family = binomial))
 
@@ -1241,7 +1316,22 @@ H5_test_results_with_OR <- OR_to_apa_full_supplier(H5_test_results$full_result$Q
 
 ```
 
-We used logistic regression to test the association between the QMP ratio in replication protocols and replication success. In line with Hypothesis 5, results showed that successful replications were associated with fewer QMPs compared to unsuccessful replications (`r H5_test_results_REV_with_OR`). However, we did not find the association when based on the initial protocol (`r H5_test_results_with_OR`).
+```{r Hypotheses5ReportedMultilevelAnalyses, include = FALSE, warning = FALSE}
+## Hypothesis 5 sensitivity test using a random intercept Gaussian model.
+# create dummy H5 dataframe for use in sensitivity test
+data_h5_sens <- data_h5
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform.
+data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio))
+
+# running the model with initial QMP ratio's
+random_intercept_h5<- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
+```
+
+We used logistic regression to test the association between the QMP ratio in replication protocols and replication success. In line with Hypothesis 5, results showed that successful replications were associated with fewer QMPs compared to unsuccessful replications (`r H5_test_results_REV_with_OR`). However, we did not find the association with the initial protocol in neither the single-level (`r H5_test_results_with_OR`) nor the multilevel model (`r random_intercept_h5$full_result$QMP`)[^2].
+
+[^2]: As of writing this article the *betareg* package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the *lmer* function from the *lme4* package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the *betareg* package) to fit the Gaussian model.
 
 ### Hypothesis 6: Relation Between QMPs in Original and Replication Research.
 
@@ -1252,12 +1342,52 @@ H6_test_results_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6
 # and the same model using the QMPs from the initial coding protocol
 H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
 
+# Using a glm to check if results differs in direction and significance from the 
+# beta-regression, to check that including a linear regression line in figure 46
+# is representative of the relationship.
+H6_glm_test_REV <- glm(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6)
 
+H6_glm_test_results_REV <- apa_print(H6_glm_test_REV)$full_result$QMP_REV_ratio
 
 ```
 
-Using a beta regression model, we found total QMP ratio in the original article to be significantly related to the total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`). This result provides evidence in favor of Hypothesis 6. However, this association was sensitive to changes in the QMP protocol, as we did not observe a significant relation between original and replication QMP ratios based on QMPs from the initial protocol (`r betareg_output_to_apa_full(H6_test_results)`).
+Using a beta regression model, we found total QMP ratio in the original article to be significantly related to the total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`). This result provides evidence in favor of Hypothesis 6. Figure \@ref(fig:Plot46RevisedDataCode) displays this relationship visually. 
 
+```{r Plot46RevisedDataCode, error = FALSE, warning = FALSE, fig.cap = paste0("Scatterplot of original QMP ratios and replication total QMP ratios with a linear regression line. The linear regression line is included, as the result based on linear regression was similarly in direction and significance to the beta regression used to test Hypothesis 6 (", H6_glm_test_results_REV, "), while being easier to understand visually. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present.")}
+ggplot(plot_46_data_rev[plot_46_data_rev$QMP_type == "QMP.Ratio" & plot_46_data_rev$QMP_Rep_type == "Rep.QMP.Ratio",], aes(QMP_ratio,QMP_Rep_ratio)) + 
+  geom_point() +
+  geom_jitter(width = 0.01, height = 0.01) +
+  geom_smooth(method = "glm", formula = y ~ x) + 
+  theme_minimal() +
+  theme(strip.text.y = element_text(size = 7), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  ylab("QMP Ratio (Replication Protocol)") +
+  xlab("QMP Ratio (Original Article)") 
+
+```
+
+```{r Hypotheses6ReportedMultilevelAnalyses, include = FALSE, warning = FALSE}
+## Hypothesis 6 sensitivity test using a random intercept Gaussian model.
+# create dummy H6 dataframe for use in sensitivity test
+data_h6_sens <- data_h6
+
+# convert outcome variable to be usable with Gaussian distribution via
+# logit transform. 
+data_h6_sens$QMP_REV <- log(data_h6_sens$QMP_REV_ratio /(1 - data_h6_sens$QMP_REV_ratio))
+data_h6_sens$Rep_QMP_REV <- log(data_h6_sens$Rep_QMP_REV_ratio /(1 - data_h6_sens$Rep_QMP_REV_ratio))
+data_h6_sens$QMP<- log(data_h6_sens$QMP_ratio /(1 - data_h6_sens$QMP_ratio))
+data_h6_sens$Rep_QMP <- log(data_h6_sens$Rep_QMP_ratio /(1 - data_h6_sens$Rep_QMP_ratio))
+
+
+# running the model with revised QMP ratio's
+random_intercept_h6_REV <- apa_print(lmer(formula = Rep_QMP_REV ~ 1 + QMP_REV + (1|many_labs_version), data = data_h6_sens))
+
+# running the model with initial QMP ratio's
+random_intercept_h6 <- apa_print(lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens))
+```
+
+However, this association was sensitive to changes in the QMP protocol, as we did not observe a significant relation between original and replication QMP ratios based on QMPs from the initial protocol in neither the single-level (`r betareg_output_to_apa_full(H6_test_results)`) nor the multilevel model (`r random_intercept_h6$full_result$QMP`). Furthermore, in the multilevel model based on the revised QMPs the association was again not significant (`r random_intercept_h6_REV$full_result$QMP`). 
+
+We additionally conducted planned exploratory analyses of the association for each unique combination of QMP types, but taking into account the limited sample size, we could not determine any clear relations between types (see [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_pre-reg_analyses.Rmd) and [Supplementary Analyses D](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_initial_QMP_analyses.Rmd) for further details on the analyses and results).
 
 # Discussion
 
@@ -1267,16 +1397,16 @@ In this article, we analyzed the data, protocols, and related original articles 
 
 ### Reliability Varied Within and Between Measures
 
-While most measures showed sufficient average reliability for most purposes in psychological research (around .80), about a quarter of the measures had a reliability generally considered insufficient (around .60 or less) [@nunnally1994assessment]. Furthermore, the reliability in original research was generally lower than in the replication samples, contrary to our hypothesis that reported reliability estimates would not differ significantly between replications and original articles. These differences may be due to features that were specific to the Many Labs projects. Large teams of researchers with diverse expertise were involved in the Many labs projects. It is possible that the pooling of expertise and use of structured procedures led to more reliable measurement compared to the original research.
+While most measures showed sufficient average reliability for most purposes in psychological research (around .80), about a quarter of the measures had a reliability generally considered insufficient (around .60 or less) [@nunnally1994assessment]. Furthermore, the reliability in original research was generally lower than in the replication samples, contrary to our Hypothesis 1 that reported reliability estimates would not differ significantly between replications and original articles. These differences may be due to features that were specific to the Many Labs projects. Large teams of researchers with diverse expertise were involved in the Many labs projects. It is possible that the pooling of expertise and use of structured procedures led to more reliable measurement compared to the original research. 
 
-Our results additionally show that the reliability of a measure differs across samples, in some cases even showing signs of true variation, or heterogeneity, in reliability. Reliability heterogeneity was particularly common for measures with a lower average reliability. However, the number of investigated measures was small, and some measures were only used in a small number of independent samples. This is particularly relevant, since the Q-test to test heterogeneity is sensitive to the number of studies included in each test [@li2015DilemmaHeterogeneityTests]. Furthermore, most measures did not show evidence of significant reliability heterogeneity, a similar lack of widespread heterogeneity was also observed for effect sizes in replications [@klein2018many; @olsson2020heterogeneity]. Regardless, our results do demonstrate an often-overlooked aspect of reliability: reliability is a sample-specific, not a measurement-specific feature.
+In some cases, the reliability of measures showed signs of true variation, or heterogeneity, across samples. Reliability heterogeneity was particularly common for measures with a lower average reliability. However, the number of investigated measures was small, and some measures were only used in a small number of independent samples. This is particularly relevant, since the Q-test to test heterogeneity is sensitive to the number of studies included in each test [@li2015DilemmaHeterogeneityTests]. Furthermore, most measures did not show evidence of significant reliability heterogeneity, a similar lack of widespread heterogeneity was also observed for effect sizes in replications [@klein2018many; @olsson2020heterogeneity]. Regardless, our results do demonstrate an often-overlooked aspect of reliability: reliability is a sample-specific, not a measurement-specific feature [@vacha1999practices; @cho2015cronbach].
 
 ### No Observed Relation Between Reliability and Replicability
 @stanley2014expectations illustrated that measurement error, when not attenuated for, can impact replication assessments. However, we observed no relation between reliability and replicability, even though our chosen replication index did not attenuate for measurement error. This result is surprising not only because it runs counter to the findings of @stanley2014expectations and Hypothesis 3. It also runs counter to the fact that according to statistical theory, the increased noise in the data as the result of lower reliability decreases the effect size estimates based on those data.
 
-However, the relationship between reliability and replicability is complex [@willson1980research; @lebreton2014corrections; @oswald2015Imperfect; @zhang2024Metaanalysis]. For example, reliability and replicability are only related when the true effect is not null. In our sample, more than half of the effects were not replicated, indicating that many of these effects may be null effects. For these effects no relation between reliability and replicability is expected. Furthermore, while lower reliability decreases effect sizes it can also reduce the observed true variance in the effects [@olsson-collentine2023UnreliableHeterogeneityHow]. As a result, effect estimates from various studies will appear more similar than they truly are, seemingly replicating the original. These and other relations are further complicated by the fact that reliability is not a fixed aspect of a scale, but a feature of that scale within a sample [e.g., @vacha1999practices; @cho2015cronbach].
+However, the relationship between reliability and replicability is complex [@willson1980research; @lebreton2014corrections; @oswald2015Imperfect; @zhang2024Metaanalysis]. For example, reliability and replicability are only related when the true effect is not null. In our sample, more than half of the effects were not replicated, indicating that many of these effects may be null effects. For these effects no relation between reliability and replicability is expected. Furthermore, while lower reliability decreases effect sizes it can also reduce the observed true variance in the effects [@olsson-collentine2023UnreliableHeterogeneityHow]. As a result, effect estimates from various studies will appear more similar than they truly are, seemingly replicating the original. These and other relations are further complicated, because as mentioned earlier reliability is not a fixed aspect of a scale, but a feature of that scale within a sample.
 
-The complexity of the relationship combined with the fact that we could only calculate reliability for a small number of measures meant we had low statistical power to detect the overall relation between reliability and replicability, which provides another possible explanation for our non-significant finding. The small number of relevant measures and reported reliabilities also indicates an important issue: we observed a lack of reliability evidence in both original and replication psychological research.
+The complexity of the relationship combined with the fact that we could only calculate reliability for a small number of measures meant we had low statistical power to detect the overall relation between reliability and replicability, even more so for the multilevel model, which provides another possible explanation for our non-significant findings. The small number of relevant measures and reported reliabilities does however indicate an important issue: we observed a lack of reliability evidence in both original and replication psychological research.
 
 ## Measurement Reporting
 
@@ -1284,7 +1414,7 @@ The complexity of the relationship combined with the fact that we could only cal
 
 The reliability of measures was rarely reported in both original and replication research, which is in line with earlier investigations in the literature [@shaw2020measurement; @flake2017construct; @flake2022construct]. Reported reliabilities were so few, that the preregistered test for Hypothesis 1 was no longer informative. We found that replication research reported reliability coefficients less often than original research, which is in line with @flake2022construct. This pattern continued for validity evidence reporting. Of the `r nrow(coded_data_replications)` measures, validity evidence in the form of factor analysis or similar analyses was reported for `r apa_num(sum(coded_data_original_shortened$sel_psychometric_evidence_REV != "None" & coded_data_original_shortened$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` measures in original articles, and `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` measures in replication protocols.
 
-The underreporting of reliability and validity evidence has long been discussed [@willson1980research;@vacha1999practices; @green2011recent]. Our study illustrates three potential reasons for why this problem has persisted. Firstly, the studies in our sample commonly used single-item measures, an observation that was also made by @shaw2020measurement. Calculating reliability for single-item measures is not as straightforward and less common as for multiple item measures [@wanous1996estimating].
+The underreporting of reliability and validity evidence has long been discussed [@willson1980research;@vacha1999practices; @green2011recent]. Our study illustrates three potential reasons for why this problem has persisted. Firstly, the studies in our sample commonly used single-item measures, an observation that was also made by @shaw2020measurement. Calculating reliability for single-item measures is not as straightforward and less common as for multiple item measures [@wanous1996estimating]. Concerns with the use of single-item measures go beyond reliability, validity may also be at risk. Single-item measures because they are singular come with an assumption of unidimensionality regarding the construct they, which our exploratory analyses revealed is an assumption that did not frequently hold for multiple-item measures in our sample. However, we did not explore validity concerns unrelated to reporting in-depth, therefore future research is needed to determine the extent of problems with validity.
 
 Secondly, our results indicate that there may be bias in reporting reliability coefficients. Reliabilities were reported in original research for those measures that obtained higher calculated reliabilities in the replication samples. If we take the calculated reliabilities in the replication sample as an accurate representation of the distribution of the true reliability for that measure, then this would imply that reliabilities are more often reported when the measure is truly reliable, and less when it is unreliable; a common issue of selective reporting. Researchers may be reluctant to report reliability for unreliable measures, thus lowering the prevalence of reported reliabilities. In turn, researchers may become overly optimistic about the reliability of measures in their field, similarly to how bias in publication causes issues for establishing estimates of true effect sizes in meta-analyses [@sutton2000empirical].
 
@@ -1298,7 +1428,7 @@ Existing literature has already warned about the potential detrimental effects o
 
 In line with Hypotheses 5 & 6, we found an indication of such a spillover effect in our sample. The total QMPs of an original study and the total QMPs in the protocol of the replication for the same study were positively associated. Furthermore, we found that QMPs may have negatively impacted replicability. An increase in total QMP ratio was associated with a decrease in replicability. These associations together indicate that poor measurement reporting in an original study could be a risk factor for subsequent replication attempts.
 
-However, it is worth noting that these associations were only found for QMPs coded with the revised coding protocol. Neither hypothesis was supported by the data on QMPs obtained with the initial coding protocol (see [Appendix D](../../SupplementaryMaterials/AppendixScripts/Appendix_initial_QMP_analyses.Rmd) for results based on the initial protocol).
+However, it is worth noting that these associations were only found for QMPs coded with the revised coding protocol. Neither hypothesis was supported by the data on QMPs obtained with the initial coding protocol (see [Supplementary Analyses D](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_initial_QMP_analyses.Rmd) for results based on the initial protocol). Furthermore, these Hypotheses were supported by only one of the multilevel models. However, these models were limited in group and sample size making their interpretation precarious.
 
 ## Limitations & Future Research
 
@@ -1322,7 +1452,7 @@ Finally, we note that we used an observational design which means that we cannot
 
 Taking all the findings together, we formulated several recommendations. Firstly, reliable and valid measures are a prerequisite for credible findings. The observation that many measures are not reported with such evidence is worrying, because it obscures the credibility of findings, and hampers scientific progress. Therefore, we join earlier recommendations [@hogan2004empirical; @barry2014validity; @flake2020measurement; @flake2022construct] that establishing validity evidence for multiple item scales should become a community standard for credible research. Furthermore, reliability coefficient estimates for multiple item scales should by default always be reported, since these estimates can easily be obtained with most statistical software, and provide important information on a measure’s performance. Only researchers that can provide reasoning to the contrary for their research should be exempt from this default.
 
-Secondly, researchers should report their procedure and measurement in detail, as specified in for example Table 1 in @flake2020measurement, or section 3.6 in @apa2020publication on measures and measurement. This is important so that it can be mimicked in replications if needed. The remaining information that could not fit in the article can be made available on a public repository, such as the Open Science Framework (OSF; @soderberg2018using) or Zenodo [@zenodo2024open].
+Secondly, researchers should report their procedure and measurement in detail, as specified in for example Table 1 in @flake2020measurement, or section 3.6 in @apa2020publication on measures and measurement. This is important so that it can be mimicked in replications if needed. The remaining information that could not fit in the article can be made available on a public repository, such as the Open Science Framework [OSF\; @soderberg2018using] or Zenodo [@zenodo2024open].
 
 Furthermore, we argue that researchers seeking to replicate a study should first evaluate the measurement of that study. It is crucial for an informative replication that the measurement is reliable or valid, otherwise it may be futile to attempt a direct replication [see also @nuijten2022assessing]. If the measurement is insufficiently reliable or valid, we suggest that researchers instead use their resources to conduct a replication of a study with reliable, valid and well-documented measurement. When replicating another study is not an option, we advise the replicating researcher to first attempt a conceptual replication using reliable and valid measurement, or use both the original and their own preferred measure [as in @stoevenbelt2018rrr]. Afterwards, a direct replication can be performed based on the conceptual replication to further assess the effect’s credibility.
 
@@ -1341,7 +1471,7 @@ Jelte M. Wicherts https://orcid.org/0000-0003-2415-2933
 Michèle B. Nuijten https://orcid.org/0000-0002-1468-8585
 
 ## Funding
-The preparation of this article was supported by the veni grant ??? awarded to Michèle Nuijten, and the vici grant ???  awarded to Jelte M. Wicherts from the Netherlands Organization for Scientific Research (NWO).
+The preparation of this article was supported by the veni grant VI.Veni.201G.003 awarded to Michèle Nuijten, and the vici grant ???  awarded to Jelte M. Wicherts from the Netherlands Organization for Scientific Research (NWO).
 
 \newpage
 
