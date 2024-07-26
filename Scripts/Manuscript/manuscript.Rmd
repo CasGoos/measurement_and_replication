@@ -44,7 +44,7 @@ abstract: |
 
 
 keywords          : "reliability, validity, measurement, reporting, replicability, credibility, psychology"
-wordcount         : "203"
+wordcount         : "159"
 
 bibliography      : ["r-references.bib", "references.bib"]
 
@@ -236,7 +236,7 @@ We preregistered data collection, coding protocol, and planned analyses: <https:
 
 ### Data, Materials, and Online Resources
 
-This manuscript was created in RStudio [@R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base], and generated using the Workflow for Open Reproducible Code in Science [*v`r getNamespaceVersion("worcs")[[1]]`*\; @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and data used to generate this manuscript and its results are available at: <https://github.com/CasGoos/measurement_and_replication> and <https://osf.io/9r8yt/>.
+This manuscript was created in RStudio [*v`r rstudioapi::versionInfo()$version`*\;@R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base], and generated using the Workflow for Open Reproducible Code in Science [*v`r getNamespaceVersion("worcs")[[1]]`*\; @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and data used to generate this manuscript and its results are available at: <https://github.com/CasGoos/measurement_and_replication> and <https://osf.io/9r8yt/>.
 
 ### Reporting
 
@@ -947,9 +947,9 @@ Our data had a multilevel structure. Each replication was nested within one of f
 
 [^1]: Initially the original articles contained 3 more measures than the replication protocols. This difference was due to the way that the moral foundations questionnaire was framed in the original articles compared to in the original article. In the original article it was framed as measuring five different moral foundations, while in the replication protocol the measure assessed the two overarching categories that were used to test the main effect in both the original and replication research. The measurement information reported was comparable across all five categories, and thus it was deemed that the measurement could be reduced to reflect two overarching categories facilitate easier comparison between measurement in original and replication.
 
-[^2]: For 7 measures the number of items were modified from the original article to the replication. To check whether or not this had a confounding impact on our results, we re-ran the analyses testing the hypotheses excluding data from these studies. We found that removing these measures' data had minimal impact on the overall results. Therefore, the results presented below were based on data from all the measures.
+[^2]: For 7 measures the number of items were modified from the original article to the replication. To check whether or not this had a confounding impact on our results, we re-ran the analyses testing the hypotheses excluding data from these studies (see [Supplementary Analyses E](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_item_reduced_measures_analyses.Rmd)). We found that removing these measures' data had minimal impact on the overall results. Therefore, the results presented below were based on data from all the measures. 
 
-Because of this multilevel structure we initially planned to conduct multilevel models alongside our single-level regression models for testing Hypothesis 3, 5, and 6. However, these analyses were omitted, because group sizes were small. The results from these analyses are reported in [Supplementary Analyses B](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_multilevel_analyses.Rmd)) for the sake of completeness and transparency. 
+Because of this multilevel structure we initially planned to conduct multilevel models alongside our single-level regression models for testing Hypothesis 3, 5, and 6. However, these analyses were omitted, because group sizes were small. The results from these analyses are reported in [Supplementary Analyses B](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_multilevel_analyses.Rmd) for the sake of completeness and transparency. 
 
 ## Measurement Reliability
 
@@ -961,7 +961,7 @@ The RG meta-analysis was performed using the *rma* function from the *metafor* R
 
 The average calculated Cronbach's alpha coefficient across replication sets was `r apa_num(mean(data_h3_multiple$alpha), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$alpha, na.rm = TRUE), digits = 3)`. Figure \@ref(fig:Plot23AlphaCode) displays the distributions of the calculated Cronbach’s Alpha scores from each lab for each measure, separated by successful and unsuccessful replication.
 
-```{r ReorderPlot23Data}
+```{r ReorderPlot23Data, warning = FALSE}
 # data re-ordering (factor order was not saved in export)
 plot_23_data_alpha_reordered <- data_prep_plot_23_alpha(plot_23_data_alpha)
 ```
