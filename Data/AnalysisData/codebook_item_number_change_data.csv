@@ -1,0 +1,7 @@
+"name","type","n","missing","unique","mean","median","mode","mode_value","sd","v","min","max","range","skew","skew_2se","kurt","kurt_2se","category","description"
+"many_labs_version","numeric",12,0,4,2.25,2,2,NA,1.21543108701099,NA,1,5,4,0.67877151474614,0.53253521010352,-0.394442800788954,-0.160050285851608,NA,NA
+"rep_org","factor",12,0,2,NA,NA,12,"Replication",NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"title","character",12,0,13,NA,NA,1,". Issue involvement can increase or decrease persuasion by enhancing message­relevant cognitive responses (Cacioppo, Petty, & Morris, 1983, Study 1)",NA,0.916666666666667,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"mod_5_REV","logical",12,0,2,NA,NA,12,"TRUE",NA,0,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"context","character",8,0.333333333333333,9,NA,NA,4,NA,NA,0.875,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"direction","factor",8,0.333333333333333,3,NA,NA,7,"decrease",NA,0.21875,NA,NA,NA,NA,NA,NA,NA,NA,NA

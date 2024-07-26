@@ -1,0 +1,171 @@
+<!-- Supplementary Analyses E -->
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Supplementary Analyses E: Item Reduced Measures Analyses
+
+This appendix contains analyses on the impact that measures with a changed number of items had on the results. These analyses were not pre-registered, but were conducted to check for the potentially confoudning influence of these measures. The results of these supplementary analyses show that this impact was minimal.
+
+```{r ExtractingItemReducedMeasures, include = FALSE}
+# Here we determine whether items had the number of items changed, and how.
+
+# The code below indexes the scales for which either the number of items or 
+# number of response options were decreased. 
+
+item_number_change_data <- coded_data_replications[!is.na(coded_data_replications$mod_5_REV) & coded_data_replications$mod_5_REV, c(1, 2, 3, 56)]
+
+
+# Extracted information on the modification of measurement items. When NA is 
+# reported it means that we found no modification of number of items.
+item_number_change_data$context <- c("from 3 questions about 15 topics -> 1 question about four topics", NA, "from a list of quotations to only the 1 of interest", "From four IATs to 1 IAT in replications", "Initial study used 6 items from an 8-item short scale, 25-item four factor scale suggested by original authors, but 5-item subscale of specific factor of interest", NA,  "Original research had 19 scenarios, replication participants got randomly assigned to 1 control and 3 moral dilemmas from the set of 19", " from a 10-item scale, to single-item scale.", NA, NA, "Compared to the 'longer lists of anagrams used' in previous research (226 for 4 dimensions) on the topic, they switched to a shorter 4 anagram task of the 1 dimension of interest.", "Original measure assessed 4 constructs with 24 item, For the replication they switched to a different scale measuring the 1 construct relevant to the effect using 7 items.")
+
+# Whether the change was a decrease or increase in items
+item_number_change_data$direction <- as.factor(c("decrease", NA, "decrease", "decrease", "decrease", NA, "decrease", "decrease", NA, NA, "decrease", "increase"))
+
+# sum(item_number_change_data$direction == "decrease", na.rm = TRUE)
+
+
+# creating indexes for decreasing items to see if there are noteworthy 
+# differences in the analyses.
+decreased_items_index <- rep(FALSE, nrow(coded_data_replications))
+
+# setting to true in case items were decreased.
+decreased_items_index[as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),]))] <- TRUE
+
+```
+
+```{r StoringItemReducedMeasureData}
+# Storing the data on the Measures for which the number of items and/or response 
+# options was altered from original to replication (of main interest are the
+# measures for which the number of items were changed).
+open_data(data = item_number_change_data, filename = paste0(paste0(
+  "Data/AnalysisData/", deparse(substitute(item_number_change_data))), ".csv"),
+  codebook = paste0(paste0(
+    "Data/AnalysisData/codebook_", 
+    deparse(substitute(item_number_change_data))), ".Rmd"),
+  value_labels = paste0(paste0(
+    "Data/AnalysisData/value_labels_", 
+    deparse(substitute(item_number_change_data))), ".yml")) 
+
+```
+
+There were overall `r sum(decreased_items_index)` measures for which the number of items were reduced. In the following analyses we will see their impact on the results
+
+```{r ReplicationSuccessDifferent}
+# getting information on hypothesis support/replication success
+hypothesis_support_index <- coded_data_replications$hypothesis_support
+
+hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "Yes"
+
+# coding Unclear into No instead of Yes didn't make a difference on the test.
+# hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "No"
+
+
+# chi-squared test of differences in hypothesis support/replication success 
+# between measures for which items were decreased and for which it was not.
+decreased_items_replicability_impact_test <- chisq.test(decreased_items_index, coded_data_replications$hypothesis_support)
+
+decreased_items_replicability_impact_test_result <- paste0("$Chi^2 = ", apa_num(decreased_items_replicability_impact_test$statistic), "$, df = ",
+decreased_items_replicability_impact_test$parameter, "$, p = ",
+apa_p(decreased_items_replicability_impact_test$p.value), "$")
+
+```
+
+Interestingly, when item numbers decreased, the replicability seemed to have increased . Although the difference was not significant (`r decreased_items_replicability_impact_test_result`), and there were too few modifications to the items to get a stable estimate.
+
+## Reliability
+### H1
+
+```{r H1Difference}
+# H1
+coded_data_original_shortened$reliability_type[decreased_items_index]
+coded_data_replications$reliability_type[decreased_items_index]
+```
+
+Only one of these measures had a reported reliability in the original, so it is unlikely to have been of much impact.
+
+### H2 & H3
+
+```{r H2H3Difference}
+# H2 & H3
+coded_data_original_shortened$reliability_coeff[decreased_items_index]
+coded_data_replications$reliability_coeff[decreased_items_index]
+
+# running the H3 model
+data_h3_avg[data_h3_avg$reporting_index %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),])),]
+
+
+```
+
+Of the measures in the replication protocol that we could calculate the reliability of, none from what we can observe in our coded data was decreased in item count.
+
+## Measurement Reporting
+### H4
+
+```{r OriginalQMPDIfference}
+# comparing the mean and sd original QMP ratio 
+print(c("mean decreased" = mean(data_h6$QMP_REV_ratio[decreased_items_index]),
+      "sd decreased" = sd(data_h6$QMP_REV_ratio[decreased_items_index]),
+      
+      "mean non-decreased" = mean(data_h6$QMP_REV_ratio[-decreased_items_index]),
+      "sd non-decreased" = sd(data_h6$QMP_REV_ratio[-decreased_items_index])))
+```
+
+No clear difference in original QMPs between modified and non-modified measures. Original measures weren't modified after all, but if QMPs were high for the changed measures, the change may be justified from the standpoint that: change was necessary, the original measurement had too many QMPs.
+
+```{r OriginalQMPDIfference}
+# comparing the mean and sd replication QMP ratio 
+print(c("mean decreased" = mean(data_h6$Rep_QMP_REV_ratio[decreased_items_index]),
+      "sd decreased" = sd(data_h6$Rep_QMP_REV_ratio[decreased_items_index]),
+      
+      "mean non-decreased" = mean(data_h6$Rep_QMP_REV_ratio[-decreased_items_index]),
+      "sd non-decreased" = sd(data_h6$Rep_QMP_REV_ratio[-decreased_items_index])))
+```
+
+The measures for which the number of items was reduced, had somewhat more QMPs than those measures for which this was not the case. Suggesting that when the number of items are reduced, there are likely also other issues at play.
+
+```{r H4Difference}
+# running the h4 models
+# only decreased item measures
+betareg_output_to_apa_full(betareg(QMP_REV_ratio ~ rep_org, data = data_h4[c(decreased_items_index, decreased_items_index),]))
+
+# only non-decreased item measures
+betareg_output_to_apa_full(betareg(QMP_REV_ratio ~ rep_org, data = data_h4[-c(decreased_items_index, decreased_items_index),]))
+
+# all (originally)
+betareg_output_to_apa_full(betareg(QMP_REV_ratio ~ rep_org, data = data_h4))
+```
+
+The effect is in the same direction, but smaller and no longer significant (although this could also be due to reduction in sample size). Overall, their removal had almost no impact on the results.
+
+### H5
+
+```{r H5Difference}
+# running the h5 models
+apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5[decreased_items_index[c(53:55)],], family = binomial))$full_result$QMP_REV_ratio
+
+apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5[-decreased_items_index[c(53:55)],], family = binomial))$full_result$QMP_REV_ratio
+
+apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5, family = binomial))$full_result$QMP_REV_ratio
+
+```
+
+The association between replication QMP ratio and replicability was stronger for measures whose items were decreased, but difficult to say with so few observations. Furthermore, their removal had negligible impact on the results.
+
+### H6
+
+```{r H6Difference}
+# running the h6 models
+betareg_output_to_apa_full(betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6[decreased_items_index,]))
+
+betareg_output_to_apa_full(betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6[-decreased_items_index,]))
+
+betareg_output_to_apa_full(betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6))
+
+```
+
+The association between original and replication QMPs was reduced and no longer significant for measures whose items were decreased, but again there are limited observations for which the number of items were decreased. Overall, their removal had limited impact on the results.

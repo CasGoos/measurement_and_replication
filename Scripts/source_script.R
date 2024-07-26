@@ -258,9 +258,13 @@ Model_H4 <- function(Data){
 data_prep_H5 <- function(Data_Replications){
   # data prep for model (using the (y * (n - 1) + 0.5) / n to adjust for any 0 
   # or 1 proportions in the data).
+  
+  # removing the cases with unclear hypothesis support
   Data_H5 <- Data_Replications[-c(53:55),]
   Data_H5$hypothesis_support <- droplevels(Data_H5$hypothesis_support)
   levels(Data_H5$hypothesis_support) <- c(FALSE, TRUE)
+  
+  # recalculating the QMP ratio
   Data_H5$hypothesis_support <- as.logical(Data_H5$hypothesis_support)
   Data_H5$QMP_ratio <- ((Data_H5$QMP_ratio * (77 - 1) + 0.5) / 77)
   Data_H5$QMP_REV_ratio <- ((Data_H5$QMP_REV_ratio * (77 - 1) + 0.5) / 77)
@@ -273,6 +277,7 @@ data_prep_H5 <- function(Data_Replications){
   
   return(Data_H5)
 }
+
 
 
 # modelling and results returning function
@@ -557,13 +562,9 @@ betareg_output_to_apa_full<- function(betareg_output, coefficient_number = 2){
   p_value <- sum_object[4]
   
   # calculating the confidence intervals
-  if(z_value < 0){
-    CI_HI <- estimate - (1.96 * std_error)
-    CI_LO <- estimate + (1.96 * std_error)
-  } else{
-    CI_LO <- estimate - (1.96 * std_error)
-    CI_HI <- estimate + (1.96 * std_error)
-  }
+  CI_LO <- estimate - (1.96 * std_error)
+  CI_HI <- estimate + (1.96 * std_error)
+  
   
   # formatting the statistics for printing
   estimate_string <- paste0("$b = ", apa_num(estimate), "$, ")
@@ -719,16 +720,9 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
                                rep(14, 36), rep(29, 74), rep(30, 74), 
                                rep(31, 74), rep(34, 61), rep(39, 60), 
                                rep(42, 58), rep(51, 21), rep(51, 21), 
-                               rep(56, 20), rep(57, 21), rep(59, 21), 
-                               rep(62, 4), rep(63, 4), rep(71, 8), rep(73, 5))
+                               rep(59, 20), rep(60, 21), rep(61, 21), 
+                               rep(65, 4), rep(66, 4), rep(74, 8), rep(76, 5))
   
-  
-  # one index 51 is being assigned not to Monin and miller, some, but instead to cacioppo, nfc, while that Monin and Miller has gotten the 57 from cacciopo
-  # The 56 and 57 isn't correct for Cacciopo: 59 for argument quality, and 60 for nfc.
-  # De Fruyt should link to 61 instead of 59
-  
-  
-  #data_5.1.1_clean: 65, data_5.1.2_clean: 66, data_5.7_clean: 74, data_5.9.1_clean: 76
   
   colnames(Data_H2) <- c("alpha", "omega", "ASE", "tau", "QEp", "pi.lb", 
                          "pi.ub", "g", "reporting_index")
@@ -747,18 +741,17 @@ data_prep_H2 <- function(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean,
 
 ### Hypothesis 3
 # indexing whether or not an effect replicated (helper function)
-replication_indexer <- function(Data_H5, Data_H2){
+replication_indexer <- function(Coded_Data_Replications, Data_H2){
   # creating an index of whether or not an effect replicated based on what was
   # coded from the paper
-  replication_index <- c(Data_H5[Data_H2$reporting_index, 10])
+  replication_index <- c(Coded_Data_Replications[Data_H2$reporting_index, 10])
   
   return(replication_index)
 }
 
-
 # data load and prep functions
-Data_prep_H3_multiple <- function(Data_H5, Data_H2){
-  replication_index <- replication_indexer(Data_H5, Data_H2)
+Data_prep_H3_multiple <- function(Coded_Data_Replications, Data_H2){
+  replication_index <- replication_indexer(Coded_Data_Replications, Data_H2)
   
   # alpha between sites
   Data_H3_multiple <- cbind(Data_H2, replication = replication_index)
@@ -767,7 +760,7 @@ Data_prep_H3_multiple <- function(Data_H5, Data_H2){
 }
 
 
-Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
+Data_prep_H3_avg <- function(Coded_Data_Replications, Data_H3_multiple){
   # alpha averaged across sites
   Data_H3_avg <- data.frame(alpha = sapply(split(Data_H3_multiple$alpha, 
                                                  Data_H3_multiple$g), mean),
@@ -788,13 +781,17 @@ Data_prep_H3_avg <- function(Data_H5, Data_H3_multiple){
   # ensuring that the reporting index is in order
   Data_H3_avg <- Data_H3_avg[c(1, 12:19, 2:11),]
   
+  # adding the unique reporting index, and 51 and 14 twice because these 
+  # measures were included twice in these analyses per coded measure.
   Data_H3_avg$reporting_index <- append(append(unique(
     Data_H3_multiple$reporting_index), 51, 10), 14, 3)
-  Data_H3_avg$replication <- c(Data_H5[append(append(unique(
+  # extracting the replication success
+  Data_H3_avg$replication <- c(Coded_Data_Replications[append(append(unique(
     Data_H3_multiple$reporting_index), 51, 10), 14, 3), 10])
   
   return(Data_H3_avg)
 }
+
 
 
 # function to add Odds-Ratio to apa_full output of logistic regressions

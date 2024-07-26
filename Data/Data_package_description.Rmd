@@ -502,6 +502,16 @@
 
 *Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. Additionally, the QMP ratio for each of the initial and revised QMP categories for both the original and revised codes had some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model.
 
+### item_number_change_data.csv
+
+*Explanation:* Contains the many_labs_version, rep_org, title, and mod_5_rev variablefrom the coded_data_replication.csv dataset of the observations where the mod_5_rev variable was TRUE (meaning that the measure's number of items and/or number of response options was modified from original to replication. Additionally, two variables were added to determine whether for that measure the number of items were decreased from original to replication.
+
+*Variables*:
+
+-   **context:** A description of the change in item numbers from original to replication. NA means that for that measure the number of items was not changed.
+
+-   **direction:** A factor indicating whether the number of items was decreased, increased, or no change (NA) from original to replication.
+
 ### plot_23_data_alpha.csv
 
 *Explanation*: Contain all of the data from the data_h3_multiple.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. For each remaining replication, the g indexing variable was changed to reflect the names of the articles were adjusted to look better in the figure this dataset was used for.

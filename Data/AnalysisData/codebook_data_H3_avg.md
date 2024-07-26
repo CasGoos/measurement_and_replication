@@ -1,4 +1,4 @@
-Codebook created on 2024-02-26 at 2024-02-26 14:50:10.406518
+Codebook created on 2024-07-26 at 2024-07-26 14:28:44.190756
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -19,8 +19,8 @@ The data contains 19 cases and 9 variables.
 | QEp             | numeric |  19 |    0.00 |     19 |  0.53 |   0.55 |  0.55 |            |  0.40 |      |  0.00 |  1.00 |  1.00 | -0.12 |    -0.11 | -1.73 |    -0.86 |
 | pi.lb           | numeric |  19 |    0.00 |     19 |  0.67 |   0.78 |  0.78 |            |  0.25 |      | -0.01 |  0.94 |  0.96 | -1.12 |    -1.06 |  0.65 |     0.32 |
 | pi.ub           | numeric |  19 |    0.00 |     19 |  0.81 |   0.85 |  0.85 |            |  0.13 |      |  0.43 |  0.96 |  0.53 | -1.25 |    -1.19 |  1.29 |     0.63 |
-| reporting_index | numeric |  19 |    0.00 |     17 | 41.95 |  42.00 | 42.00 |            | 20.51 |      | 10.00 | 73.00 | 63.00 | -0.17 |    -0.16 | -1.38 |    -0.68 |
-| replication     | logical |  19 |    0.00 |      3 |       |        | 13.00 | FALSE      |       | 0.43 |       |       |       |       |          |       |          |
+| reporting_index | numeric |  19 |    0.00 |     17 | 43.00 |  42.00 | 42.00 |            | 21.68 |      | 10.00 | 76.00 | 66.00 | -0.11 |    -0.10 | -1.42 |    -0.70 |
+| replication     | factor  |  19 |    0.00 |      3 |       |        | 13.00 | No         |       | 0.43 |       |       |       |       |          |       |          |
 
 ### Legend
 

@@ -756,7 +756,7 @@ After the initial coding, we made minor revisions to `r length(coded_data_revise
 We used the published reports of the Many Labs projects [@klein2014investigating; @ebersole2016many; @ebersole2020many; @klein2018many] to determine replication success based on the reported significance of the meta-analytic effect. An effect was considered successfully replicated if the meta-analytic effect was in the same direction as the original effect and had a p-value lower than .05.
 
 ```{r FinalPreparationData, include = FALSE, eval = FALSE}
-##### Data already available, code does not need to be run!
+##### Data already available, code does not need to be run
 ### this code prepares the various pieces of data to be ready to use for the 
 ### analyses.
 ## confirmatory analyses
@@ -772,8 +772,8 @@ data_h1 <- data_prep_H1(coded_data_original_shortened, coded_data_replications)
 # for hypothesis 2
 data_h2 <- data_prep_H2(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, data_5.9.1_clean)
 # for hypothesis 3
-data_h3_multiple <- Data_prep_H3_multiple(data_h5, data_h2)
-data_h3_avg <- Data_prep_H3_avg(data_h5, data_h3_multiple)
+data_h3_multiple <- Data_prep_H3_multiple(coded_data_replications, data_h2)
+data_h3_avg <- Data_prep_H3_avg(coded_data_replications, data_h3_multiple)
 
 
 ## graphs
@@ -943,76 +943,11 @@ apa_table(
 
 ```
 
-Our data had a multilevel structure. Each replication was nested within one of four Many Labs projects. Furthermore, `r sum(coded_data_replications$appearance != 1)` replications used more than one primary measure, resulting in `r nrow(coded_data_replications)` measures in both `r sum(coded_data_replications$appearance == 1)` replications protocols and `r sum(coded_data_original$appearance == 1)` original articles[^1]. Of these `r nrow(coded_data_replications)` measures `r sum(coded_data_replications$mod_check == "True")` were modified from the original to the replication. In the replications, the data of responses on the measures was further nested in several labs per replication. The combined sample size of all labs in the replications was on average `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N), 0)` which was approximately `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N) / mean(coded_data_original_shortened[coded_data_original_shortened$appearance == 1 & !is.na(coded_data_original_shortened$N),]$N), 0)` times larger than the average in original studies, which were conducted in single labs. 
-
-```{r InformationOnMeasurementModification}
-# Here we determine whether items had the number of items changed, and how.
-
-# The code below indexes the scales for which either the number of items or 
-# number of response options were decreased. 
-
-item_number_change_data <- coded_data_replications[!is.na(coded_data_replications$mod_5_REV) & coded_data_replications$mod_5_REV, c(1, 2, 3, 56)]
-
-
-# Extracted information on the modification of measurement items. When NA is 
-# reported it means that we found no modification of number of items.
-item_number_change_data$context <- c("from 3 questions about 15 topics -> 1 question about four topics", NA, "from a list of quotations to only the 1 of interest", "From four IATs to 1 IAT in replications", "Initial study used 6 items from an 8-item short scale, 25-item four factor scale suggested by original authors, but 5-item subscale of specific factor of interest", NA,  "Original research had 19 scenarios, replication participants got randomly assigned to 1 control and 3 moral dilemmas from the set of 19", " from a 10-item scale, to single-item scale.", NA, NA, "Compared to the 'longer lists of anagrams used' in previous research (226 for 4 dimensions) on the topic, they switched to a shorter 4 anagram task of the 1 dimension of interest.", "Original measure assessed 4 constructs with 24 item, For the replication they switched to a different scale measuring the 1 construct relevant to the effect using 7 items.")
-
-# Whether the change was a decrease or increase in items
-item_number_change_data$direction <- as.factor(c("decrease", NA, "decrease", "decrease", "decrease", NA, "decrease", "decrease", NA, NA, "decrease", "increase"))
-
-# sum(item_number_change_data$direction == "decrease", na.rm = TRUE)
-
-
-# creating indexes for decreasing items to see if there are noteworthy differences.
-decreased_items_index <- rep(FALSE, nrow(coded_data_replications))
-
-# setting to true in case items were decreased.
-decreased_items_index[as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),]))] <- TRUE
-
-
-# getting information on hypothesis support
-hypothesis_support_index <- coded_data_replications$hypothesis_support
-
-hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "Yes"
-
-# coding Unclear into No instead of Yes didn't make a difference on the test.
-# hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "No"
-
-
-# chi-squared test of differences in hypothesis support between measures for 
-# which items were decreased and for which it was not.
-chisq.test(decreased_items_index, coded_data_replications$hypothesis_support)
-
-# Interestingly, when item numbers were decreased, the replicability seemed to have increased in this scenario.
-# Although the difference was not significant and there were too few modifications to the items to get a stable estimate.
-
-#mean(coded_data_replications$hypothesis_support[!as.numeric(rownames(coded_data_replications)) %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),]))] == "Yes")
-
-### Looking at the relevancy for Hypothesis tests.
-# H1
-coded_data_original_shortened$reliability_type[decreased_items_index]
-coded_data_replications$reliability_type[decreased_items_index]
-
-# Only one of these measures had a reported reliability in the original, so it
-# is unlikely to have been of much impact.
-
-
-# H2
-coded_data_original_shortened$reliability_coeff[decreased_items_index]
-coded_data_replications$reliability_coeff[decreased_items_index]
-
-
-data_h3_avg[data_h3_avg$reporting_index %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),])),]
-
-# Of the measures we could calculate the reliability of, only the measure of 
-# persistence was decreased in item count. This was interestingly the one with
-# the lowest calculated average alpha in the sample.
-
-
-```
+Our data had a multilevel structure. Each replication was nested within one of four Many Labs projects. Furthermore, `r sum(coded_data_replications$appearance != 1)` replications used more than one primary measure, resulting in `r nrow(coded_data_replications)` measures in both `r sum(coded_data_replications$appearance == 1)` replications protocols and `r sum(coded_data_original$appearance == 1)` original articles[^1]. Of these `r nrow(coded_data_replications)` measures `r sum(coded_data_replications$mod_check == "True")` were modified from the original to the replication[^2]. In the replications, the data of responses on the measures was further nested in several labs per replication. The combined sample size of all labs in the replications was on average `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N), 0)` which was approximately `r round(mean(coded_data_replications[coded_data_replications$appearance == 1]$N) / mean(coded_data_original_shortened[coded_data_original_shortened$appearance == 1 & !is.na(coded_data_original_shortened$N),]$N), 0)` times larger than the average in original studies, which were conducted in single labs. 
 
 [^1]: Initially the original articles contained 3 more measures than the replication protocols. This difference was due to the way that the moral foundations questionnaire was framed in the original articles compared to in the original article. In the original article it was framed as measuring five different moral foundations, while in the replication protocol the measure assessed the two overarching categories that were used to test the main effect in both the original and replication research. The measurement information reported was comparable across all five categories, and thus it was deemed that the measurement could be reduced to reflect two overarching categories facilitate easier comparison between measurement in original and replication.
+
+[^2]: For 7 measures the number of items were modified from the original article to the replication. To check whether or not this had a confounding impact on our results, we re-ran the analyses testing the hypotheses excluding data from these studies. We found that removing these measures' data had minimal impact on the overall results. Therefore, the results presented below were based on data from all the measures.
 
 Because of this multilevel structure we initially planned to conduct multilevel models alongside our single-level regression models for testing Hypothesis 3, 5, and 6. However, these analyses were omitted, because group sizes were small. The results from these analyses are reported in [Supplementary Analyses B](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_multilevel_analyses.Rmd)) for the sake of completeness and transparency. 
 
@@ -1329,9 +1264,9 @@ data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio))
 random_intercept_h5<- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
 ```
 
-We used logistic regression to test the association between the QMP ratio in replication protocols and replication success. In line with Hypothesis 5, results showed that successful replications were associated with fewer QMPs compared to unsuccessful replications (`r H5_test_results_REV_with_OR`). However, we did not find the association with the initial protocol in neither the single-level (`r H5_test_results_with_OR`) nor the multilevel model (`r random_intercept_h5$full_result$QMP`)[^2].
+We used logistic regression to test the association between the QMP ratio in replication protocols and replication success. In line with Hypothesis 5, results showed that successful replications were associated with fewer QMPs compared to unsuccessful replications (`r H5_test_results_REV_with_OR`). However, we did not find the association with the initial protocol in neither the single-level (`r H5_test_results_with_OR`) nor the multilevel model (`r random_intercept_h5$full_result$QMP`)[^3].
 
-[^2]: As of writing this article the *betareg* package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the *lmer* function from the *lme4* package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the *betareg* package) to fit the Gaussian model.
+[^3]: As of writing this article the *betareg* package does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the *lmer* function from the *lme4* package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the *betareg* package) to fit the Gaussian model.
 
 ### Hypothesis 6: Relation Between QMPs in Original and Replication Research.
 

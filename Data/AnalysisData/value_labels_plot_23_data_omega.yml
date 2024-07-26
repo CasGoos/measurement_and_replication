@@ -16,3 +16,8 @@ g:
   '14': Albarracín et al. (2008), exp 5 verb
   '15': Albarracín et al. (2008), exp 5 math
   '16': De Fruyt et al. (2000)
+replication:
+  class: factor
+  '1': 'No'
+  '2': Unclear
+  '3': 'Yes'

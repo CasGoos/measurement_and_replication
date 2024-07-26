@@ -1,4 +1,4 @@
-Codebook created on 2024-02-26 at 2024-02-26 14:50:07.480565
+Codebook created on 2024-07-26 at 2024-07-26 14:28:41.437796
 ================
 
 A codebook contains documentation and metadata describing the contents,
@@ -20,7 +20,7 @@ The data contains 670 cases and 9 variables.
 | pi.lb           | numeric   | 670 |    0.00 |     19 |  0.76 |   0.84 |  0.84 |            |  0.19 |      | -0.01 |  0.94 |  0.96 | -2.39 |   -12.67 |  6.39 |    16.95 |
 | pi.ub           | numeric   | 670 |    0.00 |     19 |  0.85 |   0.87 |  0.87 |            |  0.10 |      |  0.43 |  0.96 |  0.53 | -2.53 |   -13.38 |  8.00 |    21.21 |
 | g               | character | 670 |    0.00 |     20 |       |        | 74.00 |          5 |       | 0.92 |       |       |       |       |          |       |          |
-| reporting_index | numeric   | 670 |    0.00 |     17 | 33.44 |  31.00 | 31.00 |            | 14.89 |      | 10.00 | 73.00 | 63.00 |  0.29 |     1.55 | -0.29 |    -0.78 |
+| reporting_index | numeric   | 670 |    0.00 |     17 | 33.78 |  31.00 | 31.00 |            | 15.52 |      | 10.00 | 76.00 | 66.00 |  0.42 |     2.22 | -0.15 |    -0.40 |
 
 ### Legend
 
