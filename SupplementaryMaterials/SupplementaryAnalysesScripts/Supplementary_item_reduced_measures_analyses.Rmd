@@ -6,6 +6,24 @@ set.seed(17042023)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
+```{r setup, include = FALSE}
+# loading R libraries
+library(papaja)
+library(worcs)
+library(tidyr)
+library(betareg)
+library(lmerTest)
+library(psych)
+library(sandwich)
+library(lmtest)
+
+# loading source script
+source(file = "../../Scripts/source_script.R")
+
+# Code below loads the processed data. The raw data was prepared for analysis in 'prepare_data.R.
+load_data() 
+```
+
 # Supplementary Analyses E: Item Reduced Measures Analyses
 
 This appendix contains analyses on the impact that measures with a changed number of items had on the results. These analyses were not pre-registered, but were conducted to check for the potentially confoudning influence of these measures. The results of these supplementary analyses show that this impact was minimal.
@@ -117,7 +135,7 @@ print(c("mean decreased" = mean(data_h6$QMP_REV_ratio[decreased_items_index]),
 
 No clear difference in original QMPs between modified and non-modified measures. Original measures weren't modified after all, but if QMPs were high for the changed measures, the change may be justified from the standpoint that: change was necessary, the original measurement had too many QMPs.
 
-```{r OriginalQMPDIfference}
+```{r ReplicationQMPDIfference}
 # comparing the mean and sd replication QMP ratio 
 print(c("mean decreased" = mean(data_h6$Rep_QMP_REV_ratio[decreased_items_index]),
       "sd decreased" = sd(data_h6$Rep_QMP_REV_ratio[decreased_items_index]),

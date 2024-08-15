@@ -798,15 +798,15 @@ Data_prep_H3_avg <- function(Coded_Data_Replications, Data_H3_multiple){
 OR_to_apa_full_supplier <- function(apa_print_result, negative_b = FALSE, not_significant = FALSE){
   # the odds-ratio
   OR <- round(exp(as.numeric(substr(apa_print_result, start = 6, 
-                                    stop = 9 + negative_b))), 2) 
+                                    stop = 9 + negative_b))), 1) 
   
   # the lower bound 95% confidence interval for the odds-ratio
   ORCILO <- round(exp(as.numeric(substr(apa_print_result, start = 23 + negative_b, 
-                                        stop = 26 + negative_b * 2))), 2) 
+                                        stop = 26 + negative_b * 2))), 1) 
   
   # the upper bound 95% confidence interval for the odds-ratio
   ORCIHI <- round(exp(as.numeric(substr(apa_print_result, start = 29 + negative_b * 2, 
-                                        stop = 33 + negative_b * (2 - not_significant)))), 2)
+                                        stop = 33 + negative_b * (2 - not_significant)))), 1)
   
   # combining the calculated and existing results into a printable string
   result_string_with_OR <- paste0(substr(apa_print_result, start = 0, 
