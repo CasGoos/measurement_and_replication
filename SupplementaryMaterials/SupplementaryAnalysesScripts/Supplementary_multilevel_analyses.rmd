@@ -9,7 +9,7 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 
 # Supplementary Analyses B: Multilevel Analyses
 
-This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6 in the main text (additional multilevel models can be found in [Supplementary Analyses C](Supplementary_omega_analyses.Rmd) and [Supplementary Analyses D](Supplementary_initial_QMP_analyses.Rmd)). These models were omitted from the main text because the sample sizes were not large enough to support multilevel modelling. Guidelines suggest to have at least within the range of 10 to 30 groups with 10 to 30 cases each for multilevel models, with more groups and cases each being necessary for more complex models, such as random-slope models (Kreft, 1996; Snijders and Bosker, 1993; Hox, 1998, 2010). For Hypothesis 3 we had `r nrow(table(data_h3_multiple$g))` groups with on average `r round(mean(table(data_h3_multiple$g)),3)` cases. For Hypothesis 5 and 6 we had `r nrow(table(coded_data_replications$many_labs_version))` groups with on average `r mean(table(coded_data_replications$many_labs_version))` cases. Therefore, while we have may have had a sufficient number of cases per group for simple models, we likely lacked a sufficient number of groups to estimate multilevel models, especially more complex models. In 4 (all random slope models) of the 12 multilevel models we ran we encountered convergence issues, further illustrating that our sample size was likely inadequate for these models.
+This appendix contains the multilevel model versions of the models used to test Hypothesis 3, 5, & 6 in the main text (additional multilevel models can be found in [Supplementary Analyses C](Supplementary_omega_analyses.Rmd) and [Supplementary Analyses D](Supplementary_initial_QMP_analyses.Rmd)). These models were omitted from the main text because the sample sizes were not large enough to support multilevel modelling. Guidelines suggest to have at least within the range of 10 to 30 groups with 10 to 30 cases each for multilevel models, with more groups and cases each being necessary for more complex models, such as random-slope models (Kreft, 1996; Snijders and Bosker, 1993; Hox, 1998, 2010). For Hypothesis 3 we had `r nrow(table(data_h23$g))` groups with on average `r round(mean(table(data_h23$g)),3)` cases. For Hypothesis 5 and 6 we had `r nrow(table(data_h456_replications$many_labs_version))` groups with on average `r mean(table(data_h456_replications$many_labs_version))` cases. Therefore, while we have may have had a sufficient number of cases per group for simple models, we likely lacked a sufficient number of groups to estimate multilevel models, especially more complex models. In 4 (all random slope models) of the 12 multilevel models we ran we encountered convergence issues, further illustrating that our sample size was likely inadequate for these models.
 
 Additionally, our dependent variable (replication success) was at the group level in all of these models. In this case, it is advised in most cases to run analyses with all variables aggregated at the group level and adjust the standard errors of the coefficients using White's heteroscedasticity adjustment (Foster-Johnson & Kromrey, 2018). We therefore also show analyses with this adjustment for Hypothesis 3. Aggregation would make little sense for Hypothesis 5 and 6, as there were only four groups here, which would lead to a model with only 4 cases.
 
@@ -26,18 +26,18 @@ The specific models used were a multilevel logistic regression random intercept 
 ```{r Hypothesis3MultilevelModelSensitivityAnalyses, warning = FALSE}
 ## sensitivity analyses.
 # running a random intercept multilevel logistic model
-H3_test_result_int_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 1 
+H3_test_result_int_sensitivity_alpha <- apa_print(glmer(formula = replication_success ~ 1 
                                                 + alpha + (1|g), family = 
                                                 binomial(), data = 
-                                                data_h3_multiple))
+                                                data_h23))
 
 # same as for non-multilevel model
 
 # running a random slope multilevel logistic model
-H3_test_result_slp_sensitivity_alpha <- apa_print(glmer(formula = replication ~ 1 
+H3_test_result_slp_sensitivity_alpha <- apa_print(glmer(formula = replication_success ~ 1 
                                                 + alpha + (1 + alpha|g), 
                                                 family = binomial(), data =
-                                                data_h3_multiple))
+                                                data_h23))
 
 # did not converge
 ```
@@ -60,7 +60,9 @@ To test if this nested structure might influence the relations described in Hypo
 ```{r Hypotheses5And6SensitivityAnalyses, warning = FALSE}
 ## Hypothesis 5 sensitivity test using a random intercept and random slope Gaussian model.
 # create dummy H5 dataframe for use in sensitivity test
-data_h5_sens <- data_h5
+data_h5_sens <- data_h456_replications
+data_h5_sens <- data_h5_sens[data_h5_sens$hypothesis_support != "Unclear",]
+data_h5_sens$hypothesis_support <- droplevels.factor(data_h5_sens$hypothesis_support)
 
 # convert outcome variable to be usable with Gaussian distribution via
 # logit transform.

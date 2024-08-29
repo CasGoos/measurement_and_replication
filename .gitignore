@@ -82,24 +82,11 @@
 !data/intermediatedata/coded_data_original_shortened.csv
 !data/intermediatedata/codebook_coded_data_original_shortened.csv
 
-!data/analysisdata/data_h4.csv
-!data/analysisdata/codebook_data_h4.csv
-!data/analysisdata/data_h6.csv
-!data/analysisdata/codebook_data_h6.csv
-!data/analysisdata/data_h5.csv
-!data/analysisdata/codebook_data_h5.csv
-!data/analysisdata/data_h1.csv
-!data/analysisdata/codebook_data_h1.csv
+
 !data/analysisdata/plot_456_data.csv
 !data/analysisdata/codebook_plot_456_data.csv
 !data/analysisdata/plot_46_data.csv
 !data/analysisdata/codebook_plot_46_data.csv
-!data/analysisdata/data_h2.csv
-!data/analysisdata/codebook_data_h2.csv
-!data/analysisdata/data_h3_multiple.csv
-!data/analysisdata/codebook_data_h3_multiple.csv
-!data/analysisdata/data_h3_avg.csv
-!data/analysisdata/codebook_data_h3_avg.csv
 !data/analysisdata/plot_23_data_alpha.csv
 !data/analysisdata/codebook_plot_23_data_alpha.csv
 !data/analysisdata/plot_23_data_omega.csv
@@ -118,5 +105,14 @@
 !data/analysisdata/cfa_results.csv
 !data/analysisdata/codebook_cfa_results.csv
 
+
+!data/analysisdata/data_h456_original.csv
+!data/analysisdata/codebook_data_h456_original.csv
+!data/analysisdata/data_h456_replications.csv
+!data/analysisdata/codebook_data_h456_replications.csv
+!data/analysisdata/data_h23.csv
+!data/analysisdata/codebook_data_h23.csv
+!data/analysisdata/data_h23_avg.csv
+!data/analysisdata/codebook_data_h23_avg.csv
 !data/analysisdata/item_number_change_data.csv
 !data/analysisdata/codebook_item_number_change_data.csv

@@ -18,7 +18,7 @@ To separate between and within variance in reliability, a multilevel random inte
 
 ```{r Hypothesis2ModelOmega, include = FALSE}
 # intercept only model to check the within and between group variance.
-H2_test_result_omega <- lmer(formula = omega ~ 1 + (1|g), data = data_h2[complete.cases(data_h2),])
+H2_test_result_omega <- lmer(formula = omega ~ 1 + (1|g), data = data_h23[complete.cases(data_h23),])
 
 ```
 
@@ -37,9 +37,9 @@ ICC_omega <- between_group_variance_omega / (within_group_variance_omega + betwe
 
 ```{r Hypothesis3MainTestOmega, include = FALSE}
 ## The main model to test hypothesis 3, through a logistic regression model.
-H3_test_result_main_omega <- apa_print(glm(formula = replication ~ 1 + 
+H3_test_result_main_omega <- apa_print(glm(formula = replication_success ~ 1 + 
                                      omega, family = binomial(), 
-                                     data = data_h3_avg))
+                                     data = data_h23_avg))
 
 # coefficient is positive, but not significant
 
@@ -52,24 +52,24 @@ H3_main_full_results_omega_with_OR <- OR_to_apa_full_supplier(H3_test_result_mai
 ```{r Hypothesis3MultilevelModelSensitivityAnalysesOmega}
 ## sensitivity analyses.
 # running a random intercept multilevel logistic model
-H3_test_result_int_sensitivity_omega <- apa_print(glmer(formula = replication ~ 1 
+H3_test_result_int_sensitivity_omega <- apa_print(glmer(formula = replication_success ~ 1 
                                                 + omega + (1|g), family = 
                                                   binomial(), data = 
-                                                  data_h3_multiple))
+                                                  data_h23))
 
 # same as for non-multilevel model and alpha
 
 # running a random slope multilevel logistic model
-H3_test_result_slp_sensitivity_omega <- apa_print(glmer(formula = replication ~ 1 
+H3_test_result_slp_sensitivity_omega <- apa_print(glmer(formula = replication_success ~ 1 
                                                 + omega + (1 + omega|g), 
                                                 family = binomial(), data =
-                                                data_h3_multiple))
+                                                data_h23))
 
 # omega shows no significant effect just like main.
 ```
 
 ### Results & Comparison Interpretation
-For omega the mean (values calculated in the population across replication sets) was `r apa_num(mean(data_h3_multiple$omega, na.rm = TRUE), digits = 3)` with a standard deviation of `r apa_num(sd(data_h3_multiple$omega, na.rm = TRUE), digits = 3)`.
+For omega the mean (values calculated in the population across replication sets) was `r apa_num(mean(data_h23$omega, na.rm = TRUE), digits = 3)` with a standard deviation of `r apa_num(sd(data_h23$omega, na.rm = TRUE), digits = 3)`.
 
 When looking at the between and within group variance in omega coefficients, compared to alpha an even larger relative degree of the variance was between group rather than within group when compared (between-group variance `r apa_num(within_group_variance_omega, digits = 3)`, within-group variance `r apa_num(between_group_variance_omega, digits = 3)`, ICC = `r apa_num(ICC_omega, digits = 3)`). This result thus provides evidence in a similar direction to the Cronbach's Alpha results, meaning that most variance in reliability coefficients is observed between studies rather than within studies.
 
@@ -92,7 +92,7 @@ apa_table(
 
 ```
 
-Thus, no evidence in favor of Hypothesis 3 was found. However, caution in interpreting the test results is needed. The number of measures for which the omega coefficient could be and was calculated was quite low (`r apa_num(sum(!is.na(data_h3_avg$omega)), numerals = FALSE)`).
+Thus, no evidence in favor of Hypothesis 3 was found. However, caution in interpreting the test results is needed. The number of measures for which the omega coefficient could be and was calculated was quite low (`r apa_num(sum(!is.na(data_h23$omega)), numerals = FALSE)`).
 
 The figure below shows additional information on the distributions of the calculated omega scores and their relation to replication success. It mostly resembles Figure \@ref(fig:Plot23AlphaCode) from the article, with some studies being omitted as the omega coefficient function did not converge or run properly on those data. Furthermore, information regarding heterogeneity was not present since the standard error of omega was not known, and comparisons between reported coefficients were omitted, since no article reported any omega coefficients.
 

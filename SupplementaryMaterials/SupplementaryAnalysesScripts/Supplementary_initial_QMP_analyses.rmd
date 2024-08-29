@@ -18,6 +18,8 @@ To test hypothesis 4, the total QMP ratios between replication and original rese
 
 ```{r Hypothesis4ModelInitial, include = FALSE}
 ## Hypothesis 4 beta regression model
+data_h4 <- rbind(data_h456_original, data_h456_replications)
+
 # running the model with none revised QMP ratio's
 H4_test_results <- betareg(QMP_ratio ~ rep_org, data = data_h4)
 
@@ -27,6 +29,12 @@ For Hypothesis 5, a logistic regression model was used to test the association b
 
 ```{r Hypothesis5ModelInitial, include = FALSE}
 ## Hypothesis 5 logistic regression model
+# first removing any hypotheses from the data that were rated as being unclear
+data_h5 <- data_h456_replications
+data_h5 <- data_h5[data_h5$hypothesis_support != "Unclear",]
+data_h5$hypothesis_support <- droplevels.factor(data_h5$hypothesis_support)
+
+# running the model using the QMPs from the initial coding protocol
 H5_test_results <- apa_print(glm(hypothesis_support ~ QMP_ratio, data = data_h5, family = binomial))
 
 H5_test_results_with_OR <- OR_to_apa_full_supplier(H5_test_results$full_result$QMP_ratio, negative_b = TRUE, not_significant = TRUE)
@@ -36,6 +44,17 @@ H5_test_results_with_OR <- OR_to_apa_full_supplier(H5_test_results$full_result$Q
 
 ```{r Hypothesis6ModelInitial, include = FALSE}
 ## Hypothesis 6 beta regression model
+# first we combine the datasets of the original studies and the replications 
+# together
+# adding "Rep_" to separate replication from original columns in the combined dataset
+data_h456_Rep <- data_h456_replications
+colnames(data_h456_Rep) <- paste0("Rep_", colnames(data_h456_Rep))
+
+# combine the dataset
+data_h6 <- cbind(data_h456_original, data_h456_Rep)
+
+
+# running the model using the QMPs from the initial coding protocol
 H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
 
 ```
@@ -194,39 +213,54 @@ ggplot(plot_46_data[plot_46_data$QMP_type == "QMP.Ratio" & plot_46_data$QMP_Rep_
 
 ```
 
+```{r Hypothesis6Associations, warning = FALSE}
+## Associations between the QMP categories
+# associations are generated using a helper function available in the source_ 
+# script. These associations correspond to the coefficients between replication
+# and original article QMPs of the various QMP types, as estimated through a 
+# beta regression.
+# Associations between the QMP categories (original QMP coding) MOVE THIS ANALYSIS TO INITIAL CODING APPENDIX
+Results_H6_between <- Associations_H6(data_h456_replications[59:76], 
+                                      data_h456_original[59:76])
+
+# keep in mind mod_ratio (not Rep) is based on a very small sample size, less
+# of a concern for the revised.
+```
 
 
 ```{r H6ExploratoryAssociationsInitialTable, warning = FALSE}
 # creating the dataframe for the table
 H6_table_dataframe_l <- rbind(Results_H6_between$def_def, Results_H6_between$def_op,
   Results_H6_between$def_sel, Results_H6_between$def_quant, Results_H6_between$def_mod, 
-  Results_H6_between$op_def, Results_H6_between$op_op, Results_H6_between$op_sel, 
-  Results_H6_between$op_quant, Results_H6_between$op_mod, Results_H6_between$sel_def, 
-  Results_H6_between$sel_op, Results_H6_between$sel_sel, Results_H6_between$sel_quant, 
-  Results_H6_between$sel_mod)
+  Results_H6_between$def_tot, Results_H6_between$op_def, Results_H6_between$op_op, 
+  Results_H6_between$op_sel, Results_H6_between$op_quant, Results_H6_between$op_mod, 
+  Results_H6_between$op_tot, Results_H6_between$sel_def, Results_H6_between$sel_op, 
+  Results_H6_between$sel_sel, Results_H6_between$sel_quant, Results_H6_between$sel_mod, 
+  Results_H6_between$sel_tot)
 
 H6_table_dataframe_r <- rbind(Results_H6_between$quant_def, Results_H6_between$quant_op,
   Results_H6_between$quant_sel, Results_H6_between$quant_quant, Results_H6_between$quant_mod, 
-  Results_H6_between$mod_def, Results_H6_between$mod_op, Results_H6_between$mod_sel, 
-  Results_H6_between$mod_quant, Results_H6_between$mod_mod, Results_H6_between$tot_def, 
-  Results_H6_between$tot_op, Results_H6_between$tot_sel, Results_H6_between$tot_quant, 
-  Results_H6_between$tot_mod)
+  Results_H6_between$quant_tot, Results_H6_between$mod_def, Results_H6_between$mod_op, 
+  Results_H6_between$mod_sel, Results_H6_between$mod_quant, Results_H6_between$mod_mod, 
+  Results_H6_between$mod_tot, Results_H6_between$tot_def, Results_H6_between$tot_op, 
+  Results_H6_between$tot_sel, Results_H6_between$tot_quant, Results_H6_between$tot_mod, 
+  Results_H6_between$tot_tot)
 
 H6_table_dataframe <- cbind(H6_table_dataframe_l, H6_table_dataframe_r)
 
 
 # adding asterices for significance to the significant p in the dataframe
-H6_table_dataframe[8,3] <- paste0(H6_table_dataframe[8,3], "$^*$")
-H6_table_dataframe[11,3] <- paste0(H6_table_dataframe[11,3], "$^*$")
-H6_table_dataframe[14,3] <- paste0(H6_table_dataframe[14,3], "$^*$")
-H6_table_dataframe[8,6] <- paste0(H6_table_dataframe[8,6], "$^*$")
+H6_table_dataframe[9,3] <- paste0(H6_table_dataframe[9,3], "$^*$")
+H6_table_dataframe[13,3] <- paste0(H6_table_dataframe[13,3], "$^*$")
+H6_table_dataframe[16,3] <- paste0(H6_table_dataframe[16,3], "$^*$")
+H6_table_dataframe[7,6] <- paste0(H6_table_dataframe[7,6], "$^*$")
 H6_table_dataframe[9,6] <- paste0(H6_table_dataframe[9,6], "$^*$")
-H6_table_dataframe[11,6] <- paste0(H6_table_dataframe[11,6], "$^*$")
 H6_table_dataframe[13,6] <- paste0(H6_table_dataframe[13,6], "$^*$")
+H6_table_dataframe[15,6] <- paste0(H6_table_dataframe[15,6], "$^*$")
 
 
 # adding a column to help indicate the original QMP type
-H6_table_dataframe_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification"), H6_table_dataframe)
+H6_table_dataframe_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Total", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Total", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Total"), H6_table_dataframe)
 
 
 # adding rows to give indication of specific sections (apa_table being awkward)

@@ -17,7 +17,7 @@ Reliabilities could be calculated from the replication datasets. On top of that,
 
 ```{r Hypothesis2Model, include = FALSE}
 # intercept only model to check the within and between group variance.
-H2_test_result_alpha <- lmer(formula = alpha ~ 1 + (1|g), data = data_h2)
+H2_test_result_alpha <- lmer(formula = alpha ~ 1 + (1|g), data = data_h23)
 
 ```
 
@@ -146,15 +146,11 @@ The model was the same as that used for the main test of hypothesis 6, only now 
 # script. These associations correspond to the coefficients between replication
 # and original article QMPs of the various QMP types, as estimated through a 
 # beta regression.
-# Associations between the QMP categories (original QMP coding) MOVE THIS ANALYSIS TO INITIAL CODING APPENDIX
-Results_H6_between <- Associations_H6(data_h6)
-
-# keep in mind mod_ratio (not Rep) is based on a very small sample size, less
-# of a concern for the revised.
-
 # Associations between the QMP categories (revised QMP coding)
-Results_H6_between_REV <- Associations_H6_REV(data_h6)
+Results_H6_between_REV <- Associations_H6(data_h456_replications[c(59:61, 77:91)], 
+                                      data_h456_original[c(59:61, 77:91)])
 
+# keep in mind mod_ratio (not Rep) is based on a somewhat small sample size
 ```
 
 ### Results
@@ -183,33 +179,36 @@ Table \@ref(tab:H6ExploratoryAssociationsRevisedTable) shows the beta-regression
 # creating the dataframe for the table
 H6_table_dataframe_l_REV <- rbind(Results_H6_between_REV$def_def, Results_H6_between_REV$def_op,
   Results_H6_between_REV$def_sel, Results_H6_between_REV$def_quant, Results_H6_between_REV$def_mod, 
-  Results_H6_between_REV$op_def, Results_H6_between_REV$op_op, Results_H6_between_REV$op_sel, 
-  Results_H6_between_REV$op_quant, Results_H6_between_REV$op_mod, Results_H6_between_REV$sel_def, 
-  Results_H6_between_REV$sel_op, Results_H6_between_REV$sel_sel, Results_H6_between_REV$sel_quant, 
-  Results_H6_between_REV$sel_mod)
+  Results_H6_between_REV$def_tot, Results_H6_between_REV$op_def, Results_H6_between_REV$op_op, 
+  Results_H6_between_REV$op_sel, Results_H6_between_REV$op_quant, Results_H6_between_REV$op_mod, 
+  Results_H6_between_REV$op_tot, Results_H6_between_REV$sel_def, Results_H6_between_REV$sel_op, 
+  Results_H6_between_REV$sel_sel, Results_H6_between_REV$sel_quant, Results_H6_between_REV$sel_mod, 
+  Results_H6_between_REV$sel_tot)
 
 H6_table_dataframe_r_REV <- rbind(Results_H6_between_REV$quant_def, Results_H6_between_REV$quant_op,
   Results_H6_between_REV$quant_sel, Results_H6_between_REV$quant_quant, Results_H6_between_REV$quant_mod, 
-  Results_H6_between_REV$mod_def, Results_H6_between_REV$mod_op, Results_H6_between_REV$mod_sel, 
-  Results_H6_between_REV$mod_quant, Results_H6_between_REV$mod_mod, Results_H6_between_REV$tot_def, 
-  Results_H6_between_REV$tot_op, Results_H6_between_REV$tot_sel, Results_H6_between_REV$tot_quant, 
-  Results_H6_between_REV$tot_mod)
+  Results_H6_between_REV$quant_tot, Results_H6_between_REV$mod_def, Results_H6_between_REV$mod_op, 
+  Results_H6_between_REV$mod_sel, Results_H6_between_REV$mod_quant, Results_H6_between_REV$mod_mod, 
+  Results_H6_between_REV$mod_tot, Results_H6_between_REV$tot_def, Results_H6_between_REV$tot_op, 
+  Results_H6_between_REV$tot_sel, Results_H6_between_REV$tot_quant, Results_H6_between_REV$tot_mod, 
+  Results_H6_between_REV$tot_tot)
 
 H6_table_dataframe_REV <- cbind(H6_table_dataframe_l_REV, H6_table_dataframe_r_REV)
 
 
 # adding asterices for significance to the significant p in the dataframe
-H6_table_dataframe_REV[11,3] <- paste0(H6_table_dataframe_REV[11,3], "$^*$")
 H6_table_dataframe_REV[13,3] <- paste0(H6_table_dataframe_REV[13,3], "$^*$")
-H6_table_dataframe_REV[14,3] <- paste0(H6_table_dataframe_REV[14,3], "$^*$")
+H6_table_dataframe_REV[15,3] <- paste0(H6_table_dataframe_REV[15,3], "$^*$")
+H6_table_dataframe_REV[16,3] <- paste0(H6_table_dataframe_REV[16,3], "$^*$")
+H6_table_dataframe_REV[18,3] <- paste0(H6_table_dataframe_REV[18,3], "$^*$")
 H6_table_dataframe_REV[4,6] <- paste0(H6_table_dataframe_REV[4,6], "$^*$")
-H6_table_dataframe_REV[11,6] <- paste0(H6_table_dataframe_REV[11,6], "$^*$")
 H6_table_dataframe_REV[13,6] <- paste0(H6_table_dataframe_REV[13,6], "$^*$")
-H6_table_dataframe_REV[14,6] <- paste0(H6_table_dataframe_REV[14,6], "$^*$")
+H6_table_dataframe_REV[15,6] <- paste0(H6_table_dataframe_REV[15,6], "$^*$")
+H6_table_dataframe_REV[16,6] <- paste0(H6_table_dataframe_REV[16,6], "$^*$")
 
 
 # adding a column to help indicate the original QMP type
-H6_table_dataframe_REV_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Definition", "Operationalisation", "Selection", "Quantification", "Modification"), H6_table_dataframe_REV)
+H6_table_dataframe_REV_expanded <- cbind(c("Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Total", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Total", "Definition", "Operationalisation", "Selection", "Quantification", "Modification", "Total"), H6_table_dataframe_REV)
 
 
 # adding rows to give indication of specific sections (apa_table being awkward)

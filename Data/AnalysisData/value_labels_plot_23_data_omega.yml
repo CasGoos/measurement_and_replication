@@ -1,12 +1,12 @@
 g:
   class: factor
-  '1': Nosek et al. (2002), Math
-  '2': Nosek et al. (2002), Art
+  '1': Nosek et al. (2002), Art
+  '2': Nosek et al. (2002), Math
   '3': Shnabel & Nadler (2008)
   '4': Husnu & Crisp (2010)
   '5': Vohs & Schooler (2008)
-  '6': Cacioppo et al. (1983), arg
-  '7': Anderson et al. (2012), PA
+  '6': Anderson et al. (2012), PA
+  '7': Cacioppo et al. (1983), arg
   '8': Giessner & Schubert, (2007)
   '9': Anderson et al. (2012), SWL
   '10': Caruso et al. (2012)
@@ -16,8 +16,6 @@ g:
   '14': Albarracín et al. (2008), exp 5 verb
   '15': Albarracín et al. (2008), exp 5 math
   '16': De Fruyt et al. (2000)
-replication:
-  class: factor
-  '1': 'No'
-  '2': Unclear
-  '3': 'Yes'
+  '17': Anderson et al. (2012), NA
+  '18': Norenzayan et al. (2002)
+  '19': Monin & Miller (2001), most

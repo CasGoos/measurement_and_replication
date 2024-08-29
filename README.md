@@ -6,7 +6,7 @@
 
 You can load this project in RStudio by opening the file called 'Measurement_and_Replication.Rproj'.
 
-The prepare_data.r script shows how the local data was loaded into this R project. NOTE: this script will not run properly, as this script is merely used to properly load in the local data. All raw and unaltered data is still present within the project, and is merely loaded into the project via this file. No other alterations are made to the data yet, from the point of extraction.
+The prepare_data.r script shows how the local data was originally loaded into this R project. NOTE: this script only works when having access to the data as they were stored on the first author's local system, therefore running this script will not have an effect on loading the data on other systems. All raw and unaltered data is still present within the project, no other alterations were made after the data was retrieved ande before being run through the prepare_data script. The prepare_data script is merely there to show how the original data was loaded into the project.
 
 The manuscript.rmd file (found in the Scripts/Manuscript folder) contains all of the data processing and analysis code, as well as the text and calls for results used to generate the final manuscript. Thus, for reproducing the main article, only this file needs to be run.
 
@@ -37,13 +37,11 @@ Scripts/source_script.R     | Script with self-made functions for the manuscript
 SupplementaryMaterials/     | misc. materials                  | Read only
 SupplementaryMaterials/Pre-registration.pdf     | The manuscript's original pre-registration | Read only 
 SupplementaryMaterials/Pre-registration_deviation_table.pdf     | List of deviations from the pre-registration in the manuscript | Read only 
-SupplementaryMaterials/manuscript_v.master_thesis.Rmd     | depricated master thesis version of the manuscript (Note: does not run in this folder, move to manuscript folder if desired to run)  | Human editable 
+SupplementaryMaterials/manuscript_v.master_thesis.Rmd     | deprecated master thesis version of the manuscript (Note: does not run in this folder, move to manuscript folder if desired to run)  | Human editable 
 SupplementaryMaterials/reproducible_data_retrieval_information.Rmd     | Description of the file paths and names of the Many Labs protocols and datasets used as the sample | Human editable 
 SupplementaryMaterials/AppendixScripts/    | this folder contains the Rmarkdown files that form the source code for the appendices | Human Editable
 SupplementaryMaterials/CodingProtocols/ | the coding protocols used to code the articles & studies | Read only
 SupplementaryMaterials/CodingProtocols/coding_protocol_information.Rmd | additional clarifying information on the coding protocol and its modifications | Read only
-
-
 
 
 <!--  You can consider adding the following to this file:                    -->
@@ -68,7 +66,11 @@ read the preprint at https://osf.io/zcvbs/
 
 ## WORCS: Advice for readers
 
-Please refer to the vignette on [reproducing a WORCS project]() for step by step advice.
+If you wish to reproduce this manuscript, follow [this guide](https://cjvanlissa.github.io/worcs/articles/reproduce.html) 
+until you reach the Open the project entry point section. At which point you 
+should open [this manuscript file](Scripts/Manuscript/manuscript.Rmd) and click 
+on the knit button on top of the file to rerun the analyses and generate a .pdf 
+file with all the results and text combined.
 <!-- If your project deviates from the steps outlined in the vignette on     -->
 <!-- reproducing a WORCS project, please provide your own advice for         -->
 <!-- readers here.                                                           -->

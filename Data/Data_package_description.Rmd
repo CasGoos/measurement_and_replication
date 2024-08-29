@@ -456,11 +456,11 @@
 
 -   **Single_factor:** a boolean variable indicating whether or not the measure was unidimensional based on the criteria that either the rmsea for the single factor model was smaller than .08, or the parallel test returned a single factor solution.
 
-### data_H1.csv
+### data_H1.csv DELETE???!!!
 
 *Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv except for an empty column that was meant to contain any types of reported psychometric evidence not included in the multiple choice response options, since it caused codebook generation issues. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. An additional variable was added which indicated for the multiple item measures only whether or not any form of reliability evidence was reported or not as a boolean variable.
 
-### data_H2.csv
+### data_H23.csv
 
 *Explanation*: This dataset list contains information on the calculated Cronbach's alpha and the omega reliability coefficient calculated for the responses to the questionnaire items from several of the Many Labs studies, namely those responses encoded in: Data_1.10_clean.csv, data_1.11_clean.csv, data_1.12.3.1_clean.csv, data_1.12.3.2_clean.csv, data_2.10.1_clean.csv, data_2.12.1_clean.csv, data_2.12.2_clean.csv, data_2.12.3_clean.csv, data_2.15_clean.csv, data_2.20_clean.csv, data_2.23_clean.csv, data_3.2.1.1_clean.csv, data_3.2.1.2_clean.csv, data_3.7.2_clean.csv, data_3.8.2_clean.csv, data_5.1.1_clean.csv, data_5.7_clean.csv, data_5.9.1_clean.csv.
 
@@ -478,29 +478,39 @@
 
 -   **pi.lb & pi.ub:** the lower and upper bound of the meta-analytic prediction interval for the meta-analysis of the Cronbach's alpha of the same measure across multiple lab locations.
 
--   **g:** index showing that the alpha values belonged to a particular single measure.
+-   **g:** a short reference to the specific Many Labs replication (and if necessary the particular measure and construct) each alpha was associated with.
 
--   **reporting_index:** same as above, only now the numbers correspond to the row in the coded_data_replication.csv dataset that the indexed measure belongs to.
+-   **reporting_index:** index of the row in the data_h456.csv dataset that the indexed measure belongs to.
 
-### data_H3_avg.csv
+-   **replication_success:** boolean variable indicating whether or not the measure's related effect was successfully replicated or not when looking at the significance of the meta-analytic p-value.
 
-*Explanation*: For each measure, the mean of the variables from data_H2.csv, excluding the g indexing variable. Additionally, a boolean indicator that indicated whether or not the original effect was replicated in the many labs replications when looking at the significance of the meta-analytic p-value was also included.
+### data_H23_avg.csv
 
-### data_H3_multiple.csv
+*Explanation*: For each measure, the mean of the variables from data_H23.csv, and the related g variable. Additionally, some data comparing the reported and replicated alpha was added.
 
-*Explanation*: Combination of data_H2.csv and a boolean indicator that indicated whether or not the original effect was replicated in the many labs replications when looking at the significance of the meta-analytic p-value.
+*Variables*:
 
-### data_H4.csv
+-   **coefficient_reported**: If present, the reported alpha reliability coefficient in the original article for the measure in this row.
 
-*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv except for an empty column that was meant to contain any types of reported psychometric evidence not included in the multiple choice response options, since it caused codebook generation issues. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. Additionally, it contains two variables of the total QMP ratio based on both the initial and revised coded QMPs for each measure with some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model.
+-   **coefficient_difference**: The difference between the reported alpha coefficient and the average coefficient calculated from the replication data (negative values indicate that the reported coefficient is lower than the calculated average)
 
-### data_H5.csv
+-   **siginificance_reported_coefficient**: boolean value indicating whether or not the coeffcient_reported value of a measure is outside the 95% percentile of calculated alpha coefficient score of the same measure.
 
-*Explanation*: Contain all of the data from the coded_data_replications.csv except for two empty columns that were meant to contain any types of reported psychometric evidence and reliability measures respectively not included in the multiple choice response options, since it caused codebook generation issues. 3 rows were omitted from this analysis due to the fact that the support for the hypothesis was coded as being unclear. The support for hypothesis, variable, based on the significance of the meta-analytic p-value, was afterwards recoded from a factor to a boolean variable with True for support and False for no support. The many labs version variable was recoded from numeric into a factor. Additionally, it contains two variables of the total QMP ratio based on both the initial and revised coded QMPs for each measure with some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model. It furthermore contains
+### data_H456_original.csv
 
-### data_H6.csv
+*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and one more variable indicating whether reliability was reported or not.
 
-*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. Additionally, the QMP ratio for each of the initial and revised QMP categories for both the original and revised codes had some correction applied to the 0 and 1 total QMP scores as they caused issues for the beta regression model.
+*Variables*:
+
+-   **reliability_reported**: boolean variable indicating whether any response other than nothing or "Not Reported" was given to the **reliability_type** variable.
+
+### data_H456_replication.csv
+
+*Explanation*: Contain all of the data from the coded_data_replications.csv and one more variable indicating whether reliability was reported or not.
+
+*Variables*:
+
+-   **reliability_reported**: boolean variable indicating whether any response other than nothing or "Not Reported" was given to the **reliability_type** variable.
 
 ### item_number_change_data.csv
 
@@ -514,35 +524,15 @@
 
 ### plot_23_data_alpha.csv
 
-*Explanation*: Contain all of the data from the data_h3_multiple.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. For each remaining replication, the g indexing variable was changed to reflect the names of the articles were adjusted to look better in the figure this dataset was used for.
-
-### plot_23_data_reported_alpha.csv
-
-*Explanation:* Contains reported alpha reliability coefficients extracted from original articles from which such data was available, and for which data was available from the replications from the Many Labs data to calculate reliabilities for. The goal of this data was to be superimposed on top of figure 2 (plot_23_alpha) to compare calculated reliability coefficients with reported reliability coefficients.
-
-*Variables*:
-
--   **title:** The title of the article relating to the particular measure of that row, extracted from coded_data_original_shortened.csv
-
--   **graph_title:** author, year, and optional word indicating the specific measure. Relates directly to the indication of the measures as shown in figure 2 (plot_23_alpha).
-
--   **article_order:** numerical variable giving the index for placing the reliability coefficients in the right row in figure 2 (plot_23_alpha).
-
--   **coefficient_reported:** the value for the reported alpha coefficient for the specific measure as extracted from the original article the measure was reported in.
-
--   **coefficient_calculated:** the mean value of the calculated alpha coefficients for the specific measure in the row.
-
--   **coefficient_difference:** The difference between coefficient_reported and coefficient_calculated.
-
--   **significance:** boolean value indicating whether or not the coeffcient_reported value of a measure is outside the 95% percentile of calculated alpha coefficient score of the same measure.
+*Explanation*: Contain all of the data from the data_h23.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. Finally, the replication_success was changed to a boolean variable, returning TRUE in case it was coded as "Yes", and as FALSE otherwise.
 
 ### plot_23_data_omega.csv
 
-*Explanation*: Contain all of the data from the data_h3_multiple.csv. Additionally, it contains a column of omega scores averaged across many lab locations for each article. The g indexing variable was changed to reflect the names of the articles were adjusted to look better in the figure this dataset was used for.
+*Explanation*: Contain all of the data from the data_h3_multiple.csv. Additionally, it contains a column of omega scores averaged across many lab locations for each article. Finally, the replication_success was changed to a boolean variable, returning TRUE in case it was coded as "Yes", and as FALSE otherwise.
 
 ### plot_456_data.csv
 
-*Explanation*: Contains four variables for each QMP type for all the replication studies and original articles that were coded on QMPs. The rows are ordered to have the original studies first and then the replications, then they are ordered based on QMP type from Definition to Operationalization to Selection to Quantification to Modification to Total. Within each type the QMPs are ordering matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+*Explanation*: Contains four variables for each QMP type for all the replication studies and original articles that were coded on QMPs. The rows are ordered to have the original studies first and then the replications, then they are ordered based on QMP type from Definition to Operationalization to Selection to Quantification to Modification to Total. Within each type the QMPs are ordering matches the order of the studies/articles as in the data_h456_replications.csv and data_h456_original.csv.
 
 *Variables:*
 
@@ -560,7 +550,7 @@
 
 ### plot_46_data.csv
 
-*Explanation*: Contains four variables for each QMP type (including total) for both replication studies and original articles combined per row. The QMP_ratio column indicates the initial QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the initial QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+*Explanation*: Contains four variables for each QMP type (including total) for both replication studies and original articles combined per row. The QMP_ratio column indicates the initial QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the initial QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the data_h456_replications.csv and data_h456_original.csv.
 
 ### plot_46_data_REV.csv
 

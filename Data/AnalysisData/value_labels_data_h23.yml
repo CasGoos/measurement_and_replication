@@ -1,0 +1,26 @@
+g:
+  class: factor
+  '1': Caruso et al. (2012)
+  '2': Husnu & Crisp (2010)
+  '3': Nosek et al. (2002), Math
+  '4': Nosek et al. (2002), Art
+  '5': Anderson et al. (2012), SWL
+  '6': Anderson et al. (2012), PA
+  '7': Anderson et al. (2012), NA
+  '8': Giessner & Schubert, (2007)
+  '9': Norenzayan et al. (2002)
+  '10': Zhong & Lijenquist (2006)
+  '11': Monin & Miller (2001), most
+  '12': Monin & Miller (2001), some
+  '13': Cacioppo et al. (1983), arg
+  '14': Cacioppo et al. (1983), nfc
+  '15': De Fruyt et al. (2000)
+  '16': Albarracín et al. (2008), exp 5 verb
+  '17': Albarracín et al. (2008), exp 5 math
+  '18': Shnabel & Nadler (2008)
+  '19': Vohs & Schooler (2008)
+replication_success:
+  class: factor
+  '1': 'No'
+  '2': Unclear
+  '3': 'Yes'

@@ -34,7 +34,7 @@ This appendix contains analyses on the impact that measures with a changed numbe
 # The code below indexes the scales for which either the number of items or 
 # number of response options were decreased. 
 
-item_number_change_data <- coded_data_replications[!is.na(coded_data_replications$mod_5_REV) & coded_data_replications$mod_5_REV, c(1, 2, 3, 56)]
+item_number_change_data <- data_h456_replications[!is.na(data_h456_replications$mod_5_REV) & data_h456_replications$mod_5_REV, c(1, 2, 3, 56)]
 
 
 # Extracted information on the modification of measurement items. When NA is 
@@ -75,17 +75,17 @@ There were overall `r sum(decreased_items_index)` measures for which the number 
 
 ```{r ReplicationSuccessDifferent}
 # getting information on hypothesis support/replication success
-hypothesis_support_index <- coded_data_replications$hypothesis_support
+hypothesis_support_index <- data_h456_replications$hypothesis_support
 
-hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "Yes"
+hypothesis_support_index[data_h456_replications$hypothesis_support == "Unclear"] <- "Yes"
 
 # coding Unclear into No instead of Yes didn't make a difference on the test.
-# hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "No"
+# hypothesis_support_index[data_h456_replications$hypothesis_support == "Unclear"] <- "No"
 
 
 # chi-squared test of differences in hypothesis support/replication success 
 # between measures for which items were decreased and for which it was not.
-decreased_items_replicability_impact_test <- chisq.test(decreased_items_index, coded_data_replications$hypothesis_support)
+decreased_items_replicability_impact_test <- chisq.test(decreased_items_index, data_h456_replications$hypothesis_support)
 
 decreased_items_replicability_impact_test_result <- paste0("$Chi^2 = ", apa_num(decreased_items_replicability_impact_test$statistic), "$, df = ",
 decreased_items_replicability_impact_test$parameter, "$, p = ",
@@ -100,8 +100,8 @@ Interestingly, when item numbers decreased, the replicability seemed to have inc
 
 ```{r H1Difference}
 # H1
-coded_data_original_shortened$reliability_type[decreased_items_index]
-coded_data_replications$reliability_type[decreased_items_index]
+data_h456_original$reliability_type[decreased_items_index]
+data_h456_replications$reliability_type[decreased_items_index]
 ```
 
 Only one of these measures had a reported reliability in the original, so it is unlikely to have been of much impact.
@@ -110,11 +110,11 @@ Only one of these measures had a reported reliability in the original, so it is 
 
 ```{r H2H3Difference}
 # H2 & H3
-coded_data_original_shortened$reliability_coeff[decreased_items_index]
-coded_data_replications$reliability_coeff[decreased_items_index]
+data_h456_original$reliability_coeff[decreased_items_index]
+data_h456_replications$reliability_coeff[decreased_items_index]
 
 # running the H3 model
-data_h3_avg[data_h3_avg$reporting_index %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),])),]
+data_h23_avg[data_h23_avg$reporting_index %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),])),]
 
 
 ```
@@ -125,6 +125,16 @@ Of the measures in the replication protocol that we could calculate the reliabil
 ### H4
 
 ```{r OriginalQMPDIfference}
+# first we combine the datasets of the original studies and the replications 
+# together
+# adding "Rep_" to separate replication from original columns in the combined dataset
+data_h456_Rep <- data_h456_replications
+colnames(data_h456_Rep) <- paste0("Rep_", colnames(data_h456_Rep))
+
+# combine the dataset
+data_h6 <- cbind(data_h456_original, data_h456_Rep)
+
+
 # comparing the mean and sd original QMP ratio 
 print(c("mean decreased" = mean(data_h6$QMP_REV_ratio[decreased_items_index]),
       "sd decreased" = sd(data_h6$QMP_REV_ratio[decreased_items_index]),
@@ -147,6 +157,9 @@ print(c("mean decreased" = mean(data_h6$Rep_QMP_REV_ratio[decreased_items_index]
 The measures for which the number of items was reduced, had somewhat more QMPs than those measures for which this was not the case. Suggesting that when the number of items are reduced, there are likely also other issues at play.
 
 ```{r H4Difference}
+# for H4 we have to combine the replication and original data together
+data_h4 <- rbind(data_h456_original, data_h456_replications)
+
 # running the h4 models
 # only decreased item measures
 betareg_output_to_apa_full(betareg(QMP_REV_ratio ~ rep_org, data = data_h4[c(decreased_items_index, decreased_items_index),]))
@@ -163,7 +176,13 @@ The effect is in the same direction, but smaller and no longer significant (alth
 ### H5
 
 ```{r H5Difference}
-# running the h5 models
+## running the h5 models
+# first removing any hypotheses from the data that were rated as being unclear
+data_h5 <- data_h456_replications
+data_h5 <- data_h5[data_h5$hypothesis_support != "Unclear",]
+data_h5$hypothesis_support <- droplevels.factor(data_h5$hypothesis_support)
+
+# running the model using the QMPs from the revised coding protocol
 apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5[decreased_items_index[c(53:55)],], family = binomial))$full_result$QMP_REV_ratio
 
 apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5[-decreased_items_index[c(53:55)],], family = binomial))$full_result$QMP_REV_ratio
