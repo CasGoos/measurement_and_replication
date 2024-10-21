@@ -486,7 +486,12 @@ betareg_output_to_apa_full<- function(betareg_output, coefficient_number = 2){
   CI_string <- paste0("95\\% CI $[", apa_num(CI_LO), ", ", 
                       apa_num(CI_HI), "]$, ")
   z_string <- paste0("$z = ", apa_num(z_value), "$, ")
-  p_string <- paste0("$p = ", apa_p(p_value), "$")
+  
+  if(p_value < 0.001){
+    p_string <- paste0("$p ", apa_p(p_value), "$")
+  } else{
+    p_string <- paste0("$p = ", apa_p(p_value), "$")
+  }
   
   
   return(paste0(estimate_string, CI_string, z_string, p_string))

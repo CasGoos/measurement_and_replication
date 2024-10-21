@@ -28,10 +28,10 @@ Data/InputData/             | pseudo-anonymized raw data       | Read only
 Data/IntermediateData/      | any semi-cleaned data            | Read only
 Data/LocalInputData/        | raw data on local system (empty on github)  | Read only
 Data/Data_package_description.Rmd| full description of content and use of data | Human editable
-Output/                     | digital copy of the final manuscript   | Read only
 Scripts/Manuscript/r-references.bib | BibTex references for R packages used | Human editable
 Scripts/Manuscript/references.bib | BibTex references for manuscript | Human editable
 Scripts/Manuscript/manuscript.rmd | Source code for paper (including data processing and analysis code)   | Human editable
+Scripts/Manuscript/manuscript.pdf | Main exported version of the paper for reading  | Read Only
 Scripts/prepare_data.R   | Script to load in raw data       | Human editable
 Scripts/source_script.R     | Script with self-made functions for the manuscript | Human editable
 SupplementaryMaterials/     | misc. materials                  | Read only
