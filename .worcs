@@ -300,7 +300,7 @@ checksums:
   data/intermediatedata/coded_data_replications.csv: bca464ceefcc9d40e280c8e91eff362b
   data/intermediatedata/coded_data_original.csv: 5d5e8429404fe61b6ccdf287b0d34d85
   data/intermediatedata/coded_data_original_shortened.csv: df01253c4f691a18c2c0f2e3e6c9c070
-  data/analysisdata/plot_456_data.csv: 5f9fc6d4e7b0aaf47928ae03078b9f0b
+  data/analysisdata/plot_456_data.csv: 98dc9a6086aeb0b673535746df1dd081
   data/analysisdata/plot_46_data.csv: cd08de1118ddb00cd540040472961ef9
   data/analysisdata/plot_23_data_alpha.csv: 9f0de45b0356ccb9843a498ba34b8c2e
   data/analysisdata/plot_23_data_omega.csv: 280f9c332a17ac35d3f77e322d2703ee

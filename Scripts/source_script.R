@@ -854,11 +854,11 @@ data_prep_plot_456 <- function(Data_original, Data_replication){
   
   # creating nicer names for in the graph
   levels(Plot_456_ratio_data_REV$QMP_type) <- c("Definition", 
-                                                "Operationalization",
+                                                "Operationalisation",
                                                 "Selection", "Quantification", 
                                                 "Modification", "Total")
   levels(Plot_456_ratio_rep_data_REV$QMP_type) <- c("Definition", 
-                                                    "Operationalization", "Selection", 
+                                                    "Operationalisation", "Selection", 
                                                     "Quantification", "Modification", 
                                                     "Total")
   

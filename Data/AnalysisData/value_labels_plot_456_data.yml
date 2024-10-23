@@ -1,7 +1,7 @@
 QMP_type:
   class: factor
   '1': Definition
-  '2': Operationalization
+  '2': Operationalisation
   '3': Selection
   '4': Quantification
   '5': Modification
