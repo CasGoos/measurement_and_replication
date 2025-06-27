@@ -6,8 +6,8 @@
 
 # set-up -----------------------------------------------------------------------
 library(worcs) # reproducible workflow template package
-library(foreign)
-library(readxl)
+library(foreign) # used for importing SPSS datasets
+library(readxl) # used for importing excel sheets
 set.seed(17042023) # seed for random number generators
 
 
@@ -90,6 +90,7 @@ Coded_Data_Vignette_raw <- read.csv("Data/LocalInputData/CodedData/Coded Data (V
 
 
 # Data Storing -----------------------------------------------------------------
+# Retrieved Data
 open_data(data = Data_ML1, 
           filename = "Data/InputData/Data_ML1.csv",
           codebook = NULL, value_labels = NULL, 
@@ -186,7 +187,7 @@ open_data(data = Data_5.9.1,
           load_expression = read.csv(file = filename, stringsAsFactors = FALSE)) 
 
 
-
+# the Coded Data
 open_data(data = Coded_Data_Initial_raw, 
           filename = "Data/InputData/Coded_Data_Initial_raw.csv",
   codebook = NULL, value_labels = NULL, 

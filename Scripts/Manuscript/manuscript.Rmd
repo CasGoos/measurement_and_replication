@@ -25,15 +25,9 @@ authornote: |
 
 abstract: |
   For a replication to be informative, measurement should be reliable and valid in both original and replication studies. 
-  Recent studies have identified problems with measurement and measurement reporting in both original and replication studies, although the association between measurement and replicability remains unclear. 
-  We investigated the reliability and measurement reporting of 77 measures within 56 Many Labs replications and related original articles [@klein2014investigating; @ebersole2016many; @klein2018many; @ebersole2020many] and studied their association with replicability. 
-  We found that not all measures were sufficiently reliable across contexts, and that only few measures were accompanied with reliability and validity evidence. 
-  Furthermore, “questionable measurement practices” (QMPs) in replication studies were associated with lower replicability, while original study reliability was not. 
-  These results corroborate existing findings that construct validity in published research is often unknown, which may complicate replication research. 
-  We offer suggestions on improving measurement practices and argue that reported measurement information should inform the decision to replicate.
 
-keywords          : "reliability, construct validity, measurement, reporting, questionable measurement practices, replicability, credibility, psychology"
-wordcount         : "158"
+keywords          : "reliability, construct validity, measurement, reporting, questionable measurement practices, replications, informative replications, psychology"
+wordcount         : "1"
 
 bibliography      : ["r-references.bib", "references.bib"]
 
@@ -76,29 +70,31 @@ knit              : worcs::cite_all
 # loading R libraries
 library(papaja)
 library(worcs)
-library(tidyr)
-library(betareg)
-library(lmerTest)
+library(lavaan)
 library(psych)
-library(forcats)
-library(GPArotation)
-library(ggplot2)
-library(ggridges)
-library(GGally)
-library(ggforce)
-library(grid)
-library(gridExtra)
 library(metafor)
-library(sandwich)
-library(lmtest)
+library(forcats)
+library(ggplot2)
+library(grid)
 
-# loading source script
-source(file = "../source_script.R")
 
-# Code below loads the processed data. The raw data was prepared for analysis in 'prepare_data.R.
+# loading script with helper functions
+# source(file = "../helper_functions.R") !!!needs to still be created
+
+# Code below loads all data. The raw data was loaded within the 'prepare_data.R script.
 load_data()
 
-# creates a reference list for all used R packages and the installed R version (does not automatically include Rstudio)
+# the code below removes the raw data to preserve disk space.
+# If you want to rerun the data cleaning and preparations steps, DO NOT run
+# this code.
+# If you want to only rerun the analyses, YOU CAN run the code below.
+rm(coded_data_initial_raw, coded_data_revised_raw, coded_data_vignette_raw,
+   data_2.10.1, data_2.12, data_2.15, data_2.19.1, data_2.2, data_2.20, 
+   data_2.23, data_2.3, data_2.4.1, data_2.4.2, data_2.8.2, data_3.5, data_5.1,
+   data_5.4, data_5.5, data_5.7, data_5.9.1, data_ml1, data_ml3)
+
+# creates a reference list for all used R packages and the installed R version 
+# (does not include Rstudio)
 r_refs("r-references.bib")
 ```
 
@@ -134,114 +130,131 @@ r_refs("r-references.bib")
 
 ```{r analysis-preferences}
 # Seed for random number generation
-set.seed(17042023)
+set.seed(26052025)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
+```{r helper_functions}
+##### PUT THIS ALL IN A SEPARATE R SCRIPT FILE.
+
+# Function for storing data openly in the intermediate data folder
+saving_to_intermediate_data <- function(data){
+  open_data(data = data, filename = paste0(paste0(
+    "Data/IntermediateData/", deparse(substitute(data))), ".csv"),
+    codebook = NULL, value_labels = NULL) 
+}
+
+# Function for storing data openly in the analysis data folder
+saving_to_analysis_data <- function(data){
+  open_data(data = data, filename = paste0(paste0(
+    "Data/AnalysisData/", deparse(substitute(data))), ".csv"),
+    codebook = NULL, value_labels = NULL) 
+}
+
+
+# function for changing QMP data to their ratio equivalent
+Create_QMP_descriptive_case <- function(practice_name, original_coded_var, replication_coded_var){
+  # add practice name to first row
+  Practice <- practice_name
+  
+  # Sum all QMP/GMP (Good Measurement Practice), keeping NA items out of
+  # the equation
+  original_n_QMPs <- sum(original_coded_var == "FALSE", na.rm = TRUE)
+  replication_n_QMPs <- sum(replication_coded_var == "FALSE", na.rm = TRUE)
+  
+  original_n_GMPs <- sum(original_coded_var == "TRUE", na.rm = TRUE)
+  replication_n_GMPs <- sum(replication_coded_var == "TRUE", na.rm = TRUE)
+  
+  # calculating the N of applicable items for originals
+  N_applicable_original <- original_n_QMPs + original_n_GMPs
+  
+  # checking that we are not dividing by 0, and then calculating the ratio of 
+  # QMPs for applicable items for originals
+  if(N_applicable_original != 0){
+    QMP_percentage_original <- round(original_n_QMPs / (N_applicable_original), 2)
+  } else{
+    QMP_percentage_original <- 0
+  }                               
+  
+  # calculating the N of applicable items for replications
+  N_applicable_replication <- replication_n_QMPs + replication_n_GMPs
+  
+  # checking that we are not dividing by 0, and then calculating the ratio of 
+  # QMPs for applicable items for replications
+  if(N_applicable_replication != 0){
+    QMP_percentage_replication <- round(replication_n_QMPs / (N_applicable_replication), 2)
+  } else{
+    QMP_percentage_replication <- 0
+  }     
+  
+  # calculating the Phi coefficient to estimate the relation between variables
+  Phi <- phi(matrix(c(original_n_QMPs, original_n_GMPs, replication_n_QMPs, 
+                      replication_n_GMPs), nrow = 2, byrow = TRUE))
+  
+  return(c(Practice, QMP_percentage_original, N_applicable_original, QMP_percentage_replication, N_applicable_replication, Phi))
+}
+
+
+```
+
+
 <!-- Introduction -->
 
-Findings from psychological research should be credible to build and extend upon them. A credible finding must be replicable [@vazire2022CredibilityReplicabilityImproving], such that the observed effect is sufficiently comparable across the original study and subsequent replications in new samples and using nearly identical designs [@nosek2022replicability]. In this article, we investigate how the credibility of psychological findings relates to problems in psychological measurement and how measurement problems may affect subsequent replications.
+In psychological research we are often interested in establishing a robust effect involving one or more latent constructs (e.g., IQ and conscientiousness) that describes a psychological phenomenon (like increased conscientiousness causing a person to develop higher IQ). However in the wake of the replication crisis the robustness of effects in psychology has been called into question. The Reproducibility Project: Psychology [RPP\; @osc2015estimating] and other large-scale replication projects [@klein2014investigating; @ebersole2016many; @klein2018many; @klein2022many; @ebersole2020many] and typically yielded smaller effects in replications compared to original studies. Replicability is one of the key ways to establish the robustness of an effect (Nosek RRR & …). If an effect does not replicate, it is likely not robust. Numerous factors have been proposed to explain why the original effects did not appear robust, including questionable research practices [@simmons2011false; @john2012measuring; @cumming2014new; @wicherts2016degrees], questionable reporting practices [@bakker2011mis; @nuijten2016prevalence], biased publication decisions [@sterling1959publication; @bakker2012rules; @giner2012science], and more.
 
-Unfortunately, the Reproducibility Project: Psychology [RPP\; @osc2015estimating] and other large-scale replication projects that sought to replicate earlier and seminal findings [@klein2014investigating; @ebersole2016many; @klein2018many; @klein2022many; @ebersole2020many] typically yielded smaller effects in replications compared to original studies, with Many-Labs projects featuring different locations and samples. In response to this string of failed replications, there was widespread alarm regarding the credibility and robustness of findings in psychological science [@hughes2018psychology; @giner2019crisis], combined with efforts to explain the low replication rate. The factors that have been proposed include questionable research practices [@simmons2011false; @john2012measuring; @cumming2014new; @wicherts2016degrees], questionable reporting practices [@bakker2011mis; @nuijten2016prevalence], and biased publication decisions [@sterling1959publication; @bakker2012rules; @giner2012science]. Another important factor is the impact of measurement-related challenges on replicability and credibility.
+These replication efforts and the subsequent lines of research have been of instrumental value in determining the lack of robustness in effects, uncovering what the causes of this lack of robustness are, and spearheading initiatives like … to help improve the robustness of effects. However, robustness was only one aspect of the goal highlighted at the beginning of this article, the other aspect, the fact that the effect should describe a true psychological phenomenon has received relatively less attention, although this is changing (SOME CITATIONS). 
 
-## Credibility & Measurement
+In this article, we contribute to the rising research investigating the soundness of measurement in research. After all, a true psychological phenomenon is requires accurate measurement on the relevant constructs. Our aim is to create a greater understanding of the extent to which this. We provide a descriptive account of the measurement reporting practices in the Many Labs replications and related original research, in tandem with the measure’s reliability and internal structure analyzed from the accompanying openly available data.
 
-Psychological constructs, such as affective states or intelligence, cannot be measured directly. Psychological measurements involve random measurement errors and uncertainties about whether the targeted construct is indeed well reflected in the scores retrieved from the measurement procedure.
 
-Reliability estimates provide an indication of how consistent the responses on a measurement are. Reliability is a critical first step to obtaining credible findings. Because if the scores on a measure are not consistent with themselves, it is unlikely that any effect associated with the measure can credibly be established. Psychometrics offers various ways to assess reliability empirically [@nunnally1978overview; @mellenbergh2011conceptual].
+## Measurement Quality
 
-Moreover, researchers cannot claim to have found a credible psychological effect if the measures do not relate to the psychological constructs [@cook2002experimental]. Validity indicates the extent to which a measure measures what it is supposed to measure [@borsboom2004concept] and can be studied by comparing the test scores’ empirical associations to the theoretical associations of the constructs [@cronbach1955construct].
+To understand a psychological phenomenon you need to be able to accurately capture the relevant constructs. While this premise underlines the core idea behind the use of measures for psychological constructs, it is difficult to guarantee in practice. In general, there are two aspects of a measurement between which we distinguish: validity and reliability. What complicates things is that there are multiple aspects to validity and multiple ways to assess these aspects of validity and reliability. So a researcher needs to know which type of assessment for validity and reliability is important for a measure, and on top of that it can be a complicated task to establish validity and reliability.
 
-## Replicability & Measurement
+Validity is an umbrella term for many different types of validity (construct, predictive, content, internal, external, etc.) and applies to (nearly) all aspects of the research design (CITATIONs INCLUDING VAZIRE et al.). For the purposes of this research we focus on construct validity of the applied measurement, which includes the measure and some aspects of the research design involving the administration of the measure. Construct validity refers to … . It is key to (relevant for nearly all measurement to some extent, because …) … . Evaluating it requires … and …, which in practice means … and … . !!!make sure that this section highlights something about construct validity relevant for our research that most psychologists may not actively realize.!!!
 
-Replicability and reliable and valid measurement are essential to the credibility of a finding, and are related to each other. Indeed, recent studies have illustrated that both the reliability of the measure [@stanley2014expectations] and the reporting of information relevant to demonstrating the validity of the measurement [@shaw2020measurement; @flake2017construct; @flake2020measurement] may predict the replicability of psychological findings.
+Reliability estimates provide an indication of how consistent the responses on a measurement are. …something about what this consistency is over [might relate to the different types: in CTT it is the correlation between scores on two equivalent forms of the test; but we are more focused on consistency as a basic requirement for an essentially valid measure, because no reliability means no validity]. Reliability is a critical first step to obtaining credible findings. Because if the scores on a measure are not consistent with themselves, it is unlikely that any effect associated with the measure can credibly be established. Psychometrics offers various ways to assess reliability empirically [@nunnally1978overview; @mellenbergh2011conceptual], … test-retest … interrater … internal consistency (this in turn relates back to construct validity)…. [something about the fact that reliability is sample specific and not measurement specific in nearly all cases of us assessing it]
 
-In this study, we investigate the relation of reliability and measurement reporting with replicability, using data and reports from the large-scale Many Labs replication projects. Because the Many Labs projects [@klein2014investigating; @ebersole2016many; @klein2018many; @klein2022many; @ebersole2020many] are large-scale collaborations in which multiple lab locations directly replicated the same set of studies, their data allows us to study the variability in their measures across different contexts. Furthermore, because the Many Labs projects used preregistered and documented structured protocols, we expect the measurement used in these projects to represent a high standard within the field. Any issues in measurement here might suggest that other replications could face similar or greater challenges.
 
-## Existing Research
+## Measurement Reporting
 
-### Reliability
+To summarize the previous section, the measurement of a study need to be both valid and reliable to be able to assess the phenomenon of interest. However, recent research has shown that the reliability and validity can often not be discerned from the reported information. Questionable Measurement Practices (QMPs) raise doubts about a measurement’s validity [@flake2020measurement] and have been coined as a term analogous to Questionable Research Practices [QRPs\; @john2012measuring]. QMPs range from lack of transparency and unclear motivation in choice of measure to poor justification for modifications of a measure and procedure of an existing measure [@flake2020measurement]. 
 
-Notwithstanding the common yet mistaken belief that reliability is a measure-specific feature, the reliability of a measure typically varies between samples differing in latent trait variance and/or the latent measurement model [@cho2015cronbach; @pauly2018resampling]. Besides random variation due to the sampling error, the variations can also reflect true variation in reliability, also known as reliability heterogeneity [@vacha-haase1998ReliabilityGeneralizationExploring]. For instance, measures will normally show lower reliability in more homogeneous samples than heterogeneous samples [@pike1998reliability], which follows from reliability being a function of the variability in true scores. In modern latent variable modelling, group differences in reliability can also emerge because of failures of measurement invariance across groups (e.g., differences in factor loadings or item difficulty parameters across groups).
+@flake2022construct documented QMPs among 100 replications and their respective original articles from the RPP [@osc2015estimating]. They coded the number of measures, the number of items in the measure, and the information that was reported describing the measure and justifying its use. They observed limited reporting of evidence demonstrating the reliability and validity of the measurement. Furthermore, auxiliary information on the number of items, the response format, the scoring of the scale, was also not reported for several measures in the RPP. Furthermore, only eight of the 40 translated scales contained validity evidence for the translated version of the scale. Evidence showing that this and other modifications between original and replication did not invalidate the measurement was rare. 
 
-Variations in reliability could contribute to the discrepancy between effects in original and replication studies, as well as within replications of the same original effect. After all, it has long been known that measurement error suppresses observed effects and associations [@spearman1904proof]. @stanley2014expectations simulated data of items on a scale based on levels of sampling error and reliability similar to what is standard in psychological research. The results showed that the variation due to measurement error was substantial enough to cause replications of a positive small effect to observe anywhere between a medium negative effect and a large positive effect [@stanley2014expectations]. In summary, studies using unreliable measures are less replicable, even when the measurement is equally reliable between original and replication.
+!!!Especially worrisome because @shaw2020measurement shows that when running factor analyses on the available data the structural evidence does not always show a good construct validity, so that the lack of reported validity evidence may be hiding psychometrical skeletons in the closet; Reliability something … [Hussey’s work]. !!!
 
-### Measurement Reporting
+Further findings by  @flake2022construct and others [@flake2017construct; @shaw2020measurement] also show that QMPs not only limit the reported validity of a measurement in a study, the lack of information also creates challenges for replicating researchers. If it is not clear what items were used, how they were scored, and how they were administered, the reconstructed measure used in the replication may be assessing the relevant construct(s) differently, or even assess different construct(s). If different construct(s) are assessed, the replication may not be a test of the same phenomenon as the original. If constructs are assessed differently, the estimated effects in the replication cannot easily be substantially compared to the effects in the original study. In either case, the replication is hardly informative with regards to the phenomenon of interest. Given replication’s importance in cumulative knowledge gain in science, this is worrisome.
 
-Despite the importance of reliable and valid measurement, research has shown that Questionable Measurement Practices (QMPs) are not uncommon. QMPs are practices that raise doubts about a measurement’s validity [@flake2020measurement] and have been coined as a term analogous to Questionable Research Practices [QRPs\; @john2012measuring]. QMPs range from lack of transparency and unclear motivation in choice of measure to poor justification for modifications of a measure and procedure of an existing measure [@flake2020measurement]. Specifically, @flake2020measurement identified six key questions that an article should answer to avoid QMPs: the definition of the construct, how and why the measure was selected, how the measure operationalizes the construct, how the measure was quantified, whether it was modified or not and why, and the reasons and details of creating a measure if applicable. If these questions can be answered clearly based on the reported measurement information, then reporting is sufficiently transparent to promote a more cumulative psychological science.
 
-@flake2022construct documented QMPs among 100 replications and their respective original articles from the RPP [@osc2015estimating]. They coded the number of measures, the number of items in the measure, and the information that was reported describing the measure and providing evidence justifying its use. Besides limited reporting of validity and reliability evidence for the coded measures, @flake2022construct found that several of the measures in the RPP did not report the number of items, the response format, or the scoring of the scale. Furthermore, only eight of the 40 translated scales contained validity evidence for the translated version of the scale. Evidence showing that this and other modifications between original and replication did not invalidate the measurement was rarely reported.
+## Research Aim
 
-Further findings by @flake2022construct and others [@flake2017construct; @shaw2020measurement] also illustrated how QMPs create challenges for replicating researchers. To reconstruct the measurement, replication researchers need to know the items that were used, how they were presented to the subjects, and how to compute the scores. If the measure is not reconstructed exactly, constructs measured by original and replication may differ, possibly creating differences in effect sizes between original and replication studies, resulting in less informative replications.
+Our aim is to further investigate the reliability, validity, and measurement reporting practices in the Many Labs replications and related original research. We provide a descriptive account of the measurement reporting practices in tandem with the measure’s reliability and validity evidence, obtained from the openly available data from the Many Labs replication projects.
 
-### Research Contribution
+Existing literature has looked at reported reliability, validity, and general measurement features in both original and replication studies before. Previous studies have also recalculated reliabilities from reported information and reanalyzed the validity from original data. Our research provides a unique contribution by combining the reported measurement information in original and replication studies, with reliability and validity re-analyses performed on openly available data from those replication studies, with the added benefit of having data across multiple labs so that variation in reliability and validity across multiple instances can be investigated. 
 
-Our study investigates the relation of reliability and measurement reporting with replicability, using data and reports from the large-scale Many Labs replication projects. First, this study expands on the research by @stanley2014expectations, to see if reliability is related to replication success in empirical replication data. Specifically, we investigate whether successfully replicated studies differed in reliability from non-replicated studies. @stanley2014expectations assumed reliability to be constant across studies, which we know to be an oversimplification. Therefore, to add further context to the relation between reliability and replication, we also investigate the variation in reliability as observed across labs.
-
-Furthermore, we conceptually replicate the study by @flake2022construct on QMPs in replications and original research in the context of the Many Labs projects. We expand on @flake2022construct by exploring associations between QMPs and the replicability of psychological findings.
-
-## Research Questions & Hypotheses
-
-### Reliability
-
-Measurement reliability can vary across samples, because the residual variance or the true variance in the item scores, or both, differs between samples. While differences in these variances across samples is inevitable, these differences should not be systematic between replication and original samples for their results to remain comparable. Therefore, we investigated the reliability in replication (Research Question 1a; RQ1a[^1]) and original psychological research (RQ1b). The Many Labs studies were intended as direct replications, which implies that deviations from the original research should be irrelevant for testing the effect [@nosek2022replicability], including systematic differences in reliability (Hypothesis 1; H1).
-
-[^1]: The numbering of the research questions and hypotheses matches the numbering in the preregistration
-
-Additionally, for the results of direct replications to be comparable with each other, the differences in reliability should be comparable. Systematic differences in reliability could indicate that measurement assesses fundamentally different constructs. Therefore, we investigated whether reliability estimates differed systematically between replicating labs (RQ2). For effect sizes, there is little empirical evidence of widespread heterogeneity among the Many Labs replications [@klein2018many; @olsson2020heterogeneity]. We expect that there is no systematic variation in the reliability estimates of replications of the same original study (H2) either.
-
-In theory, there should be a positive relation between reliability and replicability. Greater reliability means the variance around the estimate of the true effect is decreased [@nunnally1994assessment]. If the true effect is not null, then the statistical tests with reliable measures are more likely to be significant. To empirically assess this, we investigated the association between replication study reliability and replication outcome (RQ3). We expected that reliability in the replications would be positively associated with replication success (H3).
-
-### Measurement Reporting
-
-We conceptually replicate the findings on measurement reporting of @flake2022construct by documenting the frequency of QMPs in replications of psychological research (RQ4a) and original psychological research (RQ4b). @flake2022construct found that RPP replications contained on average more QMPs than original studies. We hypothesized that for our Many Labs sample, QMPs would be more frequent in original psychological research than in replication research (H4), because the Many Labs replications used structured protocols documenting the measurement.
-
-QMPs obscure information about a particular measurement, which may cause issues when reconstructing that measurement in subsequent replication attempts. Because resulting deviations in measurement may be partly responsible for deviations in replication and original effects [@flake2022construct], we investigated whether QMPs in replication protocols were associated with the replication outcome (RQ5). A reduction in QMPs corresponds to greater transparency in measurement reporting. In line with earlier research finding that other transparency-related practices are associated with more robust estimates of effects [@wicherts2011willingness], we expected QMPs in replications to be negatively associated with replication success (H5).
-
-@flake2022construct proposed that QMPs in original articles may impede recreating measurements for replications, and indeed @shaw2020measurement found evidence for such a spill-over effect with validity. In line with this research, we investigated the association between QMPs in original research and QMPs in replications of psychological research (RQ6). We expected the total number of QMPs in original psychological research to be positively related to the total number of QMPs in replication research (H6).
-
-# Disclosures
-
-### Preregistration
-
-We preregistered data collection, coding protocol, and planned analyses: <https://osf.io/jgxyu>. Deviations from the preregistration are explicitly mentioned in the text.
-
-### Data, Materials, and Online Resources
-
-This manuscript was created in RStudio [*v`r rstudioapi::versionInfo()$version`*\; @R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base], and generated using the Workflow for Open Reproducible Code in Science [*v`r getNamespaceVersion("worcs")[[1]]`*\; @vanlissaWORCS2021] to ensure reproducibility and transparency. All code and data used to generate this manuscript and its results are available at: <https://github.com/CasGoos/measurement_and_replication> and <https://osf.io/9r8yt/> (DOI: 10.17605/OSF.IO/9R8YT).
-
-### Reporting
-
-We report how we determined all data exclusions, all manipulations, and all measures in the study. Our sample size was predetermined by the number of studies in the Many Labs projects.
-
-### Ethical Approval
-
-This research was approved by the Tilburg University School of Social and Behavioral Sciences Ethical Review Board (nr. TSB_TP_REMA06).
+# Disclosures ???Where & How???
 
 # Method
 
-## Sample
+## Data Source
+The data source is the Many Labs replication projects. These were a series of high profile replication projects wherein multiple psychological studies considered relevant by the community were chosen to be replicated across multiple labs over the world. Practices encountered with measurement in this sample of original articles and replications are a representative reflection of these practices more broadly.
 
-### Data Source
+Furthermore, because each study was replicated across multiple labs and the data collected from each lab is publicly available, we can calculate reliability coefficients and perform factor analyses for each measurement across multiple data points and investigate the variance in these estimates.
 
-The data used for the analyses consisted of three main sources: replication datasets, replication protocols, and original study articles. The data came from the Many Labs replication projects. Specifically, data from Many Labs 1, 2, 3, & 5 [@klein2014investigating; @klein2018many; @ebersole2016many; @ebersole2020many] was included. Many Labs 4 [@klein2022many] was excluded, as there was no publicly available replication protocol. Additionally, the replication of [@crosby2008we] in Many Labs 5 made use of videos and eye-tracking measures, which did not match this study’s focus on item-based measures.
-
-### Unit of Analysis
-
-The unit of analysis in this study was a measure of a single psychological construct used in the primary analysis that was targeted in the replication. Multiple psychological constructs could be measured per original study or replication. We used the replication protocols to identify these measures. We did not include acquiescence bias checks, manipulation checks, pilot test measures, and measures added for exploratory analyses.
+## Unit of Analysis
+Our unit of analysis is a measure of a single psychological construct within a replication protocol/article. Multiple psychological constructs could be measured per original study or replication. We used the replication protocols to identify these measures. We did not include acquiescence bias checks, manipulation checks, pilot test measures, and measures added for exploratory analyses.
 
 ## Data Collection
-
-We retrieved the data on the replication protocols and replication datasets of Many Labs 1, 2, 3, & 5 from their respective OSF pages: <https://osf.io/wx7ck/>, <https://osf.io/8cd4r/>, <https://osf.io/ct89g/>, & <https://osf.io/7a6rd/>. Both the replication protocols and replication datasets were scanned to ensure the planned analyses were feasible. However, no coding or analysis of either of them had taken place before we preregistered the analyses. Further details on the search strategy can be found in the [supplementary materials](../../SupplementaryMaterials/CodingProtocols/coding_protocol_information.Rmd) (URL <https://github.com/CasGoos/measurement_and_replication/blob/master/SupplementaryMaterials/CodingProtocols/coding_protocol_information.Rmd>).
+The data consists of three main sources: replication datasets, replication protocols, and original study articles. We retrieved the data of Many Labs 1, 2, 3, & 5 [@klein2014investigating; @ebersole2016many; @klein2018many; @ebersole2020many] from their respective OSF pages. Many Labs 4 [@klein2022many] was excluded, as there was no publicly available replication protocol. Additionally, the replication of [@crosby2008we] in Many Labs 5 made use of videos and eye-tracking measures, which did not match this study’s focus on item-based measures. We checked the Many Labs data source prior to registering our coding protocol, to check the feasibility of which data could be extracted and how. However, the actual coding took place after registering the coding protocol … Further details can be found in supplement XXX.
 
 ### Replication Datasets
-
 The replication datasets refer to the publicly available datasets containing the data obtained from all labs partaking in a Many Labs study. For the analyses, we extracted the scores on the items of each previously identified measure that met our inclusion criteria specified below. When scores could not be clearly identified, any available codebooks, analysis scripts, or study materials were used to identify the relevant scores.
 
-To be included in the planned analyses on calculated reliabilities (RQ1, RQ2, and RQ3), the measure had to be a scale consisting of multiple items. If cleaned data were available, we chose these over raw data, to ensure that variables were coded as intended (e.g., no reverse-coded items). We omitted pilot data from the analyses. These criteria resulted in suitable item score data from `r apa_num(nrow(data_h23_avg))` replication sets spread across on average approximately `r apa_num(mean(table(data_h23$g)), digits = 0)` lab locations for the analyses of Hypotheses 2 & 3.
+To be included in our reliability recalculations and factor analysis checks, the measure had to be a scale consisting of multiple items. If cleaned data were available, we chose these over raw data, to ensure that variables were coded as intended (e.g., no reverse-coded items). We omitted pilot data from the analyses. These criteria and the nature of the available format(s) of each dataset resulted in suitable item score data from 19 replication sets spread across on average approximately 35 lab locations for our analyses.
 
 ```{r CleaningReplicationDatasetsData, include = FALSE, eval = FALSE}
-##### This code can be used to rerun the data preparation to convert the raw 
+##### This code can be used to rerun the data preparation to convert the raw
 ##### (input) data of the Many Labs replications into intermediate data.
 ##### However, because the intermediate data is also available in this project,
 ##### the manuscript can also be reproduced without running this code block.
@@ -373,212 +386,37 @@ colnames(data_5.9.1_clean)[1] <- "g"
 
 
 ### Saving to Intermediate Data Folder
-open_data(data = data_1.3_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_1.3_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_1.3_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_1.3_clean))), ".yml")) 
-
-open_data(data = data_1.10_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_1.10_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_1.10_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_1.10_clean))), ".yml")) 
-
-open_data(data = data_1.11_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_1.11_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_1.11_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_1.11_clean))), ".yml")) 
-
-open_data(data = data_1.12.3.1_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_1.12.3.1_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_1.12.3.1_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_1.12.3.1_clean))), ".yml")) 
-
-open_data(data = data_1.12.3.2_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_1.12.3.2_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_1.12.3.2_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_1.12.3.2_clean))), ".yml")) 
-
-open_data(data = data_2.10.1_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_2.10.1_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_2.10.1_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_2.10.1_clean))), ".yml")) 
-
-open_data(data = data_2.12.1_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_2.12.1_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_2.12.1_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_2.12.1_clean))), ".yml")) 
-
-open_data(data = data_2.12.2_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_2.12.2_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_2.12.2_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_2.12.2_clean))), ".yml")) 
-
-open_data(data = data_2.12.3_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_2.12.3_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_2.12.3_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_2.12.3_clean))), ".yml")) 
-
-open_data(data = data_2.15_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_2.15_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_2.15_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_2.15_clean))), ".yml")) 
-
-open_data(data = data_2.20_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_2.20_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_2.20_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_2.20_clean))), ".yml")) 
-
-open_data(data = data_2.23_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_2.23_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_2.23_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_2.23_clean))), ".yml")) 
-
-open_data(data = data_3.2.1.1_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_3.2.1.1_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_3.2.1.1_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_3.2.1.1_clean))), ".yml")) 
-
-open_data(data = data_3.2.1.2_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_3.2.1.2_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_3.2.1.2_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_3.2.1.2_clean))), ".yml")) 
-
-open_data(data = data_3.7.1_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_3.7.1_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_3.7.1_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_3.7.1_clean))), ".yml")) 
-
-open_data(data = data_3.7.2_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_3.7.2_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_3.7.2_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_3.7.2_clean))), ".yml")) 
-
-open_data(data = data_3.8.2_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_3.8.2_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_3.8.2_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_3.8.2_clean))), ".yml")) 
-
-open_data(data = data_5.1.1_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_5.1.1_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_5.1.1_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_5.1.1_clean))), ".yml")) 
-
-open_data(data = data_5.1.2_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_5.1.2_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_5.1.2_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_5.1.2_clean))), ".yml")) 
-
-open_data(data = data_5.4_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_5.4_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_5.4_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_5.4_clean))), ".yml")) 
-
-open_data(data = data_5.7_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_5.7_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_5.7_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_5.7_clean))), ".yml")) 
-
-open_data(data = data_5.9.1_clean, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(data_5.9.1_clean))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(data_5.9.1_clean))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(data_5.9.1_clean))), ".yml")) 
+### !!!! OMIT INTERMEDIATE DATA & KEEP FUNCTION THAT REMOVE ALL NON RAW DATA 
+### WHEN LOADING THE DATA IN!!!!
+saving_to_intermediate_data(data_1.3_clean)
+saving_to_intermediate_data(data_1.10_clean)
+saving_to_intermediate_data(data_1.11_clean)
+saving_to_intermediate_data(data_1.12.3.1_clean)
+saving_to_intermediate_data(data_1.12.3.2_clean)
+saving_to_intermediate_data(data_2.10.1_clean)
+saving_to_intermediate_data(data_2.12.1_clean)
+saving_to_intermediate_data(data_2.12.2_clean)
+saving_to_intermediate_data(data_2.12.3_clean)
+saving_to_intermediate_data(data_2.15_clean)
+saving_to_intermediate_data(data_2.20_clean)
+saving_to_intermediate_data(data_2.23_clean)
+saving_to_intermediate_data(data_3.2.1.1_clean)
+saving_to_intermediate_data(data_3.2.1.2_clean)
+saving_to_intermediate_data(data_3.7.1_clean)
+saving_to_intermediate_data(data_3.7.2_clean)
+saving_to_intermediate_data(data_3.8.2_clean)
+saving_to_intermediate_data(data_5.1.1_clean)
+saving_to_intermediate_data(data_5.1.2_clean)
+saving_to_intermediate_data(data_5.4_clean)
+saving_to_intermediate_data(data_5.7_clean)
+saving_to_intermediate_data(data_5.9.1_clean)
 
 ```
 
 ### Replication Protocols
-
-The replication protocols refer to the publicly available protocols describing the background, methodology, and analysis of each set of replications of a given original study across multiple labs. These were retrieved from the OSF pages of the Many Labs projects (the search strategy and OSF file locations can be found in the [data retrieval information](../../SupplementaryMaterials/data_retrieval_information.Rmd) supplementary document; URL <https://github.com/CasGoos/measurement_and_replication/blob/master/SupplementaryMaterials/data_retrieval_information.Rmd>).
+The replication protocols refer to the publicly available protocols describing the background, methodology, and analysis of each set of replications of a given original study across multiple labs. These were retrieved from the OSF pages of the Many Labs projects (the search strategy and OSF file locations can be found in the data retrieval information supplementary document; URL https://github.com/CasGoos/measurement_and_replication/blob/master/SupplementaryMaterials/data_retrieval_information.Rmd).
 
 ### Original Articles
-
 We identified and retrieved all original study articles using the citations for these articles in each replication protocol.
 
 ```{r CleaningCodedData, include = FALSE, eval = FALSE}
@@ -589,110 +427,146 @@ We identified and retrieved all original study articles using the citations for 
 # Selecting the relevant rows and columns for the data
 coded_data_initial_sel <- coded_data_initial_raw[3:160, 18:57]
 coded_data_revised_sel <- coded_data_revised_raw[3:160, 18:38]
-coded_data_vignette_raw <- coded_data_vignette_raw[3:160, 2]
+coded_data_vignette_sel <- coded_data_vignette_raw[3:160, 2]
 
 # Combining the datasets
 coded_data_full <- cbind(coded_data_initial_sel, 
-                         cbind(coded_data_revised_sel, coded_data_vignette_raw))
+                         cbind(coded_data_revised_sel, coded_data_vignette_sel))
 
 # filtering out unnecessary double columns
 coded_data_full <- cbind(coded_data_full[, 1:40], coded_data_full[, 45:62])
 
 
+### data preparation
+# renaming columns
+colnames(coded_data_full) <- c("many_labs_version", "rep_org", "title", "measure_name", 
+      "variable_name", "multi", "variable_order", "N", "N_items", 
+      "hypothesis_support", "reliability_type", "reliability_type_text", 
+      "reliability_coeff", "def_1", "op_version", "op_1", "op_2", "op_3", "op_4", 
+      "op_5", "sel_existing", "sel_existing_text", "sel_1", "sel_2", "sel_3", 
+      "sel_4", "sel_psychometric_evidence", "sel_psychometric_evidence_text", 
+      "quant_1", "quant_2", "quant_3", "quant_4", "mod_check", "mod_1", "mod_2", 
+      "mod_3", "mod_4", "mod_5", "mod_6", "mod_time", "op_1_REV", "op_2_REV",
+      "op_5_REV", "sel_1_REV", "sel_3_REV", "sel_psychometric_evidence_REV", 
+      "sel_psychometric_evidence_text_REV", "quant_1_REV", "quant_2_REV", 
+      "quant_3_REV", "mod_check_REV", "mod_1_REV", "mod_2_REV", "mod_3_REV", 
+      "mod_4_REV", "mod_5_REV", "mod_6_REV", "inseperable_material")
+  
+# renaming rows
+rownames(coded_data_full) <- 1:nrow(coded_data_full)
 
-### creating the cleaned dataset using the functions in the source code 
-coded_data_clean <- calculating(recoding(restructuring(fixing(
-  renaming(coded_data_full)))))
+# fixing some coding mistakes
+coded_data_full$variable_name[79] <- "quote attribution effect"
+coded_data_full$N[3] <- "5284"
+coded_data_full$N[158] <- "1202"
+coded_data_full$reliability_type[50] <- "Not Reported"
+coded_data_full$reliability_type[127] <- "Not Reported"
+coded_data_full$op_1[145] <- "False"
+coded_data_full$op_3[121] <- "True"
+coded_data_full$op_5[157] <- "True"
+coded_data_full$sel_1[59] <- "True"
+coded_data_full$quant_2[113] <- "True"
+coded_data_full$mod_time[1] <- "Before"
+
+# removing missing entry 77
+coded_data_full <- data.frame(coded_data_full)[-77,]
+
+# Many labs 2.25 and 2.26, as well as 3.4 and 3.5 (for replications) were coded 
+# in reverse order thus need to be swapped in right order. Additionally, some
+# of the entries were included later than following their order, due to some
+# minor coding oversights.
+Coded_Data_Full_Restructured <- coded_data_full[c(1:18, 148, 19:23, 147, 24:28, 
+                                                  153, 29:40, 154, 42, 41, 155, 
+                                                  43:49, 156, 51, 50, 52:76, 
+                                                  157, 77:88, 149:152, 89:146),]
 
 
+# rename the rownames to match the new order
+rownames(Coded_Data_Full_Restructured) <- 1:nrow(Coded_Data_Full_Restructured)
 
-### Saving to Intermediate Data Folder
-# Splitting data into replication and original
-coded_data_replications <- coded_data_clean[1:77,]
-coded_data_original <- coded_data_clean[78:157,]
+# changing the variable types for each column to better represent their 
+# intended variable type
+class(Coded_Data_Full_Restructured$many_labs_version) <- "numeric"
+Coded_Data_Full_Restructured$many_labs_version <- as.factor(Coded_Data_Full_Restructured$many_labs_version)
+Coded_Data_Full_Restructured$rep_org <- droplevels(as.factor(Coded_Data_Full_Restructured$rep_org))
+Coded_Data_Full_Restructured$multi <- droplevels(as.factor(Coded_Data_Full_Restructured$multi))
+Coded_Data_Full_Restructured$variable_order <- droplevels(as.factor(Coded_Data_Full_Restructured$variable_order))
+class(Coded_Data_Full_Restructured$N) <- "numeric"
+Coded_Data_Full_Restructured$N_items <- droplevels(as.factor(Coded_Data_Full_Restructured$N_items))
+Coded_Data_Full_Restructured$hypothesis_support <- droplevels(as.factor(Coded_Data_Full_Restructured$hypothesis_support))
+levels(Coded_Data_Full_Restructured$hypothesis_support) <- c("No", "Unclear", "Yes")
+Coded_Data_Full_Restructured$reliability_type <- droplevels(as.factor(Coded_Data_Full_Restructured$reliability_type))
+class(Coded_Data_Full_Restructured$reliability_coeff) <- "numeric"
+Coded_Data_Full_Restructured$def_1 <- as.logical(Coded_Data_Full_Restructured$def_1)
+Coded_Data_Full_Restructured$op_1 <- as.logical(Coded_Data_Full_Restructured$op_1)
+Coded_Data_Full_Restructured$op_2 <- as.logical(Coded_Data_Full_Restructured$op_2)
+Coded_Data_Full_Restructured$op_3 <- as.logical(Coded_Data_Full_Restructured$op_3)
+Coded_Data_Full_Restructured$op_4 <- as.logical(Coded_Data_Full_Restructured$op_4)
+Coded_Data_Full_Restructured$op_5 <- as.logical(Coded_Data_Full_Restructured$op_5)
+Coded_Data_Full_Restructured$sel_existing <- droplevels(as.factor(Coded_Data_Full_Restructured$sel_existing))
+Coded_Data_Full_Restructured$sel_1 <- as.logical(Coded_Data_Full_Restructured$sel_1)
+Coded_Data_Full_Restructured$sel_2 <- as.logical(Coded_Data_Full_Restructured$sel_2)
+Coded_Data_Full_Restructured$sel_3 <- as.logical(Coded_Data_Full_Restructured$sel_3)
+Coded_Data_Full_Restructured$sel_4 <- as.logical(Coded_Data_Full_Restructured$sel_4)
+Coded_Data_Full_Restructured$sel_psychometric_evidence <- droplevels(as.factor(Coded_Data_Full_Restructured$sel_psychometric_evidence))
+Coded_Data_Full_Restructured$quant_1 <- as.logical(Coded_Data_Full_Restructured$quant_1)
+Coded_Data_Full_Restructured$quant_2 <- as.logical(Coded_Data_Full_Restructured$quant_2)
+Coded_Data_Full_Restructured$quant_3 <- as.logical(Coded_Data_Full_Restructured$quant_3)
+Coded_Data_Full_Restructured$quant_4 <- as.logical(Coded_Data_Full_Restructured$quant_4)
+Coded_Data_Full_Restructured$mod_check <- droplevels(as.factor(Coded_Data_Full_Restructured$mod_check))
+Coded_Data_Full_Restructured$mod_1 <- as.logical(Coded_Data_Full_Restructured$mod_1)
+Coded_Data_Full_Restructured$mod_2 <- as.logical(Coded_Data_Full_Restructured$mod_2)
+Coded_Data_Full_Restructured$mod_3 <- as.logical(Coded_Data_Full_Restructured$mod_3)
+Coded_Data_Full_Restructured$mod_4 <- as.logical(Coded_Data_Full_Restructured$mod_4)
+Coded_Data_Full_Restructured$mod_5 <- as.logical(Coded_Data_Full_Restructured$mod_5)
+Coded_Data_Full_Restructured$mod_6 <- as.logical(Coded_Data_Full_Restructured$mod_6)
+Coded_Data_Full_Restructured$mod_time <- droplevels(as.factor(Coded_Data_Full_Restructured$mod_time))
+Coded_Data_Full_Restructured$op_1_REV <- as.logical(Coded_Data_Full_Restructured$op_1_REV)
+Coded_Data_Full_Restructured$op_2_REV <- as.logical(Coded_Data_Full_Restructured$op_2_REV)
+Coded_Data_Full_Restructured$op_5_REV <- as.logical(Coded_Data_Full_Restructured$op_5_REV)
+Coded_Data_Full_Restructured$sel_1_REV <- as.logical(Coded_Data_Full_Restructured$sel_1_REV)
+Coded_Data_Full_Restructured$sel_3_REV <- as.logical(Coded_Data_Full_Restructured$sel_3_REV)
+Coded_Data_Full_Restructured$sel_psychometric_evidence_REV <- droplevels(as.factor(Coded_Data_Full_Restructured$sel_psychometric_evidence_REV))
+Coded_Data_Full_Restructured$quant_1_REV <- as.logical(Coded_Data_Full_Restructured$quant_1_REV)
+Coded_Data_Full_Restructured$quant_2_REV <- as.logical(Coded_Data_Full_Restructured$quant_2_REV)
+Coded_Data_Full_Restructured$quant_3_REV <- as.logical(Coded_Data_Full_Restructured$quant_3_REV)
+Coded_Data_Full_Restructured$mod_check_REV <- droplevels(as.factor(Coded_Data_Full_Restructured$mod_check_REV))
+Coded_Data_Full_Restructured$mod_1_REV <- as.logical(Coded_Data_Full_Restructured$mod_1_REV)
+Coded_Data_Full_Restructured$mod_2_REV <- as.logical(Coded_Data_Full_Restructured$mod_2_REV)
+Coded_Data_Full_Restructured$mod_3_REV <- as.logical(Coded_Data_Full_Restructured$mod_3_REV)
+Coded_Data_Full_Restructured$mod_4_REV <- as.logical(Coded_Data_Full_Restructured$mod_4_REV)
+Coded_Data_Full_Restructured$mod_5_REV <- as.logical(Coded_Data_Full_Restructured$mod_5_REV)
+Coded_Data_Full_Restructured$mod_6_REV <- as.logical(Coded_Data_Full_Restructured$mod_6_REV)
+Coded_Data_Full_Restructured$inseperable_material <- droplevels(as.factor(Coded_Data_Full_Restructured$inseperable_material)
 
-# difference in dataset row number is due to the fact that the moral foundations
-# questionnaire in original 2.4 is reported using all 5 of its factors, whereas
-# in replication 2.4 only the two overarching groups of binding and 
-# individualizing foundations are described.
-# For that reason a shortened original dataset will be used for any direct
-# comparisons between original and replication coding.
-coded_data_original_shortened <- coded_data_original[c(1:17, 19, 22:80),] 
-coded_data_original_shortened[c(18,19),5] <- 
-  c("individualizing moral foundations", "binding moral foundations")
-coded_data_original_shortened[18,13] <- NA
-coded_data_original_shortened[19,13] <- NA
+                                                                
+                                                                
 
+# the moral foundations questionnaire in original 2.4 is reported using all 5 of 
+# its factors, whereas in replication 2.4 only the two overarching groups of 
+# binding and individualizing foundations are described. For that reason a 
+# shortened original dataset will be used for any direct comparisons between 
+# original and replication coding.
+
+Coded_Data_Full_Shortened <- Coded_Data_Full_Restructured[c(1:94, 96, 99:157),] 
+Coded_Data_Full_Shortened[c(95,96),5] <- c("individualizing moral foundations", "binding moral foundations")
+Coded_Data_Full_Shortened[95,13] <- NA
+Coded_Data_Full_Shortened[96,13] <- NA
+
+
+# separating the replication and original data from each other.
+coded_data_replications <- Coded_Data_Full_Shortened[1:77,]
+coded_data_original <- Coded_Data_Full_Shortened[78:154,]
 
 # exporting cleaned data
-open_data(data = coded_data_replications, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(coded_data_replications))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(coded_data_replications))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(coded_data_replications))), ".yml")) 
-
-open_data(data = coded_data_original, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(coded_data_original))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(coded_data_original))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(coded_data_original))), ".yml")) 
-
-open_data(data = coded_data_original_shortened, filename = paste0(paste0(
-  "Data/IntermediateData/", deparse(substitute(coded_data_original_shortened))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/IntermediateData/codebook_", 
-    deparse(substitute(coded_data_original_shortened))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/IntermediateData/value_labels_", 
-    deparse(substitute(coded_data_original_shortened))), ".yml")) 
-
-
-# clearing up memory space by removing raw files from the environment
-rm(coded_data_initial_raw, coded_data_revised_raw, coded_data_vignette_raw, 
-   data_2.10.1, data_2.12, data_2.15, data_2.19.1, data_2.2, data_2.20, 
-   data_2.23, data_2.3, data_2.4.1, data_2.4.2, data_2.8.2, data_3.5, data_5.1,
-   data_5.4, data_5.5, data_5.7, data_5.9.1, data_ml1, data_ml3)
+saving_to_intermediate_data(coded_data_replications)
+saving_to_intermediate_data(coded_data_original)
 
 ```
 
-## Measures {#Measures}
-
-We developed a [coding protocol](../../SupplementaryMaterials/CodingProtocols/Measurement_Error_Reporting_Revised_Coding_Protocol.pdf) (available in the supplementary materials; URL <https://github.com/CasGoos/measurement_and_replication/blob/master/SupplementaryMaterials/CodingProtocols/coding_protocol_information.Rmd>) to extract information on the reported measurements for both replication protocols and original studies.
-
-### Measures of Reliability
-
-Because data from the Many Labs replications were available for each lab location within each replication set, we could calculate reliabilities for any item scale measure used for each lab location separately. This allowed us to assess the variation of reliabilities of the same measure across different contexts.
-
-We calculated Cronbach’s Alpha, as it remains the most commonly used indicator of the reliability of a measure [@flake2017construct], to compare the reliabilities reported in original articles and across replicating labs. We calculated Cronbach’s Alpha using the alpha function from the *psych* R package [*v`r getNamespaceVersion("psych")[[1]]`*\; @R-psych] with default arguments. We had preregistered Omega as an additional index of reliability, because it is regarded by numerous psychometricians as a more informative alternative to Cronbach’s Alpha [@crutzen2017scale; @deng2017testing]. The results based on Omega can be found in [Supplementary Analyses C](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_multilevel_analyses.Rmd).
-
-```{r ReliabilityValidityTestabilityCheck, include = FALSE, warning = FALSE}
-## Checking the measures to recalculate the reliability and factor analysis for.
-## The question: "Are they psychometrics scales or not?", is key here.
-View(coded_data_replications)
-
-# Likely reliability: 1.10, 1.11, 1.12.3, 2.4.1, 2.4.2, 2.8.2, 2.10.1, 2.12.1, 
-# 2.12.2, 2.12.3, 2.15, 2.19.2, 2.23, 3.7.1, 3.7.2, 3.8.1, 3.8.2, 5.7, 5.9.1
-# Likely factor: 1.10, 1.11, 1.12.3, 2.4.1, 2.4.2, 2.8.2, 2.10.1, 2.12.1, 2.12.2,
-# 2,12,3, 2.15, 2.19.2, 2.23, 3.7.1, 3.7.2, 3.8.1, 3.8.2, 5.7, 5.9.1
-# Maybe reliability: 1.3, 1.12.1, 2.2, 2.3, 2.19.1, 2.20, 3.2.1, 3.5, 5.1.1, 
-# 5.1.2, 5.4, 5.5.1, 5.5.2
-# Maybe factor: 1.3, 1.12.1, 2.3, 2.19.1, 2.20, 3.2.1, 3.5, 5.1.1, 5.1.2, 5.4,
-# 5.5.1, 5.5.2
-
-# 1.9 is difficult, might be a scale as dv rather than voting behavior.
-```
-
-### Measures of Measurement Reporting
-
-We extracted the reported reliability coefficient and type of index (Cronbach’s Alpha, retest, interrater, etc.) of a measure from both the replication protocols and the original articles when present. Similarly, we coded the presence of any validity evidence, such as a factor analysis, that was presented alongside the measure.
-
-The tests for Hypotheses 4, 5, & 6 were all based on the QMPs coded for both original articles and replication protocols. We included items based on Flake et al. (2022), and additional items to further assess transparent measurement reporting as laid out in Flake and Fried (2020). In total, we coded `r sum(colnames(coded_data_replications) == "def1" | colnames(coded_data_replications) == "op_1" | colnames(coded_data_replications) == "op_2" | colnames(coded_data_replications) == "op_3" | colnames(coded_data_replications) == "op_4" | colnames(coded_data_replications) == "op_5" | colnames(coded_data_replications) == "sel_1" | colnames(coded_data_replications) == "sel_2" | colnames(coded_data_replications) == "sel_3" | colnames(coded_data_replications) == "sel_4" | colnames(coded_data_replications) == "quant_1" | colnames(coded_data_replications) == "quant_2" | colnames(coded_data_replications) == "quant_3" | colnames(coded_data_replications) == "quant_4" | colnames(coded_data_replications) == "mod_1" | colnames(coded_data_replications) == "mod_2" | colnames(coded_data_replications) == "mod_3" | colnames(coded_data_replications) == "mod_4" | colnames(coded_data_replications) == "mod_5" | colnames(coded_data_replications) == "mod_6")` different QMPs, categorized into five QMP type categories based on Flake and Fried (2020). The QMP categories and example items can be seen in Table \@ref(tab:QMPCodingInfoTable).
+## Measures
+### Coding Protocol
+We developed a coding protocol to extract reported measurement information from the original articles and replication protocols. We extracted the reported reliability coefficient and type of index (Cronbach’s Alpha, retest, interrater, etc.) when present. Similarly, we coded if any construct validity evidence, such as a factor analysis, was presented alongside the measure. We additionally included twenty items that were based on the QMP table presented in Flake & Fried. These items recorded whether or not certain information was reported and were all coded to be either true, false, or not applicable if not relevant for that measure (e.g., reporting results from a factor analysis for single-item measures). Example items can been in Table 1.
 
 ```{r QMPCodingInfoTable, warning = FALSE}
 QMP_info_dataframe <- data.frame(Category = c("Definition", "", "", "Operationalisation", "", "", "", "Selection/Creation", "", "", "Quantification", "Modification", "", "", "", "", ""),
@@ -724,693 +598,885 @@ apa_table(
   QMP_info_dataframe, align = c("l", "r", "l")
   , caption = "Information of QMP coding variables per category."
   , note = "N Questions refers only to the questions used for calculating QMP ratios. Selection and creation share a category as the justifications and requirements in selecting a measure are similar to those for creating a new measure."
-  , escape = FALSE, placement= "htp", booktabs = TRUE)
+  , escape = FALSE, placement = "htp", booktabs = TRUE)
 
 ```
 
-QMPs were all coded to be either true, false, or not applicable if not relevant for that measure (e.g., reporting results from a factor analysis for single-item measures). For the analyses, we calculated a ratio (both per QMP type and overall QMP) based on the number on the number of true responses divided by the number of responses coded to be applicable.
-
-After the initial coding, we made minor revisions to `r length(coded_data_revised_raw[1, c("Op1", "Op2", "Op5", "Sel1", "Sel3", "Quant1", "Quant2", "Quant3", "Mod1", "Mod2", "Mod3", "Mod4", "Mod5", "Mod6")])` of the `r length(coded_data_initial_raw[1, c("Def1", "Op1", "Op2", "Op3", "Op4", "Op5", "Sel1", "Sel2", "Sel3", "Sel4", "Quant1", "Quant2", "Quant3", "Quant4", "Mod1", "Mod2", "Mod3", "Mod4", "Mod5", "Mod6")])` QMP items in the preregistered coding protocol, because we considered them overly stringent in practice. For example, in the initial protocol, an example item had to be present within the article or protocol itself, or else this was counted as a QMP. In the revised protocol, references to online appendices with example items were also considered sufficient for this item. The analyses, tables, and figures presented in this article are all based on the revised coding protocol, the results of the equivalent analyses based on QMPs obtained with our initial protocol can be found in [Supplementary Analyses D](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_initial_QMP_analyses.Rmd).
-
-### Measure of Replication Success
-
-We used the published reports of the Many Labs projects [@klein2014investigating; @ebersole2016many; @ebersole2020many; @klein2018many] to determine replication success based on the reported significance of the meta-analytic effect. An effect was considered successfully replicated if the meta-analytic effect was in the same direction as the original effect and had a p-value lower than .05.
-
-```{r FinalPreparationData, include = FALSE, eval = FALSE}
-##### This code can be used to rerun the data preparation to convert the 
-##### intermediate data into the analysis data. However, because the analysis
-##### data is also available in this project, the manuscript can also be 
-##### reproduced without running this code block.
-### this code prepares the various pieces of data to be ready to use for the 
-### analyses.
-## confirmatory analyses
-# for hypotheses 4, 5, & 6
-data_h456_original <- data_prep_h456(coded_data_original_shortened)
-data_h456_replications <- data_prep_h456(coded_data_replications)
+After the initial coding, we made minor revisions to 14 of the 20 QMP items in the preregistered coding protocol, because we considered them overly stringent in practice. For example, in the initial protocol, an example item had to be present within the article or protocol itself, or else this was counted as a QMP. In the revised protocol, references to online appendices with example items were also considered sufficient for this item. The analyses, tables, and figures presented in this article are all based on the revised coding protocol, the results of the equivalent analyses based on QMPs obtained with our initial protocol can be found in Supplementary Analyses D.
 
 
-# for hypotheses 2 and 3
-data_h23 <- data_prep_H23(list(data_1.10_clean, data_1.11_clean, 
+
+We initially intended to form a QMP index using these QMP items and explore relations in the data using this index, but this index could not be validated properly (more information on the index can be found in the Supplement). These items are therefore currently used on their own to give a descriptive overview of the reporting practices in our sample.
+
+```{r Calculating_QMP_Data, include = FALSE, eval = FALSE}
+original_QMP_data <- coded_data_original[c("def_1", "sel_2", "op_4", "reliability_type", "sel_existing", "op_version", "op_1_REV", "sel_1_REV", "sel_3_REV", "sel_4", "sel_psychometric_evidence", "op_2_REV", "op_3", "quant_1_REV", "quant_2_REV", "quant_3_REV", "quant_4", "op_5_REV", "mod_1_REV", "mod_2_REV", "mod_3_REV", "mod_4_REV", "mod_5_REV", "mod_6_REV")]
+
+replication_QMP_data <- coded_data_replications[c("def_1", "sel_2", "op_4", "reliability_type", "sel_existing", "op_version", "op_1_REV", "sel_1_REV", "sel_3_REV", "sel_4", "sel_psychometric_evidence", "op_2_REV", "op_3", "quant_1_REV", "quant_2_REV", "quant_3_REV", "quant_4", "op_5_REV", "mod_1_REV", "mod_2_REV", "mod_3_REV", "mod_4_REV", "mod_5_REV", "mod_6_REV")]
+
+
+
+# create an empty dataset to add a recoded TRUE and FALSE response for QMPs to 
+QMP_data <- data.frame(delete_this = rep(NA, 77))
+
+
+QMP_data$reliability_reported_org <- ifelse(original_QMP_data$reliability_type != "Not Reported" & original_QMP_data$reliability_type != "" & !is.na(original_QMP_data$reliability_type), TRUE, ifelse(original_QMP_data$reliability_type == "Not Reported", FALSE, NA))
+
+QMP_data$reliability_reported_rep <- ifelse(replication_QMP_data$reliability_type != "Not Reported" & replication_QMP_data$reliability_type != "" & !is.na(replication_QMP_data$reliability_type), FALSE, ifelse(replication_QMP_data$reliability_type == "Not Reported", TRUE, NA))
+
+
+# add if clearly specified if measure existed or not
+QMP_data$select_or_create_clarity_org <- original_QMP_data$sel_existing == "Not Clearly Stated"
+
+QMP_data$select_or_create_clarity_rep <- replication_QMP_data$sel_existing == "Not Clearly Stated"
+
+
+# add if version was clearly specified
+QMP_data$version_clarity_org <- original_QMP_data$op_1_REV == FALSE | original_QMP_data$op_version == "" & original_QMP_data$sel_existing == "True, namely:"
+
+QMP_data$version_clarity_rep <- replication_QMP_data$op_1_REV == FALSE | replication_QMP_data$op_version == "" & replication_QMP_data$sel_existing == "True, namely:"
+
+
+# add if factor structure was analysed
+QMP_data$factor_analysis_org <- ifelse(original_QMP_data$sel_psychometric_evidence == "None", FALSE, ifelse(original_QMP_data$sel_psychometric_evidence != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)", TRUE, NA))
+
+QMP_data$factor_analysis_rep <- ifelse(replication_QMP_data$sel_psychometric_evidence == "None", FALSE, ifelse(replication_QMP_data$sel_psychometric_evidence != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)", TRUE, NA))
+
+# direct copies
+QMP_data$justified_definition_org <- original_QMP_data$def_1
+QMP_data$justified_definition_rep <- replication_QMP_data$def_1
+QMP_data$justified_selection_org <- original_QMP_data$sel_2
+QMP_data$justified_selection_rep <- replication_QMP_data$sel_2
+QMP_data$justified_operationalisation_org <- original_QMP_data$op_4
+QMP_data$justified_operationalisation_rep <- replication_QMP_data$op_4
+QMP_data$source_org <- original_QMP_data$sel_1_REV
+QMP_data$source_rep <- replication_QMP_data$sel_1_REV
+QMP_data$in_psychometric_org <- original_QMP_data$sel_3_REV
+QMP_data$in_psychometric_rep <- replication_QMP_data$sel_3_REV
+QMP_data$out_psychometric_org <- original_QMP_data$sel_4
+QMP_data$out_psychometric_rep <- replication_QMP_data$sel_4
+QMP_data$admin_format_org <- original_QMP_data$op_2_REV
+QMP_data$admin_format_rep <- replication_QMP_data$op_2_REV
+QMP_data$admin_procedure_org <- original_QMP_data$op_3
+QMP_data$admin_procedure_rep <- replication_QMP_data$op_3
+QMP_data$N_items_org <- original_QMP_data$quant_1_REV
+QMP_data$N_items_rep <- replication_QMP_data$quant_1_REV
+QMP_data$N_response_org <- original_QMP_data$quant_2_REV
+QMP_data$N_response_rep <- replication_QMP_data$quant_2_REV
+QMP_data$recoding_org <- original_QMP_data$quant_3_REV
+QMP_data$recoding_rep <- replication_QMP_data$quant_3_REV
+QMP_data$aggregation_org <- original_QMP_data$quant_4
+QMP_data$aggregation_rep <- replication_QMP_data$quant_4
+QMP_data$example_items_org <- original_QMP_data$op_5_REV
+QMP_data$example_items_rep <- replication_QMP_data$op_5_REV
+QMP_data$mod_admin_format_org <- original_QMP_data$mod_1_REV
+QMP_data$mod_admin_format_rep <- replication_QMP_data$mod_1_REV
+QMP_data$mod_admin_format_support_org <- original_QMP_data$mod_2_REV
+QMP_data$mod_admin_format_support_rep <- replication_QMP_data$mod_2_REV
+QMP_data$mod_language_org <- original_QMP_data$mod_3_REV
+QMP_data$mod_language_rep <- replication_QMP_data$mod_3_REV
+QMP_data$mod_language_support_org <- original_QMP_data$mod_4_REV
+QMP_data$mod_language_support_rep <- replication_QMP_data$mod_4_REV
+QMP_data$mod_N_items_or_response_org <- original_QMP_data$mod_5_REV
+QMP_data$mod_N_items_or_response_rep <- replication_QMP_data$mod_5_REV
+QMP_data$mod_N_items_or_response_support_org <- original_QMP_data$mod_6_REV
+QMP_data$mod_N_items_or_response_support_rep <- replication_QMP_data$mod_6_REV
+
+
+QMP_data <- QMP_data[,!(names(QMP_data) %in% "delete_this")]
+
+QMP_data$source_org <- original_QMP_data$sel_1_REV
+QMP_data$source_rep <- replication_QMP_data$sel_1_REV
+
+QMP_data$select_or_create_clarity_org <- original_QMP_data$sel_existing == "Not Clearly Stated"
+QMP_data$select_or_create_clarity_rep <- replication_QMP_data$sel_existing == "Not Clearly Stated"
+
+QMP_data$version_clarity_org <- original_QMP_data$op_1_REV == FALSE | original_QMP_data$op_version == "" & original_QMP_data$sel_existing == "True, namely"
+QMP_data$version_clarity_rep <- replication_QMP_data$op_1_REV == FALSE | replication_QMP_data$op_version == "" & replication_QMP_data$sel_existing == "True, namely"
+
+
+### QMP ratio data
+# create the empty QMP ratio dataset
+QMP_ratio_data <- data.frame(Practice = rep("", ncol(QMP_data)/2),
+                   QMP_percentage_original = rep(0, ncol(QMP_data)/2),
+                   N_applicable_original = rep(0, ncol(QMP_data)/2),
+                   QMP_percentage_replication = rep(0, ncol(QMP_data)/2),
+                   N_applicable_replication = rep(0, ncol(QMP_data)/2),
+                   Phi = rep(0, ncol(QMP_data)/2))
+
+
+# we loop through the length of the number of Measurement Practices (MPs) 
+# ignoring doubles due to having both original and replication
+for(i in 1:(ncol(QMP_data)/2)){
+  # we create the name of the variable by taking the name and removing the 
+  # _org suffix. Then we for each column except the NA initial column
+  # we take the original MP and the related replication MP, and calculate
+  # their QMP
+  QMP_ratio_data[i,] <- Create_QMP_descriptive_case(substr(names(QMP_data)[i*2], 1, nchar(names(QMP_data)[i*2]) - 4), QMP_data[[(i*2)-1]], QMP_data[[i*2]])
+  }
+
+# store QMP ratio data in the analysis data folder
+saving_to_analysis_data(QMP_ratio_data)
+```
+
+Recalculating Data
+We furthermore, used the replication datasets to calculate reliability for each measure with appropriate data for each lab the measure was used in. We calculated both Cronbach’s alpha, as well as its standard error using formulas 2 & 3 from Duhachek and Lacobucci (2004) to calculate the standard error in the meta-analysis. Then combining these two values we conducted a meta-analysis of the reliability, also commonly referred to as a Reliability Generalization (RG) Meta-Analysis (Botella & Suero, 2012; López-Ibáñez et al., 2024; Vacha-Haase, 1998). This enabled us to quantify the degree of true variation (or heterogeneity) in reliability coefficients across lab locations. We performed the RG meta-analysis using the rma function from the metafor R package (v4.4-0 ; Viechtbauer, 2010) and default settings. We implemented no correction for bias, because the Many Labs replications were not at risk of publication bias.
+
+Our analyses will focus on Cronbach’s Alpha, because Cronbach’s Alpha is used more commonly in research allowing us to make comparisons between calculated and reported reliabilities.  Furthermore, we were able to calculate the standard error of alpha to be used in the Reliability Generalization meta-analysis. However, we additionally estimated McDonald’s Omega, since it has been argued to be a more informative measure of reliability than alpha, while also simultaneously providing some validity evidence [@crutzen2017scale; @deng2017testing]. Omega was calculated using the omega function in the *psych* R package [*v`r getNamespaceVersion("psych")[[1]]`*; @R-psych]. Default arguments were used in the function except the nfactors argument, which was set to 1. 
+
+Finally, We probed the three assumptions of Cronbach’s alpha for our included nineteen measures. First, we tested for unidimensionality using the fit indices of a one-dimensional Confirmatory Factor Analysis (CFA), and the outcome from a parallel test. !!! explain parallel test !!! . Second, we compared the unidimensional model to a unidimensional model that was restricted to be Tau equivalent (equal loading of all items on the common factor), and used model comparison to test whether the restricted model fitted significantly worse or not. Third, for the unidimensional model, we tested the assumption of uncorrelated errors by freely estimated the five highest correlations between individual item pairs and then used a model comparison to test whether the model with freely estimated errors fitted significantly better or not. Besides testing the assumptions for Cronbach’s alpha, the results regarding unidimensionality combined with McDonald’s Omega also gives us some indication of the construct validity, since these measures were checked to all have been used to create a singular index. If a unidimensional model would thus lack fit according to our tests, it would put into question the use of these measures to estimate a singular variable of interest.
+
+```{r calculated_reliability_across_labs, include = FALSE, eval = FALSE}
+# creating an empty data frame to insert all the responses into
+calculated_reliability_lab_data <- data.frame(alpha = 0, omega.tot = 0, 
+                                          omega.hier = 0, ASE = 0, g = 0)
+
+# Combining the data together 1.3, & 5.4 were omitted, because data was not
+# recorded in usable numeric format
+extracted_score_data <- list(data_1.10_clean, data_1.11_clean, 
     data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.12.1_clean, 
     data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, 
     data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean,
     data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, 
-    data_5.7_clean, data_5.9.1_clean), coded_data_replications)
+    data_5.7_clean, data_5.9.1_clean)
+
+
+# obtaining the omega and alpha values for a measure in one lab.
+get_omega_and_alpha_values <- function(Data){
+  # first we calculate alpha and ase separately in case the omega function goes haywire
+  alpha <- psych::alpha(Data)$total[["std.alpha"]]
+  ase <- psych::alpha(Data)$total[["ase"]]
+  
+  # try to calculate the omega
+  result <- c(NA, NA)
+  tryCatch({
+      result <- omega(Data)
+    }, error = function(e) {
+      result <- c(NA, NA)
+    }, warning = function(w) {
+      result <- c(NA, NA)
+    })
+  
+  # combine the information in one vector
+  omega_and_alpha_vec <- as.numeric(c(alpha, result[c(4, 1)], ase))
+  
+  return(omega_and_alpha_vec)
+}
+
+
+# calculate the alpha, omega.tot, omega.hier, & ASE for all relevant datasets
+# for each lab.
+for (i in 1:length(extracted_score_data)){
+  calculated_reliability_instance <- tapply(extracted_score_data[[i]][-1], 
+                                            extracted_score_data[[i]]$g, 
+                                            get_omega_and_alpha_values)
+  
+  calculated_reliability_instance <- data.frame(matrix(unlist(
+    calculated_reliability_instance), ncol = 4, byrow = TRUE))
+  
+  # make sure the var names match the complete dataframe
+  colnames(calculated_reliability_instance) <- c("alpha", "omega.tot", 
+                                                 "omega.hier", "ASE")
+  # adding the measure as a group (g) indicator
+  calculated_reliability_instance$g <- i
+  
+  # adding this measure's data to the total
+  calculated_reliability_lab_data <- rbind(calculated_reliability_lab_data, 
+                                       calculated_reliability_instance)
+}
+
+
+# removing the empty first row
+calculated_reliability_lab_data <- calculated_reliability_lab_data[-1,]
+
+# making sure group (g) is a factor
+calculated_reliability_lab_data$g <- as.factor(calculated_reliability_lab_data$g)
+
+# indexing the meta-analysis results with a specific index relating to a 
+# row (measure) in coded_data_replications
+calculated_reliability_lab_data$coded_data_index <- c(rep(10, 36), rep(11, 36), 
+  rep(14, 36), rep(14, 36), rep(29, 74), rep(30, 74), rep(31, 74), rep(34, 61), 
+  rep(39, 60), rep(42, 58), rep(51, 21), rep(51, 21), rep(59, 20), rep(60, 21), 
+  rep(61, 21), rep(65, 4), rep(66, 4), rep(74, 8), rep(76, 5))
+
+# changing the group variable to reflect measure descriptions from the text.
+# checked using:
+# coded_data_replications[unique(calculated_reliability_data$reporting_index), 3], and
+# coded_data_replications[unique(calculated_reliability_data$reporting_index), 5]
+levels(calculated_reliability_lab_data$g) <- c("Caruso et al. (2012)", 
+    "Husnu & Crisp (2010)", "Nosek et al. (2002), Math", "Nosek et al. (2002), Art", 
+    "Anderson et al. (2012), SWL", "Anderson et al. (2012), PA", 
+    "Anderson et al. (2012), NA", "Giessner & Schubert, (2007)", 
+    "Norenzayan et al. (2002)", "Zhong & Lijenquist (2006)", 
+    "Monin & Miller (2001), most", "Monin & Miller (2001), some", 
+    "Cacioppo et al. (1983), arg",  "Cacioppo et al. (1983), nfc", 
+    "De Fruyt et al. (2000)", "Albarracín et al. (2008), exp 5 verb", 
+    "Albarracín et al. (2008), exp 5 math", "Shnabel & Nadler (2008)",
+    "Vohs & Schooler (2008)")
+  
+calculated_reliability_lab_data$g <- factor(calculated_reliability_lab_data$g, 
+    labels = c("Caruso et al. (2012)", 
+    "Husnu & Crisp (2010)", "Nosek et al. (2002), Math", 
+    "Nosek et al. (2002), Art", "Anderson et al. (2012), SWL", 
+    "Anderson et al. (2012), PA", "Anderson et al. (2012), NA", 
+    "Giessner & Schubert, (2007)", "Norenzayan et al. (2002)", 
+    "Zhong & Lijenquist (2006)", "Monin & Miller (2001), most", 
+    "Monin & Miller (2001), some", "Cacioppo et al. (1983), arg",  
+    "Cacioppo et al. (1983), nfc", "De Fruyt et al. (2000)", 
+    "Albarracín et al. (2008), exp 5 verb", 
+    "Albarracín et al. (2008), exp 5 math", "Shnabel & Nadler (2008)", 
+    "Vohs & Schooler (2008)"))
+
+# adding whether or not an effect replicated based on what was coded from the 
+# replication report.
+calculated_reliability_lab_data$replication_success <- c(coded_data_replications[
+    calculated_reliability_lab_data$coded_data_index, "hypothesis_support"])
 
 
 
-# the averaged across studies version with added information on reported alpha
-data_h23_avg <- Data_prep_H23_avg(data_h23, data_h456_original)
+# store per lab calculated reliability data in the analysis data folder
+saving_to_analysis_data(calculated_reliability_lab_data)
+```
+
+```{r averaged_reliability, include = FALSE, eval = FALSE}
+# function to assess the heterogeneity in the calculated Cronbach's Alpha values
+# and get Cronbach's Alpha prediction intervals
+assess_heterogeneity<- function(data_on_alpha){
+  # run a random effects meta-analysis
+  rma_model <- rma(yi = data_on_alpha$alpha, sei = data_on_alpha$ASE, 
+                   method = "REML", control = list(stepadj = 0.5, maxiter = 1000))
+  
+  # extract the relevant heterogeneity information
+  temp_tau <- sqrt(rma_model$tau2)
+  temp_QEp <- rma_model$QEp
+  
+  # get prediction intervals for alpha
+  rma_prediction <- predict(rma_model)
+  temp_pi.lb <- rma_prediction$pi.lb
+  temp_pi.ub <- rma_prediction$pi.ub
+  
+  return(c(temp_tau, temp_QEp, temp_pi.lb, temp_pi.ub))
+}
+
+# function to convert the lab specifc reliability to averaged
+convert_reliability_data_to_avg <- function(reliability_data){
+  # conducting the reliability-generalization meta-analysis for each measure
+  heterogeneity_results <- assess_heterogeneity(reliability_data[c(1, 4)])
+  
+  # getting the avearage reliability scores for each measure
+  avg_reliabilities <- colMeans(reliability_data[1:4], na.rm = TRUE)
+  
+  # indicates the measure
+  g <- reliability_data$g[[1]]
+  
+  # we need one of the indices per measure as they are all the same across labs
+  coded_data_index <- reliability_data$coded_data_index[[1]]
+  
+  # we need one of the indices per measure as they are all the same across labs
+  replication_success <- reliability_data$replication_success[[1]]
+  
+  # extracting the reported reliability coefficient 
+  coefficient_reported <- coded_data_original$reliability_coeff[coded_data_index]
+  
+  # calculating the difference between reported and calculated average 
+  # reliability coefficient
+  coeficient_difference <- coefficient_reported - avg_reliabilities[[1]]
+  
+  # testing whether or not (for those studies that had a reported alpha) if
+  # it was out of the 95% bounds around the mean calculated alpha
+  population_95_bounds <- quantile(reliability_data$alpha, probs = c(0.025, 0.975))
+  
+  significance_reported_coefficient <- coefficient_reported < population_95_bounds[1] | 
+                                          coefficient_reported > population_95_bounds[2]
+  
+  # return all the data as a single row in the dataframe
+  return(data.frame(alpha = avg_reliabilities[[1]], omega.tot = avg_reliabilities[[2]], 
+                    omega.hier = avg_reliabilities[[3]], ASE = avg_reliabilities[[4]], 
+                    tau = heterogeneity_results[[1]], QEp = heterogeneity_results[[2]],
+                    pi.lb = heterogeneity_results[[3]], pi.ub = heterogeneity_results[[4]], 
+                    g = g, coded_data_index = coded_data_index, 
+                    replication_success, reported_coefficient = coefficient_reported, 
+                    coefficient_difference = coeficient_difference, 
+                    significance_reported_coefficient = significance_reported_coefficient))
+}
+
+# calculate the average reliability data + heterogeneity test + reported and calculated
+# reliability coefficient comparison
+avg_reliability_list <- tapply(calculated_reliability_lab_data, calculated_reliability_lab_data$g, convert_reliability_data_to_avg)
+
+# convert data output to a dataframe
+measure_reliability_data <- do.call(rbind.data.frame, avg_reliability_list)
+
+
+# store per measure  reliability data in the analysis data folder
+saving_to_analysis_data(measure_reliability_data)
+```
+
+# Results
+## Reliability & Validity reporting
+Figure 1 depicts the flow of measures in relation to reliability reporting. First, it shows that almost half of the measures in both replication (N = 37) and original research (N = 35) were single-item measures. Only thirteen measures in original and four in replications were reported with a reliability indicator. Cronbach’s Alpha was the most commonly reported reliability indicator.
+
+```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it.", out.height = "60%"}
+knitr::include_graphics(path = "../../SupplementaryMaterials/reliability_reporting_flow_diagram.png")
+```
+
+Validity evidence was even less common than reliability evidence. Only, `r sum(coded_data_original$sel_psychometric_evidence_REV != "None" & coded_data_original$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_original$sel_3_REV == TRUE, na.rm = TRUE)` original studies and `r sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_replications$sel_3_REV == TRUE, na.rm = TRUE)` replications reported psychometric evidence on the . Most commonly exploratory factor analyses or convergent validity information were presented. Only `r sum(coded_data_original$sel_4 == TRUE, na.rm = TRUE)` original studies & `r sum(coded_data_replications$sel_4 == TRUE, na.rm = TRUE)` replications reported psychometric validity evidence from previous studies. 
+
+```{r code on the reporting of validity evidence}
+table(coded_data_original$sel_psychometric_evidence_REV)
+table(coded_data_replications$sel_psychometric_evidence_REV)
+
+sum(coded_data_original$sel_psychometric_evidence_REV != "None" & coded_data_original$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_original$sel_3_REV == TRUE, na.rm = TRUE)
+sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_replications$sel_3_REV == TRUE, na.rm = TRUE)
+
+table(coded_data_original$sel_psychometric_evidence_text_REV)
+table(coded_data_replications$sel_psychometric_evidence_text_REV)
+
+
+# internal
+table(coded_data_original$sel_3_REV)
+table(coded_data_replications$sel_3_REV)
+# external
+table(coded_data_original$sel_4)
+table(coded_data_replications$sel_4)
+
+sum(coded_data_original$sel_4 == TRUE, na.rm = TRUE)
+sum(coded_data_replications$sel_4 == TRUE, na.rm = TRUE)
 
 
 
-## graphs
-# plot accompanying the results for Hypotheses 4, 5, & 6.
-plot_456_data <- data_prep_plot_456(data_h456_original, data_h456_replications)
-# plot accompanying the results for Hypotheses 4, & 6
-plot_46_data <- data_prep_plot_46(data_h456_original[c("def_ratio", "op_ratio", "sel_ratio", "quant_ratio", "mod_ratio", "QMP_ratio")], data_h456_replications[c("def_ratio", "op_ratio", "sel_ratio", "quant_ratio", "mod_ratio", "QMP_ratio")])
-plot_46_data_rev <- data_prep_plot_46(data_h456_original[c("def_ratio", "op_REV_ratio", "sel_REV_ratio", "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio")], data_h456_replications[c("def_ratio", "op_REV_ratio", "sel_REV_ratio", "quant_REV_ratio", "mod_REV_ratio", "QMP_REV_ratio")])
+sum(coded_data_original$sel_existing == "True, namely:")
+sum(coded_data_replications$sel_existing == "True, namely:")
 
-# plot accompanying the results for Hypotheses 2, & 3
-plot_23_data_alpha <- data_prep_plot_23_alpha(data_h23)
-plot_23_data_omega <- data_prep_plot_23_omega(data_h23)
-
-
-
-### Exporting the final datasets for the analyses
-# the open data
-open_data(data = data_h456_original, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_h456_original))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_h456_original))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_h456_original))), ".yml")) 
-
-open_data(data = data_h456_replications, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_h456_replications))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_h456_replications))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_h456_replications))), ".yml")) 
-
-open_data(data = plot_456_data, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_456_data))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_456_data))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_456_data))), ".yml")) 
-
-open_data(data = plot_46_data, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(Plot_46_data))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(Plot_46_data))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(Plot_46_data))), ".yml")) 
-
-open_data(data = plot_46_data_rev, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_46_data_rev))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_46_data_rev))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_46_data_rev))), ".yml")) 
-
-open_data(data = data_h23, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_h23))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_h23))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_h23))), ".yml")) 
-
-open_data(data = data_h23_avg, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(data_h23_avg))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(data_h23_avg))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(data_h23_avg))), ".yml")) 
-
-open_data(data = plot_23_data_alpha, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_23_data_alpha))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_23_data_alpha))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_23_data_alpha))), ".yml")) 
-
-open_data(data = plot_23_data_omega, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(plot_23_data_omega))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(plot_23_data_omega))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(plot_23_data_omega))), ".yml")) 
+sum(coded_data_original$op_1_REV[coded_data_original$sel_existing == "True, namely:"] == TRUE, na.rm = TRUE)
+sum(coded_data_replications$op_1_REV[coded_data_replications$sel_existing == "True, namely:"] == TRUE , na.rm = TRUE)
 
 ```
 
-## Analyses
+It was clear that existing measures were used in `r sum(coded_data_original$sel_existing == "True, namely:")` original and `r sum(coded_data_replications$sel_existing == "True, namely:")` replication cases, with specific version reported in `r sum(coded_data_original$op_1_REV[coded_data_original$sel_existing == "True, namely:"] == TRUE, na.rm = TRUE)` original and `r sum(coded_data_replications$op_1_REV[coded_data_replications$sel_existing == "True, namely:"] == TRUE , na.rm = TRUE)` replication cases.
 
-Every hypothesis test in this study was a two-sided test with an alpha of .05. We applied no correction for multiple testing to ensure that the rate of false negatives remained low. Our hypotheses are about associations that have been proposed in the literature, but to the best of our knowledge have not yet been empirically tested on real data. In this exploratory context, we considered false negatives more detrimental than false positives.
 
-# Results
+???check if reporting of reliability/validity (ALL QMPS) more commonm for existing and sourced measures than new ones (relates to the idea of reporting bias I explore in the piece)???
 
-## Descriptives
 
-Table \@ref(tab:ReplicationNrTable) shows the number of replication sets, measures, and measures per study, as well as the proportion of successful replications, for each of the Many Labs separately and in total. Because each replication was nested within one of four Many Labs projects, our data had a multilevel structure. Furthermore, `r sum(data_h456_replications$appearance != 1)` replications used more than one primary measure, resulting in `r nrow(data_h456_replications)` measures in both `r sum(data_h456_replications$appearance == 1)` replications protocols and `r sum(coded_data_original$appearance == 1)` original articles[^2]. Of these `r nrow(data_h456_replications)` measures `r sum(data_h456_replications$mod_check == "True")` were modified from the original to the replication[^3]. In the replications, the data of responses on the measures was further nested in several labs per replication. The combined sample size of all labs in the replications was on average `r round(mean(data_h456_replications[data_h456_replications$appearance == 1]$N), 0)`, which was approximately `r round(mean(data_h456_replications[data_h456_replications$appearance == 1]$N) / mean(data_h456_original[data_h456_original$appearance == 1 & !is.na(data_h456_original$N),]$N), 0)` times larger than the average in original studies, which were conducted in single labs.
+## Questionable Measurement Practices
 
-[^2]: Initially the original articles contained 3 more measures than the replication protocols. This difference was due to the way that the moral foundations questionnaire was framed in the original article compared to in the replication protocol. In the original article it was framed as measuring five different moral foundations, while in the replication protocol the measure assessed the two overarching categories that were used to test the main effect in both the original and replication research. The measurement information reported was comparable across all five categories, and thus it was deemed that the measurement could be reduced to reflect two overarching categories facilitate easier comparison between measurement in original and replication.
+Besides Reliability and validity evidence it is also relevant to know what was measured to evaluate if it was measured well. What we found however was that for XXX original and XXX replication a clear variable assessed by the measurement was defined. The logic behind how that variable was operationalized was reported for XXX original and XXX replication. Finally, a reason was given for selecting an existing measure or creating a new measure in XXX original and XXX replication.
 
-[^3]: For 7 measures the number of items were modified from the original article to the replication. To check whether or not this had a confounding impact on our results, we re-ran the analyses testing the hypotheses excluding data from these studies (see [Supplementary Analyses E](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_item_reduced_measures_analyses.Rmd)). We found that removing these measures’ data had minimal impact on the overall results. Therefore, the results presented below are based on data from all the measures.
+Several items also indicated how the measurement was implemented: XXX the administration format was indicated, XXX the assessment environment described, XXX the steps to administer the measure were described. To recreate/understand the items of the measure we looked at if they reported: XXX the number of items were described, XXX the number of response options were described, XXX any example items were shown. Finally, to use the item scores for analyses you need to know the following: XXX any recoding was explained, XXX the calculation of an index (if used) was described.
 
-```{r ReplicationNrTable, warning = FALSE}
-# construct the replication ratio table to be printed
-replication_nr_table <- data.frame("Many Labs Version" = c("1", "2", "3", "5", "Total"),
-                                      "N Total" = c(table(data_h456_replications$many_labs_version), nrow(data_h456_replications)), 
-                                      "N Replicated" = c(table(data_h456_replications$many_labs_version, data_h456_replications$hypothesis_support)[, "Yes"], table(data_h456_replications$hypothesis_support)["Yes"]))
+The concept of consistency in assessing a phenomenon across original and replication is important but also complex and difficult to access because … . However, we do we have some information on when modifications were made to certain aspects of the measure between original and replication. For XXX replications any administration format change was indicated, and for XXX of those that choice was justified/validated. For XXX replications any assessment environment change was indicated, and for XXX of those that choice was justified/validated. For XXX replications any change in the number of items or the number of response options was indicated, and for XXX of those that choice was justified/validated … some practical examples of numbers of items being changed ???to showcase that happening and prep that for discussion as being a reasonable reason to say that the same phenomenon may not even be assessed at that point???.
+
+Table 2 below shows for both original and replication for all of the QMP items the ratio of QMPs and for how many of the 77 measures the QMP was applicable. Meanwhile, the Phi coefficient indicates the “correlation” between the MP being questionable or good in the original and the same for the replication. The average Phi was … .
+
+
+```{r qmp_table}
+# create informative Measurement Practice Labels
+MPractice <- c("Reliability is reported", "It is clear if the measure existed or is newly created", 
+  "Specifc version of the measure is specified", "Validity evidence from a factor analysis is presented",
+  "The measured variable is defined", "The choice of measure selection or creation is justified", 
+  "The implemented operationalisation is justified", "The source of the measure is provided", 
+  "Psychometric evidence from the study is given", "Psychometric evidence from an earlier study is given", 
+  "The administration format and environment are described", "The administration procedure is described",
+  "The number of items are described", "The number of response options are described", 
+  "The recoding of responses is described", "The creation of the index is described", 
+  "Example items are presented in text or supplement", "Any administration format changes are mentioned", 
+  "Administration format changes are justified/validated", "Any translations are mentioned", 
+  "Translated measures are justified/validated", "Any changes in number of items or response options are mentioned", 
+  "Changes in number of items or response options are justified/validated")
+
+
+# construct the QMP table to be printed
+QMP_table <- data.frame("Practice" = MPractice,
+                        "QMP original" = paste0(qmp_ratio_data$QMP_percentage_original, 
+                                                " (", qmp_ratio_data$N_applicable_original, ")"),
+                        "QMP Replication" = paste0(qmp_ratio_data$QMP_percentage_replication, 
+                                                " (", qmp_ratio_data$N_applicable_replication, ")"),
+                        "Phi" = qmp_ratio_data$Phi)
 
 
 # Changing column names to be less computer speak-y looking
-colnames(replication_nr_table) <- c("Many Labs Version", "Nr. Measures", 
-                                    "Nr. Replicated")
+colnames(QMP_table) <- c("Practice", "QMP org", "QMP rep", "Phi")
 
-# adding replication ratio's to the Nr. Replicated column
-replication_ratio <- apa_num(replication_nr_table$"Nr. Replicated" / replication_nr_table$"Nr. Measures", gt1 = FALSE)
-
-replication_nr_table$"Nr. Replicated"[c(1, 2, 4, 5)] <- paste(replication_nr_table$"Nr. Replicated"[c(1, 2, 4, 5)], paste0("(", replication_ratio[c(1, 2, 4, 5)], ")"))
-
-# adding a superscript for a later footnote
-replication_nr_table$"Nr. Replicated"[3] <- paste(paste0(replication_nr_table$"Nr. Replicated"[3], "$^a$"), paste0("(", replication_ratio[3], ")"))
 
 # print the table in apa formatting
 apa_table(
-  replication_nr_table, align = c("l", "r", "r")
-  , caption = "Ratio of measures for which the effect was considered replicated, across many labs projects"
-  , note = "Nr. measures refer to the total number of primary measures extracted, while Nr. replicated displays the number of measures for which the associated effect was replicated successfully. The value between brackets represents the ratio of replications. $^a$replication was assessed as unclear for three other measures, since their effect was only partially replicated. These have been treated as not replicated within this table and in further analyses throughout the article. "
-  , escape = FALSE, placement = "htp", midrules = 4)
+  QMP_table, align = c("l", "r", "r", "r")
+  , caption = "Ratio of QMPs and number of applicable measures, for original and replication"
+  , note = "The first number in QMP org and QMP rep is the ratio of measures for which the practice in that row was not conducted well by our standards. The number between brackets indicates the number of measures for which the practice was applicable."
+  , escape = FALSE, placement = "htp")
 
 ```
 
-Because of this multilevel structure we preregistered multilevel random-intercept and random-slope models alongside our single-level regression models for testing Hypothesis 3, 5, and 6. However, because group sizes turned out to be too small to support random slope models, we omitted the results from these analyses from the main article and instead report them in [Supplementary Analyses B](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_multilevel_analyses.Rmd) for the sake of completeness and transparency.
 
 ## Measurement Reliability
+The average calculated Cronbach’s alpha coefficient across replication sets was 0.787 with a standard deviation 0.167. Figure 2 displays the distributions of the calculated Cronbach’s Alpha scores from each lab for each measure, separated by successful and unsuccessful replication, based on the meta-analytic p-value (alpha , .05) retrieved from the Many Labs reports.
 
-If data from a multiple-item scale could be accessed, we calculated the Cronbach’s Alpha of that scale from that data for each lab that administered the scale. Subsequently, we included the multiple estimates of Cronbach’s Alpha for those measures into an unregistered meta-analysis of the reliability, also commonly referred to as a Reliability Generalization (RG) Meta-Analysis [@vacha-haase1998ReliabilityGeneralizationExploring; @botella2012ManagingHeterogeneityVariance; @lopez-ibanez2024ReliabilityGeneralizationMetaanalysis]. This enabled us to quantify the degree of true variation (or heterogeneity) in reliability coefficients across lab locations.
+```{r alpha_distributions_data_prep}
+### PREPARE CODE FOR THE ALPHA DISTRIBUTIONS FIGURE 
+calculated_alpha_plot_data <- calculated_reliability_lab_data
 
-For Cronbach’s alpha, we used formulas 2 & 3 from Duhachek and Lacobucci (2004) to calculate the standard error in the meta-analysis. Heterogeneity was estimated using the tau value, which indicates the standard deviation of the distribution of true Cronbach’s alpha coefficients for a measure, and tested using the Cochran’s Q test for each measure. We performed the RG meta-analysis using the *rma* function from the *metafor* R package [*v`r getNamespaceVersion("metafor")[[1]]`*\; @R-metafor] and default settings. We implemented no correction for bias, because the Many Labs replications were not at risk of publication bias.
+# calculating the average alpha per group
+calculated_alpha_plot_data$avg.alpha <- ave(calculated_reliability_lab_data$alpha, 
+                                            calculated_reliability_lab_data$g)
 
-The average calculated Cronbach’s alpha coefficient across replication sets was `r apa_num(mean(data_h23$alpha), digits = 3)` with a standard deviation `r apa_num(sd(data_h23$alpha, na.rm = TRUE), digits = 3)`. Figure \@ref(fig:Plot23AlphaCode) displays the distributions of the calculated Cronbach’s Alpha scores from each lab for each measure, separated by successful and unsuccessful replication.
+# making replication success a Boolean which can affect order
+calculated_alpha_plot_data$replication_success <- ifelse(
+  calculated_alpha_plot_data$replication_success == "Yes", TRUE, FALSE)
 
-```{r ReorderPlot23Data, warning = FALSE}
-# data re-ordering (factor order was not saved in export)
-plot_23_data_alpha_reordered <- plot_23_data_alpha
-plot_23_data_alpha_reordered$g <- fct_inorder(as.factor(plot_23_data_alpha$g), ordered = NA)
+# reordering the plot from least to most reliable split by replication success
+calculated_alpha_plot_data <- calculated_alpha_plot_data[order(-calculated_alpha_plot_data$replication_success, -calculated_alpha_plot_data$avg.alpha),]
 
-data_h23_avg$graph_index <- NA
-# adding an index to which row in the plot data the row in data_h23_avg belongs to
-for (i in 1:nrow(data_h23_avg)){
-  data_h23_avg$graph_index[which(unique(plot_23_data_alpha_reordered$g)[i] == data_h23_avg$g)] <- i
+# Making sure there are no calculated alpha's that fell below 0 in the plot.
+calculated_alpha_plot_data <- calculated_alpha_plot_data[calculated_alpha_plot_data$alpha > 0,]
+
+# reordering 
+calculated_alpha_plot_data$g <- fct_inorder(as.factor(calculated_alpha_plot_data$g), ordered = NA)
+
+
+# adding an index to which row in the plot data the row in measure_reliability_data belongs to
+measure_reliability_data$graph_index <- NA
+
+for (i in 1:nrow(measure_reliability_data)){
+  measure_reliability_data$graph_index[which(unique(calculated_alpha_plot_data$g)[i] == measure_reliability_data$g)] <- i
 }
+
 ```
 
-```{r Plot23AlphaCode, warning = FALSE,  fig.cap = "Distributions of calculated Cronbach’s alpha coefficients (> 0) calculated for the responses on a measure at each lab location, across the eighteen measures for which raw data was available from which Cronbach’s alpha coefficients could be calculated. The green lines indicate the meta-analytic prediction interval lower and upper bound. The blue triangles indicate the reported alpha coefficient for that measure from the original article, when reported. The Tau column besides the figure shows the tau heterogeneity estimate based on a meta-analysis of the calculated reliabilities for each measure. Meta-analyses for which the Q-test for heterogeneity was signicant at alpha < .05 are in black, while non-significant results are in grey. The Diff column shows the difference between reported reliability and the average reliability calculated from the Many Labs data for the applicable measures, the reported reliabilities that fell outside the 95% quantile of calculated reliability scores are shown in bold."}
 
-# plot for alpha
-ggplot(plot_23_data_alpha_reordered, aes(x = alpha, y = g)) +
+```{r plot_alpha_distributions, warning = FALSE,  fig.cap = "Distributions of calculated Cronbach’s alpha coefficients (> 0) calculated for the responses on a measure at each lab location, across the nineteen measures for which raw data was available from which Cronbach’s alpha coefficients could be calculated. The green lines indicate the meta-analytic prediction interval lower and upper bound. The blue triangles indicate the reported alpha coefficient for that measure from the original article, when reported. The Tau column besides the figure shows the tau heterogeneity estimate based on a meta-analysis of the calculated reliabilities for each measure. Meta-analyses for which the Q-test for heterogeneity was significant at alpha < .05 are in black, while non-significant results are in grey. The Diff column shows the difference between reported reliability and the average reliability calculated from the Many Labs data for the applicable measures, the reported reliabilities that fell outside the 95% quantile of calculated reliability scores are shown in black, otherwise in grey."}
+measure_reliability_data[!is.na(measure_reliability_data$coefficient_difference),]$graph_index
+
+
+# plot for distribution of alpha
+ggplot(calculated_alpha_plot_data, aes(x = alpha, y = g)) +
   geom_boxplot(outlier.shape = NA) +
   geom_hline(yintercept = 6.5, color = "red", size = 1) +
   geom_point(alpha = 0.1) +
   
   # adding in the tau values
-  geom_text(label = format(plot_23_data_alpha_reordered$tau, digits = 1), x = 1.15, size = 2.8, alpha = ifelse(plot_23_data_alpha_reordered$QEp < .05, 1, 0)) +
-  geom_text(label = format(plot_23_data_alpha_reordered$tau, digits = 1), x = 1.15, size = 2.8, alpha = ifelse(plot_23_data_alpha_reordered$QEp >= .05, 1, 0), colour = "grey") +
+  geom_text(data = measure_reliability_data, label = format(measure_reliability_data$tau, digits = 1), x = 1.15, y = measure_reliability_data$graph_index, color = ifelse(measure_reliability_data$QEp < .05, "black", "grey"), size = 2.8) +
   
-  # adding in the alpha annotations
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[1], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[1], "bold", "plain"))), ymin = data_h23_avg$graph_index[1], ymax = data_h23_avg$graph_index[1], xmin = 1.24, xmax = 1.24) +
+  # adding in the difference in alpha coefficients
+  geom_text(data = measure_reliability_data[c(1:8, 18),], label = format(measure_reliability_data$coefficient_difference[c(1:8, 18)], digits = 2), x = 1.28, y = measure_reliability_data[!is.na(measure_reliability_data$coefficient_difference),]$graph_index, color = ifelse(measure_reliability_data$significance_reported_coefficient[c(1:8, 18)], "black", "grey"), size = 2.8) +
   
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[2], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[2], "bold", "plain"))), ymin = data_h23_avg$graph_index[2], ymax = data_h23_avg$graph_index[2], xmin = 1.24, xmax = 1.24) +
-  
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[3], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[3], "bold", "plain"))), ymin = data_h23_avg$graph_index[3], ymax = data_h23_avg$graph_index[3], xmin = 1.24, xmax = 1.24) +
-  
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[4], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[4], "bold", "plain"))), ymin = data_h23_avg$graph_index[4], ymax = data_h23_avg$graph_index[4], xmin = 1.24, xmax = 1.24) +
-  
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[5], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[5], "bold", "plain"))), ymin = data_h23_avg$graph_index[5], ymax = data_h23_avg$graph_index[5], xmin = 1.24, xmax = 1.24) +
-  
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[6], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[6], "bold", "plain"))), ymin = data_h23_avg$graph_index[6], ymax = data_h23_avg$graph_index[6], xmin = 1.24, xmax = 1.24) +
-  
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[7], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[7], "bold", "plain"))), ymin = data_h23_avg$graph_index[7], ymax = data_h23_avg$graph_index[7], xmin = 1.24, xmax = 1.24) +
-  
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[8], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[8], "bold", "plain"))), ymin = data_h23_avg$graph_index[8], ymax = data_h23_avg$graph_index[8], xmin = 1.24, xmax = 1.24) +
-  
-  annotation_custom(grob = textGrob(label = format(round(data_h23_avg$coeficient_difference[18], 2), nsmall = 2), hjust = 0, gp = gpar(fontsize = 8, fontface = ifelse(data_h23_avg$significance_reported_coefficient[18], "bold", "plain"))), ymin = data_h23_avg$graph_index[18], ymax = data_h23_avg$graph_index[18], xmin = 1.24, xmax = 1.24) +
-  
+  # setting the theme
   theme_minimal() +
   theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), "lines")) +
   
   # adding the necessary indicative texts
   annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 7.25, ymax = 7.25, xmin = 0.01, xmax = 0.01) +
   annotation_custom(grob = textGrob(label = "Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 6, ymax = 6, xmin = 0.01, xmax = 0.01) +
-  annotation_custom(grob = textGrob(label = "Tau", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 1.08, xmax = 1.08) +
+  annotation_custom(grob = textGrob(label = "Tau", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 1.1, xmax = 1.1) +
   annotation_custom(grob = textGrob(label = "Diff", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 1.24, xmax = 1.24) +
   
   coord_cartesian(xlim = c(0, 1), clip = "off") +
   
+  
   # adding the blue triangles for reported reliability and green prediction intervals
-  geom_point(data = data_h23_avg, mapping = aes(x = coefficient_reported, y = graph_index), color = "blue", shape = 17, size = 3) +
-  geom_point(mapping = aes(x = pi.lb), color = "green", shape = 124, size = 2.5) + 
-  geom_point(mapping = aes(x = pi.ub), color = "green", shape = 124, size = 2.5) + 
+  geom_point(data = measure_reliability_data, mapping = aes(x = reported_coefficient, y = graph_index), color = "blue", shape = 17, size = 3) +
+  # we remove 14 & 15 lower bound because they are below 0
+  geom_point(data = measure_reliability_data[-c(14, 15),], mapping = aes(x = pi.lb, y = graph_index), color = "green", shape = 124, size = 2.5) + 
+  geom_point(data = measure_reliability_data, mapping = aes(x = pi.ub, y = graph_index), color = "green", shape = 124, size = 2.5) + 
   
   ylab("") +
   xlab("Cronbach's alpha") 
 
 
+
 ```
 
-The distribution of reliabilities varied across measures. Most of the measures near the bottom showed average reliability scores of at least .80, corresponding to adequate reliability for general research purposes [@nunnally1994assessment], with minimal variation between labs. However, other measures showed not only considerably lower average reliability scores, but also greater variation. Finally, the blue triangles indicate Cronbach’s Alpha reported in the original articles. The reliabilities were generally only reported in original studies for those measures with a large average calculated reliability in the replications.
+We found some indication of heterogeneity for fourteen of the nineteen measures. We observe that for most measures the reported reliabilities were generally lower than the reliabilities calculated for the replication labs. We also observed that original reliabilities were more commonly reported for those measures that had higher average reliabilities among the replications (>.80) compared to on average less reliable measures. 
 
-### Hypothesis 1: Reliability Reporting in Original and Replication Research
+However,  to be able to interpret Cronbach’s alpha, the underlying assumptions have to be met: undimensionality, uncorrelated item errors, and Tau equivalence. Our CFA results show (summarized in Table 3 below) that … .
 
-```{r ReportedReliabiltiesRetrieval}
-N_reported_reliabilities_original <- sum(data_h456_original$reliability_type != "Not Reported" & data_h456_original$reliability_type != "")
+```{r validity_and_alpha_assumption_tests, include = FALSE, eval = FALSE}
+# function that runs all our checks for Cronbach's alpha. Also functions as some basic validity checks
+validity_and_alpha_assumption_tests <- function(data){
+  ### Tests for Unidimensionality
+  # Test 1a: obtaining single factor model cfa RMSEA value for evaluation
+  RMSEA_values <- c(NA, NA)
+  tryCatch({
+    # creating the base function for the model (it is unidimensional)
+    model_free <- "Factor =~ " 
 
-N_reported_reliabilities_replications <- apa_num(sum(data_h456_replications$reliability_type != "Not Reported" & data_h456_replications$reliability_type != ""), numerals = FALSE)
+    for (item_name in names(data)[-1]){
+      # adding all of the items from the scale to the model formula
+      model_free <- paste0(model_free, item_name, " + ")
+    }
+      
+    # trimming the excess " + "
+    model_free <- substring(model_free, 1, nchar(model_free) - 3)
 
-N_reported_reliabilities_replications_number_style <- apa_num(sum(data_h456_replications$reliability_type != "Not Reported" & data_h456_replications$reliability_type != ""))
-```
+    # fitting the free coefficient estimated single dimensional model
+    fit.modelfree <- cfa(model_free, 
+                              data = data, 
+                              std.lv = TRUE, 
+                              estimator = "MLM")
 
-Because we counted only `r N_reported_reliabilities_original` reported reliabilities in original articles and `r N_reported_reliabilities_replications` reliabilities reported in replications, we decided against using our pre-registered Mann-Whitney U test to test the difference in the reported value of Cronbach’s Alpha between original articles and replications. Instead, we displayed the difference between the reported reliability in the original article and the calculated average reliability in replications in the Diff column in Figure \@ref(fig:Plot23AlphaCode). Contrary to Hypothesis 1, this column shows that the reported reliability in original articles was generally lower than the average reliability in the replication sample. Still, more than half of the reported reliabilities in original studies fell within the 95-percentile range around the replication average.
-
-### Hypothesis 2: Within Study Variation in Reliability
-
-To get an indication of the true variability in the reliability scores, we used the RG meta-analyses to test for heterogeneity in the reliabilities across replication labs. Even though, we preregistered the ICC of reliability in a multilevel model as an indicator of within study variation in reliability relative to between study variation, we opted for the heterogeneity test to obtain a more informative absolute estimate of the within study variation in true reliability score to test Hypothesis 2. (results from the preregistered analysis are shown in [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_pre-reg_analyses.Rmd)).
-
-Figure \@ref(fig:Plot23AlphaCode) displays the estimates of tau, which indicates the differences in true reliability scores between labs for a given measure. For `r sum(data_h23_avg$QEp > .05)` measures, the tau estimate was not significantly different from 0, meaning the true variation in reliability across labs was not significant. However, for the other `r apa_num(sum(data_h23_avg$QEp <= .05), numerals = FALSE)` measures the true reliability was quite variable. For instance, the estimate of the standard deviation of the true reliability of the top measure in the graph (a measure of conscientiousness from @gosling2003very used in the replication of @defruyt2000cloninger) equaled `r apa_num(data_h23_avg$tau[data_h23_avg$g == "De Fruyt et al. (2000)"], digits = 3, gt1 = FALSE)` points of Cronbach’s Alpha.
-
-Thus, for around a quarter of the measures, the reliability was heterogeneous across labs. Although for the remaining measures, we found no significant heterogeneity in reliabilities, we note that the power to detect small heterogeneity is often low [@ioannidis2007uncertainty; @olsson2020heterogeneity].
-
-### Hypothesis 3: Reliability and Replicability
-
-```{r Hypothesis3MainTest, include = FALSE}
-## The main model to test hypothesis 3, through a logistic regression model.
-H3_test_main_alpha <- glm(formula = replication_success ~ 1 + alpha, 
-                                 family = binomial(), data = data_h23_avg)
-
-H3_test_result_main_alpha <- apa_print(H3_test_main_alpha)
-
-# coefficient is positive but not significant.
-
-# adding OR to the result
-H3_main_full_results_alpha_with_OR <- OR_to_apa_full_supplier(H3_test_result_main_alpha$full_result$alpha, negative_b = FALSE)
+    rmsea <- fitMeasures(fit.modelfree)["rmsea"] 
+    rmsea.ci.upper <- fitMeasures(fit.modelfree)["rmsea.ci.upper"]
+    rmsea.se <- (rmsea.ci.upper - rmsea) / 1.645
+    RMSEA_values <- c(rmsea, rmsea.se)
+    
+  }, error = function(e) {
+    RMSEA_values <- c(NA, NA)
+  })
   
-# well this OR is quite a ridiculous number..., but then again a step from 0 alpha to 1 is quite a jump too...
+  
+  # Test 1b: conducting parallel test to check if one factor solution is best.
+  parallel_N_factors <- NA
+  tryCatch({
+      parallel_N_factors <- suppressWarnings(fa.parallel(data[-1], fa = "fa", plot = FALSE))$nfact
 
-### rerunning the analyses but now with a standardized alpha value
-# transforming the alpha variable 
-scaled_alpha <- scale(data_h23_avg$alpha)
-scaled_alpha
+    }, error = function(e) {
+      parallel_N_factors <- NA
+  })
+  
+  # adding a single factor check indicator value
+  if(is.null(RMSEA_values[[1]]) | is.null(parallel_N_factors)){
+    single_factor <- NA
+  } else{
+    single_factor <- ifelse(RMSEA_values[[1]] < 0.08 | parallel_N_factors == 1, "Yes", "No")
+  }
+  
+  
+  ### Test 2: Test for Tau equivalence
+  Tau_results <- c(NA, NA, NA)
+  tryCatch({
+    # creating the base function for the fixed model (it is unidimensional)
+    model_tau_restrict <- "Factor =~ " 
+  
+    for (item_name in names(data)[-1]){
+      # adding all of the items from the scale to the model formula
+      # estimated with the same coefficient a to emulate a Tau equivalent model
+      model_tau_restrict <- paste0(model_tau_restrict, "a*", item_name, " + ")
+    }
+    
+    # trimming the excess " + "
+    model_tau_restrict <- substring(model_tau_restrict, 1, nchar(model_tau_restrict) - 3)
+    
+    # fitting the tau restricted model
+    fit.modeltaurestrict <- cfa(model_tau_restrict, 
+                                     data = data, 
+                                     std.lv = TRUE, 
+                                     estimator = "MLM")
+    
+    #summary(fit.modelfree, fit.measures = TRUE)
+    #summary(fit.modeltaurestrict, fit.measures = TRUE)
+    
+    # conducting the fit test between the free coefficient model and the tau
+    # restricted model
+    fit.test <- anova(fit.modelfree, fit.modeltaurestrict)
+    
+    # extract the relevant results
+    Tau_results <- fit.test[2, c("Chisq diff", "Df diff", "Pr(>Chisq)")]
+    }, error = function(e) {
+      Tau_results <- c(NA, NA, NA)
+  })
+  
+  ### Test 3: Assessment of uncorrelated errors
+  error_cor_results <- rep(NA, 4)
+  
+  
+  tryCatch({
+    # copying the tau restricted model as the baseline.
+    model_freed_errors <- model_tau_restrict
+    fit.modelfreed <- fit.modeltaurestrict
+    
+    # create empty vector to put data into
+    spec.all.vec <- rep(NA, 5)
+    
+    # looping through five instances of freeing the highest mod index error 
+    # covariance parameter estimation. We loop 5 times rather than adding the top 5
+    # highest mod index, because when one parameter is freed it will affect the extent 
+    # to which other error covariances impact the fit since (part of) their additional 
+    # explained variance may have already been captured in the parameter just freed.
+    for (i in 1:5) {
+      modindex_highest <- suppressWarnings(modindices(fit.modelfreed, sort = TRUE))[1,]
+      
+      # store the fully standardized estimated coefficient change for the highest
+      # mod index freed parameter
+      spec.all.vec[i] <- modindex_highest[[7]]
+      
+      # add the freeing of the parameter into the model code
+      model_freed_errors <- paste(model_freed_errors, "\n", modindex_highest[[1]], modindex_highest[[2]], modindex_highest[[3]])
+      
+      # rerun the model
+      fit.modelfreed  <- cfa(model_freed_errors, 
+                             data = data, 
+                             std.lv = TRUE, 
+                             estimator = "MLM")
+    }
+  
+    # perform a model comparison between the model with the top 5 error covariances
+    # freely estimated and the model with Tau equivalence.
+    fit.test2 <- anova(fit.modeltaurestrict, fit.modelfreed)
+    
+    error_cor_test_results <- fit.test2[2, c("Chisq diff", "Df diff", "Pr(>Chisq)")]
+    
+    # calculate the mean of the fully standardized estimated coefficient change for
+    # all the highest mod index freed parameters
+    spec.all.mean <- mean(spec.all.vec)
+    
+    # store all error related results
+    error_cor_results <- unlist(c(spec.all.mean, error_cor_test_results))  
+    
+    }, error = function(e) {
+      error_cor_results <- NA
+  })
+  
+  
+  ### storing all of the data
+  FA_data <- c(RMSEA_values, parallel_N_factors, single_factor, 
+               Tau_results, error_cor_results)
+  
+  # returning the FA data
+  return(FA_data)
+}
 
-# rerunning the model with the transformed alpha variable Nr.2
-H3_test_interpretable_alpha <- glm(formula = data_h23_avg$replication_success ~ 1 + scaled_alpha, family = binomial())
 
-H3_test_result_interpretable_alpha <- apa_print(H3_test_interpretable_alpha)
 
-H3_interpretable_full_results_alpha_with_OR <- OR_to_apa_full_supplier(H3_test_result_interpretable_alpha$full_result$scaled_alpha, negative_b = FALSE, not_significant = TRUE) # with this method the result is contained to more sensible numbers. However, we opt to report the unstandardized numbers without Odds-ratio, to more transparently reflect the instability in our estimate due to alpha's boundedness, the small sample, and limited observed variation in alpha.
+extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, data_5.9.1_clean)
+
+
+# list to store the data in
+FA_list <- list(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 
+                NA, NA, NA, NA, NA, NA, NA, NA, NA)
+
+# running the validity/alpha assumption checks for all of the extracted datasets
+for (i in 1:length(extracted_data_list)){
+  # applying the function across each individual lab
+  FA_data <- tapply(extracted_data_list[[i]], extracted_data_list[[i]]$g,
+                    validity_and_alpha_assumption_tests)
+
+  # transforming the returned list to a dataframe
+  FA_data_frame <- do.call(rbind.data.frame, FA_data)
+  
+  # Setting the column names
+  names(FA_data_frame) <- c("RMSEA", "RMSEA_se", "N_factors", "unidimensional", "Tau_chisq_diff", 
+                            "Tau_Df_diff", "Tau_p_diff", "mean_spec", "err_chisq_diff", 
+                            "err_Df_diff", "err_p_diff")
+  
+  # append results to the overarching FA results list
+  FA_list[[i]] <- FA_data_frame
+}
+
+
+
+
+# store all dataframes with the list of the assumption test data in 
+# the analysis data folder
+fa_Caruso_2012 <- FA_list[[1]]
+saving_to_analysis_data(fa_Caruso_2012)
+fa_Husnu_2010 <- FA_list[[2]]
+saving_to_analysis_data(fa_Husnu_2010)
+fa_Nosek_2002_Math <- FA_list[[3]]
+saving_to_analysis_data(fa_Nosek_2002_Math)
+fa_Nosek_2002_Art <- FA_list[[4]]
+saving_to_analysis_data(fa_Nosek_2002_Art)
+fa_Anderson_2012_SWL <- FA_list[[5]]
+saving_to_analysis_data(fa_Anderson_2012_SWL)
+fa_Anderson_2012_PA <- FA_list[[6]]
+saving_to_analysis_data(fa_Anderson_2012_PA)
+fa_Anderson_2012_NA <- FA_list[[7]]
+saving_to_analysis_data(fa_Anderson_2012_NA)
+fa_Giessner_2007 <- FA_list[[8]]
+saving_to_analysis_data(fa_Giessner_2007)
+fa_Norenzayan_2002 <- FA_list[[9]]
+saving_to_analysis_data(fa_Norenzayan_2002)
+fa_Zhong_2006 <- FA_list[[10]]
+saving_to_analysis_data(fa_Zhong_2006)
+fa_Monin_2001_most <- FA_list[[11]]
+saving_to_analysis_data(fa_Monin_2001_most)
+fa_Monin_2001_some <- FA_list[[12]]
+saving_to_analysis_data(fa_Monin_2001_some)
+fa_Cacioppo_1983_arg <- FA_list[[13]]
+saving_to_analysis_data(fa_Cacioppo_1983_arg)
+fa_Cacioppo_1983_nfc <- FA_list[[14]]
+saving_to_analysis_data(fa_Cacioppo_1983_nfc)
+fa_De_Fruyt_2000 <- FA_list[[15]]
+saving_to_analysis_data(fa_De_Fruyt_2000)
+fa_Albarracin_2008_verb <- FA_list[[16]]
+saving_to_analysis_data(fa_Albarracin_2008_verb)
+fa_Albarracin_2008_math <- FA_list[[17]]
+saving_to_analysis_data(fa_Albarracin_2008_math)
+fa_Shnabel_2008 <- FA_list[[18]]
+saving_to_analysis_data(fa_Shnabel_2008)
+fa_Vohs_2008 <- FA_list[[19]]
+saving_to_analysis_data(fa_Vohs_2008)
+
+rm(extracted_data_list)
+
+
+
 ```
 
-We used a logistic regression model to test whether replication success as reflected in a significant mean effect in the meta-analysis conducted across the replicating labs could be predicted by the average calculated reliabilities of the measures. Cronbach’s alpha did not significantly predict replication success in the main logistic regression model (`r H3_test_result_main_alpha$full_result$alpha`)[^4]. Results based on the Omega coefficient lead to a similar conclusion (see [Supplementary Analyses C](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_omega_analyses.Rmd)).
+```{r internal_structure_information}
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
 
-[^4]: The log-odds ratio’s CIs are reported instead of the odds-ratios CIs for this result, as the latter were extremely wide due to Cronbach alpha’s boundedness and the small number of calculated reliabilities.
-
-```{r Hypothesis3WhiteAdjustedSensitivityAnalysis, warning = FALSE}
-# We take the H3_test_main_alpha result from the main analysis on the aggregate
-# level as reported in the main text, and then calculate the White heteroskedastic 
-# variance/covariance matrix for the coefficients
-White_varcov_matrix <- vcovHC(H3_test_main_alpha, type = "HC1") # HC1 applies White's correction
-
-# now we apply this covariance matrix to get robust standard errors on our estimation
-H3_test_alpha_White_adjusted <- coeftest(H3_test_main_alpha, White_varcov_matrix)
-
-H3_coefficient_alpha_White_adjusted <- H3_test_alpha_White_adjusted[2,1]
-
-## we then convert it to apa_num format
-# first we calculate the log-odds ratio CIs
-log_OR_CI_LOW <- H3_coefficient_alpha_White_adjusted - (1.96 * H3_test_alpha_White_adjusted[2,2])
-log_OR_CI_HI <- H3_coefficient_alpha_White_adjusted + (1.96 * H3_test_alpha_White_adjusted[2,2])
-
-# then we create the string to print in text
-H3_test_result_alpha_White_adjusted <- paste0("$\\hat{\\beta} = ", round(H3_test_alpha_White_adjusted[2,1], 2), "$, 95\\% CI $[", round(log_OR_CI_LOW, 1), ", ", round(log_OR_CI_HI, 1), "]$, $z = ", round(H3_test_alpha_White_adjusted[2,3], 2), "$, $p = ", apa_p(H3_test_alpha_White_adjusted[2,4]), "$") 
+FA_aggregate_data <- data.frame(RMSEA = rep(NA, 19), 
+                                RMSEA_se = rep(NA, 19), 
+                                RMSEA_global_mean = rep(NA, 19), 
+                                RMSEA_mean_sd = rep(NA, 19), 
+                                N_factors_mode = rep(NA, 19),
+                                unidimensional_ratio = rep(NA, 19),
+                                Tau_N_P_10 = rep(NA, 19),
+                                Tau_N_P_05 = rep(NA, 19),
+                                Tau_N_P_01 = rep(NA, 19),
+                                global_mean_spec = rep(NA, 19),
+                                global_sd_spec = rep(NA, 19),
+                                err_N_P_10 = rep(NA, 19),
+                                err_N_P_05 = rep(NA, 19),
+                                err_N_P_01 = rep(NA, 19))
 
 
-### This version contains the Odds-ratio
-# first we calculate the odds-ratio
-OR_coefficient_alpha_White_adjusted <- round(exp(H3_coefficient_alpha_White_adjusted), 1) 
 
-# and then convert them to odds ratio CIs
-OR_CI_LOW <- round(exp(log_OR_CI_LOW), 1)
-OR_CI_HI <- round(exp(log_OR_CI_HI), 1)
+### recreate FA_list
+FA_list <- list(fa_caruso_2012, fa_husnu_2010, fa_nosek_2002_math, fa_nosek_2002_art,
+                fa_anderson_2012_swl, fa_anderson_2012_pa, fa_anderson_2012_na,
+                fa_giessner_2007, fa_norenzayan_2002, fa_zhong_2006, fa_monin_2001_most,
+                fa_monin_2001_some, fa_cacioppo_1983_arg, fa_cacioppo_1983_nfc, 
+                fa_de_fruyt_2000, fa_albarracin_2008_verb, fa_albarracin_2008_math,
+                fa_shnabel_2008, fa_vohs_2008)
 
-# now we create the string to print in text
-H3_OR_test_result_alpha_White_adjusted <- paste0("$\\hat{\\beta} = ", round(H3_test_alpha_White_adjusted[2,1], 2), "$, $OR = ", OR_coefficient_alpha_White_adjusted, "$, 95\\% CI $[", OR_CI_LOW, ", ", OR_CI_HI, "]$, $z = ", round(H3_test_alpha_White_adjusted[2,3], 2), "$, $p = ", apa_p(H3_test_alpha_White_adjusted[2,4]), "$") # again, however, we omit this version from the main text for the same reasons as given in the code block above.
+
+
+for (i in 1:19){
+  data <- FA_list[[i]]
+  
+  tryCatch({
+    RMSEA_estimate <- rma(yi = as.numeric(RMSEA), sei = as.numeric(RMSEA_se), data = data) # inverse variance weighting is on by default
+    FA_aggregate_data$RMSEA[i] <- RMSEA_estimate$b
+    FA_aggregate_data$RMSEA_se[i] <- RMSEA_estimate$se
+    
+  }, error = function(e) {
+    
+  })
+  
+  FA_aggregate_data$RMSEA_global_mean[i] <- mean(as.numeric(data$RMSEA), na.rm = TRUE)
+  FA_aggregate_data$RMSEA_mean_sd[i] <- sd(as.numeric(data$RMSEA), na.rm = TRUE)
+  
+  FA_aggregate_data$N_factors_mode[i] <- Mode(data$N_factors)
+  
+  if("Yes" %in% data$unidimensional){
+    FA_aggregate_data$unidimensional_ratio[i] <- table(data$unidimensional)[["Yes"]] / length(data$unidimensional)
+  } else{
+    FA_aggregate_data$unidimensional_ratio[i] <- 0
+  }
+  
+  # count number of Tau differences (don't know anything better for now)
+  FA_aggregate_data$Tau_N_P_10[i] <- sum(as.numeric(data$Tau_p_diff) < .1, na.rm = TRUE) / length(na.omit(data$Tau_p_diff))
+  FA_aggregate_data$Tau_N_P_05[i] <- sum(as.numeric(data$Tau_p_diff) < .05, na.rm = TRUE) / length(na.omit(data$Tau_p_diff))
+  FA_aggregate_data$Tau_N_P_01[i] <- sum(as.numeric(data$Tau_p_diff) < .01, na.rm = TRUE) / length(na.omit(data$Tau_p_diff))
+  
+  FA_aggregate_data$global_mean_spec[i] <- mean(as.numeric(data$mean_spec), na.rm = TRUE)
+  FA_aggregate_data$global_sd_spec[i] <- sd(as.numeric(data$mean_spec), na.rm = TRUE)
+  
+  # count number of err differences (don't know anything better for now)
+  FA_aggregate_data$err_N_P_10[i] <- sum(as.numeric(data$err_p_diff) < .1, na.rm = TRUE) / length(na.omit(data$err_p_diff))
+  FA_aggregate_data$err_N_P_05[i] <- sum(as.numeric(data$err_p_diff) < .05, na.rm = TRUE) / length(na.omit(data$err_p_diff))
+  FA_aggregate_data$err_N_P_01[i] <- sum(as.numeric(data$err_p_diff) < .01, na.rm = TRUE) / length(na.omit(data$err_p_diff))
+}
+
+
+
+
+### PLOTs
+# ggplot(FA_aggregate_data[-15,], aes(x = RMSEA_global_mean, y = 0)) +
+#   geom_boxplot(outlier.shape = NA, width = 2) +
+#   geom_point(alpha = 0.7) +
+#   xlab("Global Mean of RMSEA for Single Factor Model") +
+#   ylim(-10, 10) +
+#   theme_apa(base_size = 20)
+# 
+# ggplot(FA_aggregate_data[-15,], aes(x = unidimensional_ratio, y = 0)) +
+#   geom_boxplot(outlier.shape = NA, width = 2) +
+#   geom_point(alpha = 0.7) +
+#   ylim(-10, 10) +
+#   xlab("Ratio of Labs with Unidimensional Factor Solution") +
+#   theme_apa(base_size = 20)
+# 
+# ggplot(FA_aggregate_data[-15,], aes(x = N_factors_mode)) +
+#   geom_histogram(stat = "count", colour = "#28292A") +
+#   scale_y_continuous(breaks = seq(0, 12, by = 2)) +
+#   xlab("Mode of N Factors Selected by Parallel Analysis") +
+#   theme_apa(base_size = 20)
+
+# apa_table(
+#   FA_aggregate_data, align = c("l", rep("r", 13))
+#   , caption = "Internal Structure indicators of applicable measures"
+#   , note = "Because of a lack of convergence in the meta-analytic model, there are no meta-analytic RMSEA results. Measure fifteen had failed to deliver results for most steps during the individual factor analysis phase of the analyses. "
+#   , escape = FALSE, placement = "htp")
+
+
+print(FA_aggregate_data)
+```
+
+
+Besides testing for Cronbach’s assumptions, we can also use the more informative Omega coefficient. … This one shows XXX, compared to our CFA + reliability results this shows … .
+
+```{r omega_distributions_data_prep}
+# checking for each data row that they have a calculated omega coefficient,
+# and only extracting those.
+calculated_omega_plot_data <- calculated_reliability_lab_data[!is.na(calculated_reliability_lab_data$omega.tot), ]
+
+# making replication success a boolean which can affect order
+calculated_omega_plot_data$replication_success <- ifelse(
+  calculated_omega_plot_data$replication_success == "Yes", TRUE, FALSE)
+  
+# calculating the average omega per group
+calculated_omega_plot_data$avg.omega <- ave(calculated_omega_plot_data$omega.tot, calculated_omega_plot_data$g)
+
+# reordering the plot from least to most reliable split by replication success
+calculated_omega_plot_data <- calculated_omega_plot_data[order(-calculated_omega_plot_data$replication_success, -calculated_omega_plot_data$avg.omega),]
+calculated_omega_plot_data$g <- fct_inorder(as.factor(calculated_omega_plot_data$g), ordered = NA)
+
+
+table(calculated_omega_plot_data$g)
+
+# reorder the total values to fit with the omega ordering
+table(calculated_reliability_lab_data$g)[c(15, 16, 17, 14, 11, 18, 4, 3, 10, 6,
+                                           5, 8, 19, 7, 13, 2, 1, 12, 9)]
 
 ```
 
-We additionally pre-registered multilevel regression model of the same relationship with each lab’s unique reliability nested within the set of replications of an effect. However, because our dependent variable (replicability) is at the group level, we decided to use a test on the aggregate level using White’s heteroscedasticity adjustment to address the dependency [as suggested by @foster-johnson2018Predicting]. This analysis also showed a non-significant relation (`r H3_test_result_alpha_White_adjusted`). However, it should be noted that for these analyses the reliability coefficient could be calculated for only `r nrow(data_h23_avg)` measures. As a result, the estimates of the relation between reliability and replication success obtained using these models each come with large uncertainty.
-
-## Measurement Reporting
-
-### Reliability & Validity Reporting
-
-Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures in relation to reliability reporting. First, it shows that almost half of the measures in both replication (N = `r apa_num(sum(data_h456_replications$N_items == "1 item measure"))`) and original research (N = `r apa_num(sum(data_h456_original$N_items == "1 item measure"))`) were single-item measures. When looking at the multiple-item measures, the graph illustrates that `r N_reported_reliabilities_replications` measures in the replication protocols (`r apa_num((as.numeric(N_reported_reliabilities_replications_number_style) / sum(data_h456_replications$N_items != "1 item measure")) * 100, digits = 1)` %) and `r N_reported_reliabilities_original` measures in the original articles (`r apa_num((as.numeric(N_reported_reliabilities_original) / sum(data_h456_original$N_items != "1 item measure")) * 100, digits = 1)` %) reported a reliability coefficient. The most commonly reported reliability coefficient was Cronbach’s Alpha, which accounted for `r apa_num(sum(data_h456_replications$reliability_type == "alpha"), numerals = FALSE)` reported reliabilities in the replication protocols, and `r apa_num(sum(data_h456_original$reliability_type == "alpha"))` in the original articles.
-
-```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it.", out.height = "60%"}
-knitr::include_graphics(path = "../../SupplementaryMaterials/reliability_reporting_flow_diagram.png")
-```
-
-```{r ReportingInformation, include = FALSE}
-## first some descriptives of reliability reporting
-# we get these descriptives from the combination of both replication and original
-# QMP data.
-
-reporting_data <- rbind(data_h456_original, data_h456_replications)
-
-# Measurement type per original and replication:
-reliability_reporting_descriptive_table_1 <- table(reporting_data$rep_org, reporting_data$N_items)
-
-# amount of reliability reported per original and replication 
-# (given that measure is a multiple item measure):
-reliability_reporting_descriptive_table_2 <- table(reporting_data$rep_org[reporting_data$N_items == "multiple item measure"], reporting_data$reliability_type[reporting_data$N_items == "multiple item measure"])
-
-
-# A chi square test for difference in N reliability reported for multiple 
-# item measures.
-reliability_reporting_test_result <- chisq.test(reporting_data$rep_org[reporting_data$N_items == "multiple item measure"], reporting_data$reliability_reported[reporting_data$N_items == "multiple item measure"])
-
-
-# a variable indicating whether there was evidence from a factor analysis 
-factor_present <- c(reporting_data$sel_psychometric_evidence_REV != "None" & reporting_data$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)")
-
-# A chi square test for difference in N factor analysis evidence reported for multiple 
-# item measures.
-factor_reporting_test_result <- chisq.test(reporting_data$rep_org, factor_present)
-
-```
-
-Reliability was more commonly reported in original (N = `r N_reported_reliabilities_original`; `r apa_num((as.numeric(N_reported_reliabilities_original) / nrow(data_h456_original)) * 100, digits = 1)` %) as compared to replication research (N = `r N_reported_reliabilities_replications_number_style`; `r apa_num((as.numeric(N_reported_reliabilities_replications_number_style) / nrow(data_h456_replications)) * 100, digits = 1)` %, $\chi^{2}$(`r apa_num(reliability_reporting_test_result$parameter)`) = `r apa_num(reliability_reporting_test_result$statistic)`, *p* = `r apa_p(reliability_reporting_test_result$p.value)`). Validity evidence was similarly reported infrequently. Validity evidence from a factor analysis was reported in `r apa_num(sum(data_h456_original$sel_psychometric_evidence_REV != "None" & data_h456_original$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` original articles, while in only `r apa_num(sum(data_h456_replications$sel_psychometric_evidence_REV != "None" & data_h456_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` replications. This difference was not significant ($\chi^{2}$(`r apa_num(factor_reporting_test_result$parameter)`) = `r apa_num(factor_reporting_test_result$statistic)`, *p* = `r apa_p(factor_reporting_test_result$p.value)`), however the total number of factor analyses reported was low.
-
-To gain a better understanding of the validity of the included measurements, we also conducted pre-registered exploratory analyses testing the unidimensionality of `r nrow(cfa_results)` measures with available replication data using a confirmatory factor analysis. We reasoned that most of the included measures should theoretically tap into a single construct, so evidence for unidimensionality would serve as a proxy for evidence of higher construct validity. We found that `r sum(cfa_results$Single_factor == "Yes", na.rm = TRUE)` of these measures (`r apa_num((sum(cfa_results$Single_factor == "Yes", na.rm = TRUE) / nrow(cfa_results)) * 100, digits = 1)` %) met our criteria for unidimensionality (see [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_pre-reg_analyses.Rmd) for further details).
-
-### Hypothesis 4: QMPs in Original Compared to Replication Research
-
-```{r numberNAsForQMPRatio}
-# calculating the ratio of NA responses for the revised QMP items, or the initial
-# items in case those items were not revised.
-ratio_of_NAs <- sum(is.na(reporting_data$def1) + is.na(reporting_data$op_1_REV) + is.na(reporting_data$op_2_REV) + is.na(reporting_data$op_3) + is.na(reporting_data$op_4) + is.na(reporting_data$op_5_REV) + is.na(reporting_data$sel_1_REV) + is.na(reporting_data$sel_1) + is.na(reporting_data$sel_2) + is.na(reporting_data$sel_3_REV) + is.na(reporting_data$sel_4) + is.na(reporting_data$quant_1_REV) + is.na(reporting_data$quant_2_REV) + is.na(reporting_data$quant_3_REV) + is.na(reporting_data$quant_4) + is.na(reporting_data$mod_1_REV) + is.na(reporting_data$mod_2_REV) + is.na(reporting_data$mod_3_REV) + is.na(reporting_data$mod_4_REV) + is.na(reporting_data$mod_5_REV) + is.na(reporting_data$mod_6_REV)) / (20 * 154)
-
-QMP_NA_percentage <- paste0(apa_num(ratio_of_NAs * 100, digits = 1), "%")
-
-```
-
-```{r MeanQMPCode, warning = FALSE, include = FALSE}
-# calculating mean total QMP ratios
-Mean_Rat_Rep <- mean(reporting_data$QMP_REV_ratio[reporting_data$rep_org == "Replication"])
-
-Mean_Rat_Org <- mean(reporting_data$QMP_REV_ratio[reporting_data$rep_org == "Original"])
-```
-
-Overall, the QMP ratios (i.e., the ratio of the total number of measurement practices that were not transparently and fully reported on) were low in both original and replication studies. The top part of Figure \@ref(fig:Plot456Code) displays the distributions of the total QMP ratio for both original articles and replication protocols, showing that the average QMP ratio in replication protocols was smaller (`r apa_num(Mean_Rat_Rep)`) than in original articles (`r apa_num(Mean_Rat_Org)`). The bottom of Figure \@ref(fig:Plot456Code) displays the observed QMP ratios per QMP type for both original articles and replication protocols, showing that original articles tended to contain fewer Definition QMPs, but more selection and operationalization QMPs, with Quantification QMPs being comparable. The number of measures that were modified also differed between original and replication. In total `r QMP_NA_percentage` of all responses across all QMP items were non-applicable.
-
-```{r Plot456Code, warning = FALSE, fig.cap = "QMP ratio counts for each QMP Type and QMP total ratio distribution grouped by whether the QMP ratio was obtained from an original article or a replication protocol. The top graph shows the distributions of total QMP ratios for both replication protocols and original articles, with the vertical line indicating the mean QMP ratio. The specific observed values are indicated along the bottom row with dots. The bottom row shows for each QMP type the proportions of each QMP ratio obtained, darker colors represent proportionally more QMPs, grey means modification did not occur for that measure."}
-
-# re-ordering the QMP-types, because it didn't save
-plot_456_data$QMP_type <- factor(plot_456_data$QMP_type, levels = c("Definition", "Selection", "Operationalisation", "Quantification", "Modification", "Total"))
-
-# shortening the replication and original labels for nicer plot 1
-levels(plot_456_data$RepOrg) <- c("Org.", "Rep.")
-
-
-
-### ratio (REV) Original and Rep
-# QMP type specific QMP ratios
-Plot_456_1 <- ggplot(plot_456_data[plot_456_data$QMP_type != "Total",], 
-                      aes(x = RepOrg, fill = as.factor(QMP_ratio_1_REV))) + 
-  geom_bar(position = "fill") +
+```{r  plot_omega_distributions, warning = FALSE,  fig.cap = "Distributions of calculated McDonald’s Omega t  calculated for the responses on a measure at each lab location, across the eighteen measures for which raw data was available from which McDonald’s Omega t coefficients could be calculated. The N.Omg column besides the figure shows the number of lab locations for which an Omega coefficient could be successfully calculated. Due to lack of underlying model convergence an Omega coefficient could not be calculated for all lab locations, or any lab locations for the Der Fruyt et al. (2000) measure. The N.tot column shows the total number of lab locations at which the measure was taken. Any difference between N.omg and N.tot can be seen as an indication of the instability to get a stable estimate of an underlying facto model for some lab locations for that measure."}
+# plot for omega
+ggplot(calculated_omega_plot_data, aes(x = omega.tot, y = g)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = 0.1) +
+  
+  # adding labels to show the number of labs per measure for which a total omega could be calculated
+  geom_text(data = calculated_omega_plot_data[1:18,], label = table(calculated_omega_plot_data$g)[1:18], x = 1.15, y = 1:18, size = 2.8) +
+  # adding labels to show the number of labs per measure
+  geom_text(data = calculated_omega_plot_data[1:18,], label = table(calculated_reliability_lab_data$g)[c(15, 16, 17, 14, 11, 18, 4, 3, 10, 6, 5, 8, 19, 7, 13, 2, 1, 12)], x = 1.35, y = 1:18, size = 2.8) +
+  
+  # theming
   theme_minimal() +
-  scale_fill_manual(values = c("#ff766c", "#ef6f65", "#ce5f57", "#be5851", "#aa4f48", "#994741", "#803b36", "#672f2b", "#562824", "#411e1b", "#341816", "#030101","#4366ff", "#4265fc", "#3551cb", "#324dc1", "#324cbe", "#2d44aa", "#2c44a9", "#283d99", "#223380", "#162255", "#10193e", "#010206", "#000102")) + # gradient for the colors was found by changing the brightness of the colour in a hsl color editor (in GIMP) to be equal to the inverse of the QMP ratio value.
-  facet_grid(~ QMP_type) + 
-  theme(legend.position = "none", strip.text = element_text(size = 7)) +
-  ylab("Relative Prevalence of\nQMP Ratio in Sample") +
-  xlab("QMP Type") +
-  ggtitle("QMP Ratio's Per QMP Type Grouped by Original and Replication")
-
-# changing the replication and original labels back for plot 2
-levels(plot_456_data$RepOrg) <- c("Original", "Replication")
-
-
-
-# total QMP ratios
-Plot_456_2 <- ggplot(plot_456_data[plot_456_data$QMP_type == "Total",], 
-       aes(x = QMP_ratio_REV, fill = RepOrg, colour = RepOrg)) +
-  geom_density(alpha = 0.2) +
-  geom_point(y = 0, alpha = 0.2, size = 3) +
-  geom_segment(aes(x = Mean_Rat_Rep, xend = Mean_Rat_Rep, y = 0, yend = 2.66)
-               , color = "blue4") +
-  geom_segment(aes(x = Mean_Rat_Org, xend = Mean_Rat_Org, y = 0, yend = 2.183)
-               , color = "brown") +
-  coord_cartesian(xlim = c(0, 1)) +
-  theme_ridges() + 
-  theme(axis.text.y=element_blank(),
-        axis.ticks.y=element_blank(),
-        axis.text.x = element_text(size = 8)) +
-  scale_fill_manual(values=c("brown", "blue4")) +
-  scale_color_manual(values=c("brown2", "blue")) +
-  scale_x_continuous(breaks = c(0, Mean_Rat_Rep, 0.25, Mean_Rat_Org, 
-                                0.5, 0.75, 1), 
-                     labels = c("0", "0.18", "0.25", "0.31", "0.5", 
-                                "0.75", "1")) + 
-  ggtitle("Distribution of Total QMP Ratio's by Original and Replication") +
-  guides(color = "none") +
-  labs(fill = "Coded from") +
+  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
+                                                     "lines")) +
+  
+  # adding the replication line
+  geom_hline(yintercept = 6.5, color = "red", size = 1) +
+  
+  # adding the necessary indicative texts
+  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 7.25, ymax = 7.25, xmin = 0.01, xmax = 0.01) +
+  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 6, ymax = 6, xmin = 0.01, xmax = 0.01) +
+  annotation_custom(grob = textGrob(label = "N.Omg", hjust = 0, gp = gpar(fontsize = 12)), ymin = 19.2, ymax = 19.2, xmin = 1.08, xmax = 1.08) +
+  annotation_custom(grob = textGrob(label = "N.Tot", hjust = 0, gp = gpar(fontsize = 12)), ymin = 19.2, ymax = 19.2, xmin = 1.28, xmax = 1.28) +
+  
+  coord_cartesian(xlim = c(0, 1), clip = "off") +
+  
   ylab("") +
-  xlab("") 
-
-
-## the following two plots are constructed solely for the purpose of extracting
-# a legend from them.
-for_legend_plot_456_org <- ggplot(plot_456_data[plot_456_data$QMP_type != "Total",], 
-                                  aes(x = RepOrg, y = abs(QMP_ratio_REV - 1), fill = abs(QMP_ratio_REV - 1))) + 
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  scale_fill_gradient(name = "Original", low = "#030101", high = "#ff766c", limits = c(0, 1), 
-                      breaks = c(0.001, 0.5, 0.999), labels = c(1, 0.5, 0)) +
-  theme(legend.title=element_text(size = 9)) + 
-  facet_grid(~ QMP_type) 
-
-for_legend_plot_456_rep <- ggplot(plot_456_data[plot_456_data$QMP_type != "Total",], 
-                                  aes(x = RepOrg, y = abs(QMP_ratio_REV - 1), fill = abs(QMP_ratio_REV - 1))) + 
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  scale_fill_gradient(name = "Replication", low = "#000102", high = "#4366ff", limits = c(0, 1), 
-                      breaks = c(0.001, 0.5, 0.999), labels = c(1, 0.5, 0)) +
-  theme(legend.title=element_text(size = 9)) + 
-  facet_grid(~ QMP_type) 
-
-# extracting the legends from the plot
-legend_456_org <- get_legend(for_legend_plot_456_org) 
-legend_456_rep <- get_legend(for_legend_plot_456_rep) 
-
-
-# combining both plots and the legends into one figure
-grid.arrange(Plot_456_2, 
-             Plot_456_1, 
-             legend_456_org,
-             legend_456_rep,
-             layout_matrix = rbind(c(1, 1, 1),
-                                    c(2, 3, 4)),
-              widths = c(8, 1, 1))
+  xlab("Omega")
 
 ```
 
-We used a beta-regression model in the *betareg* R package [*v`r getNamespaceVersion("betareg")[[1]]`*\; @R-betareg_a; @R-betareg_b] to test the difference in QMP ratio between original and replication. Beta regression models are similar to other generalized linear regression models, but they are better suited to model dependent variables with values in the interval of (0,1), including ratios. Furthermore, they are robust for heteroskedastic and asymmetrically distributed dependent variables [@cribari2010beta].
 
-```{r Hypothesis4Model, include = FALSE}
-## Hypothesis 4 beta regression model
-# for H4 we have to combine the replication and original data together
-data_h4 <- rbind(data_h456_original, data_h456_replications)
 
-# running the models with revised QMP ratio's
-H4_test_results_REV <- betareg(QMP_REV_ratio ~ rep_org, data = data_h4)
-
-```
-
-Using a beta-regression model, the total QMP ratio was regressed on a dummy variable indicating whether the coded report was an original article or a replication protocol. The results supported Hypothesis 4 and indicated that indeed original articles contained on average more QMPs than replication protocols (`r betareg_output_to_apa_full(H4_test_results_REV)`).
-
-### Hypothesis 5: Replication Research QMPs and Replicability
-
-```{r Hypothesis5Model, include = FALSE}
-## Hypothesis 5 logistic regression model
-# first removing any hypotheses from the data that were rated as being unclear
-data_h5 <- data_h456_replications
-data_h5 <- data_h5[data_h5$hypothesis_support != "Unclear",]
-data_h5$hypothesis_support <- droplevels.factor(data_h5$hypothesis_support)
-
-# running the model using the QMPs from the revised coding protocol
-H5_test_results_REV <- apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5, family = binomial))
-
-H5_test_results_REV_with_OR <- OR_to_apa_full_supplier(H5_test_results_REV$full_result$QMP_REV_ratio, negative_b = TRUE)
-
-# and the same model using the QMPs from the initial coding protocol
-H5_test_results <- apa_print(glm(hypothesis_support ~ QMP_ratio, data = data_h5, family = binomial))
-
-H5_test_results_with_OR <- OR_to_apa_full_supplier(H5_test_results$full_result$QMP_ratio, negative_b = TRUE, not_significant = TRUE)
-
-```
-
-```{r Hypotheses5ReportedMultilevelAnalyses, include = FALSE, warning = FALSE}
-## Hypothesis 5 sensitivity test using a random intercept Gaussian model.
-# create dummy H5 dataframe for use in sensitivity test
-data_h5_sens <- data_h5
-
-# convert outcome variable to be usable with Gaussian distribution via
-# logit transform.
-data_h5_sens$QMP <- log(data_h5_sens$QMP_ratio /(1 - data_h5_sens$QMP_ratio))
-
-# running the model with initial QMP ratio's
-random_intercept_h5 <- apa_print(lmer(formula = QMP ~ 1 + hypothesis_support + (1|many_labs_version), data = data_h5_sens))
-```
-
-We used logistic regression to test the association between the QMP ratio in replication protocols and replication success. In line with Hypothesis 5, results showed that successful replications were associated with fewer QMPs compared to unsuccessful replications (`r H5_test_results_REV_with_OR`). However, we did not find the association with the initial protocol in neither the single-level (`r H5_test_results_with_OR`) nor the multilevel model (`r random_intercept_h5$full_result$hypothesis_supportYes`)[^5].
-
-[^5]: The *betareg* package currently does not allow for estimation of multilevel models. As an approximation, Gaussian random-intercept multilevel models were implemented using the *lmer* function from the *lme4* package [@R-lme4]. The outcome QMP ratio variable was transformed using the logit link function (the default link function in the *betareg* package) to fit the Gaussian model.
-
-### Hypothesis 6: Relation Between QMPs in Original and Replication Research
-
-```{r Hypothesis6Model, include = FALSE}
-## Hypothesis 6 beta regression model
-# first we combine the datasets of the original studies and the replications 
-# together
-# adding "Rep_" to separate replication from original columns in the combined dataset
-data_h456_Rep <- data_h456_replications
-colnames(data_h456_Rep) <- paste0("Rep_", colnames(data_h456_Rep))
-
-# combine the dataset
-data_h6 <- cbind(data_h456_original, data_h456_Rep)
-
-
-# running the model using the QMPs from the revised coding protocol
-H6_test_results_REV <- betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6)
-
-# and the same model using the QMPs from the initial coding protocol
-H6_test_results <- betareg(Rep_QMP_ratio ~ QMP_ratio, data = data_h6)
-
-# Using a glm to check if results differs in direction and significance from the 
-# beta-regression, to check that including a linear regression line in figure 46
-# is representative of the relationship.
-H6_glm_test_REV <- glm(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6)
-
-H6_glm_test_results_REV <- apa_print(H6_glm_test_REV)$full_result$QMP_REV_ratio
-
-```
-
-Using a beta regression model, we found total QMP ratio in the original article to be significantly related to the total QMP ratio in the subsequent replication (`r betareg_output_to_apa_full(H6_test_results_REV)`). This result supports Hypothesis 6. Figure \@ref(fig:Plot46RevisedDataCode) displays this relationship visually.
-
-```{r Plot46RevisedDataCode, error = FALSE, warning = FALSE, fig.cap = paste0("Scatterplot of original QMP ratios and replication total QMP ratios with a linear regression line. The linear regression line is included, as the result based on linear regression was similarly in direction and significance to the beta regression used to test Hypothesis 6 (", H6_glm_test_results_REV, "), while being easier to understand visually. Each dot in the figure describes the QMP ratio in that graph across both the original article and its replication protocol. Note: jitter was applied to these dots to show the number of observations at points where multiple dots were present.")}
-ggplot(plot_46_data_rev[plot_46_data_rev$QMP_type == "QMP.Ratio" & plot_46_data_rev$QMP_Rep_type == "Rep.QMP.Ratio",], aes(QMP_ratio,QMP_Rep_ratio)) + 
-  geom_point() +
-  geom_jitter(width = 0.01, height = 0.01) +
-  geom_smooth(method = "glm", formula = y ~ x) + 
-  theme_minimal() +
-  theme(strip.text.y = element_text(size = 7), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
-  ylab("QMP Ratio (Replication Protocol)") +
-  xlab("QMP Ratio (Original Article)") 
-
-## Code for exporting figures to high resolution PNGs.
-# png("manuscript_files/figure-self-export/plot_46_revised.png", width=1800, height=1200, res=300)
-## #PLACE FIGURE CODE HERE#
-# dev.off()
-```
-
-```{r Hypotheses6ReportedMultilevelAnalyses, include = FALSE, warning = FALSE}
-## Hypothesis 6 sensitivity test using a random intercept Gaussian model.
-# create dummy H6 dataframe for use in sensitivity test
-data_h6_sens <- data_h6
-
-# convert outcome variable to be usable with Gaussian distribution via
-# logit transform. 
-data_h6_sens$QMP_REV <- log(data_h6_sens$QMP_REV_ratio /(1 - data_h6_sens$QMP_REV_ratio))
-data_h6_sens$Rep_QMP_REV <- log(data_h6_sens$Rep_QMP_REV_ratio /(1 - data_h6_sens$Rep_QMP_REV_ratio))
-data_h6_sens$QMP<- log(data_h6_sens$QMP_ratio /(1 - data_h6_sens$QMP_ratio))
-data_h6_sens$Rep_QMP <- log(data_h6_sens$Rep_QMP_ratio /(1 - data_h6_sens$Rep_QMP_ratio))
-
-
-# running the model with revised QMP ratio's
-random_intercept_h6_REV <- apa_print(lmer(formula = Rep_QMP_REV ~ 1 + QMP_REV + (1|many_labs_version), data = data_h6_sens))
-
-# running the model with initial QMP ratio's
-random_intercept_h6 <- apa_print(lmer(formula = Rep_QMP ~ 1 + QMP + (1|many_labs_version), data = data_h6_sens))
-```
-
-However, this association was sensitive to changes in the QMP protocol, as we did not observe a significant relation between original and replication QMP ratios based on QMPs from the initial protocol in neither the single-level (`r betareg_output_to_apa_full(H6_test_results)`) nor the multilevel model (`r random_intercept_h6$full_result$QMP`). Furthermore, in the multilevel model based on the revised QMPs the association was again not significant (`r random_intercept_h6_REV$full_result$QMP`). We additionally conducted planned exploratory analyses of the association for each unique combination of QMP types, but taking into account the limited sample size, we could not determine any clear relations between the separate QMP types and replicability (see [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_pre-reg_analyses.Rmd) and [Supplementary Analyses D](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_initial_QMP_analyses.Rmd) for further details on the analyses and results).
-
-# Discussion
-
-In this article, we analyzed the data, protocols, and related original articles from four Many Labs replication projects to assess reliability and measurement (reporting) practices and study their relationship with replication success, as a proxy of the credibility of findings. Overall, even though the average reliability was relatively high, we found that not all measures were sufficiently reliable and that reliabilities can vary across labs/settings in replication projects. Although we did not observe reliability to significantly predict replication success, we did observe a negative relation between replication success and presence of Questionable Measurement Practices in replication research. Finally, we found QMPs in the original studies to be positively associated with QMPs in the replications.
-
-## Reliability
-
-### Reliability Varied Within and Between Measures
-
-While most measures showed sufficient average reliability for most purposes in psychological research (around .80), about a quarter of the measures had reliabilities generally considered insufficient (around .60 or less) [@nunnally1994assessment]. Furthermore, the reliability in original research was generally lower than in the replication samples, contrary to our Hypothesis 1 stating that reported reliability estimates would not differ significantly between replications and original articles. These differences may be due to features that were specific to the Many Labs projects. Large teams of researchers with diverse expertise were involved in these projects and it is possible that the pooling of expertise and use of structured procedures led to more reliable measurement compared to the original research.
-
-In some cases, the reliability of measures showed signs of true variation, or heterogeneity, across samples. Reliability heterogeneity was particularly common for measures with a lower average reliability. However, the number of investigated measures was small, and some measures were only used in few independent samples. This is particularly relevant, since the Q-test to test heterogeneity is sensitive to the number of studies included in each test [@li2015DilemmaHeterogeneityTests]. Furthermore, most measures did not show evidence of significant reliability heterogeneity, a similar lack of widespread heterogeneity was also observed for effect sizes in replications [@klein2018many; @olsson2020heterogeneity]. Regardless, our results do demonstrate an often-overlooked aspect of reliability: reliability is a sample-specific, not a measurement-specific feature [@vacha1999practices; @cho2015cronbach].
-
-### No Observed Relation Between Reliability and Replicability
-
-@stanley2014expectations illustrated that measurement error, when not attenuated for, can impact replication assessments. However, we did not observe a relation between reliability and replicability. This result also runs counter to the fact that according to statistical theory, the increased noise in the data implied by lower reliability decreases the effect size estimates based on those data. However, the relationship between reliability and replicability is complex [@willson1980research; @lebreton2014corrections; @oswald2015Imperfect; @zhang2024Metaanalysis]. Combined with the fact that we could only calculate reliability for a small number of measures meant we had low statistical power to detect the overall relation between reliability and replicability, which provides the most likely explanation for our non-significant findings.
-
-This problem is exacerbated further since in our sample, more than half of the effects were not replicated, indicating that many of these effects may be null effects. For null effects, no relation between reliability and replicability is expected, lowering our power to detect the relation further. Additionally, while lower reliability decreases effect sizes it can also reduce the observed true variance in the effects [@olsson-collentine2023UnreliableHeterogeneityHow]. As a result, effect estimates from various studies will appear more similar than they truly are, seemingly replicating the original. Regardless, the small number of relevant measures and reported reliabilities does indicate an important issue: we observed a lack of reliability evidence in both original and replication psychological research.
-
-## Measurement Reporting
-
-### Measurement Reporting is Often Incomplete
-
-The reliability of measures was rarely reported in both original and replication research, which is in line with earlier investigations of the psychological literature [@shaw2020measurement; @flake2017construct; @flake2022construct]. Reported reliabilities were so few, that the preregistered test for Hypothesis 1 was no longer informative. We found that replication research reported reliability coefficients less often than original research, which aligns with findings by @flake2022construct. This pattern continued for validity evidence reporting. Of the `r nrow(data_h456_replications)` measures, validity evidence in the form of factor analysis or similar analyses was reported for `r apa_num(sum(data_h456_original$sel_psychometric_evidence_REV != "None" & data_h456_original$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` measures in original articles, and `r apa_num(sum(data_h456_replications$sel_psychometric_evidence_REV != "None" & data_h456_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)"), numerals = FALSE)` measures in replication protocols, implying that less than 10% of articles report sufficient information to judge the validity of key measures used in the study.
-
-The underreporting of reliability and validity evidence has long been discussed [@willson1980research; @vacha1999practices; @green2011recent]. Our study illustrates three potential reasons for why this problem has persisted. First, the studies in our sample commonly used single-item measures, an observation that was also made by @shaw2020measurement. Calculating reliability for single-item measures is less straightforward and common than for multiple-item measures [@wanous1996estimating]. Single-item measures can be expected to generally be less reliable than a multiple-item measure, and validity may also be at risk. Single-item measures, because they are singular, come with an assumption of unidimensionality regarding the construct they reflect, which our exploratory analyses revealed is an assumption that did not frequently hold for multiple-item measures in our sample. However, we did not explore validity concerns unrelated to reporting in-depth, therefore future research is needed to determine the extent of problems with validity.
-
-Second, our results indicate that there may be bias in reporting reliability coefficients. Reliabilities were reported in original research for those measures that obtained higher calculated reliabilities in the replication samples. If we take the calculated reliabilities in the replication sample as a good predictor of the reliabilities in the original studies, this suggests that researchers may be reluctant to report reliability for unreliable measures. In turn, researchers may become overly optimistic about the reliability of measures in their field, similarly to how bias in publication causes issues for establishing estimates of true effect sizes in meta-analyses [@sutton2000empirical].
-
-Third, the replication protocols were written before data were collected, which means measurement based on these protocols had not taken place yet. As a result, no data were available yet from which the replicating researchers could have calculated reliability and validity. This would explain why there was little reliability and validity evidence reported in replication protocols. It may still represent a problem, however, because original articles similarly rarely reported evidence on reliability and validity. This implies that the replications commonly picked measures for which reliability and validity could not be checked.
-
-On the other hand, we found that more general issues in the transparency of measurement reporting practices, as assessed by QMPs, were less common in replication protocols compared to original articles. This is in line with Hypothesis 4 but runs counter to the findings of @flake2022construct), who found less evidence on construct validity in the replications from the RPP [@osc2015estimating] than in original articles. We believe this discrepancy was the result of our sample being the Many Labs projects. These projects made use of structured replication protocols to document the way measurement was going to be conducted. For example, several Many Labs replication protocols contained a section specifically listing the deviations from the original measurement.
-
-### Incomplete Measurement Reporting Hinders Replicability
-
-When the original article does not document the measurement in sufficient detail, it becomes challenging for replication researchers to mimic the measurement of an original study,. Consequently, the measurement in the replication may assess constructs substantially differently, weakening the relation between the test in original and replication studies [@shaw2020measurement; @flake2022construct].
-
-In line with Hypotheses 5 & 6, we found an indication of such a spillover effect in our sample. The total QMPs of an original study and the total QMPs in the protocol of the replication for the same study were positively associated. Furthermore, we found that QMPs may have negatively impacted replicability. An increase in total QMP ratio was associated with a decrease in replicability. These associations together indicate that poor measurement reporting in an original study could be a risk factor for subsequent replication attempts. We did observe that unidimensionality was not universal among the measures for which we could run a factor analysis, which raises doubts on the validity of the measures and substantive interpretations based on them. Furthermore, when replications use unvalidated measures these replications are unlikely to be informative.
-
-However, it is worth noting that the spillover effect was only observed for QMPs coded with the revised coding protocol. Neither hypothesis was supported by the data on QMPs obtained with the initial coding protocol (see [Supplementary Analyses D](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_initial_QMP_analyses.Rmd%20for%20results%20based%20on%20the%20initial%20protocol). Furthermore, these hypotheses were supported by only one of the multilevel models. These were limited in group and sample size however, making their results uncertain.
-
-## Limitations & Future Research
-
-Our study had several limitations. We encountered challenges in operationalizing QMPs. Whereas previous research has focused on descriptives of specific QMPs detrimental to construct validity [@flake2022construct; @shaw2020measurement], we combined all coded QMPs together as an index to assess measurement practices and evaluate their impact on replicability. However, this also means that it remains uncertain if our operationalization accurately captured the concept. We encountered particular difficulty in determining when a practice is questionable, and the impact of the context on this decision. As a result, we already deemed it necessary to revise our coding protocol to be more lenient regarding more context dependent QMPs compared to the initial protocol. This revision was not trivial, as it altered the interpretation of our results. This finding reflects the challenges in operationalizing QMPs in a single index.
-
-Another challenge in constructing one overarching QMP variable was how to quantify it. We constructed ratios to cancel out the effects of non-applicable items. However, this has the consequence that both a measure for which all relevant measurement-related information was reported, and a measure for which no item was applicable would have a QMP ratio of zero. Yet, we would not consider the latter case to indicate the same level of completeness as the first. A little more than one-third of all responses were not applicable. As a result, the relation between QMP ratios and measurement reporting completeness may have been obscured to some extent. Additionally, it is not obvious from observing a QMP ratio whether good research practices were clearly violated. One might argue that any QMP is a sign of questionable research making any ratio greater than zero problematic. However, not all violations may have detrimental consequences or be relevant in all contexts.
-
-These challenges are potential threats to the validity of our assessment of QMPs. The validity of QMPS could be evaluated based on the extent to which a measured QMP score can be used to predict other variables it is expected to be associated with. For this future research will be needed to develop a framework of the associations between QMPs and other variables, and then test whether measured QMP scores are associated with those variables. To develop this framework, researchers can use this study and earlier studies by @shaw2020measurement and @flake2022construct. To improve upon previous measures of QMPs, the criteria on measurement reporting as set out in the @aera2014standards can be used as an additional source.
-
-A second limitation is that some of our tests were likely underpowered. Especially the tests on reliability, because of the small number of reported reliabilities and multiple item scales with available data. However, this limitation also illustrates two key findings. One finding is that reliability was rarely reported for measures in both original articles and replication protocols. The other finding is that around half of the measures in our sample were single-item measures. The use of single-item measures comes with psychometric risks [@diamantopoulos2012guidelines; @nunnally1978overview] and is more limited with respect to the type of reliability and validity evidence that can be determined [@sarstedt2016selecting; @shaw2020measurement]. Because of these issues, it could even be argued that using single-item measures is a QMP in certain contexts.
-
-As a third limitation, it is important to consider whether replication protocols and research articles can be fairly compared in terms of QMPs. The space for describing methodology within a replication protocol is generally shorter than an article. Furthermore, for direct replications the methodology may be seen as largely equivalent to the original article, thus measurement descriptions in the replication protocol may be considered superfluous. There are three main reasons why we believe protocols and articles remain comparable. First, most of the measurements in our replication sample were modified in some way, it is therefore important that replication protocols still report on their measurement as it may deviate from the original. Second, articles are often also restricted in the amount of space they have available to devote to measurement, so space restrictions in measurement reporting are not unique to replication protocols [@gardiner2019editorial]. Third, supplementary materials were also included as a valid information source, which increased the space available to describe the measurement, further equalizing reporting space in original articles and replication protocols. Still, future research may wish to analyze supplementary materials in greater detail to investigate to what extent these materials cover measurement details in both replication protocols and original articles.
-
-A fourth limitation is that we used only one definition of replication success. Replication success can be estimated and framed in multiple ways [for an example in replication research, see @osc2015estimating], including methods that do not make use of significance testing, or that attenuate for (measurement) error. The relationship between reliability and other indices of replication success may differ.
-
-Finally, we note that we used an observational design meaning that we cannot attach definitive causal directions to the relations observed in this study. To directly assess if there is a negative impact of reliability and QMPs on replicability, we would need experimental research. Future research could for example randomly assign original studies in a large-scale replication project to either needing to report all relevant measurement information as noted down in Table 1 in @flake2020measurement, while other studies receive no such reporting requirements. Similarly, the requirement to use validated measures based on the criteria set out in Sections 1, 2, and 3 in the @aera2014standards standards, or lack thereof could be randomly assigned to conditions. Although such experimental designs would be the most direct way to assess causality, it would take tremendous coordination and funding to integrate original studies into a large-scale replication project from the start. Alternative methods exist to assess causal relations on observational data, at least to some extent. @rohrer2018thinking has suggested researchers make use of Directed Acyclic Graphs to investigate causality in (non-)experimental settings by systematically accounting for confounding influences on an effect.
-
-## Recommendations
-
-Taking all the findings together, we formulated several recommendations. First, reliable and valid measures are a prerequisite for credible findings. The observation that many measures are not reported with such evidence is worrying because it obscures the credibility of findings and hampers scientific progress. Therefore, we join earlier recommendations [@hogan2004empirical; @barry2014validity; @flake2020measurement; @flake2022construct] that establishing evidence for the validity of scales should become a community standard for credible research. Furthermore, reliability coefficient estimates for multiple-item scales of a single construct should, by default, always be reported since these estimates can readily be obtained with most statistical software and provide important information on a measure’s performance. Only researchers who can provide reasoning to the contrary for their research should be exempt from this default.
-
-Second, researchers should report their procedure and measurement in detail, as specified in, for example, Table 1 in @flake2020measurement, or Section 3.6 in @apa2020publication on measures and measurement. This is important so that it can be mimicked in replications if needed. The remaining information that does not fit in the article can be made available on a public repository, such as the Open Science Framework [OSF\; @soderberg2018using] or Zenodo [@zenodo2024open].
-
-Furthermore, we argue that researchers seeking to replicate a study should first evaluate the measurement of that study. It is crucial for an informative replication that the measurement is reliable or valid, otherwise it may be futile to attempt a direct replication [see also @nuijten2022assessing]. If the measurement is insufficiently reliable or valid, we suggest that researchers instead use their resources to replicate a study with reliable, valid, and well-documented measurement. When replicating another study is not an option, we advise the replicating researcher to first attempt a conceptual replication using reliable and valid measurement or use both the original and their own preferred measure [as in @stoevenbelt2018rrr]. Afterwards, a direct replication can be performed based on the conceptual replication to further assess the effect’s credibility.
-
-# Conclusion
-
-Through our investigations into the reliability and reporting of measurement in the Many Labs replications and associated original studies, we found that reliability and validity evidence was often missing from articles. Furthermore, QMPs that obscured important information needed to evaluate and reconstruct the measurement were common, especially in original research. We observed results suggesting that QMPs in turn related to the replicability of a finding. Results were less clear for reliability differences between original and replication, most likely because the analysis lacked the power to detect a difference. However, we did observe that around a quarter of measures showed signs of significant variation in reliability across labs. Combined, these findings illustrate the need for widespread adoption of measurement reporting standards and that researchers should consider the validity and reporting completeness of a study’s measurement before attempting to replicate it.
 
 ## Conflicts of Interest
 

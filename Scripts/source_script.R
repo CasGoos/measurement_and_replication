@@ -919,6 +919,3 @@ data_prep_plot_46 <- function(Data_original, Data_replication){
   return(Plot_46_data)
 }
 
-
-
-

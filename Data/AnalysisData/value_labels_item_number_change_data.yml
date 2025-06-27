@@ -1,7 +1,0 @@
-rep_org:
-  class: factor
-  '1': Replication
-direction:
-  class: factor
-  '1': decrease
-  '2': increase
