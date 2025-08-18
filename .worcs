@@ -255,8 +255,8 @@ checksums:
   data/intermediatedata/data_5.7_clean.csv: 4eb41c4c1becdf67b1e9745223441f4d
   data/intermediatedata/data_5.9.1_clean.csv: a88936b13f189cbf580cb0db6a66e151
   data/intermediatedata/coded_data_replications.csv: 90b1c5e0a4af2f80faeff19cf9b40af2
-  data/intermediatedata/coded_data_original.csv: aef97b470fb6bc72754700a3d4de4ac8
-  data/analysisdata/qmp_ratio_data.csv: 11c92672205a758b2cae174f2c24ae8c
+  data/intermediatedata/coded_data_original.csv: f3c8e0b7bfcc293e3957f503113e1a05
+  data/analysisdata/qmp_ratio_data.csv: 52368d496d6704fd2a9d048a92dd74c8
   data/analysisdata/calculated_reliability_lab_data.csv: a97e581f7a711ca80c9b67c129497aa0
   data/analysisdata/measure_reliability_data.csv: 63440ec2ccfafc17281f57855f177bf4
   data/analysisdata/fa_caruso_2012.csv: cddbba36ae6ba9fadc75c079a0ee1982
