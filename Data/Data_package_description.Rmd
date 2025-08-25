@@ -314,45 +314,27 @@
 
 *Alterations*: the only alteration made to the dataset at this stage was: the name of the dataset was changed.
 
-<!-- Should look into the datasets that were considered not usable and see what I might find for them now. Particularly Data_2.4.1, Data_2.4.2, Data_5.5, and Data_2.19.2 -->
-
 # IntermediateData
 
 ### coded_data_original.csv
 
-*Explanation*: contains all coded data on the original articles with renamed columns, fixed bad data, restructured to match the ordering of the protocols more eligibly, recoded to be close to suitable for analysis, and with several composite variables added that were calculated from the raw data.
+*Explanation*: contains all coded data on the original articles with renamed columns, fixed bad data, restructured to match the ordering of the protocols more eligibly, recoded to be close to suitable for analysis. Additionally, he coded data on 3 measures that did not appear in the replication protocols were removed to allow for easier comparisons between replications and original studies.
 
 *Newly Coded Variables*:
 
 -   **\_REV variables:** these relate to the coding obtained for that particular variable using the revised coding protocol instead of the initial coding protocol.
 
 -   **Inseparable material:** the Vignette variable from the Coded_Data_Vignette_raw.csv dataset.
-
--   **\_count variables**: a sum of the total number of TRUE coded variables within the named QMP category or the total across all categories.
-
--   **\_total variables**: the sum of all the variables within the named QMP category or the total across all categories that was not coded as Not Applicable or No Modification.
-
--   **\_ratio variables**: the ratio (rounded to four decimals) between the count of TRUE scores and the total applicable variables within the named QMP category or the total across all categories.
-
-### coded_data_original_shortened.csv
-
-*Explanation*: similar to the coded_data_original.csv only with the coded data on 3 measures that did not appear in the replication protocols being removed to allow for easier comparisons between replications and original studies.
 
 ### coded_data_replications.csv
 
-*Explanation*: contains all coded data on the replications as described in the many labs protocols with renamed columns, fixed bad data, restructured to match the ordering of the protocols more ineligibly, recoded to be close to suitable for analysis, and with several composite variables added that were calculated from the raw data.
+*Explanation*: contains all coded data on the replications as described in the many labs protocols with renamed columns, fixed bad data, restructured to match the ordering of the protocols more ineligibly, recoded to be close to suitable for analysis.
 
 *Newly Coded Variables*:
 
 -   **\_REV variables:** these relate to the coding obtained for that particular variable using the revised coding protocol instead of the initial coding protocol.
 
 -   **Inseparable material:** the Vignette variable from the Coded_Data_Vignette_raw.csv dataset.
-
--   **\_count variables**: a sum of the total number of TRUE coded variables within the named QMP category or the total across all categories.
-
--   **\_total variables**: the sum of all the variables within the named QMP category or the total across all categories that was not coded as Not Applicable or No Modification.
-
--   **\_ratio variables**: the ratio (rounded to four decimals) between the count of TRUE scores and the total applicable variables within the named QMP category or the total across all categories.
 
 ### Data_1.3_clean.csv
 
@@ -444,23 +426,7 @@
 
 # AnalysisData
 
-### cfa_results.csv
-
-*Explanation:* contains the results obtained from the exploratory unidimensionality check analyses based on factor analyses of the measures related to the data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean,data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, & data_5.9.1_clean datasets. This is part of the pre-registered exploratory analyses documented in appendix A.
-
-*Variables:*
-
--   **RMSEA:** the rmsea value for a single factor confirmatory factor analysis model when in turn applied to each of the datasets under consideration.
-
--   **N factors:** the number of factors selected for each of the datasets based on the parallel test for selecting factors.
-
--   **Single_factor:** a boolean variable indicating whether or not the measure was unidimensional based on the criteria that either the rmsea for the single factor model was smaller than .08, or the parallel test returned a single factor solution.
-
-### data_H1.csv DELETE???!!!
-
-*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and coded_data_replications.csv except for an empty column that was meant to contain any types of reported psychometric evidence not included in the multiple choice response options, since it caused codebook generation issues. The two datasets of which this dataset was composed were bound so that each row contained both the coded data of the original article and the coded data on the same measure as described in the replication protocols. An additional variable was added which indicated for the multiple item measures only whether or not any form of reliability evidence was reported or not as a boolean variable.
-
-### data_H23.csv
+### calculated_reliability_lab_data.csv
 
 *Explanation*: This dataset list contains information on the calculated Cronbach's alpha and the omega reliability coefficient calculated for the responses to the questionnaire items from several of the Many Labs studies, namely those responses encoded in: Data_1.10_clean.csv, data_1.11_clean.csv, data_1.12.3.1_clean.csv, data_1.12.3.2_clean.csv, data_2.10.1_clean.csv, data_2.12.1_clean.csv, data_2.12.2_clean.csv, data_2.12.3_clean.csv, data_2.15_clean.csv, data_2.20_clean.csv, data_2.23_clean.csv, data_3.2.1.1_clean.csv, data_3.2.1.2_clean.csv, data_3.7.2_clean.csv, data_3.8.2_clean.csv, data_5.1.1_clean.csv, data_5.7_clean.csv, data_5.9.1_clean.csv.
 
@@ -468,9 +434,203 @@
 
 -   **alpha:** Cronbach's alpha calculated for a measure at a particular lab location within a single study/questionnaire as extracted from the Many Labs datasets.
 
--   **omega:** McDonald's omega calculated for a measure at a particular lab location within a single study/questionnaire as extracted from the Many Labs datasets.
+-   **omega.tot:** McDonald's omega for the overarching factor as an estimate of the total reliability of a test calculated for a measure at a particular lab location within a single study/questionnaire as extracted from the Many Labs datasets.
 
--   **ASE:** Standard error of Cronbach's alpha at a particular lab location, based on formulas 2 & 3 from @duhachek2004AlphaStandardError.
+-   **omega.hier:** McDonald's hierarchical omega as the estimate of the general factor saturation of a test (not refered to much in study) calculated for a measure at a particular lab location within a single study/questionnaire as extracted from the Many Labs datasets.
+
+-   **ASE:** Standard error of Cronbach's alpha at a particular lab location, based on formulas 2 & 3 from @duhachekAlphasStandardError2004a.
+
+-   **g:** a short reference to the specific Many Labs replication (and if necessary the particular measure and construct) each alpha was associated with.
+
+-   **coded_data_index:** index of the row in the coded_data_original.csv or coded_data_replication.csv dataset that the indexed measure belongs to.
+
+-   **replication_success:** boolean variable indicating whether or not the measure's related effect was successfully replicated or not when looking at the significance of the meta-analytic p-value.
+
+### FA_Albarracin_2008_math.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 1 (as stated by order in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   **RMSEA:** the RMSEA of a single factor model fitted to the data of this particular lab.
+
+-   **RMSEA_se:** the standard error of the RMSEA of a single factor model fitted to the data of this particular lab.
+
+-   **N_factors:** the number of factors suggested by the parallel analysis on the data of this particular lab.
+
+-   **unidimensional:** the result of our unidimensionality decision rule (RMSEA \<.08 or N_Factors = 1) for this particular lab.
+
+-   **Tau_chisq_diff**: the chi square difference between the Tau restricted single factor model and the non-tau-restricted single factor model each fitted to the data of this particular lab.
+
+-   **Tau_Df_diff**: the degrees of freedom difference between the Tau restricted single factor model and the non-tau-restricted single factor model each fitted to the data of this particular lab.
+
+-   **Tau_p_diff**: the p value of the chi square test between the Tau restricted single factor model and the non-tau-restricted single factor model each fitted to the data of this particular lab.
+
+-   **mean_spec:** the mean of the fully standardized estimated coefficient change for all the five highest mod index freed parameters for the unidimensional model for this particular lab.
+
+-   **err_chisq_diff**: the chi square difference between the single factor model with the five (sequentially) highest mod index freed parameters freed and the non-freed parameters single factor model each fitted to the data of this particular lab.
+
+-   **err_Df_diff**: the degrees of freedom difference between the single factor model with the five (sequentially) highest mod index freed parameters freed and the non-freed parameters single factor model each fitted to the data of this particular lab.
+
+-   **err_p_diff**: the p value of the chi square test between the single factor model with the five (sequentially) highest mod index freed parameters freed and the non-freed parameters single factor model each fitted to the data of this particular lab.
+
+### FA_Albarracin_2008_verb.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 1 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Anderson_2012_NA.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 12 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Anderson_2012_PA.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 12 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Anderson_2012_SWL.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 12 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Cacioppo_1983_arg.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 7 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Cacioppo_1983_nfc.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 7 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Caruso_2012.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 10 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_De_Fruyt_2000.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 8 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Giessner_2007.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 15 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Husnu_2010.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 11 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Monin_2001_most.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 2 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Monin_2001_some.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 2 (as stated in the Many Labs 3 protocol) from Many Labs 3 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Norenzayan_2002.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 20 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Nosek_2002_Art.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 12 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Nosek_2002_Math.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 12 (as stated in the Many Labs 1 Proposal_V1.1) from Many Labs 1 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Shnabel_2008.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 7 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Vohs_2008.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 9 (as ordered in Table 1. in the Many Labs 5 manuscript) from Many Labs 5 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### FA_Zhong_2006.csv
+
+*Explanation*: This dataset describes for each lab location of study several unidimensionality, factor analysis, and Cronbach's Alpha assumptions tests for study 23 (as stated in the Many Labs 2 protocol) from Many Labs 2 that was checked for reliability and unidimensionality.
+
+*Variables*:
+
+-   Same as FA_Albarracin_2008_math.csv
+
+### measure_reliability_data.csv
+
+*Explanation*: For each measure, the mean of the variables from calculated_reliability_lab_data.csv, and the related g variable. Additionally, some data comparing the reported and replicated alpha was added.
+
+*Variables*:
+
+-   **alpha:** Cronbach's alpha calculated for a measure across lab locations as extracted from the Many Labs datasets.
+
+-   **omega.tot:** McDonald's omega for the overarching factor as an estimate of the total reliability of a test calculated for a measure across lab locations as extracted from the Many Labs datasets.
+
+-   **omega.hier:** McDonald's hierarchical omega as the estimate of the general factor saturation of a test (not refered to much in study) calculated for a measure across lab locations as extracted from the Many Labs datasets.
+
+-   **ASE:** Standard error of Cronbach's alpha across lab locations, based on formulas 2 & 3 from @duhachekAlphasStandardError2004a.
 
 -   **tau:** the tau estimate fo heterogeneity as obtained from a meta-analysis of the Cronbach's alpha of the same measure across multiple lab locations.
 
@@ -480,78 +640,30 @@
 
 -   **g:** a short reference to the specific Many Labs replication (and if necessary the particular measure and construct) each alpha was associated with.
 
--   **reporting_index:** index of the row in the data_h456.csv dataset that the indexed measure belongs to.
+-   **coded_data_index:** index of the row in the coded_data_original.csv or coded_data_replication.csv dataset that the indexed measure belongs to.
 
 -   **replication_success:** boolean variable indicating whether or not the measure's related effect was successfully replicated or not when looking at the significance of the meta-analytic p-value.
 
-### data_H23_avg.csv
-
-*Explanation*: For each measure, the mean of the variables from data_H23.csv, and the related g variable. Additionally, some data comparing the reported and replicated alpha was added.
-
-*Variables*:
-
--   **coefficient_reported**: If present, the reported alpha reliability coefficient in the original article for the measure in this row.
+-   **reported_coefficient**: If present, the reported alpha reliability coefficient in the original article for the measure in this row.
 
 -   **coefficient_difference**: The difference between the reported alpha coefficient and the average coefficient calculated from the replication data (negative values indicate that the reported coefficient is lower than the calculated average)
 
--   **siginificance_reported_coefficient**: boolean value indicating whether or not the coeffcient_reported value of a measure is outside the 95% percentile of calculated alpha coefficient score of the same measure.
+-   **significance_reported_coefficient**: boolean value indicating whether or not the reported_coeffcient value of a measure is outside the 95% percentile of calculated alpha coefficient score of the same measure.
 
-### data_H456_original.csv
+### QMP_ratio_data.csv
 
-*Explanation*: Contain all of the data from the coded_data_original_shortened.csv and one more variable indicating whether reliability was reported or not.
-
-*Variables*:
-
--   **reliability_reported**: boolean variable indicating whether any response other than nothing or "Not Reported" was given to the **reliability_type** variable.
-
-### data_H456_replication.csv
-
-*Explanation*: Contain all of the data from the coded_data_replications.csv and one more variable indicating whether reliability was reported or not.
+Percentage of measures that have a QMP for each of our QMP items and the number of measures for which they are applicable by both original and replication. The data is organized by QMP item in rows, and the percentages & number of applicable measures being the variables for both original and replication. We also calculated a Phi Coefficient as a correlation between the original QMP and replication QMP being present.
 
 *Variables*:
 
--   **reliability_reported**: boolean variable indicating whether any response other than nothing or "Not Reported" was given to the **reliability_type** variable.
+-   **Practice:** a description of the reporting practice for which we count the percentage of QMPs.
 
-### item_number_change_data.csv
+-   **QMP_percentage_original:** the QMP percentage for a particular measurement information in the original studies. This is done by dividing the number of measures for which the relevant measurement information was not available by the total number of measures for which the particular item was applicable.
 
-*Explanation:* Contains the many_labs_version, rep_org, title, and mod_5_rev variablefrom the coded_data_replication.csv dataset of the observations where the mod_5_rev variable was TRUE (meaning that the measure's number of items and/or number of response options was modified from original to replication. Additionally, two variables were added to determine whether for that measure the number of items were decreased from original to replication.
+-   **N_applicable_original:** the number of measures in the original studies for which the measurement item is applicable (factor analytic evidence reporting for single-item measures for instance would not be applicable).
 
-*Variables*:
+-   **QMP_percentage_replication:** the QMP percentage for a particular measurement information in the replication projects. This is done by dividing the number of measures for which the relevant measurement information was not available by the total number of measures for which the particular item was applicable.
 
--   **context:** A description of the change in item numbers from original to replication. NA means that for that measure the number of items was not changed.
+-   **N_applicable_replication:** the number of measures in the replication projects for which the measurement item is applicable (factor analytic evidence reporting for single-item measures for instance would not be applicable).
 
--   **direction:** A factor indicating whether the number of items was decreased, increased, or no change (NA) from original to replication.
-
-### plot_23_data_alpha.csv
-
-*Explanation*: Contain all of the data from the data_h23.csv that had a calculated alpha level larger than 0. Additionally, it contains a column of alpha scores averaged across many lab locations for each article. Finally, the replication_success was changed to a boolean variable, returning TRUE in case it was coded as "Yes", and as FALSE otherwise.
-
-### plot_23_data_omega.csv
-
-*Explanation*: Contain all of the data from the data_h3_multiple.csv. Additionally, it contains a column of omega scores averaged across many lab locations for each article. Finally, the replication_success was changed to a boolean variable, returning TRUE in case it was coded as "Yes", and as FALSE otherwise.
-
-### plot_456_data.csv
-
-*Explanation*: Contains four variables for each QMP type for all the replication studies and original articles that were coded on QMPs. The rows are ordered to have the original studies first and then the replications, then they are ordered based on QMP type from Definition to Operationalization to Selection to Quantification to Modification to Total. Within each type the QMPs are ordering matches the order of the studies/articles as in the data_h456_replications.csv and data_h456_original.csv.
-
-*Variables:*
-
--   **QMP_ratio:** float number between 0 and 1 that indicates the QMP ratio based on the initial coding protocol for that QMP type for that study/article.
-
--   **QMP_ratio_1:** transformed version of the QMP_ratio column, where QMPs for all original articles have a 1 added to their ratio. This was done for the sake of making the figure possible in ggplot as it is right now.
-
--   **QMP_type:** factor that indicates the QMP type the QMP ratio belongs to (Definition, Operationalization, Selection, Quantification, or Modification).
-
--   **QMP_ratio_REV:** float number between 0 and 1 that indicates the QMP ratio based on the revised coding protocol for that QMP type for that study/article.
-
--   **RepOrg:** factor that indicates whether the QMP ratio belongs to a replication or an original article.
-
--   **QMP_ratio_1_REV:** transformed version of the QMP_ratio_REV column, where QMPs for all original articles have a 1 added to their ratio. This was done for the sake of making the figure possible in ggplot as it is right now.
-
-### plot_46_data.csv
-
-*Explanation*: Contains four variables for each QMP type (including total) for both replication studies and original articles combined per row. The QMP_ratio column indicates the initial QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the initial QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the data_h456_replications.csv and data_h456_original.csv.
-
-### plot_46_data_REV.csv
-
-*Explanation*: Contains four variables for each QMP type (including total) for both replication studies and original articles combined per row. The QMP_ratio column indicates the revised QMP ratio for the specific QMP type for that original article. The QMP_type column indicates the specific QMP type the QMP_ratio column belongs to. The QMP_Rep_ratio column indicates the revised QMP ratio for the specific QMP type for that replication study. The QMP_Rep_type column indicates the specific QMP type the QMP_Rep_ratio column belongs to. The rows are ordered so that within each QMP type it matches the order of the studies/articles as in the coded_data_replications.csv and coded_data_original_shortened.csv.
+-   **Phi:** the phi coefficient is a correlation between the original QMP percentage and replication QMP percentage.

@@ -152,9 +152,27 @@ This can only be run after data is loaded with the main manuscript file.
 
 ```{r DataStructurePlotCode, warning = FALSE, fig.cap = "This figure displays the sample size for the included original articles and total sample size for multiple replications. The color of each point indicates whether it represents an original article or a replication. Each point's shape relates to whether the hypothesis was supported or not, while the size indicates the number of measures used within that article or replication. The figure is log10-scaled, each light grey vertical line represents a step of 500 in sample size. Two original articles are not represented in this figure due to them containing no reported sample size.", fig.height = 4, fig.width = 12}
 
+
+full_coded_data <- rbind(coded_data_original, coded_data_replications)
+
+plot_data_structure_data <- data.frame()
+
+
+for (i in 1:nrow(full_coded_data)){
+  if(full_coded_data$variable_order[i] == 1){
+    plot_data_structure_data <- rbind(plot_data_structure_data, full_coded_data[i,])
+  }
+  
+  if(full_coded_data$variable_order[i] != 1){
+    plot_data_structure_data[nrow(plot_data_structure_data),] <- full_coded_data[i,]
+  }
+}
+  
+  
+  
 # plot of the multilevel data structure
 ggplot(plot_data_structure_data, aes(x = N, y = factor(many_labs_version, levels = c("5", "3", "2", "1")), 
-                                colour = rep_org, shape = hypothesis_support, size = measure_count)) +
+                                colour = rep_org, shape = hypothesis_support, size = variable_order)) +
   geom_point(alpha = .33) +
   
   scale_x_continuous(trans = "log10", breaks = c(10, 100, 1000, 10000), 

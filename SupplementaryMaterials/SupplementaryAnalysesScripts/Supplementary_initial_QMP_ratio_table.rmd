@@ -1,0 +1,184 @@
+<!-- Supplementary Analyses B -->
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(17042023)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Supplementary Analyses B: Initial Coding Protocol QMP Table
+
+This appendix contains the QMP Table equivalent based on the QMPs obtained using the initial coding protocol.
+
+### Explanation
+The data was initially coded using to the preregistered coding protocol. After the coding was completed using the preregistered coding protocol, it was determined that some of the initial ratings were possibly too stringent. As a result, some of the items in the protocol were reformulated, so that the conclusions from the resulting analyses were based on a more lenient judgement of QMPs. The coded data using the initial protocol was still separately available, and because this protocol was the one that was pre-registered the QMP table based on these QMPs is shown here.
+
+### Table
+Table \@ref(tab:QMPtableInitial) below shows for both original and replication for all of the QMP items the ratio of QMPs and for how many of the `r nrow(coded_data_original)` measures the QMP was applicable. Meanwhile, the Phi coefficient indicates the “correlation” between the MP being questionable or good in the original and the same for the replication. Compared to the revised protocol, the QMP rates are much higher, especially for modification items as we had specific criteria for this that required things to be reported all in the article/protocol with specific details for what  should be there.
+
+```{r Calculating_initial_QMP_Data, include = FALSE, eval = FALSE}
+# function for changing QMP data to their ratio equivalent (copied from main manuscript file)
+Create_QMP_descriptive_case <- function(practice_name, original_coded_var, replication_coded_var){
+  # add practice name to first row
+  Practice <- practice_name
+  
+  # Sum all QMP/GMP (Good Measurement Practice), keeping NA items out of
+  # the equation
+  original_n_QMPs <- sum(original_coded_var == "FALSE", na.rm = TRUE)
+  replication_n_QMPs <- sum(replication_coded_var == "FALSE", na.rm = TRUE)
+  
+  original_n_GMPs <- sum(original_coded_var == "TRUE", na.rm = TRUE)
+  replication_n_GMPs <- sum(replication_coded_var == "TRUE", na.rm = TRUE)
+  
+  # calculating the N of applicable items for originals
+  N_applicable_original <- original_n_QMPs + original_n_GMPs
+  
+  # checking that we are not dividing by 0, and then calculating the ratio of 
+  # QMPs for applicable items for originals
+  if(N_applicable_original != 0){
+    QMP_percentage_original <- round(original_n_QMPs / (N_applicable_original), 2)
+  } else{
+    QMP_percentage_original <- 0
+  }                               
+  
+  # calculating the N of applicable items for replications
+  N_applicable_replication <- replication_n_QMPs + replication_n_GMPs
+  
+  # checking that we are not dividing by 0, and then calculating the ratio of 
+  # QMPs for applicable items for replications
+  if(N_applicable_replication != 0){
+    QMP_percentage_replication <- round(replication_n_QMPs / N_applicable_replication, 2)
+  } else{
+    QMP_percentage_replication <- 0
+  }     
+  
+  # calculating the Phi coefficient to estimate the relation between variables
+  Phi <- phi(matrix(c(original_n_QMPs, original_n_GMPs, replication_n_QMPs, 
+                      replication_n_GMPs), nrow = 2, byrow = TRUE))
+  
+  return(c(Practice, QMP_percentage_original, N_applicable_original, QMP_percentage_replication, N_applicable_replication, Phi))
+}
+
+
+
+# loading the relevant items
+original_QMP_data_initial <- coded_data_original[c("def_1", "sel_2", "op_4", "reliability_type", "sel_existing", "op_version", "op_1", "sel_1", "sel_3", "sel_4", "sel_psychometric_evidence", "op_2", "op_3", "quant_1", "quant_2", "quant_3", "quant_4", "op_5", "mod_1", "mod_2", "mod_3", "mod_4", "mod_5", "mod_6")]
+
+replication_QMP_data_initial <- coded_data_replications[c("def_1", "sel_2", "op_4", "reliability_type", "sel_existing", "op_version", "op_1", "sel_1", "sel_3", "sel_4", "sel_psychometric_evidence", "op_2", "op_3", "quant_1", "quant_2", "quant_3", "quant_4", "op_5", "mod_1", "mod_2", "mod_3", "mod_4", "mod_5", "mod_6")]
+
+
+
+# create an empty dataset to add a recoded TRUE and FALSE response for QMPs to 
+QMP_data_initial <- data.frame(delete_this = rep(NA, 77))
+
+
+QMP_data_initial$reliability_reported_org <- ifelse(original_QMP_data_initial$reliability_type != "Not Reported" & original_QMP_data_initial$reliability_type != "" & !is.na(original_QMP_data_initial$reliability_type), TRUE, ifelse(original_QMP_data_initial$reliability_type == "Not Reported", FALSE, NA))
+
+QMP_data_initial$reliability_reported_rep <- ifelse(replication_QMP_data_initial$reliability_type != "Not Reported" & replication_QMP_data_initial$reliability_type != "" & !is.na(replication_QMP_data_initial$reliability_type), TRUE, ifelse(replication_QMP_data_initial$reliability_type == "Not Reported", FALSE, NA))
+
+
+# add if clearly specified if measure existed or not
+QMP_data_initial$select_or_create_clarity_org <- original_QMP_data_initial$sel_existing == "Not Clearly Stated"
+
+QMP_data_initial$select_or_create_clarity_rep <- replication_QMP_data_initial$sel_existing == "Not Clearly Stated"
+
+
+# add if version was clearly specified
+QMP_data_initial$version_clarity_org <- original_QMP_data_initial$op_1 == FALSE | original_QMP_data_initial$op_version == "" & original_QMP_data_initial$sel_existing == "True, namely:"
+
+QMP_data_initial$version_clarity_rep <- replication_QMP_data_initial$op_1 == FALSE | replication_QMP_data_initial$op_version == "" & replication_QMP_data_initial$sel_existing == "True, namely:"
+
+
+# add if factor structure was analysed
+QMP_data_initial$factor_analysis_org <- ifelse(original_QMP_data_initial$sel_psychometric_evidence == "None", FALSE, ifelse(original_QMP_data_initial$sel_psychometric_evidence != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)", TRUE, NA))
+
+QMP_data_initial$factor_analysis_rep <- ifelse(replication_QMP_data_initial$sel_psychometric_evidence == "None", FALSE, ifelse(replication_QMP_data_initial$sel_psychometric_evidence != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)", TRUE, NA))
+
+# direct copies
+QMP_data_initial$justified_definition_org <- original_QMP_data_initial$def_1
+QMP_data_initial$justified_definition_rep <- replication_QMP_data_initial$def_1
+QMP_data_initial$justified_selection_org <- original_QMP_data_initial$sel_2
+QMP_data_initial$justified_selection_rep <- replication_QMP_data_initial$sel_2
+QMP_data_initial$justified_operationalisation_org <- original_QMP_data_initial$op_4
+QMP_data_initial$justified_operationalisation_rep <- replication_QMP_data_initial$op_4
+QMP_data_initial$source_org <- original_QMP_data_initial$sel_1
+QMP_data_initial$source_rep <- replication_QMP_data_initial$sel_1
+QMP_data_initial$in_psychometric_org <- original_QMP_data_initial$sel_3
+QMP_data_initial$in_psychometric_rep <- replication_QMP_data_initial$sel_3
+QMP_data_initial$out_psychometric_org <- original_QMP_data_initial$sel_4
+QMP_data_initial$out_psychometric_rep <- replication_QMP_data_initial$sel_4
+QMP_data_initial$admin_format_org <- original_QMP_data_initial$op_2
+QMP_data_initial$admin_format_rep <- replication_QMP_data_initial$op_2
+QMP_data_initial$admin_procedure_org <- original_QMP_data_initial$op_3
+QMP_data_initial$admin_procedure_rep <- replication_QMP_data_initial$op_3
+QMP_data_initial$N_items_org <- original_QMP_data_initial$quant_1
+QMP_data_initial$N_items_rep <- replication_QMP_data_initial$quant_1
+QMP_data_initial$N_response_org <- original_QMP_data_initial$quant_2
+QMP_data_initial$N_response_rep <- replication_QMP_data_initial$quant_2
+QMP_data_initial$recoding_org <- original_QMP_data_initial$quant_3
+QMP_data_initial$recoding_rep <- replication_QMP_data_initial$quant_3
+QMP_data_initial$aggregation_org <- original_QMP_data_initial$quant_4
+QMP_data_initial$aggregation_rep <- replication_QMP_data_initial$quant_4
+QMP_data_initial$example_items_org <- original_QMP_data_initial$op_5
+QMP_data_initial$example_items_rep <- replication_QMP_data_initial$op_5
+QMP_data_initial$mod_admin_format_org <- original_QMP_data_initial$mod_1
+QMP_data_initial$mod_admin_format_rep <- replication_QMP_data_initial$mod_1
+QMP_data_initial$mod_admin_format_support_org <- original_QMP_data_initial$mod_2
+QMP_data_initial$mod_admin_format_support_rep <- replication_QMP_data_initial$mod_2
+QMP_data_initial$mod_language_org <- original_QMP_data_initial$mod_3
+QMP_data_initial$mod_language_rep <- replication_QMP_data_initial$mod_3
+QMP_data_initial$mod_language_support_org <- original_QMP_data_initial$mod_4
+QMP_data_initial$mod_language_support_rep <- replication_QMP_data_initial$mod_4
+QMP_data_initial$mod_N_items_or_response_org <- original_QMP_data_initial$mod_5
+QMP_data_initial$mod_N_items_or_response_rep <- replication_QMP_data_initial$mod_5
+QMP_data_initial$mod_N_items_or_response_support_org <- original_QMP_data_initial$mod_6
+QMP_data_initial$mod_N_items_or_response_support_rep <- replication_QMP_data_initial$mod_6
+
+
+QMP_data_initial <- QMP_data_initial[,!(names(QMP_data_initial) %in% "delete_this")]
+
+
+
+### QMP ratio data
+# create the empty QMP ratio dataset
+QMP_ratio_data_initial <- data.frame(Practice = rep("", ncol(QMP_data_initial)/2),
+                                     QMP_percentage_original = rep(0, ncol(QMP_data_initial)/2),
+                                     N_applicable_original = rep(0, ncol(QMP_data_initial)/2),
+                                     QMP_percentage_replication = rep(0, ncol(QMP_data_initial)/2),
+                                     N_applicable_replication = rep(0, ncol(QMP_data_initial)/2),
+                                     Phi = rep(0, ncol(QMP_data_initial)/2))
+
+
+# we loop through the length of the number of Measurement Practices (MPs) 
+# ignoring doubles due to having both original and replication
+for(i in 1:(ncol(QMP_data_initial)/2)){
+  # we create the name of the variable by taking the name and removing the 
+  # _org suffix. Then we for each column except the NA initial column
+  # we take the original MP and the related replication MP, and calculate
+  # their QMP
+  QMP_ratio_data_initial[i,] <- Create_QMP_descriptive_case(substr(names(QMP_data_initial)[i*2], 1, nchar(names(QMP_data_initial)[i*2]) - 4), QMP_data_initial[[(i*2)-1]], QMP_data_initial[[i*2]])
+  }
+
+```
+
+
+```{r QMPtableInitial}
+# create informative Measurement Practice Labels 
+MPractice <- c("Reliability is reported", "It is clear if the measure existed or is newly created",    "Specifc version of the measure is specified", "Validity evidence from a factor analysis is presented",   "The measured variable is defined", "The choice of measure selection or creation is justified",    "The implemented operationalisation is justified", "The source of the measure is provided",    "Psychometric evidence from the study is given", "Psychometric evidence from an earlier study is given",    "The administration format and environment are described", "The administration procedure is described",   "The number of items are described", "The number of response options are described",    "The recoding of responses is described", "The creation of the index is described",    "Example items are presented in text or supplement", "Any administration format changes are mentioned",    "Administration format changes are justified/validated", "Any translations are mentioned",    "Translated measures are justified/validated", "Any changes in number of items or response options are mentioned",    "Changes in number of items or response options are justified/validated")   
+
+
+# construct the QMP table to be printed 
+QMP_table_initial <- data.frame("Practice" = MPractice, 
+                        "QMP original" = paste0(QMP_ratio_data_initial$QMP_percentage_original, " (", QMP_ratio_data_initial$N_applicable_original, ")"), 
+                        "QMP Replication" = paste0(QMP_ratio_data_initial$QMP_percentage_replication, " (", QMP_ratio_data_initial$N_applicable_replication, ")"), 
+                        "Phi" = QMP_ratio_data_initial$Phi)   
+
+
+# print the table in apa formatting 
+apa_table(QMP_table_initial, align = c("l", "r", "r", "r"), caption = "Ratio of QMPs and number of applicable measures, for original and replication", note = "The first number in QMP org and QMP rep is the ratio of measures for which the practice in that row was not conducted well by our standards. The number between brackets indicates the number of measures for which the practice was applicable.", escape = FALSE, placement = "htp")
+```
+
+
+
+
+

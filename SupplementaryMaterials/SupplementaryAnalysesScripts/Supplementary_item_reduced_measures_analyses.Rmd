@@ -1,4 +1,4 @@
-<!-- Supplementary Analyses E -->
+<!-- Supplementary Analyses C -->
 
 ```{r analysis-preferences}
 # Seed for random number generation
@@ -9,24 +9,94 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```{r setup, include = FALSE}
 # loading R libraries
 library(papaja)
-library(worcs)
-library(tidyr)
 library(betareg)
-library(lmerTest)
-library(psych)
-library(sandwich)
-library(lmtest)
-
-# loading source script
-source(file = "../../Scripts/source_script.R")
-
-# Code below loads the processed data. The raw data was prepared for analysis in 'prepare_data.R.
-load_data() 
+library(statmod)
 ```
 
-# Supplementary Analyses E: Item Reduced Measures Analyses
+```{r data_prep}
+# combine replication and original data 
+is_replication <- c(rep(FALSE, 77), rep(TRUE, 77))
 
-This appendix contains analyses on the impact that measures with a changed number of items had on the results. These analyses were not pre-registered, but were conducted to check for the potentially confoudning influence of these measures. The results of these supplementary analyses show that this impact was minimal.
+combi_org_rep <- rbind(coded_data_original, coded_data_replications)
+
+combi_org_rep <- cbind(combi_org_rep, is_replication)
+
+combi_org_rep$has_reliability <- combi_org_rep$reliability_type != "Not Reported" & combi_org_rep$reliability_type != ""
+
+
+# function to calculate QMP ratios
+calculating <- function(Data){
+  QMP_data <- data.frame(def_ratio = rep(NA, 154),
+                         op_ratio = rep(NA, 154),
+                         sel_ratio = rep(NA, 154),
+                         quant_ratio = rep(NA, 154),
+                         mod_ratio = rep(NA, 154),
+                         QMP_ratio = rep(NA, 154),
+                         op_REV_ratio = rep(NA, 154),
+                         sel_REV_ratio = rep(NA, 154),
+                         quant_REV_ratio = rep(NA, 154),
+                         mod_REV_ratio = rep(NA, 154),
+                         QMP_REV_ratio = rep(NA, 154))
+  
+  def_count <- as.numeric(Data$def_1)
+  def_count[is.na(def_count)] <- 0
+  def_total <- as.numeric(!is.na(Data$def_1))
+  QMP_data$def_ratio <- 1 - round(def_count / def_total, 4) 
+  QMP_data$def_ratio[is.na(Data$def_ratio)] <- 0
+  
+  op_count <- rowSums(Data[16:20], na.rm = TRUE)
+  op_total <- rowSums(!is.na(Data[16:20]))
+  QMP_data$op_ratio <- 1 - round(op_count / op_total, 4)
+  
+  sel_count <- rowSums(Data[23:26], na.rm = TRUE)
+  sel_total <- rowSums(!is.na(Data[23:26]))
+  QMP_data$sel_ratio <- 1 - round(sel_count / sel_total, 4) 
+  
+  quant_count <- rowSums(Data[29:32], na.rm = TRUE)
+  quant_total <- rowSums(!is.na(Data[29:32]))
+  QMP_data$quant_ratio <- 1 - round(quant_count / quant_total, 4)  
+  
+  mod_count <- rowSums(Data[34:39], na.rm = TRUE)
+  mod_total <- rowSums(!is.na(Data[34:39]))
+  QMP_data$mod_ratio <- 1 - round(mod_count / mod_total, 4) 
+  
+  MP_total <- def_total + op_total + sel_total + quant_total + mod_total
+  MP_count <- def_count + op_count + sel_count + quant_count + mod_count
+  QMP_data$QMP_ratio <- 1 - round(MP_count / MP_total, 4) 
+  
+  op_REV_count <- rowSums(Data[c(18,19,41,42,43)], na.rm = TRUE)
+  op_REV_total <- rowSums(!is.na(Data[c(18,19,41,42,43)]))
+  QMP_data$op_REV_ratio <- 1 - round(op_REV_count / op_REV_total, 4) 
+  
+  sel_REV_count <- rowSums(Data[c(24,26,44,45)], na.rm = TRUE)
+  sel_REV_total <- rowSums(!is.na(Data[c(24,26,44,45)]))
+  QMP_data$sel_REV_ratio <- 1 - round(sel_REV_count / sel_REV_total, 4)  
+  
+  quant_REV_count <- rowSums(Data[c(32,48,49,50)], na.rm = TRUE)
+  quant_REV_total <- rowSums(!is.na(Data[c(32,48,49,50)]))
+  QMP_data$quant_REV_ratio <- 1 - round(quant_REV_count / quant_REV_total, 4) 
+  
+  mod_REV_count <- rowSums(Data[52:57], na.rm = TRUE)
+  mod_REV_total <- rowSums(!is.na(Data[52:57]))
+  QMP_data$mod_REV_ratio <- 1 - round(mod_REV_count / mod_REV_total, 4) 
+  
+  MP_REV_count <- def_count + op_REV_count + sel_REV_count + quant_REV_count + mod_REV_count
+  MP_REV_total <- def_total + op_REV_total + sel_REV_total + quant_REV_total + mod_REV_total
+  QMP_data$QMP_REV_ratio <- 1 - round(MP_REV_count / MP_REV_total, 4) 
+  
+  return(QMP_data)
+}
+
+# calculating the QMP ratios for each QMP item.
+QMP_Ratio_data <- calculating(combi_org_rep)
+
+QMP_Ratio_data <- cbind(QMP_Ratio_data, is_replication)
+
+```
+
+# Supplementary Analyses C: Item Reduced Measures Analyses
+
+This appendix contains the analyses on the impact that measures with a changed number of items had on the main results from  Supplementary Analyses A. These analyses were not pre-registered, but were conducted to check for the potentially confounding influence of these measures. The results of these supplementary analyses show that this impact was minimal overall.
 
 ```{r ExtractingItemReducedMeasures, include = FALSE}
 # Here we determine whether items had the number of items changed, and how.
@@ -34,7 +104,7 @@ This appendix contains analyses on the impact that measures with a changed numbe
 # The code below indexes the scales for which either the number of items or 
 # number of response options were decreased. 
 
-item_number_change_data <- data_h456_replications[!is.na(data_h456_replications$mod_5_REV) & data_h456_replications$mod_5_REV, c(1, 2, 3, 56)]
+item_number_change_data <- coded_data_replications[!is.na(coded_data_replications$mod_5_REV) & coded_data_replications$mod_5_REV, c(1, 2, 3, 56)]
 
 
 # Extracted information on the modification of measurement items. When NA is 
@@ -56,36 +126,18 @@ decreased_items_index[as.numeric(rownames(item_number_change_data[item_number_ch
 
 ```
 
-```{r StoringItemReducedMeasureData}
-# Storing the data on the Measures for which the number of items and/or response 
-# options was altered from original to replication (of main interest are the
-# measures for which the number of items were changed).
-open_data(data = item_number_change_data, filename = paste0(paste0(
-  "Data/AnalysisData/", deparse(substitute(item_number_change_data))), ".csv"),
-  codebook = paste0(paste0(
-    "Data/AnalysisData/codebook_", 
-    deparse(substitute(item_number_change_data))), ".Rmd"),
-  value_labels = paste0(paste0(
-    "Data/AnalysisData/value_labels_", 
-    deparse(substitute(item_number_change_data))), ".yml")) 
-
-```
-
 There were overall `r sum(decreased_items_index)` measures for which the number of items were reduced. In the following analyses we will see their impact on the results
 
 ```{r ReplicationSuccessDifferent}
 # getting information on hypothesis support/replication success
-hypothesis_support_index <- data_h456_replications$hypothesis_support
+hypothesis_support_index <- coded_data_replications$hypothesis_support
 
-hypothesis_support_index[data_h456_replications$hypothesis_support == "Unclear"] <- "Yes"
-
-# coding Unclear into No instead of Yes didn't make a difference on the test.
-# hypothesis_support_index[data_h456_replications$hypothesis_support == "Unclear"] <- "No"
+hypothesis_support_index[coded_data_replications$hypothesis_support == "Unclear"] <- "Yes"
 
 
 # chi-squared test of differences in hypothesis support/replication success 
 # between measures for which items were decreased and for which it was not.
-decreased_items_replicability_impact_test <- chisq.test(decreased_items_index, data_h456_replications$hypothesis_support)
+decreased_items_replicability_impact_test <- chisq.test(decreased_items_index, coded_data_replications$hypothesis_support)
 
 decreased_items_replicability_impact_test_result <- paste0("$Chi^2 = ", apa_num(decreased_items_replicability_impact_test$statistic), "$, df = ",
 decreased_items_replicability_impact_test$parameter, "$, p = ",
@@ -93,15 +145,15 @@ apa_p(decreased_items_replicability_impact_test$p.value), "$")
 
 ```
 
-Interestingly, when item numbers decreased, the replicability seemed to have increased . Although the difference was not significant (`r decreased_items_replicability_impact_test_result`), and there were too few modifications to the items to get a stable estimate.
+Interestingly, when item numbers decreased, the replicability seemed to have increased. Although the difference was not significant (`r decreased_items_replicability_impact_test_result`), and there were too few modifications to the items to get a stable estimate.
 
 ## Reliability
 ### H1
 
 ```{r H1Difference}
 # H1
-data_h456_original$reliability_type[decreased_items_index]
-data_h456_replications$reliability_type[decreased_items_index]
+coded_data_original$reliability_type[decreased_items_index]
+coded_data_replications$reliability_type[decreased_items_index]
 ```
 
 Only one of these measures had a reported reliability in the original, so it is unlikely to have been of much impact.
@@ -110,11 +162,11 @@ Only one of these measures had a reported reliability in the original, so it is 
 
 ```{r H2H3Difference}
 # H2 & H3
-data_h456_original$reliability_coeff[decreased_items_index]
-data_h456_replications$reliability_coeff[decreased_items_index]
+coded_data_original$reliability_coeff[decreased_items_index]
+coded_data_replications$reliability_coeff[decreased_items_index]
 
 # running the H3 model
-data_h23_avg[data_h23_avg$reporting_index %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),])),]
+measure_reliability_data[measure_reliability_data$reporting_index %in% as.numeric(rownames(item_number_change_data[item_number_change_data$direction == "decrease" & !is.na(item_number_change_data$direction),])),]
 
 
 ```
@@ -128,30 +180,30 @@ Of the measures in the replication protocol that we could calculate the reliabil
 # first we combine the datasets of the original studies and the replications 
 # together
 # adding "Rep_" to separate replication from original columns in the combined dataset
-data_h456_Rep <- data_h456_replications
-colnames(data_h456_Rep) <- paste0("Rep_", colnames(data_h456_Rep))
+data_h4_Rep <- QMP_Ratio_data[QMP_Ratio_data$is_replication,]
+colnames(data_h4_Rep) <- paste0("Rep_", colnames(data_h4_Rep))
 
 # combine the dataset
-data_h6 <- cbind(data_h456_original, data_h456_Rep)
+data_h4 <- cbind(QMP_Ratio_data[!QMP_Ratio_data$is_replication,], data_h4_Rep)
 
 
 # comparing the mean and sd original QMP ratio 
-print(c("mean decreased" = mean(data_h6$QMP_REV_ratio[decreased_items_index]),
-      "sd decreased" = sd(data_h6$QMP_REV_ratio[decreased_items_index]),
+print(c("mean decreased" = mean(data_h4$QMP_REV_ratio[decreased_items_index]),
+      "sd decreased" = sd(data_h4$QMP_REV_ratio[decreased_items_index]),
       
-      "mean non-decreased" = mean(data_h6$QMP_REV_ratio[-decreased_items_index]),
-      "sd non-decreased" = sd(data_h6$QMP_REV_ratio[-decreased_items_index])))
+      "mean non-decreased" = mean(data_h4$QMP_REV_ratio[-decreased_items_index]),
+      "sd non-decreased" = sd(data_h4$QMP_REV_ratio[-decreased_items_index])))
 ```
 
 No clear difference in original QMPs between modified and non-modified measures. Original measures weren't modified after all, but if QMPs were high for the changed measures, the change may be justified from the standpoint that: change was necessary, the original measurement had too many QMPs.
 
 ```{r ReplicationQMPDIfference}
 # comparing the mean and sd replication QMP ratio 
-print(c("mean decreased" = mean(data_h6$Rep_QMP_REV_ratio[decreased_items_index]),
-      "sd decreased" = sd(data_h6$Rep_QMP_REV_ratio[decreased_items_index]),
+print(c("mean decreased" = mean(data_h4$Rep_QMP_REV_ratio[decreased_items_index]),
+      "sd decreased" = sd(data_h4$Rep_QMP_REV_ratio[decreased_items_index]),
       
-      "mean non-decreased" = mean(data_h6$Rep_QMP_REV_ratio[-decreased_items_index]),
-      "sd non-decreased" = sd(data_h6$Rep_QMP_REV_ratio[-decreased_items_index])))
+      "mean non-decreased" = mean(data_h4$Rep_QMP_REV_ratio[-decreased_items_index]),
+      "sd non-decreased" = sd(data_h4$Rep_QMP_REV_ratio[-decreased_items_index])))
 ```
 
 The measures for which the number of items was reduced, had somewhat more QMPs than those measures for which this was not the case. Suggesting that when the number of items are reduced, there are likely also other issues at play.
@@ -162,13 +214,14 @@ data_h4 <- rbind(data_h456_original, data_h456_replications)
 
 # running the h4 models
 # only decreased item measures
-betareg_output_to_apa_full(betareg(QMP_REV_ratio ~ rep_org, data = data_h4[c(decreased_items_index, decreased_items_index),]))
+betareg(QMP_REV_ratio ~ is_replication, data = QMP_Ratio_data[decreased_items_index,])
 
 # only non-decreased item measures
-betareg_output_to_apa_full(betareg(QMP_REV_ratio ~ rep_org, data = data_h4[-c(decreased_items_index, decreased_items_index),]))
+betareg(QMP_REV_ratio ~ is_replication, data = QMP_Ratio_data[!decreased_items_index,])
 
 # all (originally)
-betareg_output_to_apa_full(betareg(QMP_REV_ratio ~ rep_org, data = data_h4))
+betareg(QMP_REV_ratio ~ is_replication, data = QMP_Ratio_data)
+
 ```
 
 The effect is in the same direction, but smaller and no longer significant (although this could also be due to reduction in sample size). Overall, their removal had almost no impact on the results.
@@ -177,18 +230,21 @@ The effect is in the same direction, but smaller and no longer significant (alth
 
 ```{r H5Difference}
 ## running the h5 models
-# first removing any hypotheses from the data that were rated as being unclear
-data_h5 <- data_h456_replications
-data_h5 <- data_h5[data_h5$hypothesis_support != "Unclear",]
-data_h5$hypothesis_support <- droplevels.factor(data_h5$hypothesis_support)
+# first making data with and without decreased item measures
+Diff_QMP_Ratio_data <- QMP_Ratio_data[QMP_Ratio_data$is_replication,]
+Diff_QMP_Ratio_data <- Diff_QMP_Ratio_data[decreased_items_index,]
+UnDiff_QMP_Ratio_data <- QMP_Ratio_data[QMP_Ratio_data$is_replication,]
+UnDiff_QMP_Ratio_data <- UnDiff_QMP_Ratio_data[-decreased_items_index,]
+Diff_coded_data_replications <- coded_data_replications[decreased_items_index,]
+UnDiff_coded_data_replications <- coded_data_replications[-decreased_items_index,]
+
 
 # running the model using the QMPs from the revised coding protocol
-apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5[decreased_items_index[c(53:55)],], family = binomial))$full_result$QMP_REV_ratio
+betareg(Diff_QMP_Ratio_data$QMP_REV_ratio ~ Diff_coded_data_replications$hypothesis_support)
 
-apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5[-decreased_items_index[c(53:55)],], family = binomial))$full_result$QMP_REV_ratio
+betareg(UnDiff_QMP_Ratio_data$QMP_REV_ratio ~ UnDiff_coded_data_replications$hypothesis_support)
 
-apa_print(glm(hypothesis_support ~ QMP_REV_ratio, data = data_h5, family = binomial))$full_result$QMP_REV_ratio
-
+betareg(QMP_Ratio_data[QMP_Ratio_data$is_replication,]$QMP_REV_ratio ~ coded_data_replications$hypothesis_support)
 ```
 
 The association between replication QMP ratio and replicability was stronger for measures whose items were decreased, but difficult to say with so few observations. Furthermore, their removal had negligible impact on the results.
@@ -197,12 +253,15 @@ The association between replication QMP ratio and replicability was stronger for
 
 ```{r H6Difference}
 # running the h6 models
-betareg_output_to_apa_full(betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6[decreased_items_index,]))
+betareg(QMP_Ratio_data[!QMP_Ratio_data$is_replication,]$QMP_REV_ratio[decreased_items_index] ~ QMP_Ratio_data[QMP_Ratio_data$is_replication,]$QMP_REV_ratio[decreased_items_index])
 
-betareg_output_to_apa_full(betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6[-decreased_items_index,]))
 
-betareg_output_to_apa_full(betareg(Rep_QMP_REV_ratio ~ QMP_REV_ratio, data = data_h6))
+betareg(QMP_Ratio_data[!QMP_Ratio_data$is_replication,]$QMP_REV_ratio[!decreased_items_index] ~ QMP_Ratio_data[QMP_Ratio_data$is_replication,]$QMP_REV_ratio[!decreased_items_index])
+
+betareg(QMP_Ratio_data[!QMP_Ratio_data$is_replication,]$QMP_REV_ratio ~ QMP_Ratio_data[QMP_Ratio_data$is_replication,]$QMP_REV_ratio)
 
 ```
 
 The association between original and replication QMPs was reduced and no longer significant for measures whose items were decreased, but again there are limited observations for which the number of items were decreased. Overall, their removal had limited impact on the results.
+
+
