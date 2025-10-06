@@ -256,25 +256,25 @@ checksums:
   data/intermediatedata/data_5.9.1_clean.csv: a88936b13f189cbf580cb0db6a66e151
   data/intermediatedata/coded_data_replications.csv: 90b1c5e0a4af2f80faeff19cf9b40af2
   data/intermediatedata/coded_data_original.csv: f3c8e0b7bfcc293e3957f503113e1a05
-  data/analysisdata/qmp_ratio_data.csv: 52368d496d6704fd2a9d048a92dd74c8
+  data/analysisdata/qmp_ratio_data.csv: d9279b77997c01b001629909fdae2e0d
   data/analysisdata/calculated_reliability_lab_data.csv: a97e581f7a711ca80c9b67c129497aa0
   data/analysisdata/measure_reliability_data.csv: 63440ec2ccfafc17281f57855f177bf4
-  data/analysisdata/fa_caruso_2012.csv: cddbba36ae6ba9fadc75c079a0ee1982
-  data/analysisdata/fa_husnu_2010.csv: 0b50eab8663cadf47eb4e5abf556a780
-  data/analysisdata/fa_nosek_2002_math.csv: aca605f7725ed00a2c3574dde20578e8
-  data/analysisdata/fa_nosek_2002_art.csv: f90e5db6fbbc4b8d69e598ef6e55ff76
-  data/analysisdata/fa_anderson_2012_swl.csv: f941b4c7801ac8d016d3003812d9b251
-  data/analysisdata/fa_anderson_2012_pa.csv: 468ca2d827016132c7e4000cc5b6e795
-  data/analysisdata/fa_anderson_2012_na.csv: 3cf36a24fe00b79f9ca2f8cf71a51714
-  data/analysisdata/fa_giessner_2007.csv: c0448bb376f56bc6458433f5209e5039
-  data/analysisdata/fa_norenzayan_2002.csv: 1d8720f388916b20eadf910d86f15b68
-  data/analysisdata/fa_zhong_2006.csv: cb073e83391a6a3ea602cc82f06a42f3
-  data/analysisdata/fa_monin_2001_most.csv: 0b14105c4a7bce75972301854d59f7b8
-  data/analysisdata/fa_monin_2001_some.csv: bec2853db83a4b21a6b31bd30cb254e6
-  data/analysisdata/fa_cacioppo_1983_arg.csv: cff3dc6e116a678f04be393302ca69c1
-  data/analysisdata/fa_cacioppo_1983_nfc.csv: 4269c23dac679192356ac5409542c0f4
-  data/analysisdata/fa_de_fruyt_2000.csv: 95f36c7a0a6803132d59e66c9ae66667
-  data/analysisdata/fa_albarracin_2008_verb.csv: c89ea66e6b426e099ceb2149dc70bdfc
-  data/analysisdata/fa_albarracin_2008_math.csv: cc28cc323afd2f60046186713cd6cc99
-  data/analysisdata/fa_shnabel_2008.csv: 91570f59e4381fe60a44668fa2fe6bbc
-  data/analysisdata/fa_vohs_2008.csv: c1437e1a5905d2bfd62b769a04559931
+  data/analysisdata/fa_caruso_2012.csv: 9436824234ceef61b1cb8c39564d4f79
+  data/analysisdata/fa_husnu_2010.csv: 3a1aeceb33becbfe2de4b8bc058b93b6
+  data/analysisdata/fa_nosek_2002_math.csv: a1595565cc9c262921e3bfacbb585c81
+  data/analysisdata/fa_nosek_2002_art.csv: ecd590da721b90614f3b52182f1b46fa
+  data/analysisdata/fa_anderson_2012_swl.csv: 50e104e019fd876832c7ff281388abc0
+  data/analysisdata/fa_anderson_2012_pa.csv: a31abcd7fef2be4515c7a436a61ae7ff
+  data/analysisdata/fa_anderson_2012_na.csv: 735034dac117f8d7bf6f56cf6571a6c3
+  data/analysisdata/fa_giessner_2007.csv: 5a1d6b021954dbd8a9dd1275d8993df5
+  data/analysisdata/fa_norenzayan_2002.csv: 61e713eeaa75c5f7bc1181b6ccec530e
+  data/analysisdata/fa_zhong_2006.csv: 1e761c1c6c73abff473785b9967942b9
+  data/analysisdata/fa_monin_2001_most.csv: 5cc92c3235e8ffb9bc301cf6da5037f9
+  data/analysisdata/fa_monin_2001_some.csv: 1d89e775ce25ff5eed3d39c9f011024b
+  data/analysisdata/fa_cacioppo_1983_arg.csv: 806309b916e97979e74bc9ec2847abae
+  data/analysisdata/fa_cacioppo_1983_nfc.csv: 6ec993eb299c5fe22197054d5a1c8f6b
+  data/analysisdata/fa_de_fruyt_2000.csv: bd39e33f03ad0430ece22e9e63f53cb4
+  data/analysisdata/fa_albarracin_2008_verb.csv: 708c31ce3c259069733f07957bad32ff
+  data/analysisdata/fa_albarracin_2008_math.csv: 342e61b8ef93bae7d6116f42423f5b7f
+  data/analysisdata/fa_shnabel_2008.csv: 8979b2d179cc97673b7604113bda0b6b
+  data/analysisdata/fa_vohs_2008.csv: b67e029ffffd39351fa613bd581d3688

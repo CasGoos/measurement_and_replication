@@ -1,5 +1,5 @@
 "Practice","QMP_percentage_original","N_applicable_original","QMP_percentage_replication","N_applicable_replication","Phi"
-"reliability_reported","0.67","39","0.89","37","-0.27"
+"reliability_reported","0.66","38","0.89","35","-0.27"
 "select_or_create_clarity","0.52","77","0.96","77","-0.5"
 "version_clarity","0.7","77","0.22","77","0.48"
 "factor_analysis","0.95","41","1","37","-0.15"

@@ -62,7 +62,7 @@ csl               : "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
 documentclass     : "apa7"
 
 classoption       : man
-output            : papaja::apa6_pdf
+output            : papaja::apa6_docx
 knit              : worcs::cite_all
 ---
 
@@ -76,6 +76,7 @@ library(metafor)
 library(forcats)
 library(ggplot2)
 library(grid)
+library(patchwork)
 
 # Code below loads all data. The raw data was loaded within the 'prepare_data.R script.
 load_data()
@@ -96,15 +97,25 @@ r_refs("r-references.bib")
 
 <!-- altering latex defaults to get better figure and table placement -->
 
-\renewcommand{\arraystretch}{0.7} <!-- reducing the line spacing within tables -->
+\renewcommand{\arraystretch}{0.7}
 
-\renewcommand{\topfraction}{.8} <!-- max fraction of page for floats at top -->
+<!-- reducing the line spacing within tables -->
 
-\renewcommand{\bottomfraction}{.8} <!-- max fraction of page for floats at bottom -->
+\renewcommand{\topfraction}{.8}
 
-\renewcommand{\textfraction}{.15} <!-- min fraction of page for text -->
+<!-- max fraction of page for floats at top -->
 
-\renewcommand{\floatpagefraction}{.8} <!-- min fraction of page that should have floats .66 -->
+\renewcommand{\bottomfraction}{.8}
+
+<!-- max fraction of page for floats at bottom -->
+
+\renewcommand{\textfraction}{.15}
+
+<!-- min fraction of page for text -->
+
+\renewcommand{\floatpagefraction}{.8}
+
+<!-- min fraction of page that should have floats .66 -->
 
 \setcounter{topnumber}{3} <!-- max number of floats at top of page -->
 
@@ -138,43 +149,55 @@ saving_to_analysis_data <- function(data){
 
 <!-- Introduction -->
 
-The challenge with measurement in quantitative psychological research is that unlike height or weight, psychological constructs cannot be directly measured. Instead we use scores from a measurement as a proxy indicator for that psychological construct. However, we cannot simply assume that any measure we create will form a good indicator of the construct. We have to substantiate this. Psychometrics can be used to statistically estimate the measure's validity, still validating a measure entails a substantial research effort. Regardless, the burden of validating a measure – besides some well-established psychiatric and personality measures – is most often placed on the researcher conducting a study of a psychological phenomenon. When the effort involved in validating a measure is relegated to be only a component of a study, then how well does the measurement validation process go?
+The challenge with measurement in quantitative psychological research is that unlike height or weight, psychological constructs cannot be directly measured, as they cannot be directly observed. Instead, we use scores from a measurement as an indicator for a psychological construct. Yet, it cannot simply be assumed that any measure will form a good indicator of the constructs of interest. The measure has to be validated by establishing the reliability and construct validity of the measure. "Reliability refers to the consistency of scale scores when a construct is assessed multiple times or in multiple ways" [@crutzenScaleQualityAlpha2017b; pp. 244]. Meanwhile, construct validity refers to whether the variance in the measured item scores between participants can be attributed to the variance in the unobserved construct(s) of interest between participants [@cronbachConstructValidityPsychological1955; @vazireCredibilityReplicabilityImproving2022].
 
-## Measurement Validation
-When validating a measure of a psychological construct, two main psychometric components are of interest: construct validity & reliability. Construct validity refers to whether the variance in the measured item scores between participants can be attributed to variance in unobserved constructs between participants [@cronbachConstructValidityPsychological1955; @vazireCredibilityReplicabilityImproving2022]. Reliability refers to how consistent a participant's responses on a measurement are [@nunnallyOverviewPsychologicalMeasurement1978; @mellenberghConceptualIntroductionPsychometrics2011]. Reliability is part of the validation of a measure because a measure that does not consistently capture a participant's response, cannot accurately capture a construct [@crutzenScaleQualityAlpha2017b]. As an example, suppose we have a measure and we want it to measure general intelligence, and we want to validate this as a measure of general intelligence. We would see our measurement as construct valid if being more intelligent resulted in generally scoring higher on our test, and our measurement would be reliable if the score of people on our measure consistently reflected their actual intelligence.
-
-In practice construct validity is often evaluated through factor analysis. In factor analysis, a model is fitted to explain as much of the variance of multiple items through a smaller number of factors, or weighted averages of the item scores. To fit a factor model, the number of factors are first specified, and then the fit of that model on the data can be evaluated. Preferably, a model with the number of factors corresponding to the number of constructs of interest should show adequate fit on the data. Additionally, the items aimed at the same construct should be statistically related to the same factor. For example, suppose items 1 through 5 from our general intelligence measure are meant to capture verbal intelligence, and items 6 through 10 are distinctly about mathematical intelligence. To establish construct validity, we want to find that a two factor model on our intelligence measure to show adequate fit, with one factor to which only items 1 through 5 relate strongly, and one to which only items 6 through 10 relate strongly. However, even in this ideal scenario, the factor relations may not be stable for this measure in other contexts and implementations, a concept known as measurement invariance [@hornPracticalTheoreticalGuide1992; @cheungDirectComparisonApproach2012].
-
-Reliability gives us an indication of how much our measure captures the signal of our measured variables over noise. Psychometrics offers various ways to assess reliability empirically [@nunnallyOverviewPsychologicalMeasurement1978; @mellenberghConceptualIntroductionPsychometrics2011]. For example, we can compare scores on multiple equivalent forms of the test, between multiple different raters, or between multiple different timepoints of the same test. Still, the most common way to assess reliability for single measurement instances is through internal consistency indicators. The most common internal consistency indicator is the Cronbach's Alpha coefficient. The Cronbach's Alpha coefficient is defined as “the average of all the possible split-half coefficients for a given test” [@cronbachCoefficientAlphaInternal1951]. Here split-half coefficients being the correlation between two halves of the same test. It can be calculated by taking the ratio of interitem covariance to total variance and multiplying it by n / (n - 1), where n is the number of items in the scale. However, Cronbach's Alpha comes with strong assumptions on the underlying factor structure, including that the measure is unidimensional, so a single factor. Furthermore, because Cronbach's alpha is proportional to the total variance in the target variable in the sample, it is an indicator of reliability within a particular sample and not of the reliability of the measure in general. Despite this many researchers report and interpret Cronbach's Alpha as a universal quality of the measure [@cortinaWhatCoefficientAlpha1993; @schmittUsesAbusesCoefficient1996].
-
-Thus, psychometric tests are useful but they have their limitations. Even simple factor analyses - unless the amount of variance explained by the factors is large and the factor structure is clear - require sample sizes of at least 100 [@maccallumSampleSizeFactor1999; @gorsuchFactorAnalysis2013]. Furthermore, even in the latter case factor analysis may not converge with small sample sizes. If we want to know the reliability and validity of not just one measurement but for the measure across multiple contexts, we need to conduct multiple studies. Additionally, larger sample sizes per relevant group to detect meaningful effects when checking for measurement invariance across groups [@meadePowerPrecisionConfirmatory2007; @frenchMeasurementInvarianceTechniques2016; @koziolImpactModelParameterization2018]. However, what we observe in the literature is that most measures are reused once or never [@elsonPsychologicalMeasuresArent2023; @anvariFragmentedFieldConstruct2025; @anvariDefragmentingPsychology2025], let alone that they are systematically tested on reliability and validity. @maireadshawMeasurementPracticesLargescale2020 checked the factor structure and reliability of measures used in the Many Labs 2 replication project [@kleinManyLabs22018b] on the available data. They observed that for the scales they assessed, no factor model fit congruent with the use of the scales met all of their evaluation criteria. Furthermore, the overall sample Cronbach's alpha level of all scales was below .5, a level of reliability far below what many would consider acceptable for almost all research purposes. 
+However, research indicates that measures often lack reliability and construct validity evidence !!!CITE!!!, either because the evidence is not reported, or because the measures are not validated. @flakeMeasurementSchmeasurementQuestionable2020 dubbed these practices - that raise doubts about a measurement’s validity - Questionable Measurement Practices (QMPs), being a term analogous to Questionable Research Practices [QRPs; Simmons et al. (2011); John et al. (2012); Wicherts et al. (2016)]. Existing research has already shown practices that reflect QMPs to be relatively common in both replication and original studies !!!CITE!!!. The purpose of this study is to provide a combined overview of the information on the reporting practices of measurement in replication and original with reliability and construct validity indices obtained from the shared item response data. By combining information on reporting with our own calculated indices, we can reflect on which validity issues lie in reporting and which are an issue with the measurement itself.
 
 ## Measurement Reporting
 
-As illustrated in the previous section, validating measurement is a complex but essential part of doing psychological research. Yet the scientific community has not fully stepped up to this challenge [@flakeMeasurementSchmeasurementQuestionable2020]. A large number of measures used in the psychological literature lack information on the validity and reliability of the measure [@hoganEmpiricalStudyReporting2004; @flakeConstructValidationSocial2017; @flakeConstructValidityValidity2022].
+One issue that has been observed with respect to measurement validation is that the reported measurement information is typically insufficient for readers to understand, evaluate, and reuse the measurement that was used [!!!CITE]. @flakeConstructValidityValidity2022 documented the measurement reporting practices among 100 replications and their respective original articles from the Reproducibility Project Psychology [@opensciencecollaborationEstimatingReproducibilityPsychological2015]. They coded the number of measures, the content of the measures, and information describing and justifying the measurement. They observed limited reporting of evidence demonstrating the reliability and validity of the measurement. Additionally, only eight of the 40 translated scales contained validity evidence for the translated version. A similar lack of reliability and validity reporting has been observed in other studies as well [@hoganEmpiricalStudyReporting2004; @flakeConstructValidationSocial2017]. If readers cannot glance the construct validity and reliability of a measure from the reported information, then readers lack the basic information needed to determine whether the measured variables are actually related to the constructs of interest. In turn, if we cannot determine whether the constructs of interest are captured in the measured variables or not, then the relation of the results of the statistical analysis using these variables and any psychological phenomena of interest is also strenuous. In short, if the reported information does not show that the measurement was valid, then any substantive conclusions from the data are unfortunately left unsubstantiated.
 
-Questionable Measurement Practices (QMPs) are practices that raise doubts about a measurement’s validity [@flakeMeasurementSchmeasurementQuestionable2020] and have been coined as a term analogous to Questionable Research Practices [QRPs; @simmonsFalsePositivePsychologyUndisclosed2011a; @johnMeasuringPrevalenceQuestionable2012a; @wichertsDegreesFreedomPlanning2016a]. QMPs range from lack of transparency in the reporting of the measure and unclear motivation in choice of measure to poor justification for modifications of a measure and procedure of an existing measure [@flakeMeasurementSchmeasurementQuestionable2020]. @flakeConstructValidityValidity2022 documented QMPs among 100 replications and their respective original articles from the Reproduciblity Project Psychology [@opensciencecollaborationEstimatingReproducibilityPsychological2015]. They coded the number of measures, the number of items in the measure, and the information that was reported describing the measure and justifying its use. They observed limited reporting of evidence demonstrating the reliability and validity of the measurement. Additionally, only eight of the 40 translated scales contained validity evidence for the translated version. Furthermore, reporting of reliability may not only be little, but also biased. @husseyAberrantAbundanceCronbachs2023 observed a disproportional amount of Cronbach's Alpha values at the common acceptably reliable threshold value of .70, and low reporting just below .70. Thus the lack of reported measurement evidence may on occasion be hiding psychometric skeletons in the closet.
+Further findings by @flakeConstructValidityValidity2022 and others [@flakeConstructValidationSocial2017; @maireadshawMeasurementPracticesLargescale2020] show that measurement reporting was not only limited in terms of the reliability and validity evidence needed to evaluate the measure. The lack of information was also observed for basic content descriptions such as the number of items, the response format, and the scoring of the scale were irregular. This creates challenges for future researchers that want to reuse to measurement. Specifically for replication studies attempting to reconstruct the measurement from these incomplete descriptions, they may end up with a measurement that assesses the constructs in a substantially different way from the original study, or even assess different constructs altogether. If different constructs are assessed, the replication cannot be seen as a test of the same phenomenon as the original. If the same constructs are assessed, but in a substantially different way, the estimated effects in the replication cannot easily be put side-by-side with the effects in the original study. In either case, substantial comparisons between original and replication are hindered. The inability to reuse a measure does not only affect replications however, it also limits our ability to validate the measure thoroughly. Even if the measure is shown to be construct valid in one context, the factor relations may not be stable for this measure in other contexts and implementations, a concept known as measurement invariance [@hornPracticalTheoreticalGuide1992; @cheungDirectComparisonApproach2012]. While it is important to assess measurement (in)variance before using measures in a new context, if that measure is not reusable, the invariance cannot even be assessed.
 
-Further findings by @flakeConstructValidityValidity2022 and others [@flakeConstructValidationSocial2017; @maireadshawMeasurementPracticesLargescale2020] also show that QMPs not only limit the reported validity of that measurement. The lack of information also creates challenges for replicating researchers. Basic content descriptions such as the number of items, the response format, and the scoring of the scale were irregular (!!!exact numbers!!!). If it is not clear what items were used, how they were scored, and how they were administered, then it is challenging to reconstruct the measurement for a replication study. In turn, the replication may assess the constructs in a substantially different way, or even assess different constructs. If different constructs are assessed, the replication cannot be seen as a test of the same phenomenon as the original. On the other hand, if the same constructs are assessed very differently, the estimated effects in the replication cannot easily be substantially compared to the effects in the original study. In either case, substantial comparisons between original and replication are hindered.
+Our first aim is to extend these existing findings on measurement reporting practices with a descriptive account of these practices for the Many Labs replications and the related original studies. We evaluate to what extent the reporting and use of item-based measurement scales in our sample allows us to evaluate and reuse the measurement. We do not ourselves evaluate whether the reported measurement information provide sufficient justification for its use, merely that information is reported such that that part of the measurement can be evaluated. We extend earlier investigations through new questions about the presence of justification for measurement selection or creation, item transformations such as reverse coding being described, the administration format being described, a change in the number of items from the source, whether changes in items response options, or number of items, or administration were validated or justified. All of our measurement reporting items were inspired by and categorized based on the QMP table in @flakeMeasurementSchmeasurementQuestionable2020.
 
-## Research Aim
+We chose the Many Labs replications and associated original studies as our sample, due to them being of particular interest. The Many Labs replications were a series of large-scale collaborations in which multiple labs across the world directly replicated classic and contemporary psychological studies [@kleinInvestigatingVariationReplicability2014a; @ebersoleManyLabs32016; @kleinManyLabs22018b; @ebersoleManyLabs52020d; @kleinManyLabs42022]. The original studies chosen for replication in the Many Labs were not only picked based on ease and feasibility, but importantly for us they were also picked to display a diverse range of effects that were also of key interest to the field. This makes these studies an important sample to evaluate, because the replicated effects represent a broad range of relevant findings. Furthermore, because the Many Labs projects used preregistered and documented structured protocols, we expect the measurement reporting for the replications to represent a high standard within the field. Any issues in measurement reporting here might suggest that other replications could face similar or greater challenges.
 
-Our aim is to provide a descriptive account of the reliability, validity, and reporting practices of measurement in replications and related original research. We coded several measurement reporting practices in replications and original articles. Additionally, we estimated reliability and validity from openly available replication data on item responses. This replication data was available across multiple labs. Our unique contribution is based on the combination of reported and the recalculated measurement information. These two sources combined allows us to capture a "double whammy" scenario where there is uncertainty in the reliability and validity of these measures when we calculate these ourselves, and where QMPs obscure the ability to evaluate the measure as well as inhibiting future researchers to recreate the measurement and validate it in a new study. Besides this, our study also functions as a conceptual replication of existing research on reporting practices and measurement validation, by assessing measurement reporting differently and using a novel set of replications and original research. While theoretical considerations are  key for evaluating how the content of the measure fits to the constructs of interest, we do not look into these here. Evaluating the theory of a measurement requires domain specific knowledge for each measure which is outside of this article's scope. We refer interested readers to articles discussing theory in measurement elsewhere [e.g.; @gehlbachMeasureTwiceCut2011; @humphryPsychologicalMeasurementTheory2017; @borgstedeMeaningfulMeasurementRequires2023; @hasselmanGoingSquaresTheorybased2023].
+## Reliability
+
+Psychometrics offers various ways in which to assess construct validity and reliability [@nunnallyOverviewPsychologicalMeasurement1978; @mellenberghConceptualIntroductionPsychometrics2011]. It is often the results from these psychometric analyses that form one of the pre-requisite pieces of evidence for assessing whether or not the measure is valid or not.
+
+When psychometric indicators are reported - which as mentioned earlier is not common - it is often limited to Cronbach's Alpha, a commonly used indicator for reliability. Cronbach's Alpha comes with strong assumptions that are themselves rarely tested [@crutzenScaleQualityAlpha2017b]. Furthermore, research by @husseyAberrantAbundanceCronbachs2023 has shown evidence that the reporting of reliability may not only be little, but also biased. They observed a disproportional amount of Cronbach's Alpha values at the common acceptably reliable threshold value of .70, and relatively low reporting below .70. Thus, the lack of reported measurement evidence may on occasion be hiding psychometric skeletons in the closet.
+
+As a result, if we want to evaluate the reliability of measurement in our sample, we cannot rely on the reported information alone to give us a representative picture. Thus, we evaluate the measurement reliability within the Many Labs original and replication studies by estimating it from the item response data. The data on the item responses are openly available per lab for our sample. As a result, we can evaluate not only the reliability per measure, but also the variation in reliability across labs. The variation is relevant because Cronbach's alpha is an indicator of reliability within a particular sample and not of the reliability of the measure in general, as it is proportional to the total variance in the target variable in the sample. Despite this many researchers report and interpret Cronbach's Alpha as a universal quality of the measure [@cortinaWhatCoefficientAlpha1993; @schmittUsesAbusesCoefficient1996]. @maireadshawMeasurementPracticesLargescale2020 has so far observed that for Many Labs 2 the overall sample Cronbach's alpha level across scales was below .5, a degree of reliability far below what many would consider acceptable for most research purposes. It is our second aim to empirically evaluate both the degree as well as the variation of reliability of the measures in our sample that includes the other Many Labs projects.
+
+## Unidimensionality
+
+Reliability is a pre-requisite to construct validity, because a measure for which a participant’s response is not consistent, cannot capture a stable construct [Kaplan and Saccuzzo (2013, pp. 154–155)]. Another, important pre-requisite for many measures is unidimensionality. Unidimensionality means that the items on a measure assess, show evidence of measuring a single construct. Thus, if a set of items are intended to measure the same one construct, then unidimensionality is key to the construct validity of that set of items. Additionally, most reliability indicators - including Cronbach's Alpha - cannot be assessed without first making sure that the measure is unidimensional. Thus for our third aim we again used the item response data. This time hitting two birds with one stone. We check the measures' construct validity, and we check if one of the key assumptions of Cronbach's Alpha is met.
+
+!!!substantively belangrijk, want de scores worden als unidimensioneel geinterpreteerd. Alpha assumptie testen, als kleiner deel bespreken; Reliability kan in sommige gevallen slecht zijn als de schaal gewoon multi-dimensioneel is. Eerst een beetje techniek, daarna meer kwalitatief oordeel dat het gewoon belangrijk is voor interpretatie!!!
+
+@maireadshawMeasurementPracticesLargescale2020 checked the factor structure on the openly available item data from Many Labs 2 [@kleinManyLabs22018b]. They observed that no scales in their sample did the results from the factor analysis meet all of their evaluation criteria for unidimensionality. @maireadshawMeasurementPracticesLargescale2020 had access to measures that were used across multiple contexts to evaluate their validity across more than one instance. However, in practice, measures are frequently made on the fly and reused maybe once or never [@weidmanJingleJangleEmotion2017; @elsonPsychologicalMeasuresArent2023; @anvariFragmentedFieldConstruct2025; @anvariDefragmentingPsychology2025]. This is dangerous, because these measures are often not validated before use, and if they cannot be reused, they are not going to be validated afterwards either. Furthermore, validating a scale requires substantial sample sizes in most cases [@maccallumSampleSizeFactor1999, @gorsuchFactorAnalysis2013], sample sizes that many original studies cannot obtain, in which case these measures are reliant on future research to obtain the required sample size to validate the measure.
+
+Thus, for our third research aim - similarly to our aim with reliability - we check the unidimensionality of measures from the Many Labs projects per lab with meta-analytic assessment of the variation in unidimensionality across labs. The combined goal of our three research aims is to create a description of the measurement use in our data.
 
 # Disclosures
 
 ## Preregistration
-We preregistered data collection, coding protocol, and planned analyses: <https://osf.io/jgxyu>. We deviated from our coding protocol as is explained further in the text. Our pre-registered analyses have been move to the [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_exploratory_version_pre-reg_analyses.Rmd) in favor of focusing on the descriptive results.
+
+We preregistered data collection, coding protocol, and planned analyses: <https://osf.io/jgxyu>. We deviated from our coding protocol as is explained further in the text. Our pre-registered analyses have been move to the [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_exploratory_version_pre-reg_analyses.Rmd) in favor of focusing on the descriptive results here.
 
 ## Data, Materials, and Online Resources
-TThis manuscript was created in RStudio [*v`r rstudioapi::versionInfo()$version`*\; @R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base], and generated using the Workflow for Open Reproducible Code in Science [*v`r getNamespaceVersion("worcs")[[1]]`*\; @R-worcs] to ensure reproducibility and transparency. All code and data used to generate this manuscript and its results are available at: <https://github.com/CasGoos/measurement_and_replication> and <https://osf.io/9r8yt/> (DOI: 10.17605/OSF.IO/9R8YT).
+
+This manuscript was created in RStudio [*v`r rstudioapi::versionInfo()$version`*; @R-Rstudio] with R Version `r paste0(R.Version()$major, ".", R.Version()$minor)` [@R-base], and generated using the Workflow for Open Reproducible Code in Science [*v`r getNamespaceVersion("worcs")[[1]]`*; @R-worcs] to ensure reproducibility and transparency. All code and data used to generate this manuscript and its results are available at: <https://github.com/CasGoos/measurement_and_replication> and <https://osf.io/9r8yt/> (DOI: 10.17605/OSF.IO/9R8YT).
 
 ## Reporting
+
 We report how we determined all data exclusions, all manipulations, and all measures in the study. Our sample size was predetermined by the number of studies in the Many Labs projects.
 
 ## Ethical Approval
-This research was approved by the Tilburg University School of Social and Behavioral Sciences Ethical Review Board (nr. TSB_TP_REMA06).
 
+This research was approved by the Tilburg University School of Social and Behavioral Sciences Ethical Review Board (nr. TSB_TP_REMA06).
 
 # Method
 
@@ -184,13 +207,11 @@ The data consists of three main sources: replication datasets, replication proto
 
 ## Unit of Analysis
 
-Our unit of analysis is a measure of a single variable within a replication protocol or original article that was used in the main analysis that was replicated. We allowed for multiple variables to be measured per study. We used the replication protocols to identify the measure of each variable. We did not include acquiescence bias checks, manipulation checks, pilot test measures, and measures added for exploratory analyses.
+Our unit of analysis is a measure of a single variable within a replication protocol or original article that was used in the main analysis that was replicated. For example, if conscientiousness and agreeableness were both measured using a big-five personality questionnaire, each of which was a variable in a replicated effect, then both the conscientiousness and agreeableness part of that questionnaire would be coded as their own unit of analysis. We also allowed for multiple variables to be measured per study. We used the replication protocols to identify the measure of each variable. We did not include acquiescence bias checks, manipulation checks, pilot test measures, and measures added for exploratory analyses. Our final sample size was `r nrow(coded_data_replications)` measures of unique variables for both original and replication studies\^[Initially the original articles contained 3 more measures of unique variables than the replication protocols. This difference was due to the way that the moral foundations questionnaire was framed in the original article compared to in the replication protocol. In the original article it was framed as measuring five different moral foundations, while in the replication protocol the measure assessed the two overarching categories that were used to test the main effect in both the original and replication research. The measurement information reported was comparable across all five categories, and thus it was deemed that the measurement could be reduced to reflect two overarching categories facilitate easier comparison between measurement in original and replication.]
 
 ## Data Collection
 
-The data on the preregistered replication protocols, and replication datasets from Many Labs 1, 2, 3, & 5 were all retrieved from their respective OSF pages: <https://osf.io/wx7ck/>, <https://osf.io/8cd4r/>, <https://osf.io/ct89g/>, & <https://osf.io/7a6rd/>. Both the replication protocols and replication datasets were scanned through to ensure that the planned analyses were feasible. However, no coding or analysis of either of them had taken place before the analyses were preregistered. Further details on the search strategy can be found in the [coding protocol information file](../../SupplementaryMaterials/CodingProtocols/coding_protocol_information.Rmd) in the supplementary materials.
-
-
+The data on the preregistered replication protocols, and replication datasets from Many Labs 1, 2, 3, & 5 were all retrieved from their respective OSF pages: <https://osf.io/wx7ck/>, <https://osf.io/8cd4r/>, <https://osf.io/ct89g/>, & <https://osf.io/7a6rd/>. Both the replication protocols and replication datasets were scanned through to ensure that they were the correct files to code measurement reporting information from. However, no coding or analysis of either of them had taken place before the analyses were preregistered. Further details on the search strategy can be found in the [coding protocol information file](../../SupplementaryMaterials/CodingProtocols/coding_protocol_information.Rmd) in the supplementary materials.
 
 ### Replication Datasets
 
@@ -360,7 +381,6 @@ saving_to_intermediate_data(data_5.9.1_clean)
 
 The replication protocols refer to the publicly available protocols describing the background, methodology, and analysis of the replication of an original study. These were retrieved from the OSF pages of the Many Labs projects (the search strategy and OSF file locations can be found in the [data retrieval information](../../SupplementaryMaterials/data_retrieval_information.Rmd) supplementary document; URL <https://github.com/CasGoos/measurement_and_replication/blob/master/SupplementaryMaterials/data_retrieval_information.Rmd>).
 
-
 ### Original Articles
 
 We identified and retrieved all original study articles using the citations for these articles in each replication protocol.
@@ -517,7 +537,7 @@ saving_to_intermediate_data(coded_data_original)
 
 ### Coding Protocol
 
-We extracted reported measurement information from the original articles and replication protocols using our preregistered coding protocol. We extracted the reported reliability coefficient and type of index (Cronbach’s Alpha, retest, interrater, etc.) when present. Similarly, we coded if any psychometric construct validity evidence, such as a factor analysis, was presented for the measure. We additionally included twenty items that were based on the QMP table presented in @flakeMeasurementSchmeasurementQuestionable2020. For each of these items we a piece information we would want to see reported with regards to the measurement was described. If the information was clearly reported we coded the item as true; false if not or not clear enough; or not applicable if not relevant for that measure (e.g., reporting results from a factor analysis for single-item measures). Example items can be seen in Table \@ref(tab:QMPCodingInfoTable).
+We extracted reported measurement information from the original articles and replication protocols using our preregistered coding protocol. We extracted the reported reliability coefficient and type of index (Cronbach’s Alpha, retest, interrater, etc.) when present. Similarly, we coded if any psychometric construct validity evidence, such as a factor analysis, was presented for the measure. We additionally included twenty items that were based on the QMP table presented in @flakeMeasurementSchmeasurementQuestionable2020. For each of these items we checked if a piece information we would want to see reported with regards to the measurement was described. If the information was clearly reported we coded the item as true; false if not or not clear enough; or not applicable if not relevant for that measure (e.g., reporting results from a factor analysis for single-item measures). Example items can be seen in Table \@ref(tab:QMPCodingInfoTable).
 
 ```{r QMPCodingInfoTable, warning = FALSE}
 QMP_info_dataframe <- data.frame(Category = c("Definition", "", "", "Operationalisation", "", "", "", "Selection/Creation", "", "", "Quantification", "Modification", "", "", "", "", ""),
@@ -555,7 +575,7 @@ apa_table(
 
 After the initial coding, we made minor revisions to fourteen of the twenty QMP items from the preregistered coding protocol. These items were changed after familiarizing ourselves with the way measurement was reported, and it became clear that our criteria were too stringent in the exact way and degree of detail in which to present things. For example, in the initial protocol, an example item had to be present within the article or protocol itself, or else this was counted as a QMP. In the revised protocol, references to online appendices with example items were also considered sufficient for this item. The analyses, tables, and figures presented in this article are all based on the revised coding protocol. The equivalent QMP descriptives obtained with the initial protocol can be found in [Supplementary Analyses B](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_initial_QMP_ratio_table.rmd).
 
-We initially intended to form a QMP index using these QMP items and perform regression analyses using this index, but this index could not be validated properly and its results would be misleading to present here in the main article. A more detailed explanation of what was omitted and why, as well as the results from these preregistered analyses can be found in [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_exploratory_version_pre-reg_analyses.Rmd).
+We initially intended to construct a QMP index from the QMP items and perform regression analyses between this index and replication outcomes. However, this index could not be validated properly and its results would be misleading to present here in the main article. A more detailed explanation of what was omitted and why, as well as the results from these preregistered analyses can be found in [Supplementary Analyses A](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_exploratory_version_pre-reg_analyses.Rmd).
 
 ```{r Calculating_QMP_Data, include = FALSE, eval = FALSE}
 # function for changing QMP data to their ratio equivalent
@@ -613,9 +633,9 @@ replication_QMP_data <- coded_data_replications[c("def_1", "sel_2", "op_4", "rel
 QMP_data <- data.frame(delete_this = rep(NA, 77))
 
 
-QMP_data$reliability_reported_org <- ifelse(original_QMP_data$reliability_type != "Not Reported" & original_QMP_data$reliability_type != "" & !is.na(original_QMP_data$reliability_type), TRUE, ifelse(original_QMP_data$reliability_type == "Not Reported", FALSE, NA))
+QMP_data$reliability_reported_org <- ifelse(coded_data_original$N_items == "multiple item measure", ifelse(original_QMP_data$reliability_type != "Not Reported" & original_QMP_data$reliability_type != "" & !is.na(original_QMP_data$reliability_type), TRUE, ifelse(original_QMP_data$reliability_type == "Not Reported", FALSE, NA)), NA)
 
-QMP_data$reliability_reported_rep <- ifelse(replication_QMP_data$reliability_type != "Not Reported" & replication_QMP_data$reliability_type != "" & !is.na(replication_QMP_data$reliability_type), TRUE, ifelse(replication_QMP_data$reliability_type == "Not Reported", FALSE, NA))
+QMP_data$reliability_reported_rep <- ifelse(coded_data_replications$N_items == "multiple item measure", ifelse(replication_QMP_data$reliability_type != "Not Reported" & replication_QMP_data$reliability_type != "" & !is.na(replication_QMP_data$reliability_type), TRUE, ifelse(replication_QMP_data$reliability_type == "Not Reported", FALSE, NA)), NA)
 
 
 # add if clearly specified if measure existed or not
@@ -704,11 +724,11 @@ for(i in 1:(ncol(QMP_data)/2)){
 saving_to_analysis_data(QMP_ratio_data)
 ```
 
-### Recalculating Data
+### Calculating Reliaiblity
 
-We calculated reliability for each measure from the replication datasets with suitable data for each lab the measure was used in. We calculated both Cronbach’s alpha, as well as its standard error using formulas 2 & 3 from @duhachekAlphasStandardError2004a. Then we entered these two values into a meta-analysis of the measure's reliability, also commonly referred to as a Reliability Generalization (RG) Meta-Analysis [@botellaManagingHeterogeneityVariance2012; @lopez-ibanezReliabilityGeneralizationMetaanalysis2024; @vacha-haaseReliabilityGeneralizationExploring1998]. Using RG Meta-Analysis we quantified the degree of true variation (or heterogeneity) in reliability coefficients across lab locations. We performed the RG Meta-Analysis using the rma function from the metafor R package [*v`r getNamespaceVersion("metafor")[[1]]`*; @R-metafor] and default settings. We evaluated the heterogeneity using the tau statistic and the Cochran's Q-test [@cochranCombinationEstimatesDifferent1954]. These indicators have received criticism as indicators of heterogeneity, especially when within study sample sizes are small and power to detect heterogeneity is low [@hoaglinMisunderstandingsCochransTest2016; @pereiraCriticalInterpretationCochrans2010]. Therefore, we also present the prediction interval and implore that the heterogeneity results should be viewed critically [@borensteinAvoidingCommonMistakes2024]. We implemented no correction for bias, because the Many Labs replications were not at risk of publication bias.
+We calculated reliability for each measure from the replication datasets with suitable data for each lab the measure was used in. We calculated both Cronbach’s alpha, as well as its standard error using formulas 2 & 3 from @duhachekAlphasStandardError2004a. We used these values to conduct a meta-analysis of the measure's reliability, also commonly referred to as a Reliability Generalization (RG) Meta-Analysis [@botellaManagingHeterogeneityVariance2012; @lopez-ibanezReliabilityGeneralizationMetaanalysis2024; @vacha-haaseReliabilityGeneralizationExploring1998]. We performed the RG Meta-Analysis using the rma function from the metafor R package [*v`r getNamespaceVersion("metafor")[[1]]`*; @R-metafor] and default settings. We then used the results from the meta-analysis to evaluate the heterogeneity via the tau statistic and the Cochran's Q-test [@cochranCombinationEstimatesDifferent1954]. These indicators have received criticism as indicators of heterogeneity, especially when within study sample sizes are small and power to detect heterogeneity is low [@hoaglinMisunderstandingsCochransTest2016; @pereiraCriticalInterpretationCochrans2010]. Therefore, we also present the prediction interval and implore that the heterogeneity results should be viewed critically [@borensteinAvoidingCommonMistakes2024]. We implemented no correction for bias, because the Many Labs replications were not at risk of publication bias.
 
-Our analyses will focus on Cronbach’s Alpha, because it is common in research, which also allows us to make comparisons between calculated and reported reliabilities. Furthermore, we were able to calculate the standard error of alpha to be used in the RG meta-analysis. We additionally estimated McDonald’s Omega for each lab from the same set of replications as for Cronbach's Alpha, since it has been argued to be a more informative measure of reliability than Cronbach's Alpha, while also simultaneously providing some validity evidence [@crutzenScaleQualityAlpha2017b; @dengTestingDifferenceReliability2017]. McDonald’s Omega was calculated using the omega function in the *psych* R package [*v`r getNamespaceVersion("psych")[[1]]`*; @R-psych]. Default arguments were used in the function except the nfactors argument, which was set to 1. No RG Meta-Analysis was performed on McDonald's Omega, as we could not find a formula for calculating its standard error. 
+Our analyses will focus on Cronbach’s Alpha, because it is common in research, which also allows us to make comparisons between calculated and reported reliabilities. Furthermore, we were able to calculate the standard error of alpha to be used in the RG meta-analysis. However, Cronbach's Alpha comes with strong assumptions on the underlying factor structure, including that the measure is unidimensional, which means that there should a single factor underlying the measurement scores. Therefore, we also estimated McDonald’s Omega for each lab from the same set of replications as for Cronbach's Alpha, since it has been argued to be a more informative measure of reliability than Cronbach's Alpha with less strict assumptions [@crutzenScaleQualityAlpha2017b; @dengTestingDifferenceReliability2017]. The results based on Omega can be found in [Supplementary Analyses D](../../SupplementaryMaterials/SupplementaryAnalysesScripts/Supplementary_omega_analyses.Rmd).
 
 ```{r calculated_reliability_across_labs, include = FALSE, eval = FALSE}
 # creating an empty data frame to insert all the responses into
@@ -896,16 +916,23 @@ measure_reliability_data <- do.call(rbind.data.frame, avg_reliability_list)
 saving_to_analysis_data(measure_reliability_data)
 ```
 
-Finally, we also tested these measures for unidimensionality. Our unidimensionality check serves a double purpose. First, unidimensionality is one of the assumptions of Cronbach's Alpha. If this assumption does not hold for a measure, our Cronbach's Alpha estimates give a biased estimate of the reliability. Second, all measurement items for which unidimensionality was checked, were used to form a singular index of one latent variable. Certainly, not all singular indexes require the underlying latent factor model to be unidimensional (e.g., general intelligence can be used as a variable on its own or sub-divided in multiple components such as numerical and verbal intelligence). Still, we believe it is not unreasonable to assume that for most of the single index measures we should observe a unidimensional factor model to have at least adequate fit.
+### Unidimensionality
 
-We tested for unidimensionality using two tests on the data from each lab for each measure. If at least one of these tests was passed, the measure in that lab was marked as unidimensional. For the first test we fit a Confirmatory Factor Analysis (CFA) model with one factor to the data, and we then evaluate the RMSEA value. If this value is below .08, the test is passed. For the second test we run a parallel analysis. This runs multiple Exploratory Factor Analyses (EFA) where the number of factors in the model is increased by 1 until the number of factors is one less than the number of items. It then compares the eigenvalues (an indication of how much variance is explained by that factor) of each factor to the eigenvalues for that factor if the data matrix was effectively random. If only the first factor has an eigenvalue that is significantly higher than the eigenvalue when the data matrix is random, the test is passed. We chose a combination of these two tests, as the RMSEA is known to be biased for models with small degrees of freedom [@kennyPerformanceRMSEAModels2015], while the parallel analysis may be less suited if a two or more factor solution would also fit the sample item data.
+All measurement items for which we checked unidimensionality, were used to form a singular index of one latent variable. Therefore, unidimensionality presents a valuable indication of the construct validity of a measure in our dataset. To test for unidimensionality, we fit a single-factor model on the item response data of each individual lab with the relevant measurement data. This was done to simulate the inference a lab would make if they were to check for unidimensionality. Our inference of unidimensionality is based on a set of five model fit indices. If the indices point towards a good unidimensional fit that is also consistent across labs - as we also evaluate the variability across labs - then we can say that with this preliminary evidence at least, we did not observe any issues with the construct validity of that measure. If the indices point towards a lack of unidimensionality in a substantial number of labs, that would be a warning sign for the lack of construct validity for that measure. Our goal is not to fully check the validity of these measures, this requires additional steps that are beyond the scope of this study.
 
-```{r validity_and_alpha_assumption_tests, include = FALSE, eval = FALSE}
+For the first four of our five fit indices we fit a Confirmatory Factor Analysis (CFA) model with one factor to the data, and we then evaluate the RMSEA value, CFI value, SRMR value, and the result from the exact fit test. For the RMSEA and SRMR value we checked if it was below .08. For the CFI value we checked if the value was above .90. Finally, for the exact fit test we evaluated if the fit test was statistically significant at an alpha of .05. These values are based on common thresholds used to determine adequate fit. We consider the use of these thresholds sufficient for our descriptive aim, even though we understand apprehension against rules of thumb when used to evaluate measurement in individual studies.
+
+For the final index we ran a parallel analysis. A parallel analysis runs multiple Exploratory Factor Analyses where the number of factors in the model is increased by 1 until the number of factors is one less than the number of items. It then compares the eigenvalues (an indication of how much variance is explained by that factor) of each factor to the eigenvalues for that factor if the data matrix was effectively random. If only the first factor has an eigenvalue that is significantly higher than the eigenvalue when the data matrix is random, the test is passed. We chose a combination of indices since each one has their own limitations, and combining them gives us a more robust picture of the unidimensionality of the measures.
+
+```{r unidimensionality_tests, include = FALSE, eval = FALSE}
 # function that runs all our checks for Cronbach's alpha. Also functions as some basic validity checks
 validity_and_alpha_assumption_tests <- function(data){
   ### Tests for Unidimensionality
-  # Test 1a: obtaining single factor model cfa RMSEA value for evaluation
+  # Test 1a: obtaining single factor model cfa RMSEA, CFI, SRMR, and exact fit test results
   RMSEA_values <- c(NA, NA)
+  CFI <- NA
+  SRMR <- NA
+  fit_results <- c(NA, NA, NA)
   tryCatch({
     # creating the base function for the model (it is unidimensional)
     model_free <- "Factor =~ " 
@@ -924,14 +951,35 @@ validity_and_alpha_assumption_tests <- function(data){
                               std.lv = TRUE, 
                               estimator = "MLM")
 
-    rmsea <- fitMeasures(fit.modelfree)["rmsea"] 
-    rmsea.ci.upper <- fitMeasures(fit.modelfree)["rmsea.ci.upper"]
+    # extracting the fit measures
+    fit_measures <- fitMeasures(fit.modelfree, c("chisq", "df", "pvalue", "rmsea", "rmsea.ci.upper", "cfi", "srmr"))
+    
+    # extracting RMSEA and its standard error
+    rmsea <- fit_measures["rmsea"] 
+    rmsea.ci.upper <- fit_measures["rmsea.ci.upper"]
     rmsea.se <- (rmsea.ci.upper - rmsea) / 1.645
     RMSEA_values <- c(rmsea, rmsea.se)
     
+    # extracting CFI
+    CFI <- fit_measures["cfi"] 
+    
+    # extracting SRMR
+    SRMR <- fit_measures["srmr"] 
+    
+    # extracting exact fit test measures
+    fit_chisq <- fit_measures["chisq"]
+    fit_df <- fit_measures["df"]
+    fit_pvalue <- fit_measures["pvalue"]
+    fit_results <- c(fit_chisq, fit_df, fit_pvalue)
+    
+    
   }, error = function(e) {
     RMSEA_values <- c(NA, NA)
+    CFI <- NA
+    SRMR <- NA
+    fit_results <- c(NA, NA, NA)
   })
+
   
   
   # Test 1b: conducting parallel test to check if one factor solution is best.
@@ -943,11 +991,11 @@ validity_and_alpha_assumption_tests <- function(data){
       parallel_N_factors <- NA
   })
   
-  # adding a single factor check indicator value
+  # adding a single factor check count
   if(is.null(RMSEA_values[[1]]) | is.null(parallel_N_factors)){
-    single_factor <- NA
+    unidimensional_check_count <- NA
   } else{
-    single_factor <- ifelse(RMSEA_values[[1]] < 0.08 | parallel_N_factors == 1, "Yes", "No")
+    unidimensional_check_count <- sum(RMSEA_values[[1]] < .08, CFI > .90, SRMR < .08, fit_results[[3]] < .05, parallel_N_factors == 1)
   }
   
   
@@ -1036,10 +1084,9 @@ validity_and_alpha_assumption_tests <- function(data){
       error_cor_results <- NA
   })
   
-  
   ### storing all of the data
-  FA_data <- c(RMSEA_values, parallel_N_factors, single_factor, 
-               Tau_results, error_cor_results)
+  FA_data <- c(RMSEA_values, CFI, SRMR, fit_results, parallel_N_factors, 
+               unidimensional_check_count, Tau_results, error_cor_results)
   
   # returning the FA data
   return(FA_data)
@@ -1047,6 +1094,8 @@ validity_and_alpha_assumption_tests <- function(data){
 
 
 extracted_data_list <- list(data_1.10_clean, data_1.11_clean, data_1.12.3.1_clean, data_1.12.3.2_clean, data_2.12.1_clean, data_2.12.2_clean, data_2.12.3_clean, data_2.15_clean, data_2.20_clean, data_2.23_clean, data_3.2.1.1_clean, data_3.2.1.2_clean, data_3.7.1_clean, data_3.7.2_clean, data_3.8.2_clean, data_5.1.1_clean, data_5.1.2_clean, data_5.7_clean, data_5.9.1_clean)
+
+
 
 
 # list to store the data in
@@ -1063,7 +1112,8 @@ for (i in 1:length(extracted_data_list)){
   FA_data_frame <- do.call(rbind.data.frame, FA_data)
   
   # Setting the column names
-  names(FA_data_frame) <- c("RMSEA", "RMSEA_se", "N_factors", "unidimensional", "Tau_chisq_diff", 
+  names(FA_data_frame) <- c("RMSEA", "RMSEA_se", "CFI", "SRMR", "fit_chisq", "fit_df", 
+                            "fit_pvalue", "N_factors", "unidimensional_check_count", "Tau_chisq_diff", 
                             "Tau_Df_diff", "Tau_p_diff", "mean_spec", "err_chisq_diff", 
                             "err_Df_diff", "err_p_diff")
   
@@ -1121,15 +1171,19 @@ rm(extracted_data_list)
 
 # Results
 
-## Reported Reliability & Validity Evidence
+## Measurement Reporting
 
-Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures in relation to reliability reporting. First, it shows that almost half of the measures in both replication (N = `r sum(coded_data_replications$N_items == "1 item measure")`) and original research (N = `r sum(coded_data_original$N_items == "1 item measure")`) were single-item measures. Second, only `r apa_num(sum(coded_data_original$reliability_type != "Not Reported" & coded_data_original$reliability_type != ""), numerals = FALSE)` measures in original and `r apa_num(sum(coded_data_replications$reliability_type != "Not Reported" & coded_data_replications$reliability_type != ""), numerals = FALSE)` in replications were reported alongside a reliability indicator. Cronbach’s Alpha was the most commonly reported reliability indicator.
+### Reliability
+
+Figure \@ref(fig:ReliabilityReportingFlowDiagram) depicts the flow of measures in relation to reliability reporting. First, it shows that almost half of the measures in both replication (N = `r sum(coded_data_replications$N_items == "1 item measure")`) and original research (N = `r sum(coded_data_original$N_items == "1 item measure")`) were single-item measures. Second, only `r apa_num(sum(coded_data_original$reliability_type != "Not Reported" & coded_data_original$reliability_type != ""), numerals = FALSE)` measures out of `r sum(coded_data_original$N_items == "multiple item measure")` (`r round((sum(coded_data_original$reliability_type != "Not Reported" & coded_data_original$reliability_type != "") / sum(coded_data_original$N_items == "multiple item measure")) * 100, 1)` %) multi-item scales in original and `r apa_num(sum(coded_data_replications$reliability_type != "Not Reported" & coded_data_replications$reliability_type != ""), numerals = FALSE)` out of `r sum(coded_data_replications$N_items == "multiple item measure")` (`r round((sum(coded_data_replications$reliability_type != "Not Reported" & coded_data_replications$reliability_type != "") / sum(coded_data_replications$N_items == "multiple item measure")) * 100, 1)` %) multi-item scales in replications were reported alongside a reliability indicator. @flakeConstructValidityValidity2022 observed a much larger degree of reliability coefficient reporting in both original (60.8%) and replications (37.1%). However, similarly to @flakeConstructValidityValidity2022, we observed that reliability reporting was more common in original studies as compared to replication studies, and that Cronbach’s Alpha was the most commonly reported reliability indicator in our sample as well.
 
 ```{r ReliabilityReportingFlowDiagram, fig.cap = "Reliability reporting flow diagram. Figure shows the number of measures as reported in both the replication protocols and original article, which meet the criterion in the box within the diagram and those criteria before it.", out.height = "60%"}
 knitr::include_graphics(path = "../../SupplementaryMaterials/reliability_reporting_flow_diagram.png")
 ```
 
-For validity evidence the pattern was similar. Only, `r apa_num(sum(coded_data_original$sel_psychometric_evidence_REV != "None" & coded_data_original$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_original$sel_3_REV == TRUE, na.rm = TRUE), numerals = FALSE)` original studies and `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_replications$sel_3_REV == TRUE, na.rm = TRUE), numerals = FALSE)` replications reported psychometric validity evidence on the measurement. Replications reported both less reliability and validity evidence. Exploratory factor analyses (original: `r apa_num(sum(coded_data_original$sel_psychometric_evidence_REV == "Exploratory Factor Analysis"), numerals = FALSE)`, replications: `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_REV == "Exploratory Factor Analysis"))`) and convergent validity evidence (original: `r apa_num(sum(coded_data_original$sel_psychometric_evidence_text_REV == "convergent validity"), numerals = FALSE)`, replications: `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_text_REV == "convergent validity"), numerals = FALSE)`) were the most common. Psychometric validity evidence from previous studies was reported in `r apa_num(sum(coded_data_original$sel_4 == TRUE, na.rm = TRUE), numerals = FALSE)` original studies and `r apa_num(sum(coded_data_replications$sel_4 == TRUE, na.rm = TRUE), numerals = FALSE)` replications. For single-item measures, `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_text_REV[coded_data_replications$N_items == "1 item measure"] != ""), numerals = FALSE)` were reported with validity evidence – specifically, all were convergent validity – in the replication protocols. In the original studies, `r apa_num(sum(coded_data_original$sel_psychometric_evidence_text_REV[coded_data_original$N_items == "1 item measure"] != ""), numerals = FALSE)` single-item measures came with reported validity evidence.
+### Validity
+
+For validity evidence the pattern was similar. Only, `r apa_num(sum(coded_data_original$sel_psychometric_evidence_REV != "None" & coded_data_original$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_original$sel_3_REV == TRUE, na.rm = TRUE), numerals = FALSE)` (`r round((sum(coded_data_original$sel_psychometric_evidence_REV != "None" & coded_data_original$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_original$sel_3_REV == TRUE, na.rm = TRUE) / nrow(coded_data_original)) * 100, 1)` %) original studies and `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_replications$sel_3_REV == TRUE, na.rm = TRUE), numerals = FALSE)` (`r round((sum(coded_data_replications$sel_psychometric_evidence_REV != "None" & coded_data_replications$sel_psychometric_evidence_REV != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_replications$sel_3_REV == TRUE, na.rm = TRUE) / nrow(coded_data_replications)) * 100, 1)`) replications reported psychometric validity evidence on their measurement. These proportions align with the results from @flakeConstructValidityValidity2022 for both original (9.3%) and replication studies (6.2%), and again, similar to @flakeConstructValidityValidity2022 we observe that validity evidence is also more commonly reported in original compared to replication studies. Exploratory factor analyses (original: `r apa_num(sum(coded_data_original$sel_psychometric_evidence_REV == "Exploratory Factor Analysis"), numerals = FALSE)`, replications: `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_REV == "Exploratory Factor Analysis"))`) and convergent validity evidence (original: `r apa_num(sum(coded_data_original$sel_psychometric_evidence_text_REV == "convergent validity"), numerals = FALSE)`, replications: `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_text_REV == "convergent validity"), numerals = FALSE)`) were the most commonly reported validity indicators. Psychometric validity evidence from previous studies was reported in `r apa_num(sum(coded_data_original$sel_4 == TRUE, na.rm = TRUE), numerals = FALSE)` original studies and `r apa_num(sum(coded_data_replications$sel_4 == TRUE, na.rm = TRUE), numerals = FALSE)` replications. For single-item measures, `r apa_num(sum(coded_data_replications$sel_psychometric_evidence_text_REV[coded_data_replications$N_items == "1 item measure"] != ""), numerals = FALSE)` were reported with validity evidence – specifically, all were convergent validity – in the replication protocols. In the original studies, `r apa_num(sum(coded_data_original$sel_psychometric_evidence_text_REV[coded_data_original$N_items == "1 item measure"] != ""), numerals = FALSE)` single-item measures came with reported validity evidence.
 
 ```{r validity_evidence_reporting, include = FALSE, eval = FALSE}
 table(coded_data_original$sel_psychometric_evidence_REV)
@@ -1188,7 +1242,41 @@ table(coded_data_original$sel_existing, coded_data_original$sel_psychometric_evi
 # overall not substantive enough data too highlight in the article (would require a test to evaluate)
 ```
 
-## Calculated Reliability & Validity Evidence
+### Questionable Measurement Practices
+
+We also coded the reporting of measurement information besides reliability and validity reporting. Table \@ref(tab:QMPTable) below shows the ratio of measurements that aligned with that row's practice of reporting a specific piece of measurement information and for how many of the `r nrow(coded_data_original)` measures the reporting of that measurement information was applicable for both original and replications. The ratio is based on the number of measures that reported that piece of measurement information for the measures for which that item was applicable. A higher ratio thus indicates better measurement reporting.
+
+```{r QMPTable}
+# create informative Measurement Practice Labels 
+MPractice <- c("Reliability is reported", "It is clear if the measure existed or is newly created",    "Exact version of the measure is specified", "Validity evidence from a factor analysis is presented",   "Measured variable is defined", "Choice of measure selection or creation is justified",    "Implemented operationalisation is justified", "Source of the measure is provided",    "Psychometric evidence from the study is given", "Psychometric evidence from an earlier study is given",    "Administration format and environment are described", "Administration procedure is described",   "N items are described", "N response options are described", "Recoding of responses is described", "Creation of the index is described", "Text or supplement has example items", "Administration format changes are mentioned",    "Administration format changes are justified/validated", "Translations are mentioned",    "Translated measures are justified/validated", "Changes in N items or response options are mentioned",    "Changes in N items or response options are justified/validated")   
+
+
+# construct the QMP table to be printed 
+QMP_table <- data.frame("Practice" = MPractice, 
+                        "Original" = paste0(1 - qmp_ratio_data$QMP_percentage_original, " (", qmp_ratio_data$N_applicable_original, ")"), 
+                        "Replication" = paste0(1 - qmp_ratio_data$QMP_percentage_replication, " (", qmp_ratio_data$N_applicable_replication, ")"))   
+
+QMP_table_formatted <- rbind(rbind(rbind(rbind(rbind(c("Definition", "", ""), QMP_table[5,]),
+                                               c("Operationalisation", "", ""), QMP_table[c(3, 11, 12, 7, 17),]),
+                                         c("Selection/Creation", "", ""), QMP_table[c(2, 6, 8, 9, 10, 1, 4),]),
+                                   c("Quantification", "", ""), QMP_table[c(13, 14, 15, 16),]),
+                             c("Modification", "", ""), QMP_table[18:23,])
+
+
+
+# print the table in apa formatting 
+apa_table(QMP_table_formatted, align = c("l", "r", "r"), 
+          caption = "Ratio of QMPs and number of applicable measures, for original and replication", 
+          note = "The first number in both Original and Replication is the ratio of measures for which that reporting practice contained sufficient information. The number between brackets indicates the number of measures for which the practice was applicable.", escape = FALSE, placement = "htp", booktabs = TRUE)
+```
+
+For our purposes, we can focus on the reporting of information most relevant for reconstructing the measure in future research, as well as the modification reporting practices to learn about the relation between original and replication studies. It was clear that existing measures were used for `r round(sum(coded_data_original$sel_existing == "True, namely:") / nrow(coded_data_replications) * 100, 1)`% original and `r round(sum(coded_data_replications$sel_existing == "True, namely:") / nrow(coded_data_original) * 100, 1)`% replication measures. It was not always clear which measures were used (`r round(sum(coded_data_original$sel_existing == "Not Clearly Stated") / nrow(coded_data_original) * 100, 1)`% original; `r round(sum(coded_data_replications$sel_existing == "Not Clearly Stated") / nrow(coded_data_replications) * 100, 1)`% replication), meaning they could not clearly be identified to be the same between original and replication . The number of items (`r round((1 - qmp_ratio_data$QMP_percentage_original[13]) * 100, 1)`% original (n = `r qmp_ratio_data$N_applicable_original[13]`); `r round((1 - qmp_ratio_data$QMP_percentage_replication[13]) * 100, 1)`% replications (n = `r qmp_ratio_data$N_applicable_replication[13]`)) and response options (`r round((1 - qmp_ratio_data$QMP_percentage_original[14]) * 100, 1)`% original (n = `r qmp_ratio_data$N_applicable_original[14]`); `r round((1 - qmp_ratio_data$QMP_percentage_replication[14]) * 100, 1)`% replications (n = `r qmp_ratio_data$N_applicable_replication[14]`)) were usually clear, and modifications to these being unclearly reported was atypical, but did occur (`r round((1 - qmp_ratio_data$QMP_percentage_original[22]) * 100, 1)`% original (n = `r qmp_ratio_data$N_applicable_original[22]`); `r round((1 - qmp_ratio_data$QMP_percentage_replication[22]) * 100, 1)`% replications (n = `r qmp_ratio_data$N_applicable_replication[22]`)). The percentage of numbers of items reported was similar to @flakeConstructValidityValidity2022 (original: 92%; replication 85.6%). The proportion to which the number of items were changed from original to replication was also similar (`r round(sum(!is.na(coded_data_replications$mod_5_REV)) / nrow(coded_data_replications) * 100, 1)`) to @flakeConstructValidityValidity2022 (16%). In general, modifications could only rarely be identified for original studies. In replication studies we observe that not all modifications were validated or justified (language: `r round((1 - qmp_ratio_data$QMP_percentage_replication[21]) * 100, 1)`% (n = `r qmp_ratio_data$N_applicable_replication[21]`); administration format: `r round((1 - qmp_ratio_data$QMP_percentage_replication[19]) * 100, 1)`% (n = `r qmp_ratio_data$N_applicable_replication[19]`)), especially for changes in items and response options (`round((1 - qmp_ratio_data$QMP_percentage_replication[23]) * 100, 1)`(n = `r qmp_ratio_data$N_applicable_replication[23]`)). In general, we observed that measurement was modified in some way from original to replication for `r round((sum(coded_data_replications$mod_check == "True") / nrow(coded_data_replications)) * 100, 1)`% of measures, and it was unclear whether modification occurred for `r round((sum(coded_data_replications$mod_check == "None Reported") / nrow(coded_data_replications)) * 100, 1)`%.
+
+???LEFTOVER RESULTS from @flakeConstructValidityValidity2022. - had a citation flake:original ::: 29% - response format reported flake:original :: 94% - scale scoring flake:original :: 49% - citing existing validity evidence flake:original :: 29% - citing existing validity evidence flake:replication :: 38% - translation validated flake:replication :: 20% ???
+
+## Measurement Response Data Analysis
+
+### Calculated Reliability Coefficients
 
 The average calculated Cronbach’s alpha coefficient across individual replications was `r apa_num(mean(calculated_reliability_lab_data$alpha))` with a standard deviation of `r apa_num(sd(calculated_reliability_lab_data$alpha))`. Figure \@ref(fig:PlotAlphaDistributions) displays the distributions of the calculated Cronbach’s Alpha scores from each lab for each measure, separated by successful and unsuccessful replication, based on the meta-analytic p-value (alpha \< .05) retrieved from the Many Labs reports.
 
@@ -1262,9 +1350,11 @@ ggplot(calculated_alpha_plot_data, aes(x = alpha, y = g)) +
 
 ```
 
-We found statistically significant indication of heterogeneity in Cronbach's alpha for `r apa_num(sum(measure_reliability_data$QEp < .05), numerals = FALSE)` of the `r apa_num(nrow(measure_reliability_data), numerals = FALSE)` measures. However, as noted earlier a more accurate indication of the heterogeneity can be observed in the prediction intervals. The prediction intervals generally show larger indications of heterogeneity for some of the lower reliability measures and less for higher reliability measures when compared to the Tau test results. Number of labs also appears to be a factor for narrowing the prediction intervals. Additionally, we observe that for most measures the reported reliabilities were generally lower than the reliabilities calculated for the replication labs. Perhaps more interesting is that we observed that reported reliabilities in the original study were more common for those measures that had higher average reliabilities (\>.80) in the replications compared to on average less reliable measures.
+We found statistically significant indication of heterogeneity in Cronbach's alpha for `r apa_num(sum(measure_reliability_data$QEp < .05), numerals = FALSE)` of the `r apa_num(nrow(measure_reliability_data), numerals = FALSE)` measures. However, as noted earlier a more accurate indication of the heterogeneity can be observed in the prediction intervals. The prediction intervals generally show larger indications of heterogeneity for some of the lower reliability measures and less for higher reliability measures when compared to the Tau test results. An increase in the number of labs also appears to be a factor for narrowing the prediction intervals. Additionally, we observe that for most measures the reported reliabilities were generally lower than the reliabilities calculated for the replication labs. Another interesting observation is that reported reliabilities in the original study were more common for those measures that had higher average calculated reliabilities (\>.80) in the replications compared to on average less reliable measures.
 
-```{r PlotData1FactorRMSEA, warning = FALSE}
+### Unidimensionality assessment
+
+```{r PlotData1Factor, warning = FALSE}
 # load in the FA_list data
 FA_list <- list(fa_caruso_2012, fa_husnu_2010, fa_nosek_2002_math, fa_nosek_2002_art,
                 fa_anderson_2012_swl, fa_anderson_2012_pa, fa_anderson_2012_na,
@@ -1276,10 +1366,15 @@ FA_list <- list(fa_caruso_2012, fa_husnu_2010, fa_nosek_2002_math, fa_nosek_2002
 
 
 # create the base dataframe
-unidimensionality_graph_data <- data.frame(RMSEA = c(NA),
-                                           RMSEA_se = c(NA),
+unidimensionality_graph_data <- data.frame(RMSEA = NA,
+                                           RMSEA_se = NA,
+                                           CFI = NA,
+                                           SRMR = NA,
+                                           fit_chisq = NA,
+                                           fit_df = NA,
+                                           fit_pvalue = NA,
                                            N_factors = NA,
-                                           unidimensional = NA,
+                                           unidimensional_check_count = NA,
                                            g = NA)
 
 measured_variables <- c("caruso_2012", "husnu_2010", "nosek_2002_math", "nosek_2002_art", "anderson_2012_swl", "anderson_2012_pa", "anderson_2012_na", "giessner_2007", "norenzayan_2002", "zhong_2006", "monin_2001_most", "monin_2001_some", "cacioppo_1983_arg", "cacioppo_1983_nfc", "de_fruyt_2000", "albarracin_2008_verb", "albarracin_2008_math", "shnabel_2008", "vohs_2008")
@@ -1290,7 +1385,7 @@ for (i in 1:19){
 
   g = measured_variables[i]
   
-  unidimensionality_graph_data <- rbind(unidimensionality_graph_data, cbind(FA_list[[i]][1:4], g))
+  unidimensionality_graph_data <- rbind(unidimensionality_graph_data, cbind(FA_list[[i]][1:9], g))
 
 }
 
@@ -1310,7 +1405,7 @@ N_factors_capped[unidimensionality_graph_data$N_factors >= 3] <- "3+"
 unidimensionality_graph_data$N_factors_capped <- as.factor(N_factors_capped)
 
 
-### meta-analyzing
+### meta-analyzing RMSEA
 assess_undidimensionality_heterogeneity <- function(data_on_RMSEA){
   temp_beta <- NA
   temp_tau <- NA
@@ -1350,15 +1445,34 @@ unidimensionality_meta_list <- tapply(unidimensionality_graph_data, unidimension
 # convert data output to a dataframe
 unidimensionality_meta_data <- do.call(rbind.data.frame, unidimensionality_meta_list)
 
-names(unidimensionality_meta_data) <- c("beta", "tau", "QEp", "pi.lb", "pi.ub")
+names(unidimensionality_meta_data) <- c("beta", "tau", "QEp", "pi.lb", "pi.ub", "g")
+
+# add the count of significant p_values for the exact test to the meta_dataframe
+
+count_significant_results <- function(p){
+  significance <- sum(p > .05, na.rm = TRUE)
+  number_of_converged <- sum(!is.na(p))
+  return(c(significance, number_of_converged))
+}
+
+p_meta_list <- tapply(unidimensionality_graph_data$fit_pvalue, unidimensionality_graph_data$g, count_significant_results)
+
+p_meta_data <- do.call(rbind.data.frame, p_meta_list)
+
+names(p_meta_data) <- c("p_count", "converged_count")
+
+unidimensionality_meta_data <- cbind(unidimensionality_meta_data, p_meta_data)
 
 
 # added the reporting or lack of reporting of psychometric validty evidence in the original to the meta data
 unidimensionality_meta_data$reported_psych_val <- coded_data_original$sel_psychometric_evidence_REV[measure_reliability_data$coded_data_index] != "None" & coded_data_original$sel_psychometric_evidence_REV[measure_reliability_data$coded_data_index] != "Not Apllicable (only report this if psychometric evidence would not be possible for this measure, otherwise report as None)" | coded_data_original$sel_3_REV[measure_reliability_data$coded_data_index] == TRUE
 
 
+
+
 # adding the number of non-coverged factor models
 non_converged_list <- tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, is.na)
+
 
 non_converged_vec <- rep(0, 19)
 
@@ -1366,35 +1480,46 @@ for (i in 1:19){
   non_converged_vec[i] <- sum(non_converged_list[[i]])
 }
 
+# creating a string that shows the ratio of nonconverged to total
+convergence_rate_vec <- paste0(unidimensionality_meta_data$converged_count, "/", unidimensionality_meta_data$converged_count + non_converged_vec)
+
+# adding a star for De Fruyt et al. (2000)
+convergence_rate_vec <- c(convergence_rate_vec[1:18], paste0(convergence_rate_vec[19], "*"))
+
+
 ```
 
-Figure \@ref(fig:Plot1Factor) below show the result of our unidimensionality test. `r apa_num((sum(unidimensionality_graph_data$RMSEA < .08, na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)` % of labs were below our RMSEA .08 threshold, while for `r apa_num((sum(unidimensionality_meta_data$beta < .08, na.rm = TRUE)), numerals = FALSE)` measures of the total `r apa_num(nrow(unidimensionality_meta_data), numerals = FALSE)` the mean across labs was below this threshold. Furthermore, the RMSEA shows considerable variation within measures, with the standard deviation ranging from `r apa_num(min(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE)[!is.na(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE))]))` as the lowest to all the way up to `r apa_num(max(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE)[!is.na(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE))]))`. The parallel analysis results similarly showed inconsistency both across and within measures. While `r apa_num((sum(unidimensionality_graph_data$N_factors_capped == "1", na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% of labs returned a single factor solution, `r apa_num((sum(unidimensionality_graph_data$N_factors_capped == "2", na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% returned a two-factor, and `r apa_num((sum(unidimensionality_graph_data$N_factors_capped == "2", na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% returned three or more factors. The remainder did not converge. The lack of convergence was an also an issue for the CFA used for the RMSEA check. The CFA failed to converge for `r apa_num((sum(is.na(unidimensionality_graph_data$RMSEA)) / nrow(unidimensionality_graph_data)) * 100)`% of labs. In the case of the @defruytCloningersPsychobiologicalModel2000 measure all labs failed to converge. Convergence in the other cases was the result of either the severe misfit of our factor models or a lack of sample size to stably estimate these models. In the end, `r apa_num((sum(unidimensionality_graph_data$unidimensional == "Yes", na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% of labs passed our unidimensionality check.
+Figure \@ref(fig:Plot1FactorRMSEA) below show the result of our unidimensionality test. `r apa_num((sum(unidimensionality_graph_data$RMSEA < .08, na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)` % of labs were below our RMSEA .08 threshold, while for `r apa_num((sum(unidimensionality_meta_data$beta < .08, na.rm = TRUE)), numerals = FALSE)` measures of the total `r apa_num(nrow(unidimensionality_meta_data), numerals = FALSE)` the mean across labs was below this threshold. Furthermore, the RMSEA shows considerable variation within measures, with the standard deviation ranging from `r apa_num(min(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE)[!is.na(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE))]))` to `r apa_num(max(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE)[!is.na(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE))]))` (mean sd = `r apa_num(mean(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE)[!is.na(tapply(unidimensionality_graph_data$RMSEA, unidimensionality_graph_data$g, sd, na.rm = TRUE))]))`).
 
-```{r Plot1Factor, warning = FALSE, fig.cap = "Distributions of calculated RMSEA of a single-factor model fit calculated for the responses on a measure at each lab location, across the nineteen measures for which raw data was available on which a factor model could be fitted. The red horizontal line separate the replicated from the non-repicated measures. The red vertical line indicates our .08 RMSEA cutoff value. The N non-conv. column besides the graph shows the number of labs per measure for which the single-factor CFA did not converge. The color of each dot shows the number of factors that were selected for that measure for that lab location based on the parallel analyses. Psychometric validity evidence was reported in the original Husnu & Crips (2010) and Shnabel & Nadler (2008) studies."}
+The parallel analysis results similarly showed inconsistency both across and within measures. While `r apa_num((sum(unidimensionality_graph_data$N_factors_capped == "1", na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% of labs returned a single factor solution, `r apa_num((sum(unidimensionality_graph_data$N_factors_capped == "2", na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% returned a two-factor, and `r apa_num((sum(unidimensionality_graph_data$N_factors_capped == "2", na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% returned three or more factors. The remainder did not converge. The lack of convergence was also an issue for the CFA used for the RMSEA check. The CFA failed to converge for `r apa_num((sum(is.na(unidimensionality_graph_data$RMSEA)) / nrow(unidimensionality_graph_data)) * 100)`% of labs. Convergence in most cases was the result of either the severe misfit of our factor models or a lack of sample size to stably estimate these models. A consistent pattern was also lacking for the results from the exact fit tests. For `r sum((unidimensionality_meta_data$p_count[1:18] / unidimensionality_meta_data$converged_count[1:18]) >= .75)` out of `r sum(unidimensionality_meta_data$converged_count != 0)` measures with converged factor analyses, three quarters or more labs showed statistical significant fit, for `r sum((unidimensionality_meta_data$p_count[1:18] / unidimensionality_meta_data$converged_count[1:18]) <= .25)` a quarter or less did, and for the remaining `r sum((unidimensionality_meta_data$p_count[1:18] / unidimensionality_meta_data$converged_count[1:18]) > .25 & (unidimensionality_meta_data$p_count[1:18] / unidimensionality_meta_data$converged_count[1:18]) < .75)` the proportion lay somewhere in between.
 
-# plot for distribution of alpha
+```{r Plot1FactorRMSEA, warning = FALSE, fig.cap = "Distributions of calculated RMSEA of a single-factor model fit calculated for the responses on a measure at each lab location, across the nineteen measures for which raw data was available on which a factor model could be fitted. The red horizontal line separate the replicated from the non-repicated measures. The red vertical line indicates our .08 RMSEA cutoff value. The first number in the Conv. column besides the graph shows the number of labs per measure for which the single-factor CFA converged, with second number showing the total number of labs. The color of each dot shows the number of factors that were selected for that measure for that lab location based on the parallel analyses. Psychometric validity evidence was reported in the original Husnu & Crips (2010) and Shnabel & Nadler (2008) studies. * The Conscientiousness measure used in De Fruyt et al. (2000) consisted of two items, which are too few items to fit a factor model on. Therefore, none of these models converged."}
+
+# plot for distribution of RMSEA and exact fit test
 ggplot(unidimensionality_graph_data, aes(x = RMSEA, y = g, colour = as.factor(N_factors_capped))) +
   geom_boxplot(outlier.shape = NA, colour = "black") +
   geom_hline(yintercept = 6.5, color = "red", size = 1) +
   geom_vline(xintercept = 0.08, color = "red", size = 1) +
   geom_point(alpha = 0.3) +
   
-  # adding in the tau values
-  #geom_text(data = unidimensionality_meta_data, label = format(unidimensionality_meta_data$tau, digits = 1), x = 0.58, y = 1:19, color = ifelse(unidimensionality_meta_data$QEp < .05, "black", "grey"), size = 2.8) +
   
-  # adding in the N non converted
-  geom_text(data = unidimensionality_meta_data, label = format(non_converged_vec), x = 0.51, y = 1:19, size = 2.8, colour = "black") +
+  # adding in the convergence rate
+  geom_text(data = unidimensionality_meta_data, label = format(convergence_rate_vec), x = 0.51, y = 1:19, size = 2.8, colour = "black") +
+  
+  # adding in the proportion of significant p-values
+  geom_text(data = unidimensionality_meta_data, label = format(c(round(unidimensionality_meta_data$p_count[1:18] / unidimensionality_meta_data$converged_count[1:18], 2), "")), x = 0.58, y = 1:19, size = 2.8, colour = "black") +
+  
   
   # setting the theme
   theme_minimal() +
-  theme(legend.position = "bottom", plot.margin = unit(c(1, 5, 1, 1), "lines")) +
+  theme(legend.position = "bottom", plot.margin = unit(c(2, 5, 1, 1), "lines")) +
   
   
   # adding the necessary indicative texts
   annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 7.25, ymax = 7.25, xmin = 0.33, xmax = 0.33) +
   annotation_custom(grob = textGrob(label = "Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 6, ymax = 6, xmin = 0.37, xmax = 0.37) +
-  #annotation_custom(grob = textGrob(label = "Tau", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 0.55, xmax = 0.55) +
-  annotation_custom(grob = textGrob(label = "N Non-Conv.", hjust = 0, gp = gpar(fontsize = 11)), ymin = 20.2, ymax = 20.2, xmin = 0.48, xmax = 0.48) +
+  annotation_custom(grob = textGrob(label = "Conv.", hjust = 0, gp = gpar(fontsize = 11)), ymin = 20.2, ymax = 20.2, xmin = 0.48, xmax = 0.48) +
+  annotation_custom(grob = textGrob(label = "Sig.\nProp.", hjust = 0, gp = gpar(fontsize = 11)), ymin = 20.9, ymax = 20.9, xmin = 0.55, xmax = 0.56) +
   
   coord_cartesian(xlim = c(0, 0.45), clip = "off") +
   
@@ -1402,114 +1527,113 @@ ggplot(unidimensionality_graph_data, aes(x = RMSEA, y = g, colour = as.factor(N_
   # geom_point(data = unidimensionality_meta_data[c(1:6, 8:14, 16:17),], mapping = aes(x = pi.lb, y = c(1:6, 8:13, 15:17) ), color = "green", shape = 124, size = 2.5) + 
   # geom_point(data = unidimensionality_meta_data, mapping = aes(x = pi.ub, y = 1:19), color = "green", shape = 124, size = 2.5) + 
   
-  scale_colour_manual(name = "N Factors (Parallel Analysis)", values = c("#0072B2", "#009E73", "#F0E442"), na.value = "#000000") + 
+  scale_colour_manual(name = "N Factors (Parallel Analysis)", values = c("#0049b8", "#02bd8a", "#f2e30f"), na.value = "#000000") + 
   guides(colour = guide_legend(override.aes = list(alpha = 1))) +
   ylab("") +
   xlab("RMSEA (unidimensional CFA model)") 
+
+
 ```
 
-```{r check_on_Omega_convergence, warning = FALSE}
-is_mostly_na <- function(x){
-  return((sum(is.na(x)) / length(x)) > .5) 
-}
+Figure \@ref(fig:Plot1FactorSRMRCFI) below shows the SRMR, and CFI fit indices for the same single factor model as was used to estimate the RMSEA and exact fit test. `r apa_num((sum(unidimensionality_graph_data$SRMR < .08, na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% of labs were below our SRMR .08 threshold and `r apa_num((sum(unidimensionality_graph_data$CFI < .9, na.rm = TRUE) / nrow(unidimensionality_graph_data)) * 100)`% were above our CFI .90 threshold. For the `r apa_num(nrow(unidimensionality_meta_data), numerals = FALSE)` measures, the mean SRMR was below .08 for `r apa_num((sum(tapply(unidimensionality_graph_data$SRMR, unidimensionality_graph_data$g, mean, na.rm = TRUE) < .08, na.rm = TRUE)), numerals = FALSE)` measures, while the mean CFI was above .90 for for `r apa_num((sum(tapply(unidimensionality_graph_data$CFI, unidimensionality_graph_data$g, mean, na.rm = TRUE) > .9, na.rm = TRUE)), numerals = FALSE)` measures.The mean standard deviation of the SRMR fit index is `r apa_num(mean(tapply(unidimensionality_graph_data$SRMR, unidimensionality_graph_data$g, sd, na.rm = TRUE)[!is.na(tapply(unidimensionality_graph_data$SRMR, unidimensionality_graph_data$g, sd, na.rm = TRUE))]))`. For CFI this was `r apa_num(mean(tapply(unidimensionality_graph_data$CFI, unidimensionality_graph_data$g, sd, na.rm = TRUE)[!is.na(tapply(unidimensionality_graph_data$CFI, unidimensionality_graph_data$g, sd, na.rm = TRUE))]))`. Overall, compared to the RMSEA, the SRMR and CFI fit indices show a more stable unidimensional fit. Especially the SRMR index shows considerably better fit compared to the RMSEA. When combining the results from all five unidimensionality checks together we observe that at least one of the five unidimensionality checks was passed for `r round((sum(unidimensionality_graph_data$unidimensional_check_count >= 1, na.rm = TRUE) / sum(!is.na(unidimensionality_graph_data$unidimensional_check_count))) * 100, 2)`% of the `r sum(!is.na(unidimensionality_graph_data$unidimensional_check_count))` labs with converged factor models, at least two for `r round((sum(unidimensionality_graph_data$unidimensional_check_count >= 2, na.rm = TRUE) / sum(!is.na(unidimensionality_graph_data$unidimensional_check_count))) * 100, 2)`%, at least three for `r round((sum(unidimensionality_graph_data$unidimensional_check_count >= 3, na.rm = TRUE) / sum(!is.na(unidimensionality_graph_data$unidimensional_check_count))) * 100, 2)`%, at least three for `r round((sum(unidimensionality_graph_data$unidimensional_check_count >= 4, na.rm = TRUE) / sum(!is.na(unidimensionality_graph_data$unidimensional_check_count))) * 100, 2)`%, and all five for `r round((sum(unidimensionality_graph_data$unidimensional_check_count == 5, na.rm = TRUE) / sum(!is.na(unidimensionality_graph_data$unidimensional_check_count))) * 100, 2)`%. The mean number of unidimensionality check passed was `r round(mean(unidimensionality_graph_data$unidimensional_check_count, nar.rm = TRUE), 2)`.
 
-Omega_convergence_vector <- tapply(calculated_alpha_plot_data$omega.tot, calculated_alpha_plot_data$g, is_mostly_na)
+```{r Plot1FactorSRMRCFI, warning = FALSE, fig.cap = "Distributions of calculated SRMR and calculated CFI of a single-factor model fit calculated for the responses on a measure at each lab location, across the nineteen measures for which raw data was available on which a factor model could be fitted. The left figure shows the SRMR result, where the red vertical line indicates our .08 RMSR cutoff value. The right figure shows the CFI results, where the red vertical line indicates our .90 CFI cutoff value. In both figures the red horizontal line separate the replicated from the non-repicated measures."}
 
-# sum(Omega_convergence_vector)
-```
-
-Figure \@ref(fig:PlotOmegaDistributions) below shows the result of our Omega analyses. Note that while we show the distributions of omega values here, due to the lack of a formula to calculate the Omega standard error, we did not perform a meta-analysis on these results. Overall, our Omega coefficient analyses show a similar pattern between measures to that observed for the alpha coefficient albeit with generally higher coefficient scores across measures. However, not all improved. The two columns beside Figure \@ref(fig:PlotOmegaDistributions) show in how many labs each measure was used, as well as for how many labs an omega coefficient could be obtained, which was not always. In `r apa_num(sum(is.na(calculated_alpha_plot_data$omega.tot)) / nrow(calculated_alpha_plot_data) * 100)`% of labs, no omega coefficient could be obtained. For `r sum(Omega_convergence_vector)` measures the number of labs for which an Omega coefficient could not be obtained was even the majority. This relates to our findings from the unidimensionality tests, where some factor models did not converge.
-
-```{r PlotOmegaDistributions, warning = FALSE, fig.cap = "Distributions of calculated McDonald’s Omega t  calculated for the responses on a measure at each lab location, across the eighteen measures for which raw data was available from which McDonald’s Omega t coefficients could be calculated. The N.Omg column besides the figure shows the number of lab locations for which an Omega coefficient could be successfully calculated. Due to lack of underlying model convergence an Omega coefficient could not be calculated for all lab locations, or any lab locations for the Der Fruyt et al. (2000) measure. The N.tot column shows the total number of lab locations at which the measure was taken. Any difference between N.omg and N.tot can be seen as an indication of the instability to get a stable estimate of an underlying facto model for some lab locations for that measure."}
-# plot for omega
-ggplot(calculated_alpha_plot_data, aes(x = omega.tot, y = g)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_point(alpha = 0.1) + 
-  
-  # adding labels to show the number of labs per measure for which a total omega could be calculated
-  geom_text(data = calculated_alpha_plot_data[1:19,], label = table(calculated_alpha_plot_data$g[!is.na(calculated_alpha_plot_data$omega.tot)]), x = 1.15, y = 1:19, size = 2.8) +
-  # adding labels to show the number of labs per measure
-  geom_text(data = calculated_alpha_plot_data[1:19,], label = table(calculated_alpha_plot_data$g), x = 1.35, y = 1:19, size = 2.8) +
-  
-  # theming
-  theme_minimal() +
-  theme(legend.position = "none", plot.margin = unit(c(1, 6.5, 1, 1), 
-                                                     "lines")) +
-  
-  # adding the replication line
+# plot for distribution of SRMR
+SRMR_plot <- ggplot(unidimensionality_graph_data, aes(x = SRMR, y = g, colour = as.factor(N_factors_capped))) +
+  geom_boxplot(outlier.shape = NA, colour = "black") +
+  geom_point(alpha = 0.3) +
   geom_hline(yintercept = 6.5, color = "red", size = 1) +
+  geom_vline(xintercept = 0.08, color = "red", size = 1) +
+
+  # setting the theme
+  theme_minimal() +
+  theme(legend.position = "bottom", plot.margin = unit(c(1, 5, 1, 1), "lines")) +
+  scale_x_continuous(breaks = round(c(0, 0.1, 0.2),1)) +
   
   # adding the necessary indicative texts
-  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 7.25, ymax = 7.25, xmin = 0.01, xmax = 0.01) +
-  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0, gp = gpar(fontsize = 10)), ymin = 6, ymax = 6, xmin = 0.01, xmax = 0.01) +
-  annotation_custom(grob = textGrob(label = "N.Omg", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 1.08, xmax = 1.08) +
-  annotation_custom(grob = textGrob(label = "N.Tot", hjust = 0, gp = gpar(fontsize = 12)), ymin = 20.2, ymax = 20.2, xmin = 1.28, xmax = 1.28) +
+  annotation_custom(grob = textGrob(label = "Not Replicated", hjust = 0, gp = gpar(fontsize = 8)), ymin = 7.25, ymax = 7.25, xmin = 0.18, xmax = 0.18) +
+  annotation_custom(grob = textGrob(label = "Replicated", hjust = 0, gp = gpar(fontsize = 8)), ymin = 6, ymax = 6, xmin = 0.18, xmax = 0.18) +
+
+  coord_cartesian(xlim = c(0, 0.2), clip = "off") +
+
+  scale_colour_manual(name = "N Factors (Parallel Analysis)", values = c("#0049b8", "#02bd8a", "#f2e30f"), na.value = "#000000") + 
+  guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+  ylab("") +
+  xlab("SRMR (unidimensional CFA model)") 
+
+
+# plot for distribution of CFI
+CFI_plot <- ggplot(unidimensionality_graph_data, aes(x = CFI, y = g, colour = as.factor(N_factors_capped))) +
+  geom_boxplot(outlier.shape = NA, colour = "black") +
+  geom_hline(yintercept = 6.5, color = "red", size = 1) +
+  geom_vline(xintercept = 0.9, color = "red", size = 1) +
+  geom_point(alpha = 0.3) +
+
+  # setting the theme
+  theme_minimal() +
+  theme(legend.position = "none", plot.margin = unit(c(1, 5, 1, 1), "lines"), axis.text.y = element_blank()) +
+  scale_x_continuous(breaks = round(c(0, 0.2, 0.4, 0.6, 0.8, 1),1)) +
   
   coord_cartesian(xlim = c(0, 1), clip = "off") +
   
+  scale_colour_manual(name = "N Factors (Parallel Analysis)", values = c("#0049b8", "#02bd8a", "#f2e30f"), na.value = "#000000") + 
+  guides(colour = guide_legend(override.aes = list(alpha = 1))) +
   ylab("") +
-  xlab("Omega")
+  xlab("CFI (unidimensional CFA model)") 
+
+
+(SRMR_plot + CFI_plot)
 
 ```
 
-## Questionable Measurement Practices
-
-Reliability and validity indicators are only one aspect of measurement reporting. We coded additional potential questionable measurement practices in reporting in general too. Table \@ref(tab:QMPTable) below shows for both original and replication for all of the QMP items the ratio of QMPs and for how many of the `r nrow(coded_data_original)` measures the QMP was applicable. Meanwhile, the Phi coefficient indicates the “correlation” between the MP being questionable or good in the original and the same for the replication.
-
-```{r QMPTable}
-# create informative Measurement Practice Labels 
-MPractice <- c("Reliability is reported", "It is clear if the measure existed or is newly created",    "Exact version of the measure is specified", "Validity evidence from a factor analysis is presented",   "Measured variable is defined", "Choice of measure selection or creation is justified",    "Implemented operationalisation is justified", "Source of the measure is provided",    "Psychometric evidence from the study is given", "Psychometric evidence from an earlier study is given",    "Administration format and environment are described", "Administration procedure is described",   "N items are described", "N response options are described", "Recoding of responses is described", "Creation of the index is described", "Text or supplement has example items", "Administration format changes are mentioned",    "Administration format changes are justified/validated", "Translations are mentioned",    "Translated measures are justified/validated", "Changes in N items or response options are mentioned",    "Changes in N items or response options are justified/validated")   
-
-
-# construct the QMP table to be printed 
-QMP_table <- data.frame("Practice" = MPractice, 
-                        "QMP original" = paste0(qmp_ratio_data$QMP_percentage_original, " (", qmp_ratio_data$N_applicable_original, ")"), 
-                        "QMP Replication" = paste0(qmp_ratio_data$QMP_percentage_replication, " (", qmp_ratio_data$N_applicable_replication, ")"), 
-                        "Phi" = qmp_ratio_data$Phi)   
-
-
-
-# print the table in apa formatting 
-apa_table(QMP_table, align = c("l", "r", "r", "r"), 
-          caption = "Ratio of QMPs and number of applicable measures, for original and replication", 
-          note = "The first number in QMP org and QMP rep is the ratio of measures for which the practice in that row was not conducted well by our standards. The number between brackets indicates the number of measures for which the practice was applicable.", escape = FALSE, placement = "htp", booktabs = TRUE)
-```
-
-The Phi coefficients reveal little in the way of a consistent pattern on the relation of QMPs in original to QMPs in replications. However, if we look more conceptually we can also look at the reporting of information most relevant for reconstructing the measure, as well as modifications to the measure to learn about the relation between original and replication study. It was clear that existing measures were used for `r apa_num(sum(coded_data_original$sel_existing == "True, namely:") / nrow(coded_data_replications) * 100)`% original and `r sum(coded_data_replications$sel_existing == "True, namely:") / nrow(coded_data_original) * 100`% replication measures. It was not always clear which measures were used (`r sum(coded_data_original$sel_existing == "Not Clearly Stated") / nrow(coded_data_original) * 100`% original; `r sum(coded_data_replications$sel_existing == "Not Clearly Stated") / nrow(coded_data_replications) * 100`% replication), meaning they could not clearly be identified to be the same between original and replication. While the number of items (`r qmp_ratio_data$QMP_percentage_original[13]`% original; `r qmp_ratio_data$QMP_percentage_replication[13]`% replications) and response (`r qmp_ratio_data$QMP_percentage_original[14]`% original; `r qmp_ratio_data$QMP_percentage_replication[14]`% replications) were usually clear, and modifications were atypical, but did occur (`r qmp_ratio_data$QMP_percentage_original[22]`% original; `r qmp_ratio_data$QMP_percentage_replication[22]`% replications). It was however uncommon for this modification to be validated (`r qmp_ratio_data$QMP_percentage_original[23]`% original; `r qmp_ratio_data$QMP_percentage_replication[23]`% replication). QMPs were less common for language (`r qmp_ratio_data$QMP_percentage_original[20]`% original; `r qmp_ratio_data$QMP_percentage_replication[20]`% replications) and administration format modifications (`r qmp_ratio_data$QMP_percentage_original[18]`% original; `r qmp_ratio_data$QMP_percentage_replication[18]`% replications), . Validation was however still rare (language: `r qmp_ratio_data$QMP_percentage_original[21]`% original, `r qmp_ratio_data$QMP_percentage_replication[21]`% replications; administration format: `r qmp_ratio_data$QMP_percentage_original[19]`% original; `r qmp_ratio_data$QMP_percentage_replication[19]`% replications). While generally QMPs were not found for admin format and procedure in the replications (format: `r qmp_ratio_data$QMP_percentage_replication[11]`%; procedure: `r qmp_ratio_data$QMP_percentage_replication[12]`%), they did occur for original measures (format: `r qmp_ratio_data$QMP_percentage_original[11]`%; procedure: `r qmp_ratio_data$QMP_percentage_original[12]`%). In general, we observed that measurement was modified in some way from original to replication for `r sum(coded_data_replications$mod_check == "True") / nrow(coded_data_replications)`% of measures, and it was unclear whether modification occured for `r sum(coded_data_replications$mod_check == "None Reported") / nrow(coded_data_replications)`%.
+???Compared to Shaw ,!!! - mean CFI of scales is: `r  mean(0.919, 0.966, 0.877, 0.946, 0.616, 0.92, 0.889, 0.873)` 0.919 - mean SRMR of scales is: `r  mean(0.066, 0.028, 0.047, 0.045, 0.267, 0.04, 0.059, 0.036)` 0.066 - mean of RMSEA of scales is: `r  mean(0.056, 0.082, 0.093, 0.059, 0.262, 0.191, 0.174, 0.085)` 0.056. However these are means of scales and not per lab???
 
 # Discussion
 
-To assess psychological phenomena we need measurement that is valid and reliable for our constructs. However, we noted that little reliability and validity evidence was reported, and our reanalysis of the reliability and validity of the measures showed inconsistent reliability and validity support. Furthermore, we observed a lack of transparent reporting, which makes it difficult for future researchers to reuse and build upon the validation of existing measurements.
+To assess psychological phenomena we need measurement that is valid and reliable for our constructs. However, we noted that little reliability and validity evidence was reported, and that all the information needed to understand and recreate the measurement was rarely all available. Furthermore our reanalysis of the reliability and validity of the measures showed inconsistent reliability and validity support.
 
-In line with existing research we found that for the majority of the measures in original and replication studies no reliability coefficient was reported, and psychometric validity evidence was even less common [@beckmanHowReliableAre2004; @barryValidityReliabilityReporting2014; @flakeConstructValidationSocial2017; @maireadshawMeasurementPracticesLargescale2020; @flakeConstructValidityValidity2022]. Some part of this is due to around half of the measures in original and replication studies being single item measures. While it is possible to check the reliability and validity of single item measures, these methods often require multiple measures or studies to be able to cross-validate the measure with [@leppinkWeNeedMore2017; @sarstedtSelectingSingleItems2016]. Another factor may be observed in the fact that we observed that replications generally reported less reliability and psychometric validity evidence. This could be because replications implicitly defer the responsibility of reporting validity and reliability evidence to the original study. However, it was not uncommon for the replication to use modified or different measures from the original study. If it was not set in stone that the same measure as the original was used, then it stands to reason that in any case the choice of measure should be motivated based on reliability and validity evidence. Furthermore, this does not explain the lack of reliability and validity reporting in the original studies. It may unfortunately be more likely that many of these measures are simply not validated before (or even after) use.
+!!!Korte samenvatting van wat we gedaan hebben; daarna voor alle drie aims de resultaten bescrhijven; gebruik QMPs als framework, maar niet veel expliciet bescrhijven (future research, er zijn nog meer QMPs); blijf de volgorde aanhouden!!!
 
-This is not merely based on guessing. When we recalculated the reliability coefficients and factor structure of the measures used in the replication projects, the observed reliability and validity of several measures did not convincingly show that these would be valid if presented alongside the measure in a study. While some measures were consistently not reliable and valid and some others were consistently reliable and valid, most were reliable and valid in some labs but not others. We also noted that some measures had convergence issues, where for some labs we could not get the factor model to fit nor Omega coefficient results. This may have been because of sample size issues, or the small number of items we often observed in the replication measures. However, gross misfit is also possible. Although, the psychometric indicators we used were applied rather broadly across a spectrum of different measures, and should not be used to make individual inferences for the measures. As a general overview, our results strongly indicate that these measures were frequently neither reliable nor valid for the contexts they were used in.
+In line with existing research we found that for the majority of the measures in original and replication studies no reliability coefficient was reported, and psychometric validity evidence was even less common [@beckmanHowReliableAre2004; @barryValidityReliabilityReporting2014; @flakeConstructValidationSocial2017; @maireadshawMeasurementPracticesLargescale2020; @flakeConstructValidityValidity2022]. Some part of this is due to around half of the measures in original and replication studies being single item measures. While it is possible to check the reliability and validity of single item measures, these methods often require multiple measures or studies to be able to cross-validate the measure with [@leppinkWeNeedMore2017; @sarstedtSelectingSingleItems2016]. Another reason can be found in our observation that replications generally reported less reliability and psychometric validity evidence. This could be because replications implicitly defer the responsibility of reporting validity and reliability evidence to the original study. However, as we noted before, and as our analyses of the reliability and unidimensionality reiterate, the reliability and validity of a measure varies across contexts. It is therefore still important for the reliability and validity to be described for the replications studies too.
 
-We also observed that when a Cronbach's Alpha was reported for a measure in an original study, then their average Cronbach's Alpha observed among the replications were consistently relatively high. Meanwhile when no Cronbach's Alpha was reported in the original study, the reliability was often relatively low. This aligns with existing research indicating bias in reported Cronbach's Alpha values, with an excess of reported values at the common acceptably reliable threshold value of .70, and low reporting just below .70 [@husseyAberrantAbundanceCronbachs2023]. Authors may be less inclined to report reliabilities when they fall below an acceptable threshold, but not otherwise. In combination with our inconsistent reliability and validity evidence this bias in reporting could create a false sense of security when looking only at the information that is reported in the literature.
+We also noted that about two-thirds of the measurements were modified between replication and original study. While minor differences between replication and original study are inevitable, substantial changes between original and replication study raises questions about labeling those replications as direct. For example, the conscientiousness measure used for the replication of @defruytCloningersPsychobiologicalModel2000 was reduced from the original NEO-PI-R 30-item measure to a two-item measure in the replication. It is highly unlikely that a measure with such a significant change would have a comparable validity and reliability to the original, and we did unsurprisingly observe convergence issues with validity as well as low reliability for this measure. The regularity at which measures were modified also provides a response to the argument that replications do not need to report as many measurement details, since the reporting of these . If measurement is modified, then the new use and validity of the measurement has to be documented by the replication. Additionally, if changing the measurement between original and replication study is fair game, then the choice of measure has to also be substantially motivated beyond: "the original study did it that way". Finally, none of this explains away the lack of reliability and validity reporting in the original studies. It may unfortunately be more likely that many of these measures are simply not validated before (or even after) use.
 
-After all, there is little incentive for researchers to report this information if they don't want to. Reporting standards for measurement reporting are not broadly applied, and we observed this also when we looked at the information needed to reconstruct a measure for reuse. Similar to @flakeConstructValidityValidity2022, we observed that QMPs were not infrequent. In particular, like @flakeConstructValidityValidity2022, we observed that original research underreported information needed to reconstruct the measurement In original research the administration format and procedure for each was not properly described for around a third of the applicable measures, the number of items and response options for each around an eight, and how the index was calculated, how the items were recoded and example items were presented for each a little under half. We also found that about two-thirds of the measurements were modified between original and replication, and specific modifications were rarely validated or justified. This raises some questions around atributing the label direct replication to some of these studies. For example, the conscientiousness measure used for the replication of @defruytCloningersPsychobiologicalModel2000 was reduced from original NEO-PI-R 30-item measure to a two-item measure in the replication. It is highly unlikely that a measure with such a significant change would have a comparable validity and reliability to the original, and we did unsurprisingly observe convergence issues with validity as well as low reliability for this measure.
+The information needed to reconstruct a measure for reuse was also not consistently clearly reported. In particular, like @flakeConstructValidityValidity2022, we observed that original research underreported information needed to reconstruct the measurement In future research. The administration format and procedure for each was not properly described for around a third of the applicable measures. The number of items and response options were unclear for both in around an eight of the applicable measures, while how the index was calculated, how the items were recoded and example items were presented for each a little under half of the applicable measures.
 
-One notable difference compared to @flakeConstructValidityValidity2022 is that in our results replications did on average have less QMPs than original research. We believe that this is in part due to the structured way in which the Many Labs protocols were written up. Several Many Labs protocols even contained specific sections to declare any deviations from the original methodology. The other reason may be due to the more lenient coding of the QMPs in the revised protocol. We mostly checked that something relevant to a specific QMP item was reported, not whether that reporting thoroughly shared all the needed information. Regardless, any lack of information needed to recreate the measurement makes it harder for follow up research to validate the measure.
+One notable difference compared to @flakeConstructValidityValidity2022 is that in our results replications did on average have less QMPs than original research. We believe that this is in part due to the structured way in which the Many Labs protocols were written up. Several Many Labs protocols even contained specific sections to declare any deviations from the original methodology. The other reason may be due to the more lenient coding of the QMPs in the revised protocol. We mostly checked that something relevant to a specific QMP item was reported, not whether that reporting thoroughly shared all the needed information. In particular, for our items checking whether a particular practice was justified or validated, we accepted any reason that was given, we did not check whether that reason was sufficient. For example, even if we did not code QMPs in validating modifications to measurement, this does not mean that Measurement Invariance was empirically established, even if it might have been important to do so.
 
-Our goal with these findings is not to specifically scold the Many Labs replications nor the original studies. We commend the tremendous effort involved in the creation of the Many Labs projects, and we understand that for feasibility some corners had to be cut. Similarly, we understand that complete validation of psychological measures is not a responsibility that should or can be placed on any one study. However, we would argue that full transparent measurement reporting is a responsibility both replications and original studies do have. Furthermore, even though validating measures is difficult, its necessity cannot be ignored. At one point this measure has to be validated properly, or else we cannot be certain that substantive interpretations on the basis of this measure are substantiated.
+Inconsistency was not only observed in the reporting of measurement. When we recalculated the reliability coefficients and factor structure of the measures used in the replication projects, the observed reliability and validity varied considerably across labs. We also noted that some measures had convergence issues, where for some labs we could not get the factor model to fit. This may have been because of sample size issues, or the small number of items we often observed in the replication measures. However, gross misfit is also possible. Although, the psychometric indicators we used were applied rather broadly across a spectrum of different measures, and should not be used to make individual inferences for the measures. As a general overview, our results do carry the warning that we cannot merely assume that the measures used in our sample were valid and can be used for substantive interpretations.
+
+We also observed that when a Cronbach's Alpha was reported for a measure in an original study, then their average Cronbach's Alpha observed among the replications were consistently relatively high. Meanwhile when no Cronbach's Alpha was reported in the original study, the reliability was often relatively low. This aligns with existing research indicating bias in reported Cronbach's Alpha values, with an excess of reported values at the common acceptably reliable threshold value of .70, and low reporting just below .70 [@husseyAberrantAbundanceCronbachs2023]. Authors may be less inclined to report reliabilities when they fall below an acceptable threshold, but not otherwise. In combination with our inconsistent reliability and validity evidence, this bias in reporting could create a false sense of security when looking only at what is reported.
+
+Overall, our intent is not to specifically scold the Many Labs replications nor the original studies. We commend the tremendous effort involved in the creation of the Many Labs projects, and we understand that for feasibility some corners had to be cut. Similarly, we understand that complete validation of psychological measures is not a responsibility that should or can be placed on any one study. However, we would argue that full transparent measurement reporting is a responsibility both replications and original studies do have. Based on our results and the results of existing research, we believe that with current measurement reporting, you cannot reliably expect to observe the information you need to evaluate and understand the measurement that was used in a study. Even though a substantial proportion of measurement information was frequently reported - when looking at our intentionally non-strict coding protocol - information was almost never consistently clearly reported across our sample. Furthermore, critical information on reliability and validity in particular was rare. Finally, even though validating measures is difficult, its necessity cannot be ignored. If validity evidence for a measure is never obtained, it becomes questionable to draw substantive interpretations on the basis of responses to that measure.
+
+!!!detecting meaningful effects when checking for measurement invariance across groups requires large sample sizes [@meadePowerPrecisionConfirmatory2007; @frenchMeasurementInvarianceTechniques2016; @koziolImpactModelParameterization2018].!!!
 
 ## Limitations & Future Research
 
-We focused primarily on a unidimensionality test from a factor analysis as our indicator of validity as recalculated from the data. However, our factor analyses were not informed by theory specific to each measure, and were instead applied the same across the board. It is quite possible that a measure fails at our checks and is still a valid and reliable measure to use in its specific use case. We consider these checks to be indicators of the overall construct validity in our sample. The checks should not be interpreted as complete tests of validity, nor should they be interpreted at the individual measurement level. Future research may want to deep dive into this specific topic and focus on doing theory informed factor analysis tests on measurement data.
+Our main indicator of construct validity obtained from the response data was our unidimensionality test from a factor analysis. However, our factor analyses were not informed by theory, and were not specific to each measure. Instead the structure of the model and the test was the same for all measures. It is quite possible that a measure fails at our checks and is still a valid and reliable measure in its specific use case. We use these checks to get an assessment of one element of construct validitty within our sample, not to make inferences for particular measures, nor to test construct validity completely. Future research may want to deep dive into this specific topic and focus on doing theory informed construct validity tests using openly available measurement reponse data.
 
-One of the most impactful limitations was that we were unable to construct tests to compare the measurement properties between original and replication study, and replicated and non-replicated studies. This was in large part because there were simply to few measures with the relevant information. we planned to test. We initially planned to test the significance of the difference in reported reliability between original and replication studies, and the relation between reliability and replication outcome. But due to the small number of reported reliabilities sand measures for which reliability could be calculated we were unable to perform these tests. However, this limitation is also one of our most important findings. While we were unable to perform our pre-registered tests, the fact that we couldn't, is telling regarding the lack of standards for reported measurement information in our sample.
+One of the most impactful limitations to our study design was that we were unable to conduct informative inferential tests on our data. This was in large part because there were simply to few measures with the relevant information for our test. We initially planned to test the significance of the difference in reported reliability between original and replication studies, and the relation between reliability and replication outcome. But due to the small number of reported reliabilities and measures for which reliability could be calculated we were unable to perform these tests. However, this limitation is also one of our most important findings. While we were unable to perform our pre-registered tests, the fact that we couldn't, is telling with respect to the lack of consistent measurement information reporting in our sample.
+
+!!!limited usefulness of the data!!!
 
 As another limitation, it is important to reflect on whether or not replication protocols and research articles can be fairly compared in terms of Measurement Practices. A study’s description within a replication protocol is generally shorter than an article. The protocol may therefore lack the space needed to report on the measurement in full detail. There are three reasons why we believe protocols and articles remain mostly comparable. Firstly, articles are often also restricted in the amount of space they have available to devote to measurement [@gardinerEditorialMethodsPapers2019; @zogmaisterAssessingTransparencyMethods2024]. Second, in the revised protocol some QMP items, such as whether example items were reported or not, also allowed for reporting this information in supplementary materials to count as good practice. Third, there are little to no other files outside the protocol and supplements where the measurement details for the replication could be found, as such the protocol and supplements represent the total available information on the measurement just like the original article does. A difference that was not resolved between articles and protocols was that the protocols were written before the measurement was conducted. Therefore we can not fairly compare protocol and replication on measurement information that is derived from the data – such as reliability coefficients and psychometric validity information. Still, future research should look if possible at replications that report on measurement information derived from the replication data.
 
-There were additional sources of information we could have included. Data from original studies could have been used to recalculate reliability and validity indicators from to compare with the replication results. However, it is unlikely that a substantial number would have shared their data (many were conducted before the OSF and other Open Science initiatives were launched). This is likely different for more recent research [@hardwickeEstimatingPrevalenceTransparency2022; @hamiltonPrevalencePredictorsData2023a]. Including replications of recent research could help resolve some of the sample size issues for our tests. Future research may wish to look at replications of more recent research to compare recalculated measurement information between original and replication. reliabilities and validity.
+???move to the paragraph above, the section in the discussion that describes the argument that replications dont have to report what is presumed to be in the original together with the counter-argument that modificaitons are regular, and as such measurement choice is fair game and should be motivated + an extra sentence that often information is not available in the original so it can hardly be relied upon???
+
+There were additional sources of information we could have included. Data from original studies could have been used to recalculate reliability and validity indicators from to compare with the replication results. However, it is unlikely that a substantial number would have shared their data (many were conducted before the OSF and other Open Science initiatives were launched). This is likely different for more recent research [@hardwickeEstimatingPrevalenceTransparency2022; @hamiltonPrevalencePredictorsData2023a]. Including replications of recent original research could enable more comparisons based on open data from the original studies. Future research may wish to look at replications of more recent research to compare recalculated measurement information between original and replication.
+
+!!!niet representatieief, kodnen niet alles doen, maar voor vervolgonderzoek mogelijk!!!
 
 ## Recommendations
 
-The two main issues we believe that should be addressed in the literature are: the common use of non-validated measurement, and the lack of transparency surrounding measurement reporting. Unfortunately, there is no easy fix to these issues. Significant efforts are required, involving multiple members of the scientific community to bring about significant change. However, the positives are that these issues are interrelated, because solving transparency will benefit greater validation of measures, and that every little bit can help.
+There are two main issues we believe that should be addressed in the literature to improve measurement practices: the common use of non-validated measurement, and the lack of transparency surrounding measurement reporting. Unfortunately, there is no easy fix to these issues. The widespread use of validated measurement requires measures for a large range of topics to be validated, a practice that currently occurs only rarely. Meanwhile improving transparency in reporting is an issue that many have tried to address in relation to other parts of , but universal success has remained elusive here ???CITATIONS???. However, the positives are first that these two issues are interrelated, because solving transparency will benefit greater validation of measures, and second that every instance of transparent reporting and validation helps reduce the current problem.
 
-First we recommend that reporting standards for measurement deserve a more central place. We found that reporting reliability and validity information was the exception rather than the rule, and even basic information such as how many items were in the measure was not always present. The @americaneducationalresearchassociationStandardsEducationalPsychological2014 guidelines exist to guide researchers in the creation and validation of scales, but are not tailored as guidelines for general measurement reporting.  The APA guidelines [@AmericanPsychologicalAssociation2020] do address many of the same reporting practices we assessed, however our findings and those of other research shows that uptake of these standards is minimal. Meanwhile, statistical reporting standards and guidelines have had a stronger place in the field and among journals, including recommendations from the ASA [@wassersteinASAStatementPValues2016]. A high-profile push for measurement reporting standards is lacking. We believe that measurement reporting standards deserve to be highlighted as much as statistical result reporting. after all, even well reported statistics lack have to be understood within the context of the measurement.
+Our first reccomendation is that reporting standards for measurement deserve a more central place. We found that reporting reliability and validity information was the exception rather than the rule, and even basic information such as how many items were in the measure was reported with little consistency among our sample of measures. The @americaneducationalresearchassociationStandardsEducationalPsychological2014 guidelines exist to guide researchers in the creation and validation of scales, but are not tailored as guidelines for general measurement reporting. The APA guidelines [@AmericanPsychologicalAssociation2020] do address many of the same reporting practices we assessed, however our findings and those of other research shows that uptake of these standards is minimal. Meanwhile, statistical reporting standards and guidelines have had a stronger place in the field and among journals, including recommendations from the ASA [@wassersteinASAStatementPValues2016]. A high-profile push for measurement reporting standards is lacking. We believe that measurement reporting standards deserve to be highlighted as much as statistical result reporting. after all, even well reported statistics lack have to be understood within the context of the measurement.
 
-Transparent measurement reporting also has the advantage that it enables future researchers to recreate the original measure. This point is critical to fueling our second recommendation: as a community we need to systematically evaluate and revise our measures. To do so existing measures need to first of all be reusable. Then researchers need to reuse existing measures. The obtained reliability and validity of the measure then need to be compared across multiple occasions, and finally a value judgement to determine in what contexts, if any, the measure is valid. Transparent reporting takes care of the first step. For the second step, @elsonPsychologicalMeasuresArent2023 have suggested journals to implement the Standardisation Of BEhavior Research (SOBER) guidelines to specifically address issues of flexibility and norming in measurement. Furthermore, they propose an open repository of measurement protocols to facilitate the discovery of measures and building an evidence base. For the third and fourth step, two things are needed. First, there should be a space in the scientific literature for persistent measurement evaluation. Second, the data obtained from the measurement should be reusable in a more comprehensive analyses of the measure across contexts. For this it would be best if the original data of the item responses and demographics is shared for each use of the measure. This way the measure's validity and reliability can be recomputed similarly to what was done in our analyses, but hopefully with a closer link to theory. Otherwise, the summary statistics such as the variance-covariance structure, means, and standard deviations should be shared as these are sufficient for many basic factor analysis models. 
+Transparent measurement reporting also has the advantage that it enables future researchers to recreate the original measure. This point is critical to fueling our second recommendation: as a community we need to systematically evaluate and revise our measures. To do so, we first need measures to be reusable. Second, researchers need to reuse existing measures. Third, the obtained reliability and validity of the measure then need to be compared across multiple occasions, and finally a value judgement to determine in what contexts, if any, the measure is valid has to be made. Transparent reporting takes care of the first step. For the second step, @elsonPsychologicalMeasuresArent2023 have suggested journals to implement the Standardisation Of BEhavior Research (SOBER) guidelines to specifically address issues of flexibility and norming in measurement so that measures are reused in a comparable state. Furthermore, they propose an open repository of measurement protocols to facilitate the discovery of measures and building an evidence base. For the third and fourth step, two things are needed. First, there should be a space in the scientific literature for persistent measurement evaluation, just like how a place for replication studies in the literature has been suggested to provide persistent evaluation of effects. In fact, if replications were to play closer attention to measurement evaluation and reporting, they can function as an excellent validation test of the measure as well. Second, the data obtained from the measurement should be available for a comprehensive validaity analyses of the measure within different contexts. For this it would be best if the original data of the item responses and demographics is shared for each use of the measure. This way the measure's validity and reliability can be recomputed similarly to what was done in our analyses, but with a closer link to theory. Otherwise, the summary statistics such as the variance-covariance structure, means, and standard deviations should be shared as these are sufficient for many basic factor analysis models.
 
 Furthermore, researchers should report and evaluate their measures using more informative indicators. Cronbach's Alpha on its own gives only limited information the quality of a scale, and comes with strong assumptions [@cortinaWhatCoefficientAlpha1993; @sijtsmaUseMisuseVery2009]. Factor analytical evidence and McDonald's Omega are more informative indicators that should be presented in favor of or in tandem with Cronbach's Alpha.
 
@@ -1517,7 +1641,7 @@ Finally, we argue that researchers seeking to replicate a study should first eva
 
 # Conclusion
 
-Cumulative knowledge on psychological phenomena starts with our ability to accurately capture the relevant constructs of interest. Based on the results from our sample and the findings of existing research, the validity and reliability of psychological measurements is rarely reported and based on our data cannot be assumed to be generally correct. The lack of transparent reporting on the measurement further complicates evaluating and reusing the existing measures. A change will be necessary. Otherwise, the basic premise that the measurement measures the variable it is intended to measure, will remain unsubstantiated for many psychological studies. Fortunately, even small steps towards improved reporting practices and single instances in cumulative measurement validation can already help proliferate validated measurement.
+Cumulative knowledge on psychological phenomena starts with our ability to accurately capture the relevant constructs of interest. Based on the results from our sample and the findings of existing research, the validity and reliability of psychological measurements is rarely reported and based on our data cannot be assumed to be generally correct. The lack of consistent transparency in measurement reporting further complicates evaluating and reusing the existing measures. A change will be necessary. Otherwise, the basic premise that the measurement measures the variable it is intended to measure, will remain unsubstantiated for many psychological studies. Fortunately, even small steps towards improved reporting practices and single instances in cumulative measurement validation can already help to proliferate validated measurement.
 
 ## Conflicts of Interest
 
